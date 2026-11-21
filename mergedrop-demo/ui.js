@@ -1044,10 +1044,28 @@
       }
     };
     if (name === 'home') { closeAllModals(); goHome(); return; }
-    if (name === 'play') { window.__demo.play(layouts.play); return; }
+    if (name === 'play') { playSim(777, 26); return; }
+    if (name === 'guide') {
+      playSim(777, 26);
+      setTimeout(function () {
+        var s = state.game;
+        for (var c = 0; c < C.COLS; c++) {
+          var p = C.previewDrop(s, c);
+          if (p && p.mergesWith) { window.BoardView.showPreview(c, p.value, p.mergesWith); break; }
+        }
+      }, 260);
+      return;
+    }
     if (name === 'combo') {
-      window.__demo.play(layouts.combo);
-      setTimeout(function () { showChain(3); }, 250);
+      var s2 = playSim(4242, 40);
+      s2.fever.active = true;
+      s2.fever.dropsLeft = 4;
+      s2.fever.charge = 100;
+      s2.streak = 4;
+      s2.maxChain = 5;
+      updateGoal();
+      updateHud();
+      setTimeout(function () { bannerHold('CHAIN x4'); }, 250);
       return;
     }
     if (name === 'fever') {
@@ -1058,10 +1076,21 @@
       setTimeout(function () { showFever(); }, 200);
       return;
     }
-    if (name === 'quests') { window.__demo.play(layouts.play); setTimeout(openQuests, 200); return; }
+    if (name === 'quests') {
+      playSim(777, 26);
+      var q = C.ensureQuests(profile);
+      q.items.forEach(function (it, i) {
+        var def = C.questDef(it.id);
+        it.prog = i === 0 ? def.target : Math.floor(def.target * (i === 1 ? 0.6 : 0.25));
+      });
+      setTimeout(openQuests, 220);
+      return;
+    }
     if (name === 'over') {
-      window.__demo.play(layouts.combo);
-      setTimeout(function () { window.__demo.over(64380); }, 200);
+      var s3 = playSim(4242, 40);
+      s3.maxTile = 512;
+      s3.maxChain = 5;
+      setTimeout(function () { window.__demo.over(64380); }, 220);
       return;
     }
     if (name === 'tutorial') { setTimeout(function () { openTutorial(1); }, 200); return; }
@@ -1085,7 +1114,43 @@
 
   /* --------------------------------------------------------- demo harness */
 
+  var bannerTimer = null;
+
+  function playSim(seed, drops) {
+    var sim = C.simulateGame(seed, { maxDrops: drops });
+    startGame();
+    var s = state.game;
+    s.board = sim.board;
+    s.queue = sim.queue.slice(0, 3);
+    s.score = sim.score;
+    s.streak = sim.streak;
+    s.maxTile = sim.maxTile;
+    s.goalIndex = 0;
+    while (s.goalIndex < C.GOAL_TILES.length && s.maxTile >= C.GOAL_TILES[s.goalIndex]) s.goalIndex++;
+    s.fever.charge = sim.fever.charge;
+    window.BoardView.setBoard(C.snapshot(s.board));
+    updateHud();
+    updateGoal();
+    return s;
+  }
+
+  function bannerHold(text) {
+    if (bannerTimer) clearInterval(bannerTimer);
+    function draw() {
+      var old = document.querySelector('.chain-banner');
+      if (old) old.remove();
+      var b = document.createElement('div');
+      b.className = 'chain-banner show';
+      b.textContent = text;
+      stage.appendChild(b);
+    }
+    draw();
+    bannerTimer = setInterval(draw, 640);
+  }
+
   window.__demo = {
+    playSim: playSim,
+    bannerHold: bannerHold,
     ready: function () { return state.screen === 'home'; },
     home: function () { closeAllModals(); goHome(); },
     play: function (layout) {
