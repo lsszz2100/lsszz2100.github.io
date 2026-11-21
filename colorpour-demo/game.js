@@ -593,7 +593,8 @@
 
   function drawTube(x, y, tw, th, balls, opts) {
     opts = opts || {};
-    var ballD = Math.min(tw * 0.75, th * 0.232);
+    var ballD = Math.min(tw * 0.76, th / 4.12);
+    var pad = Math.max(0, (th - ballD * 4) / 2);
     var wall = (tw - ballD) / 2;
     var lift = opts.lift || 0;
     y -= lift;
@@ -616,7 +617,7 @@
     // 볼
     for (var i = 0; i < balls.length; i++) {
       if (opts.hideFrom !== undefined && i >= opts.hideFrom) continue;
-      var cy = y + th - wall - ballD / 2 - i * ballD;
+      var cy = y + th - pad - ballD / 2 - i * ballD;
       drawBall(x + tw / 2, cy, ballD, balls[i], opts.ballAlpha);
     }
     // 유리 하이라이트
