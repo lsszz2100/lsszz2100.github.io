@@ -726,7 +726,7 @@
     // 은은한 장식 블록
     c.save();
     c.globalAlpha = 0.55;
-    var deco = [[112, 1846, 58, '#D8F2E6'], [978, 1836, 70, '#E3DBFF']];
+    var deco = [[108, 1850, 56, '#D8F2E6'], [982, 1766, 64, '#E3DBFF']];
     for (var i = 0; i < deco.length; i++) {
       c.save();
       c.translate(deco[i][0], deco[i][1]);
