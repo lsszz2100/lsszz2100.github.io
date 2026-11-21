@@ -102,6 +102,8 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
+/* game screen fills the 1080x1920 canvas: spread header, board, tools, pad, foot */
+#game { justify-content: space-between; }
 .screen.active { display: flex; }
 
 /* ---------------------------------------------------------------- splash */
