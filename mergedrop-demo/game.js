@@ -456,6 +456,11 @@
 
   /* ---------------------------------------------------------------- api */
 
+  function setVisible(v) {
+    if (!host) return;
+    host.style.display = v ? 'block' : 'none';
+  }
+
   function layout(rect) {
     if (!host) return;
     host.style.left = rect.left + 'px';
@@ -557,6 +562,7 @@
     BOARD_H: BOARD_H,
     boot: boot,
     layout: layout,
+    setVisible: setVisible,
     setSkin: setSkin,
     setBoard: setBoard,
     playFrames: playFrames,

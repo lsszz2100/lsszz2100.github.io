@@ -131,6 +131,7 @@
       var el = document.getElementById(id);
       if (el) el.classList.toggle('active', id === name);
     });
+    if (window.BoardView) window.BoardView.setVisible(name === 'play');
     if (name === 'home') renderHome();
     if (name === 'play') setTimeout(layoutBoard, 20);
   }
