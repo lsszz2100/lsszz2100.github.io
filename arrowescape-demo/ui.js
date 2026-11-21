@@ -1075,6 +1075,7 @@
     state.shots = !!params.get('shot');
     if (state.shots) {
       document.body.classList.add('shot');
+      document.documentElement.classList.add('shot');
       fitStage();
     }
 
