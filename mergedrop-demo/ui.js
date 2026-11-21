@@ -195,6 +195,15 @@
     var color = window.BoardView ? window.BoardView.colorOf(v) : '#6FB7FF';
     el.textContent = String(v);
     el.style.background = 'linear-gradient(180deg, ' + color + ', ' + shade(color, -30) + ')';
+    el.style.color = textOn(color);
+    el.style.fontSize = String(v).length >= 4 ? '32px' : '42px';
+  }
+
+  function textOn(hex) {
+    var h = hex.replace('#', '');
+    var r = parseInt(h.substr(0, 2), 16), g = parseInt(h.substr(2, 2), 16), b = parseInt(h.substr(4, 2), 16);
+    var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum > 0.66 ? '#1F2A44' : '#FFFFFF';
   }
 
   function shade(hex, amount) {
@@ -1095,6 +1104,8 @@
         s.score = layout.score || s.score;
         s.streak = layout.streak || 0;
         s.maxTile = C.maxTileOnBoard(s.board);
+        s.goalIndex = 0;
+        while (s.goalIndex < C.GOAL_TILES.length && s.maxTile >= C.GOAL_TILES[s.goalIndex]) s.goalIndex++;
         s.fever.charge = layout.fever || 0;
         window.BoardView.setBoard(C.snapshot(s.board));
         updateHud(); updateGoal();
