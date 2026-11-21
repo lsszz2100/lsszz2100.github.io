@@ -524,10 +524,13 @@
   function panel(x, y, w, h, r, alpha) {
     ctx.save();
     rr(x, y, w, h, r);
-    ctx.fillStyle = 'rgba(255,255,255,' + (alpha === undefined ? 0.07 : alpha) + ')';
+    var pg = ctx.createLinearGradient(x, y, x, y + h);
+    pg.addColorStop(0, 'rgba(34,24,66,' + (alpha === undefined ? 0.97 : Math.min(1, alpha + 0.86)) + ')');
+    pg.addColorStop(1, 'rgba(17,12,38,' + (alpha === undefined ? 0.97 : Math.min(1, alpha + 0.86)) + ')');
+    ctx.fillStyle = pg;
     ctx.fill();
     ctx.lineWidth = 2.5;
-    ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.20)';
     ctx.stroke();
     ctx.restore();
   }
@@ -1375,7 +1378,16 @@
   window.__shot = function (scene, caption, name) {
     var prevScreen = S.screen, prevOverlay = S.overlay;
     if (scene === 'home') { S.screen = 'home'; S.overlay = null; }
-    else if (scene === 'levels') { S.screen = 'levels'; S.scroll = 0; S.scrollTarget = 0; S.overlay = null; }
+    else if (scene === 'levels') {
+      S.screen = 'levels'; S.scroll = 0; S.scrollTarget = 0; S.overlay = null;
+      if (!window.__shotSaveBak) {
+        window.__shotSaveBak = { unlocked: save.unlocked, stars: JSON.parse(JSON.stringify(save.stars)) };
+      }
+      save.unlocked = 49;
+      save.stars = {};
+      for (var sl = 1; sl <= 48; sl++) save.stars[sl] = (sl % 7 === 0) ? 2 : ((sl % 5 === 0) ? 2 : 3);
+      save.stars[48] = 0;
+    }
     else if (scene.indexOf('win') === 0) {
       var wl = parseInt(scene.split(':')[1] || '14', 10);
       startLevel(wl); S.moves = Math.max(8, Math.round(S.par * 0.95)); S.winStars = 3;
