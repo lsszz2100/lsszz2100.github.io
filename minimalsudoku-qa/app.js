@@ -418,7 +418,12 @@
     showScreen('game');
     startTimer();
     if (window.__QA_SOLVE__) {
-      setTimeout(function () { game.grid = game.solution.slice(); save(); renderAll(); checkComplete(); }, 700);
+      var m = /[?&]time=([0-9]+)/.exec(location.search);
+      var secs = m ? parseInt(m[1], 10) : 0;
+      setTimeout(function () {
+        if (secs > 0) { game.timeBase = secs * 1000; }
+        game.grid = game.solution.slice(); save(); renderAll(); checkComplete();
+      }, 700);
     }
   }
 
@@ -802,7 +807,7 @@
     var body = '<div class="result-time"><strong>' + St.formatTime(ms) + '</strong></div>' +
       (isBest ? '<div class="result-best">' + t('newBest') + '</div>' : '') +
       '<div class="result-grid">' +
-      '<div class="result-box"><strong>' + t(game.difficulty) + '</strong><span>' + t('time') + '</span></div>' +
+      '<div class="result-box"><strong>' + t(game.difficulty) + '</strong><span>' + t('difficulty') + '</span></div>' +
       '<div class="result-box"><strong>' + game.mistakes + '</strong><span>' + t('mistakes') + '</span></div>' +
       '<div class="result-box"><strong>' + game.hintsUsed + '</strong><span>' + t('hint') + '</span></div>' +
       '</div>' +
