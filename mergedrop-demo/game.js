@@ -274,11 +274,10 @@
     layers.col.clear();
     if (col === null || col === undefined) return;
 
-    var pal = PALETTES[state.skin] || PALETTES.sunrise;
-    layers.col.fillStyle(0xff7a59, 0.10);
-    layers.col.fillRoundedRect(cellX(col) - CELL_W / 2 - 4, 0, CELL_W + 8, BOARD_H, 26);
-    layers.col.lineStyle(5, 0xff7a59, 0.35);
-    layers.col.strokeRoundedRect(cellX(col) - CELL_W / 2 - 4, 4, CELL_W + 8, BOARD_H - 8, 26);
+    layers.col.fillStyle(0xff7a59, 0.05);
+    layers.col.fillRoundedRect(cellX(col) - CELL_W / 2 - 6, PAD_Y - 10, CELL_W + 12, BOARD_H - PAD_Y * 2 + 20, 24);
+    layers.col.lineStyle(5, 0xff7a59, 0.30);
+    layers.col.strokeRoundedRect(cellX(col) - CELL_W / 2 - 6, PAD_Y - 10, CELL_W + 12, BOARD_H - PAD_Y * 2 + 20, 24);
 
     layers.ghost.removeAll(true);
     if (!callbacks.previewTarget) return;

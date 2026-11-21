@@ -248,8 +248,7 @@
       dom.goalFill.style.width = '100%';
     } else {
       dom.goalTarget.textContent = String(goal);
-      var prev = s.goalIndex === 0 ? 2 : C.GOAL_TILES[s.goalIndex - 1];
-      var progress = (s.maxTile - prev) / (goal - prev);
+      var progress = Math.log(Math.max(2, s.maxTile)) / Math.log(goal);
       dom.goalFill.style.width = Math.max(0, Math.min(1, progress)) * 100 + '%';
     }
     var fever = dom.feverWrap;
