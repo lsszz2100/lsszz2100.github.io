@@ -536,8 +536,9 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
 .modal-back {
   position: absolute;
   inset: 0;
-  background: rgba(24, 42, 70, .44);
-  backdrop-filter: blur(3px);
+  /* no backdrop-filter: Chromium mis-renders the backdrop (mirrored) when the
+     page is inside a scaled container, which is exactly how this stage is shown. */
+  background: rgba(24, 42, 70, .52);
   display: flex;
   align-items: center;
   justify-content: center;
