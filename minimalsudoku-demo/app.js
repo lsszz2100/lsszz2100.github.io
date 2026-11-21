@@ -799,7 +799,7 @@
     var body = '<div class="result-time"><strong>' + St.formatTime(ms) + '</strong></div>' +
       (isBest ? '<div class="result-best">' + t('newBest') + '</div>' : '') +
       '<div class="result-grid">' +
-      '<div class="result-box"><strong>' + t(game.difficulty) + '</strong><span>' + t('time') + '</span></div>' +
+      '<div class="result-box"><strong>' + t(game.difficulty) + '</strong><span>' + t('difficulty') + '</span></div>' +
       '<div class="result-box"><strong>' + game.mistakes + '</strong><span>' + t('mistakes') + '</span></div>' +
       '<div class="result-box"><strong>' + game.hintsUsed + '</strong><span>' + t('hint') + '</span></div>' +
       '</div>' +
