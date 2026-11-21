@@ -1083,7 +1083,7 @@
       startGame();
       var s = state.game;
       if (layout) {
-        var values = layout;
+        var values = layout.rows || layout;
         s.board = C.newGame({ seed: 1 }).board;
         for (var r = 0; r < C.ROWS; r++) {
           for (var c = 0; c < C.COLS; c++) {
@@ -1091,11 +1091,11 @@
             s.board[r][c] = v ? { id: s.idSeq++, v: v } : null;
           }
         }
-        if (values.queue) s.queue = values.queue;
-        s.score = values.score || s.score;
-        s.streak = values.streak || 0;
+        if (layout.queue) s.queue = layout.queue;
+        s.score = layout.score || s.score;
+        s.streak = layout.streak || 0;
         s.maxTile = C.maxTileOnBoard(s.board);
-        s.fever.charge = values.fever || 0;
+        s.fever.charge = layout.fever || 0;
         window.BoardView.setBoard(C.snapshot(s.board));
         updateHud(); updateGoal();
       }
