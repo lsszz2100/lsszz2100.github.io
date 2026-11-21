@@ -1172,12 +1172,17 @@
       var old = document.querySelector('.chain-banner');
       if (old) old.remove();
       var b = document.createElement('div');
-      b.className = 'chain-banner show';
+      b.className = 'chain-banner';
       b.textContent = text;
+      b.style.animation = 'none';
+      b.style.opacity = '1';
+      b.style.transform = 'none';
+      b.style.top = '300px';
+      b.style.fontSize = '86px';
       stage.appendChild(b);
     }
     draw();
-    bannerTimer = setInterval(draw, 640);
+    bannerTimer = setInterval(draw, 2000);
   }
 
   window.__demo = {
