@@ -249,6 +249,7 @@
       cell.appendChild(val);
       cell.appendChild(notes);
       cell.setAttribute('data-i', String(i));
+      cell.setAttribute('role', 'button');
       board.appendChild(cell);
       cellEls.push({ root: cell, val: val, notes: notes.children, notesBox: notes });
     }
@@ -314,6 +315,10 @@
       else if (peerSet[i]) cell.root.classList.add('peer');
       if (value && selectedValue && value === selectedValue && i !== selected) cell.root.classList.add('same');
       if (wrong[i]) cell.root.classList.add('err');
+      var r = Math.floor(i / 9) + 1, c = (i % 9) + 1;
+      cell.root.setAttribute('aria-label', value
+        ? t('cellValue', { r: r, c: c, n: value })
+        : t('cellEmpty', { r: r, c: c }));
       if (isGiven) cell.root.classList.add('given');
       else if (value) cell.root.classList.add('user');
 

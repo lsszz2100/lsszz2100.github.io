@@ -163,6 +163,8 @@
       close: 'Close',
       agreeNote: 'Data stays on this device. Uninstalling the app deletes it permanently.',
 
+      cellValue: 'Row {r}, column {c}, {n}',
+      cellEmpty: 'Row {r}, column {c}, empty',
       pickCell:  'Pick a cell first',
       givenCell: 'That number came with the puzzle',
       nothingToUndo: 'Nothing to undo',
@@ -344,6 +346,8 @@
       close: '닫기',
       agreeNote: '모든 데이터는 이 기기에만 있습니다. 앱을 삭제하면 영구 삭제됩니다.',
 
+      cellValue: '{r}행 {c}열, {n}',
+      cellEmpty: '{r}행 {c}열, 비어 있음',
       pickCell: '칸을 먼저 선택하세요',
       givenCell: '처음부터 주어진 숫자입니다',
       nothingToUndo: '되돌릴 수가 없습니다',
