@@ -409,7 +409,11 @@ h1, h2, h3, p { margin: 0; }
 .ds-time { font-size: 24px; color: var(--ink-soft); text-align: right; min-width: 170px; }
 
 .sub-note { font-size: 26px; color: var(--soft); padding: 4px 4px 22px; font-weight: 400; }
-.quest-list { display: flex; flex-direction: column; gap: 16px; }
+.quest-list { display: flex; flex-direction: column; gap: 20px; }
+/* quests screen: keep the three cards centred in the tall canvas */
+#quests .panel-body { display: flex; flex-direction: column; }
+#quests .quest-list { flex: 1 1 auto; justify-content: center; }
+#quests .note.center { margin-top: 0; padding: 26px 0 6px; }
 .quest { background: var(--card); border: 2px solid var(--line); border-radius: 26px; padding: 26px 28px; display: flex; align-items: center; gap: 22px; }
 .quest.done { border-color: var(--accent-soft-2); background: var(--accent-soft); }
 .q-check { width: 64px; height: 64px; border-radius: 32px; background: var(--paper-2); display: flex; align-items: center; justify-content: center; font-size: 30px; color: var(--soft); flex: 0 0 auto; }
