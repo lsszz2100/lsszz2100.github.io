@@ -147,9 +147,25 @@
     dom.homeGoal.textContent = T.t('nextGoalHome', { goal: nextGoalValue() });
     var dot = document.getElementById('questDot');
     if (dot) dot.classList.toggle('on', questReady());
+    renderQuestTeaser();
     dom.langHome.textContent = T.t('langButton');
     dom.langPlay.textContent = T.t('langButton');
     T.apply(document);
+  }
+
+  function renderQuestTeaser() {
+    var q = C.ensureQuests(profile);
+    var bars = document.querySelectorAll('#qtBars b');
+    var done = 0;
+    q.items.forEach(function (item, i) {
+      var def = C.questDef(item.id);
+      if (!def) return;
+      var pct = Math.min(100, (item.prog / def.target) * 100);
+      if (bars[i]) bars[i].style.width = pct + '%';
+      if (item.claimed) done++;
+    });
+    var sub = document.getElementById('qtSub');
+    if (sub) sub.textContent = T.t('questDone', { done: done });
   }
 
   function nextGoalValue() {
@@ -917,6 +933,7 @@
     document.getElementById('btnSettingsHome').addEventListener('click', openSettings);
     document.getElementById('btnSettings').addEventListener('click', openSettings);
     document.getElementById('btnQuests').addEventListener('click', openQuests);
+    document.getElementById('btnQuestTeaser').addEventListener('click', openQuests);
     document.getElementById('btnSkins').addEventListener('click', openSkins);
     document.getElementById('btnBadges').addEventListener('click', openBadges);
     document.getElementById('btnPause').addEventListener('click', openPause);
@@ -960,8 +977,8 @@
     state.shots = !!params.get('shot');
     if (state.shots) {
       document.body.classList.add('shot');
-      document.documentElement.style.height = '1920px';
-      document.body.style.height = '1920px';
+      document.documentElement.style.height = '1953px';
+      document.body.style.height = '1953px';
       fitStage();
     }
 

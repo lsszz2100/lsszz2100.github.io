@@ -35,6 +35,7 @@
   var tiles = new Map();       // id -> container
   var callbacks = {};
   var state = { busy: false, skin: 'sunrise', hammer: false, preview: null, fever: false };
+  var pendingBoard = null;
   var layers = {};
 
   /* ------------------------------------------------------------ helpers */
@@ -161,6 +162,7 @@
     layers.ghost = this.add.container(0, 0).setDepth(6);
     layers.feverRing = this.add.graphics().setDepth(8).setAlpha(0);
     layers.tiles = this.add.container(0, 0).setDepth(10);
+    if (pendingBoard) { var b = pendingBoard; pendingBoard = null; sync(b); }
     layers.fx = this.add.container(0, 0).setDepth(20);
 
     // spark texture for particles
@@ -506,13 +508,13 @@
 
   function setSkin(id) {
     state.skin = PALETTES[id] ? id : 'sunrise';
-    if (!scene) return;
+    if (!scene) return;  // applied by create() via redrawAllTiles
     drawBoardBase();
     redrawAllTiles();
   }
 
   function setBoard(board) {
-    if (!scene) return;
+    if (!scene) { pendingBoard = board; return; }
     tiles.forEach(function (s) { s.destroy(); });
     tiles.clear();
     sync(board);
