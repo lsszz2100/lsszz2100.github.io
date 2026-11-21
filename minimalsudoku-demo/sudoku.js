@@ -91,6 +91,7 @@
   }
 
   function candidatesAt(grid, index) {
+    if (grid[index]) return 0;
     var used = 0;
     var peers = PEERS[index];
     for (var i = 0; i < peers.length; i++) {

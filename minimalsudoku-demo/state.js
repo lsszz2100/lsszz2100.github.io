@@ -246,13 +246,17 @@
     return unlocked;
   }
 
+  function prevDay(dateStr) {
+    var parts = String(dateStr).split('-').map(Number);
+    var d = new Date(Date.UTC(parts[0] || 1970, (parts[1] || 1) - 1, parts[2] || 1));
+    d.setUTCDate(d.getUTCDate() - 1);
+    return d.toISOString().slice(0, 10);
+  }
+
   function streakFor(profile, today) {
     var last = profile.stats.lastPlayed;
     if (last === today) return profile.stats.streak || 1;
-    var yesterday = new Date(today + 'T00:00:00');
-    yesterday.setDate(yesterday.getDate() - 1);
-    var y = yesterday.toISOString().slice(0, 10);
-    if (last === y) return (profile.stats.streak || 0) + 1;
+    if (last === prevDay(today)) return (profile.stats.streak || 0) + 1;
     return 1;
   }
 
