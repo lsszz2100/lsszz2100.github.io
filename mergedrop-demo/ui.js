@@ -6,8 +6,12 @@
   var T = window.I18N;
 
   var stage = document.getElementById('stage');
-  var modalRoot = document.getElementById('modalRoot');
-  var toastRoot = document.getElementById('toastRoot');
+  var modalRoot = document.createElement('div');
+  var toastRoot = document.createElement('div');
+  var fxRoot = document.getElementById('fxRoot') || document.createElement('div');
+  modalRoot.id = 'modalRoot';
+  toastRoot.id = 'toastRoot';
+  fxRoot.id = 'fxRoot';
 
   var profile = loadProfile();
   var state = {
@@ -44,17 +48,22 @@
   function fitStage() {
     var w = window.innerWidth, h = window.innerHeight;
     var scale = Math.min(w / 1080, h / 1920);
+    var layers = [stage, modalRoot, toastRoot, fxRoot];
     if (state.shots) {
-      stage.style.transform = 'none';
-      stage.style.left = '0px';
-      stage.style.top = '0px';
-      stage.style.position = 'absolute';
+      layers.forEach(function (el) {
+        el.style.transform = 'none';
+        el.style.left = '0px';
+        el.style.top = '0px';
+        el.style.position = 'absolute';
+      });
       return;
     }
-    stage.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
-    stage.style.left = '50%';
-    stage.style.top = '50%';
-    stage.style.position = 'absolute';
+    layers.forEach(function (el) {
+      el.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+      el.style.left = '50%';
+      el.style.top = '50%';
+      el.style.position = 'absolute';
+    });
   }
 
   function layoutBoard() {
@@ -319,7 +328,7 @@
     var banner = document.createElement('div');
     banner.className = 'chain-banner show';
     banner.textContent = 'CHAIN x' + chain;
-    stage.appendChild(banner);
+    fxRoot.appendChild(banner);
     setTimeout(function () { banner.parentNode && banner.parentNode.removeChild(banner); }, 760);
   }
 
@@ -327,7 +336,7 @@
     var banner = document.createElement('div');
     banner.className = 'fever-banner show';
     banner.textContent = 'FEVER!';
-    stage.appendChild(banner);
+    fxRoot.appendChild(banner);
     setTimeout(function () { banner.parentNode && banner.parentNode.removeChild(banner); }, 1200);
   }
 
@@ -974,7 +983,14 @@
     });
   }
 
+  function mountLayers() {
+    [fxRoot, modalRoot, toastRoot].forEach(function (el) {
+      if (el.parentNode !== document.body) document.body.appendChild(el);
+    });
+  }
+
   function start() {
+    mountLayers();
     bind();
     T.setLang(profile.lang);
     applyLanguage();
@@ -1187,7 +1203,7 @@
       b.style.background = 'linear-gradient(180deg, #FF9273, #FF6B4E)';
       b.style.boxShadow = '0 16px 34px rgba(255, 107, 78, .38)';
       b.style.textShadow = 'none';
-      stage.appendChild(b);
+      fxRoot.appendChild(b);
     }
     draw();
     bannerTimer = setInterval(draw, 2000);

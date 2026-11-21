@@ -266,7 +266,13 @@ html, body {
 .booster:disabled { opacity: .45; }
 
 /* ---------------------------------------------------------------- modals */
-#modalRoot { position: absolute; inset: 0; pointer-events: none; z-index: 20; }
+#modalRoot, #toastRoot, #fxRoot {
+  position: absolute; left: 50%; top: 50%; width: 1080px; height: 1920px;
+  transform-origin: center center; pointer-events: none;
+}
+#fxRoot { position: absolute; z-index: 30; pointer-events: none; }
+#modalRoot { z-index: 40; }
+#toastRoot { z-index: 50; }
 .modal-back {
   position: absolute; inset: 0; background: rgba(23, 38, 66, .42);
   display: flex; align-items: center; justify-content: center; pointer-events: auto;
@@ -391,7 +397,7 @@ html, body {
 .badge-cell .b-ico { font-size: 46px; }
 .badge-cell .b-name { font-size: 20px; font-weight: 900; line-height: 1.25; }
 
-#toastRoot { position: absolute; left: 0; right: 0; top: 320px; display: flex; flex-direction: column; align-items: center; gap: 12px; pointer-events: none; z-index: 30; }
+#toastRoot { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 320px; }
 .toast {
   background: rgba(31, 42, 68, .92); color: #fff; font-size: 28px; font-weight: 800;
   padding: 18px 34px; border-radius: 24px; animation: toastIn 220ms ease;
