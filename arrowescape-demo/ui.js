@@ -291,7 +291,6 @@
     dom.wasteChip.textContent = T.t('blockedShort') + ' ' + g.wasted;
     dom.wasteChip.classList.toggle('hot', g.wasted > 0);
     dom.playLeft.textContent = String(C.remaining(g));
-    dom.playLeft2.textContent = String(C.remaining(g));
     dom.playCoins.textContent = fmt(profile.coins);
     if (state.daily) {
       dom.playChapter.textContent = T.t('dailyTitle');
@@ -977,7 +976,6 @@
     dom.starTrail = document.getElementById('starTrail');
     dom.wasteChip = document.getElementById('wasteChip');
     dom.playLeft = document.getElementById('playLeft');
-    dom.playLeft2 = document.getElementById('playLeft2');
     dom.playCoins = document.getElementById('playCoins');
     dom.playLevel = document.getElementById('playLevel');
     dom.playChapter = document.getElementById('playChapter');
