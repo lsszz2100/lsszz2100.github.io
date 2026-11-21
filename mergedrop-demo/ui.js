@@ -1049,20 +1049,16 @@
       }
     };
     if (name === 'home') { closeAllModals(); goHome(); return; }
-    if (name === 'play') { playSim(777, 26); return; }
+    if (name === 'play') { demoBoard(); return; }
     if (name === 'guide') {
-      playSim(777, 26);
+      demoBoard();
       setTimeout(function () {
-        var s = state.game;
-        for (var c = 0; c < C.COLS; c++) {
-          var p = C.previewDrop(s, c);
-          if (p && p.mergesWith) { window.BoardView.showPreview(c, p.value, p.mergesWith); break; }
-        }
+        window.BoardView.showPreview(1, 16, 16);
       }, 260);
       return;
     }
     if (name === 'combo') {
-      var s2 = playSim(4242, 40);
+      var s2 = demoBoard({ score: 64380, streak: 4, fever: 100, queue: [32, 8, 4] });
       s2.fever.active = true;
       s2.fever.dropsLeft = 4;
       s2.fever.charge = 100;
@@ -1082,7 +1078,7 @@
       return;
     }
     if (name === 'quests') {
-      playSim(777, 26);
+      demoBoard();
       var q = C.ensureQuests(profile);
       q.items.forEach(function (it, i) {
         var def = C.questDef(it.id);
@@ -1092,9 +1088,7 @@
       return;
     }
     if (name === 'over') {
-      var s3 = playSim(4242, 40);
-      s3.maxTile = 512;
-      s3.maxChain = 5;
+      var s3 = demoBoard({ score: 64380 });
       setTimeout(function () { window.__demo.over(64380); }, 220);
       return;
     }
@@ -1120,6 +1114,40 @@
   /* --------------------------------------------------------- demo harness */
 
   var bannerTimer = null;
+
+  var SHOT_ROWS = [
+    [16, 4, 32, 4, 16],
+    [2, 64, 8, 16, 8],
+    [8, 32, 16, 32, 4],
+    [4, 16, 128, 8, 2],
+    [0, 0, 256, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+  ];
+
+  function demoBoard(opts) {
+    opts = opts || {};
+    startGame();
+    var s = state.game;
+    for (var r = 0; r < C.ROWS; r++) {
+      for (var c = 0; c < C.COLS; c++) {
+        var v = SHOT_ROWS[r][c];
+        s.board[r][c] = v ? { id: s.idSeq++, v: v } : null;
+      }
+    }
+    s.queue = opts.queue || [16, 4, 8];
+    s.score = opts.score || 18420;
+    s.streak = opts.streak || 0;
+    s.maxTile = C.maxTileOnBoard(s.board);
+    s.goalIndex = 0;
+    while (s.goalIndex < C.GOAL_TILES.length && s.maxTile >= C.GOAL_TILES[s.goalIndex]) s.goalIndex++;
+    s.fever.charge = opts.fever || 45;
+    window.BoardView.setBoard(C.snapshot(s.board));
+    updateHud();
+    updateGoal();
+    return s;
+  }
 
   function playSim(seed, drops) {
     var sim = C.simulateGame(seed, { maxDrops: drops });
@@ -1155,6 +1183,7 @@
 
   window.__demo = {
     playSim: playSim,
+    demoBoard: demoBoard,
     bannerHold: bannerHold,
     ready: function () { return state.screen === 'home'; },
     home: function () { closeAllModals(); goHome(); },
