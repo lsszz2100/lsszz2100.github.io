@@ -659,7 +659,7 @@
       rows.push(arr);
       idx += inRow;
     }
-    var areaTop = 330, areaBottom = 1490;
+    var areaTop = 310, areaBottom = 1420;
     var totalH = m.rows * m.th + (m.rows - 1) * 110;
     var top = areaTop + (areaBottom - areaTop - totalH) / 2;
     var out = [];
@@ -1376,7 +1376,7 @@
     var prevScreen = S.screen, prevOverlay = S.overlay;
     if (scene === 'home') { S.screen = 'home'; S.overlay = null; }
     else if (scene === 'levels') { S.screen = 'levels'; S.scroll = 0; S.scrollTarget = 0; S.overlay = null; }
-    else if (scene === 'win') {
+    else if (scene.indexOf('win') === 0) {
       var wl = parseInt(scene.split(':')[1] || '14', 10);
       startLevel(wl); S.moves = Math.max(8, Math.round(S.par * 0.95)); S.winStars = 3;
       S.overlay = 'win'; S.starsShown = 3;
