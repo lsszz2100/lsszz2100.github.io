@@ -1076,6 +1076,18 @@
     if (state.shots) {
       document.body.classList.add('shot');
       document.documentElement.classList.add('shot');
+      // Inline styles beat the stylesheet here: the page must be exactly 1080x1920
+      // and scrollable so two viewport captures can be stitched into one screenshot.
+      document.documentElement.style.height = '1920px';
+      document.documentElement.style.overflowY = 'auto';
+      document.body.style.height = '1920px';
+      document.body.style.overflowY = 'auto';
+      var app = document.getElementById('app');
+      app.style.position = 'absolute';
+      app.style.top = '0';
+      app.style.left = '0';
+      app.style.width = '1080px';
+      app.style.height = '1920px';
       fitStage();
     }
 
