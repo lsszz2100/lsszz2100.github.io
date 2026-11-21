@@ -7,9 +7,10 @@
   'use strict';
 
   var COLS = 5, ROWS = 8;
-  var CELL_W = 188, CELL_H = 130, GAP = 12;
-  var BOARD_W = COLS * CELL_W + (COLS - 1) * GAP;   // 988
-  var BOARD_H = ROWS * CELL_H + (ROWS - 1) * GAP;   // 1124
+  var CELL_W = 180, CELL_H = 122, GAP = 14;
+  var PAD_X = 16, PAD_Y = 25;
+  var BOARD_W = COLS * CELL_W + (COLS - 1) * GAP + PAD_X * 2;   // 988
+  var BOARD_H = ROWS * CELL_H + (ROWS - 1) * GAP + PAD_Y * 2;   // 1124
 
   var PALETTES = {
     sunrise: {
@@ -74,8 +75,8 @@
     return pal.colors[valueIndex(v)];
   }
 
-  function cellX(c) { return c * (CELL_W + GAP) + CELL_W / 2; }
-  function cellY(r) { return BOARD_H - (r * (CELL_H + GAP) + CELL_H / 2); }
+  function cellX(c) { return PAD_X + c * (CELL_W + GAP) + CELL_W / 2; }
+  function cellY(r) { return BOARD_H - PAD_Y - (r * (CELL_H + GAP) + CELL_H / 2); }
 
   function fontSizeFor(v) {
     var s = String(v).length;
@@ -90,15 +91,15 @@
   function drawTile(g, v) {
     var pal = PALETTES[state.skin] || PALETTES.sunrise;
     var base = colorOf(v);
-    var w = CELL_W, h = CELL_H, r = 26;
+    var w = CELL_W, h = CELL_H, r = 24;
     var lip = shade(base, -26);
     g.clear();
     // soft shadow
-    g.fillStyle(0x1f2a44, 0.10);
-    g.fillRoundedRect(-w / 2 + 2, -h / 2 + 9, w, h, r);
+    g.fillStyle(0x1f2a44, 0.08);
+    g.fillRoundedRect(-w / 2 + 1, -h / 2 + 8, w, h, r);
     // bottom lip for depth
     g.fillStyle(Phaser.Display.Color.HexStringToColor(lip).color, 1);
-    g.fillRoundedRect(-w / 2, -h / 2 + 7, w, h, r);
+    g.fillRoundedRect(-w / 2, -h / 2 + 6, w, h, r);
     // body
     g.fillStyle(Phaser.Display.Color.HexStringToColor(base).color, 1);
     g.fillRoundedRect(-w / 2, -h / 2, w, h, r);
@@ -215,13 +216,13 @@
   }
 
   function columnFromX(x) {
-    var c = Math.floor(x / (CELL_W + GAP));
+    var c = Math.floor((x - PAD_X + GAP / 2) / (CELL_W + GAP));
     return Math.max(0, Math.min(COLS - 1, c));
   }
 
   function cellFromPoint(x, y) {
     var c = columnFromX(x);
-    var r = ROWS - 1 - Math.floor(y / (CELL_H + GAP));
+    var r = ROWS - 1 - Math.floor((y - PAD_Y + GAP / 2) / (CELL_H + GAP));
     r = Math.max(0, Math.min(ROWS - 1, r));
     return { r: r, c: c };
   }
