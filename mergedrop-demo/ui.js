@@ -998,6 +998,11 @@
       setTimeout(function () {
         showScreen('home');
         if (state.shots) {
+          if (params.get('lang')) {
+            profile.lang = params.get('lang');
+            T.setLang(profile.lang);
+            applyLanguage();
+          }
           runScene(params.get('scene') || 'home');
         } else if (!profile.tutorialSeen) {
           setTimeout(function () { openTutorial(0); }, 420);
