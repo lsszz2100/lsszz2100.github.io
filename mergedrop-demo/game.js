@@ -296,7 +296,6 @@
       }).setOrigin(0.5);
       layers.ghost.add(badge);
     }
-    void pal;
   }
 
   /* ----------------------------------------------------------- animation */
