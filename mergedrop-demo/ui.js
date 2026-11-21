@@ -1176,9 +1176,17 @@
       b.textContent = text;
       b.style.animation = 'none';
       b.style.opacity = '1';
-      b.style.transform = 'none';
-      b.style.top = '455px';
-      b.style.fontSize = '86px';
+      b.style.left = '50%';
+      b.style.right = 'auto';
+      b.style.width = 'auto';
+      b.style.transform = 'translateX(-50%)';
+      b.style.top = '470px';
+      b.style.fontSize = '76px';
+      b.style.padding = '10px 46px';
+      b.style.borderRadius = '34px';
+      b.style.background = 'linear-gradient(180deg, #FF9273, #FF6B4E)';
+      b.style.boxShadow = '0 16px 34px rgba(255, 107, 78, .38)';
+      b.style.textShadow = 'none';
       stage.appendChild(b);
     }
     draw();
