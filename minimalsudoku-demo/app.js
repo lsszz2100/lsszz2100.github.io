@@ -24,6 +24,7 @@
   var toastId = null;
   var pendingModal = null;
   var modalOpen = false;
+  var modalOnClose = null;
   var captureMode = false;
 
   var cellEls = [];
