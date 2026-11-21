@@ -154,6 +154,12 @@
 
       dataNote: 'This app keeps everything on your device. There is no account and no server.',
       offlineNote: 'Offline play · No sign-up · Progress saved on this device',
+      feat1: 'No timer',
+      feat1Sub: 'Play at your own pace',
+      feat2: 'Hold to preview',
+      feat2Sub: 'See the path before you tap',
+      feat3: 'Works offline',
+      feat3Sub: 'No sign-up, no account',
       loading: 'Loading…'
     },
 
@@ -308,6 +314,12 @@
 
       dataNote: '이 앱의 모든 데이터는 기기에만 저장됩니다. 계정도 서버도 없습니다.',
       offlineNote: '오프라인 플레이 · 가입 없음 · 진행 상황은 이 기기에 저장',
+      feat1: '시간 제한 없음',
+      feat1Sub: '원하는 속도로 플레이',
+      feat2: '길게 눌러 미리보기',
+      feat2Sub: '경로를 먼저 확인',
+      feat3: '오프라인 지원',
+      feat3Sub: '가입도 계정도 없음',
       loading: '불러오는 중…'
     }
   };
