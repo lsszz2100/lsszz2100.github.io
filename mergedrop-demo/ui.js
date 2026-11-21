@@ -1052,7 +1052,7 @@
     if (name === 'guide') {
       demoBoard();
       setTimeout(function () {
-        window.BoardView.showPreview(1, 16, 16);
+        window.BoardView.showPreview(0, 16, 16);
       }, 260);
       return;
     }
@@ -1119,8 +1119,8 @@
     [2, 64, 8, 16, 8],
     [8, 32, 16, 32, 4],
     [4, 16, 128, 8, 2],
-    [0, 0, 256, 0, 0],
-    [0, 0, 0, 0, 0],
+    [32, 8, 256, 64, 4],
+    [16, 2, 64, 8, 32],
     [0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0]
   ];
