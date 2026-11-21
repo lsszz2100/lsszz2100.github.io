@@ -143,10 +143,13 @@
     var h = window.innerHeight;
     if (captureMode) {
       stage.style.transform = 'none';
-      document.body.style.overflow = 'auto';
+      document.documentElement.style.height = 'auto';
       document.documentElement.style.overflow = 'auto';
-      document.getElementById('app').style.position = 'static';
-      document.getElementById('app').style.overflow = 'visible';
+      document.body.style.height = 'auto';
+      document.body.style.overflow = 'auto';
+      var appRoot = document.getElementById('app');
+      appRoot.style.position = 'static';
+      appRoot.style.overflow = 'visible';
       stage.style.position = 'relative';
       return;
     }
