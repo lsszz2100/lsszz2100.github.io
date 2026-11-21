@@ -187,6 +187,9 @@
       if (key) nodes[i].textContent = t(key);
     }
     $('btnLangHome').textContent = t('langButton');
+    $('btnLangHome').setAttribute('aria-label', I.getLang() === 'en' ? 'Switch to Korean' : '영어로 전환');
+    $('btnSettingsHome').setAttribute('aria-label', t('settings'));
+    $('btnPause').setAttribute('aria-label', t('pause'));
     $('legalTitle').textContent = t('legalTitle');
     $('verLine').textContent = t('version', { v: VERSION });
     document.documentElement.lang = I.getLang();
@@ -791,7 +794,7 @@
   }
 
   function showResultModal(ms, isBest, result, dailyCredit) {
-    var badges = (result.badges || []).map(function (b) { return b.name; });
+    var badges = (result.badges || []).map(function (b) { return t('a_' + b.id + '_name'); });
     var body = '<div class="result-time"><strong>' + St.formatTime(ms) + '</strong></div>' +
       (isBest ? '<div class="result-best">' + t('newBest') + '</div>' : '') +
       '<div class="result-grid">' +
@@ -885,6 +888,12 @@
     $('swHighlight').setAttribute('aria-pressed', String(profile.settings.highlight));
     $('swAutoCheck').setAttribute('aria-pressed', String(profile.settings.autoCheck));
     $('swTimer').setAttribute('aria-pressed', String(profile.settings.showTimer));
+    $('swSound').setAttribute('aria-label', t('sound'));
+    $('swVibrate').setAttribute('aria-label', t('vibration'));
+    $('swHighlight').setAttribute('aria-label', t('highlight'));
+    $('swAutoCheck').setAttribute('aria-label', t('autoCheck'));
+    $('swTimer').setAttribute('aria-label', t('showTimer'));
+    $('segLang').setAttribute('aria-label', t('language'));
   }
 
   function toggleSetting(key) {
@@ -922,7 +931,7 @@
       var d = profile.stats.byDiff[diff];
       var row = el('div', 'ds-row');
       row.appendChild(el('span', 'ds-name', t(diff)));
-      row.appendChild(el('span', 'ds-mid', d.solved + ' · ' + t('totalSolved')));
+      row.appendChild(el('span', 'ds-mid', t('solvedCount', { n: d.solved })));
       var avg = d.solved > 0 ? St.formatTime(d.totalMs / d.solved) : '—';
       var best = d.bestMs > 0 ? St.formatTime(d.bestMs) : '—';
       row.appendChild(el('span', 'ds-time', t('best') + ' ' + best));
@@ -943,8 +952,8 @@
       var check = el('div', 'q-check', item.claimed ? '✓' : String(Math.min(item.progress, def.target)));
       card.appendChild(check);
       var main = el('div', 'q-main');
-      main.appendChild(el('span', 'q-name', def.name));
-      main.appendChild(el('span', 'q-desc', def.desc));
+      main.appendChild(el('span', 'q-name', t('q_' + def.id + '_name')));
+      main.appendChild(el('span', 'q-desc', t('q_' + def.id + '_desc')));
       var bar = el('div', 'q-bar');
       var fill = el('i');
       fill.style.width = Math.round(Math.min(1, item.progress / def.target) * 100) + '%';
@@ -953,7 +962,7 @@
       card.appendChild(main);
       var side = el('div', 'q-side');
       side.appendChild(el('span', 'q-reward', t('rewardCoins', { n: def.reward })));
-      var btn = el('button', 'q-claim', item.claimed ? t('claimed') : done ? t('claim') : def.target + '×');
+      var btn = el('button', 'q-claim', item.claimed ? t('claimed') : done ? t('claim') : item.progress + '/' + def.target);
       btn.disabled = item.claimed || !done;
       btn.addEventListener('click', function () {
         var gained = St.claimQuest(profile, item.id);
@@ -981,8 +990,8 @@
       var on = !!profile.achievements[a.id];
       var card = el('div', 'ach' + (on ? ' on' : ''));
       card.appendChild(el('div', 'ach-badge', on ? '★' : '·'));
-      card.appendChild(el('span', 'ach-name', a.name));
-      card.appendChild(el('span', 'ach-desc', a.desc));
+      card.appendChild(el('span', 'ach-name', t('a_' + a.id + '_name')));
+      card.appendChild(el('span', 'ach-desc', t('a_' + a.id + '_desc')));
       card.appendChild(el('span', 'ach-state', on ? t('achDone') : t('achLocked')));
       host.appendChild(card);
     });
