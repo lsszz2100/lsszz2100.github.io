@@ -1189,8 +1189,12 @@
     return state.game;
   }
 
+  window.__build = 'ae-' + new Date().getTime();
+
   window.__demo = {
+    build: function () { return window.__build; },
     ready: function () { return state.screen === 'home'; },
+    game: function () { return state.game; },
     home: goHome,
     play: demoPlay,
     levels: function (ch) { state.selectedChapter = ch || 0; showScreen('levels'); },
