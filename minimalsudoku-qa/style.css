@@ -102,6 +102,8 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
+/* game screen fills the 1080x1920 canvas: spread header, board, tools, pad, foot */
+#game { justify-content: space-between; }
 .screen.active { display: flex; }
 
 /* ---------------------------------------------------------------- splash */
@@ -407,7 +409,11 @@ h1, h2, h3, p { margin: 0; }
 .ds-time { font-size: 24px; color: var(--ink-soft); text-align: right; min-width: 170px; }
 
 .sub-note { font-size: 26px; color: var(--soft); padding: 4px 4px 22px; font-weight: 400; }
-.quest-list { display: flex; flex-direction: column; gap: 16px; }
+.quest-list { display: flex; flex-direction: column; gap: 20px; }
+/* quests screen: keep the three cards centred in the tall canvas */
+#quests .panel-body { display: flex; flex-direction: column; }
+#quests .quest-list { flex: 1 1 auto; justify-content: center; }
+#quests .note.center { margin-top: 0; padding: 26px 0 6px; }
 .quest { background: var(--card); border: 2px solid var(--line); border-radius: 26px; padding: 26px 28px; display: flex; align-items: center; gap: 22px; }
 .quest.done { border-color: var(--accent-soft-2); background: var(--accent-soft); }
 .q-check { width: 64px; height: 64px; border-radius: 32px; background: var(--paper-2); display: flex; align-items: center; justify-content: center; font-size: 30px; color: var(--soft); flex: 0 0 auto; }
@@ -423,7 +429,9 @@ h1, h2, h3, p { margin: 0; }
 .q-claim[disabled] { background: var(--line); color: var(--soft); }
 
 .ach-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.ach { background: var(--card); border: 2px solid var(--line); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 8px; min-height: 200px; }
+#achievements .panel-body { display: flex; flex-direction: column; }
+#achievements .ach-list { margin: auto 0; }
+.ach { background: var(--card); border: 2px solid var(--line); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 8px; min-height: 240px; justify-content: center; }
 .ach.on { background: var(--accent-soft); border-color: var(--accent-soft-2); }
 .ach-badge { width: 56px; height: 56px; border-radius: 28px; background: var(--paper-2); display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--soft); }
 .ach.on .ach-badge { background: var(--accent); color: #fff; }
