@@ -65,12 +65,9 @@
       ]);
       S.tray = [P('sq2', 1), P('v4', 4), P('dot', 2)];
       S.score = 2380;
-      var fxCells = [];
-      for (var c = 0; c < 8; c++) fxCells.push([7, c]);
-      for (var c2 = 0; c2 < 8; c2++) fxCells.push([6, c2]);
-      S.fx = [{ cells: fxCells, t0: Date.now() - 60 }];
-      S.floaters = [{ text: '+360', x: 300, y: 1300, t0: Date.now() - 120 },
-        { text: 'COMBO x3', x: 540, y: 400, t0: Date.now() - 120, big: true }];
+      S.fx = [];
+      S.floaters = [{ text: '+360', x: 540, y: 1180, t0: Date.now() - 120, big: true }];
+      S.toast = null;
       S.toast = null;
     },
     quests: function () {
@@ -183,10 +180,20 @@
       b.onclick = function () { shoot(s[0], s[1], s[2], s[3]); };
       box.appendChild(b);
     });
-    var pre = document.createElement('button');
-    pre.textContent = 'preview home';
-    pre.onclick = function () { setup('home'); S.screen = 'home'; bp.render(); };
-    box.appendChild(pre);
+    var spares = [['tut0', 'tut', 0], ['tut1', 'tut', 1], ['tut2', 'tut', 2], ['settings', 'settings'], ['terms', 'doc'], ['pause', 'pause'], ['exit', 'exit'], ['skins', 'skins'], ['home', null]];
+    spares.forEach(function (sp) {
+      var b = document.createElement('button');
+      b.textContent = 'preview ' + sp[0];
+      b.onclick = function () {
+        setup('home');
+        if (sp[0] === 'home') { S.screen = 'home'; S.modal = null; }
+        else if (sp[0].indexOf('tut') === 0) { S.screen = 'home'; S.modal = 'tut'; S.tutStep = sp[2] || 0; S.tutFrom = 'home'; }
+        else if (sp[0] === 'terms') { S.screen = 'home'; S.modal = 'doc'; S.doc = 'terms'; S.docScroll = 0; }
+        else { S.screen = 'home'; S.modal = sp[1]; }
+        bp.render();
+      };
+      box.appendChild(b);
+    });
   }
 
   window.addEventListener('load', function () {

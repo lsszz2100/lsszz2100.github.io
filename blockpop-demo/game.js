@@ -726,7 +726,7 @@
     // 은은한 장식 블록
     c.save();
     c.globalAlpha = 0.55;
-    var deco = [[110, 120, 74, '#FFD7D2'], [950, 90, 56, '#CFE6FF'], [140, 1780, 62, '#D8F2E6'], [960, 1750, 80, '#E3DBFF']];
+    var deco = [[120, 1730, 66, '#D8F2E6'], [966, 1700, 80, '#E3DBFF']];
     for (var i = 0; i < deco.length; i++) {
       c.save();
       c.translate(deco[i][0], deco[i][1]);
@@ -907,8 +907,40 @@
       txt(c, ach[a].label, ax, 1452, 22, 700, done ? UI.ink2 : UI.ink3, 'center', 150);
     }
 
-    txt(c, T('localOnly'), cx, H - 92, 26, 700, UI.ink3);
-    txt(c, 'v1.0.0', W - 80, H - 92, 24, 700, UI.ink3, 'right');
+    // 오늘의 퀘스트 스트립
+    var nq = nextQuest();
+    if (nq) {
+      card(c, 60, 1500, 960, 176, 32);
+      txt(c, T('daily'), 100, 1552, 26, 900, UI.ink3, 'left');
+      txt(c, T('quest_' + nq.id), 100, 1602, 32, 900, UI.ink, 'left', 620);
+      var pn = questProgress(nq);
+      c.fillStyle = '#DFE9F7';
+      rr(c, 100, 1632, 620, 18, 9); c.fill();
+      c.fillStyle = questDone(nq) ? UI.mint : UI.sky;
+      rr(c, 100, 1632, Math.max(10, 620 * (pn / nq.target)), 18, 9); c.fill();
+      drawCoin(c, 790, 1596, 22);
+      txt(c, '+' + nq.reward, 820, 1596, 30, 900, UI.ink, 'left');
+      c.save();
+      c.fillStyle = mix(UI.sky, '#FFFFFF', 0.86);
+      rr(c, 900, 1560, 96, 96, 28); c.fill();
+      c.restore();
+      txt(c, '›', 948, 1606, 52, 700, UI.sky);
+      hit('homeQuest', 60, 1500, 960, 176, function () { S.modal = 'quests'; S.questScroll = 0; });
+    }
+
+    txt(c, T('localOnly'), cx, H - 70, 26, 700, UI.ink3);
+    txt(c, 'v1.0.0', W - 80, H - 70, 24, 700, UI.ink3, 'right');
+  }
+
+  function nextQuest() {
+    for (var i = 0; i < save.quests.length; i++) {
+      var q = save.quests[i];
+      if (!(save.daily.claimed && save.daily.claimed[q.id]) && !questDone(q)) return q;
+    }
+    for (var j = 0; j < save.quests.length; j++) {
+      if (!(save.daily.claimed && save.daily.claimed[save.quests[j].id])) return save.quests[j];
+    }
+    return null;
   }
 
   function questsReady() {
@@ -988,9 +1020,10 @@
     txt(c, T('score'), 110, 208, 30, 900, UI.ink3, 'left');
     txt(c, String(S.score), 110, 286, 92, 900, UI.ink, 'left');
     txt(c, T('best') + ' ' + Math.max(save.best, S.score), W - 110, 218, 28, 700, UI.ink3, 'right');
-    var coinXw = W - 110;
-    drawCoin(c, coinXw - 84, 292, 26);
-    txt(c, String(S.coins), coinXw - 44, 294, 40, 900, UI.ink, 'right');
+    var coinTxt = String(S.coins);
+    var coinW = measure(c, coinTxt, 40, 900);
+    drawCoin(c, W - 110 - coinW - 28, 292, 25);
+    txt(c, coinTxt, W - 110, 294, 40, 900, UI.ink, 'right');
 
     // 콤보 표시
     if (S.combo >= 2) {
@@ -1351,8 +1384,8 @@
 
   function drawGameOver(c) {
     scrim(c);
-    modalPanel(c, 470, 1000);
-    txt(c, T('overTitle'), W / 2, 570, 56, 900, UI.ink);
+    modalPanel(c, 486, 900);
+    txt(c, T('overTitle'), W / 2, 578, 56, 900, UI.ink);
     var isBest = S.score >= save.best && S.score > 0;
     if (isBest) {
       var bw = 320;
@@ -1360,19 +1393,19 @@
       var g = c.createLinearGradient(W / 2 - bw / 2, 0, W / 2 + bw / 2, 0);
       g.addColorStop(0, '#FFC93C'); g.addColorStop(1, '#FF8A3D');
       c.fillStyle = g;
-      rr(c, W / 2 - bw / 2, 612, bw, 56, 28); c.fill();
+      rr(c, W / 2 - bw / 2, 620, bw, 54, 27); c.fill();
       c.restore();
-      txt(c, T('newBest'), W / 2, 641, 30, 900, '#FFFFFF');
+      txt(c, T('newBest'), W / 2, 648, 29, 900, '#FFFFFF');
     } else {
-      txt(c, T('best') + ' ' + save.best, W / 2, 640, 30, 700, UI.ink3);
+      txt(c, T('best') + ' ' + save.best, W / 2, 646, 30, 700, UI.ink3);
     }
-    txt(c, T('finalScore'), W / 2, 726, 28, 700, UI.ink3);
-    txt(c, String(S.score), W / 2, 806, 100, 900, UI.ink);
+    txt(c, T('finalScore'), W / 2, 722, 27, 700, UI.ink3);
+    txt(c, String(S.score), W / 2, 796, 96, 900, UI.ink);
 
-    press(c, 150, 872, 780, 120, '▶  ' + T('revive'), { bg: S.reviveUsed ? '#C9D5E8' : UI.mint, size: 44 });
+    press(c, 150, 858, 780, 118, '▶  ' + T('revive'), { bg: S.reviveUsed ? '#C9D5E8' : UI.mint, size: 44 });
     if (!S.reviveUsed) {
-      txt(c, T('reviveSub'), W / 2, 1016, 25, 700, UI.ink3, 'center', 780);
-      hit('revive', 150, 872, 780, 120, function () {
+      txt(c, T('reviveSub'), W / 2, 1002, 25, 700, UI.ink3, 'center', 780);
+      hit('revive', 150, 858, 780, 118, function () {
         if (window.AndroidHost && window.AndroidHost.tryShowRewarded) {
           pendingReward = 'revive';
           var shown = false;
@@ -1383,13 +1416,13 @@
         }
       });
     } else {
-      txt(c, T('reviveUsed'), W / 2, 1016, 25, 700, UI.ink3);
+      txt(c, T('reviveUsed'), W / 2, 1002, 25, 700, UI.ink3);
     }
 
-    press(c, 150, 1060, 780, 130, T('again'), { bg: UI.coral, size: 48 });
-    hit('again', 150, 1060, 780, 130, function () { newGame(); });
-    press(c, 150, 1210, 780, 116, T('home'), { flat: true, size: 42 });
-    hit('home', 150, 1210, 780, 116, function () { goHome(); });
+    press(c, 150, 1040, 780, 126, T('again'), { bg: UI.coral, size: 48 });
+    hit('again', 150, 1040, 780, 126, function () { newGame(); });
+    press(c, 150, 1188, 780, 112, T('home'), { flat: true, size: 42 });
+    hit('home', 150, 1188, 780, 112, function () { goHome(); });
   }
 
   var pendingReward = null;
@@ -1481,7 +1514,7 @@
 
   function drawQuests(c) {
     scrim(c);
-    modalPanel(c, 300, 1320);
+    modalPanel(c, 300, 1120);
     txt(c, T('daily'), W / 2, 386, 46, 900, UI.ink);
     txt(c, T('dailySub'), W / 2, 436, 26, 700, UI.ink3);
     closeBtn(c, W - 160, 386, function () { S.modal = null; });
@@ -1497,7 +1530,7 @@
       var claimed = !!(save.daily.claimed && save.daily.claimed[q.id]);
       c.fillStyle = done ? '#F0FBF6' : '#F5F8FE';
       rr(c, 130, y, 820, 200, 30); c.fill();
-      txt(c, T('quest_' + q.id), 168, y + 56, 32, 900, UI.ink, 'left', 560);
+      txt(c, T('quest_' + q.id), 168, y + 56, 31, 900, UI.ink, 'left', 500);
       // 진행 바
       var bw = 520, bx = 168, by = y + 108;
       c.fillStyle = '#DFE9F7';
@@ -1506,12 +1539,12 @@
       rr(c, bx, by, Math.max(12, bw * (p / q.target)), 22, 11); c.fill();
       txt(c, p + ' / ' + q.target, bx + bw / 2, by + 60, 24, 700, UI.ink2);
       // 보상
-      drawCoin(c, 700, y + 58, 22);
-      txt(c, '+' + q.reward, 728, y + 58, 32, 900, UI.ink, 'left');
+      drawCoin(c, 726, y + 58, 21);
+      txt(c, '+' + q.reward, 754, y + 58, 32, 900, UI.ink, 'left');
       if (done && !claimed) {
-        press(c, 780, y + 120, 140, 62, T('claim'), { bg: UI.mint, size: 28, rad: 20, labelDY: 0 });
+        press(c, 790, y + 118, 130, 60, T('claim'), { bg: UI.mint, size: 27, rad: 20, labelDY: 0 });
         (function (qq) {
-          hit('claim', 780, y + 120, 140, 62, function () {
+          hit('claim', 790, y + 118, 130, 60, function () {
             if (!save.daily.claimed) save.daily.claimed = {};
             if (save.daily.claimed[qq.id]) return;
             save.daily.claimed[qq.id] = true;
@@ -1526,8 +1559,8 @@
       }
     }
 
-    press(c, 130, 1290, 820, 116, T('gotIt'), { flat: true, size: 38 });
-    hit('questClose', 130, 1290, 820, 116, function () { S.modal = null; });
+    press(c, 130, 1278, 820, 108, T('gotIt'), { flat: true, size: 38 });
+    hit('questClose', 130, 1278, 820, 108, function () { S.modal = null; });
   }
 
   function drawSkins(c) {
