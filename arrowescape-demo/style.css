@@ -80,6 +80,7 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
   padding: 0 44px;
 }
 .screen.active { display: block; }
+#home.active { display: flex; flex-direction: column; padding-bottom: 34px; }
 
 /* ================================================================ splash */
 
@@ -171,10 +172,10 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
 .pill:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(31, 42, 68, .06); }
 .lang-pill { font-size: 26px; letter-spacing: .5px; color: var(--blue-deep); }
 
-.hero { padding-top: 12px; text-align: center; }
+.hero { flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; padding-top: 4px; }
 
 .hero-art {
-  height: 250px;
+  height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -182,13 +183,13 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
   margin-bottom: 8px;
 }
 .ha {
-  width: 128px;
-  height: 128px;
-  border-radius: 34px;
+  width: 150px;
+  height: 150px;
+  border-radius: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 74px;
+  font-size: 88px;
   color: #fff;
   box-shadow: 0 12px 0 rgba(31, 42, 68, .08), 0 18px 36px rgba(47, 134, 214, .18);
 }
@@ -198,13 +199,13 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
 .ha-4 { background: linear-gradient(180deg, #FFC45C, #EE9C21); transform: rotate(9deg) translateY(-6px); }
 
 .hero-title {
-  font-size: 66px;
+  font-size: 72px;
   line-height: 1.14;
   font-weight: 900;
   margin: 0 0 14px;
   color: #1E3358;
 }
-.hero-sub { font-size: 27px; color: var(--soft); margin: 0 auto 22px; max-width: 820px; line-height: 1.42; font-weight: 700; }
+.hero-sub { font-size: 28px; color: var(--soft); margin: 0 auto 22px; max-width: 820px; line-height: 1.42; font-weight: 700; }
 
 .hero-steps { display: flex; gap: 12px; justify-content: center; }
 .hs-item {
@@ -232,7 +233,7 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
 }
 
 .progress-card {
-  margin-top: 26px;
+  margin-top: 22px;
   background: var(--card);
   border: 2px solid var(--line);
   border-radius: 34px;
@@ -453,16 +454,16 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
 .board-wrap {
   position: absolute;
   left: 36px;
-  top: 250px;
+  top: 240px;
   width: 1008px;
-  height: 1108px;
+  height: 1160px;
 }
 
 .tap-hint {
   position: absolute;
   left: 0;
   right: 0;
-  top: 1374px;
+  top: 1420px;
   text-align: center;
   font-size: 22px;
   color: #93A4BE;
@@ -473,13 +474,13 @@ button { font-family: inherit; font-weight: 800; border: none; background: none;
   position: absolute;
   left: 44px;
   right: 44px;
-  top: 1436px;
+  top: 1490px;
   display: flex;
   gap: 18px;
 }
 .booster {
   flex: 1;
-  height: 190px;
+  height: 210px;
   border-radius: 34px;
   background: #fff;
   border: 2px solid var(--line);
