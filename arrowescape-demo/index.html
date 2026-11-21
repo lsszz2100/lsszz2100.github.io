@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#F7FBFF">
+<title>Arrow Escape: Tap &amp; Clear</title>
+<link rel="stylesheet" href="style.css?v=1795277360">
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+
+    <!-- ============================== SPLASH ============================== -->
+    <section id="splash" class="screen active">
+      <div class="splash-art">
+        <span class="sp-arrow sp-a">↑</span>
+        <span class="sp-arrow sp-b">→</span>
+        <span class="sp-arrow sp-c">↓</span>
+      </div>
+      <div class="splash-title">ARROW ESCAPE</div>
+      <div class="splash-sub">Tap &amp; Clear</div>
+    </section>
+
+    <!-- =============================== HOME =============================== -->
+    <section id="home" class="screen">
+      <header class="top-bar">
+        <div class="brand">
+          <div class="brand-mark">↗</div>
+          <div class="brand-text">
+            <strong>ARROW ESCAPE</strong>
+            <span data-i18n="appSub">Tap &amp; Clear</span>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="pill" id="btnHelp" aria-label="How to play">?</button>
+          <button class="pill" id="btnSettingsHome" aria-label="Settings">⚙</button>
+          <button class="pill lang-pill" id="btnLangHome">EN</button>
+        </div>
+      </header>
+
+      <div class="hero">
+        <div class="hero-art">
+          <span class="ha ha-1">↑</span>
+          <span class="ha ha-2">→</span>
+          <span class="ha ha-3">←</span>
+          <span class="ha ha-4">↓</span>
+        </div>
+        <h1 class="hero-title" data-i18n="heroTitle" data-i18n-html="true">Tap the arrow.<br>Clear the way.</h1>
+        <p class="hero-sub" data-i18n="heroSub">Every arrow flies the way it points.</p>
+        <div class="hero-steps">
+          <div class="hs-item"><span class="hs-ico">1</span><b data-i18n="step1">Tap an arrow</b></div>
+          <div class="hs-item"><span class="hs-ico">2</span><b data-i18n="step2">Clear its path</b></div>
+          <div class="hs-item"><span class="hs-ico">3</span><b data-i18n="step3">Empty the board</b></div>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="pc-top">
+          <span data-i18n="progress">Progress</span>
+          <b id="homeLevel">Level 1 / 180</b>
+        </div>
+        <div class="pc-bar"><i id="homeFill"></i></div>
+        <div class="pc-stats">
+          <div class="pc-stat">
+            <span class="stat-label">★ <em data-i18n="stars">STARS</em></span>
+            <span class="stat-value" id="homeStars">0</span>
+          </div>
+          <div class="pc-stat coin">
+            <span class="stat-label">● <em data-i18n="coins">COINS</em></span>
+            <span class="stat-value" id="homeCoins">0</span>
+          </div>
+          <div class="pc-stat">
+            <span class="stat-label" data-i18n="dailyTitle">Daily puzzle</span>
+            <span class="stat-value small" id="homeDaily">—</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="play-btn" id="btnPlay">
+        <span id="playLabel" data-i18n="play">PLAY</span>
+        <small id="playSub">Level 1</small>
+      </button>
+
+      <nav class="home-nav">
+        <button class="nav-btn" id="btnLevels"><span class="nav-ico">▦</span><span data-i18n="levelsTitle">Levels</span></button>
+        <button class="nav-btn" id="btnDaily"><span class="nav-ico">◷</span><span data-i18n="dailyTitle">Daily</span><i class="dot" id="dailyDot"></i></button>
+        <button class="nav-btn" id="btnQuests"><span class="nav-ico">✓</span><span data-i18n="questsTitle">Quests</span><i class="dot" id="questDot"></i></button>
+        <button class="nav-btn" id="btnSkins"><span class="nav-ico">◈</span><span data-i18n="skinsTitle">Styles</span></button>
+        <button class="nav-btn" id="btnBadges"><span class="nav-ico">★</span><span data-i18n="badgesTitle">Badges</span></button>
+      </nav>
+
+      <p class="home-foot" data-i18n="offlineNote">Offline play · No sign-up · Progress saved on this device</p>
+    </section>
+
+    <!-- ============================== LEVELS ============================== -->
+    <section id="levels" class="screen">
+      <header class="sub-bar">
+        <button class="hud-icon" id="btnLevelsBack" aria-label="Back">←</button>
+        <h2 data-i18n="levelsTitle">Levels</h2>
+        <button class="pill lang-pill" id="btnLangLevels">EN</button>
+      </header>
+      <div class="chapter-pills" id="chapterPills"></div>
+      <div class="chapter-head">
+        <b id="chapterName">Meadow</b>
+        <span id="chapterStars">0 / 90</span>
+      </div>
+      <div class="level-grid" id="levelGrid"></div>
+      <p class="levels-note" data-i18n="levelsSub">Clear a level to unlock the next one.</p>
+    </section>
+
+    <!-- =============================== PLAY =============================== -->
+    <section id="play" class="screen">
+      <header class="hud">
+        <button class="hud-icon" id="btnPause" aria-label="Pause">❚❚</button>
+        <div class="hud-mid">
+          <span class="hud-label" id="playChapter">Meadow</span>
+          <b class="hud-level" id="playLevel">Level 1</b>
+        </div>
+        <div class="hud-chip"><span data-i18n="remaining">LEFT</span><b id="playLeft">0</b></div>
+        <div class="hud-chip coin"><span data-i18n="coins">COINS</span><b id="playCoins">0</b></div>
+        <button class="hud-icon lang-pill" id="btnLangPlay">EN</button>
+      </header>
+
+      <div class="status-row">
+        <div class="star-trail" id="starTrail">
+          <i class="st on">★</i><i class="st on">★</i><i class="st on">★</i>
+        </div>
+        <div class="waste-chip" id="wasteChip">0</div>
+        <div class="left-chip"><b id="playLeft2">0</b><span data-i18n="remaining">LEFT</span></div>
+      </div>
+
+      <div class="board-wrap" id="boardWrap"></div>
+
+      <div class="tap-hint" id="tapHint" data-i18n="tapHint">Tap an arrow to send it flying</div>
+
+      <div class="boosters">
+        <button class="booster" id="btnHint">
+          <span class="b-ico">◎</span>
+          <span class="b-name" data-i18n="hintName">Hint</span>
+          <span class="b-cost" id="costHint">30</span>
+        </button>
+        <button class="booster" id="btnShuffle">
+          <span class="b-ico">⇄</span>
+          <span class="b-name" data-i18n="shuffleName">Shuffle</span>
+          <span class="b-cost" id="costShuffle">60</span>
+        </button>
+        <button class="booster" id="btnUndo">
+          <span class="b-ico">↺</span>
+          <span class="b-name" data-i18n="undoName">Undo</span>
+          <span class="b-cost" id="costUndo">25</span>
+        </button>
+      </div>
+    </section>
+
+    <div id="fxRoot"></div>
+  </div>
+</div>
+
+<script src="vendor/phaser.min.js?v=1795277360"></script>
+<script src="i18n.js?v=1795277360"></script>
+<script src="core.js?v=1795277360"></script>
+<script src="game.js?v=1795277360"></script>
+<script src="ui.js?v=1795277360"></script>
+</body>
+</html>
