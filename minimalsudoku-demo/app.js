@@ -211,7 +211,7 @@
     }
 
     $('dailySub').textContent = profile.daily.done ? t('todayDone') : t('todayLeft');
-    $('statsSub').textContent = profile.stats.solved + ' · ' + t('totalSolved');
+    $('statsSub').textContent = t('solvedCount', { n: profile.stats.solved });
     var done = 0, claimable = 0;
     profile.quests.items.forEach(function (q) {
       var def = St.questDef(q.id);
