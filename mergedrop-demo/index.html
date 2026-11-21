@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#F4FAFF">
+<title>Merge Drop 2048: Combo Puzzle</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+
+    <!-- ============================== SPLASH ============================== -->
+    <section id="splash" class="screen active">
+      <div class="splash-tile" id="splashTile">2048</div>
+      <div class="splash-title">MERGE DROP</div>
+      <div class="splash-sub">Combo Puzzle</div>
+    </section>
+
+    <!-- =============================== HOME =============================== -->
+    <section id="home" class="screen">
+      <div class="home-bg" aria-hidden="true">
+        <span class="float-tile ft1">2</span>
+        <span class="float-tile ft2">64</span>
+        <span class="float-tile ft3">8</span>
+        <span class="float-tile ft4">256</span>
+        <span class="float-tile ft5">16</span>
+        <span class="float-tile ft6">1024</span>
+      </div>
+
+      <header class="home-top">
+        <div class="brand">
+          <div class="brand-mark">2048</div>
+          <div class="brand-text">
+            <strong data-i18n="appShort">MERGE DROP</strong>
+            <span data-i18n="appSub">Combo Puzzle</span>
+          </div>
+        </div>
+        <div class="home-top-actions">
+          <button class="pill" id="btnHelp" aria-label="How to play">?</button>
+          <button class="pill" id="btnSettingsHome" aria-label="Settings">⚙</button>
+          <button class="pill lang-pill" id="btnLangHome">EN</button>
+        </div>
+      </header>
+
+      <div class="hero">
+        <div class="hero-stack">
+          <div class="hero-tile h128">128</div>
+          <div class="hero-tile h64">64</div>
+          <div class="hero-tile h32">32</div>
+          <div class="hero-tile h16">16</div>
+        </div>
+        <h1 class="hero-title" data-i18n="heroTitle">Drop. Merge. Combo!</h1>
+        <p class="hero-sub" data-i18n="heroSub">Drop numbered tiles, connect matching ones and chase big chain combos.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-label" data-i18n="best">BEST</span>
+          <span class="stat-value" id="homeBest">0</span>
+        </div>
+        <div class="stat-card coin-card">
+          <span class="stat-label" data-i18n="coins">COINS</span>
+          <span class="stat-value" id="homeCoins">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label" data-i18n="bestTile">TOP TILE</span>
+          <span class="stat-value" id="homeBestTile">—</span>
+        </div>
+      </div>
+
+      <button class="play-btn" id="btnPlay">
+        <span data-i18n="play">PLAY</span>
+        <small id="homeGoal">Next goal: 64</small>
+      </button>
+
+      <nav class="home-nav">
+        <button class="nav-btn" id="btnQuests"><span class="nav-ico">✓</span><span data-i18n="quests">Quests</span><i class="dot" id="questDot"></i></button>
+        <button class="nav-btn" id="btnSkins"><span class="nav-ico">◈</span><span data-i18n="skins">Skins</span></button>
+        <button class="nav-btn" id="btnBadges"><span class="nav-ico">★</span><span data-i18n="badges">Badges</span></button>
+        <button class="nav-btn" id="btnSettings"><span class="nav-ico">⚙</span><span data-i18n="settings">Settings</span></button>
+      </nav>
+
+      <p class="home-foot" data-i18n="offlineNote">Play offline · No sign-up · Progress saved on this device</p>
+    </section>
+
+    <!-- =============================== PLAY =============================== -->
+    <section id="play" class="screen">
+      <header class="hud">
+        <button class="hud-icon" id="btnPause" aria-label="Pause">❚❚</button>
+        <div class="hud-score">
+          <span class="hud-label" data-i18n="score">SCORE</span>
+          <span class="hud-value" id="playScore">0</span>
+        </div>
+        <div class="hud-side">
+          <div class="hud-chip"><span data-i18n="best">BEST</span><b id="playBest">0</b></div>
+          <div class="hud-chip coin"><span data-i18n="coins">COINS</span><b id="playCoins">0</b></div>
+        </div>
+        <button class="hud-icon lang-pill" id="btnLangPlay">EN</button>
+      </header>
+
+      <div class="goal-bar">
+        <div class="goal-text">
+          <span class="goal-label" id="goalLabel">NEXT GOAL</span>
+          <span class="goal-target" id="goalTarget">64</span>
+        </div>
+        <div class="goal-track"><div class="goal-fill" id="goalFill"></div></div>
+        <div class="combo-chip" id="comboChip">COMBO x0</div>
+      </div>
+
+      <div class="fever-wrap" id="feverWrap">
+        <div class="fever-fill" id="feverFill"></div>
+        <span class="fever-label" id="feverLabel">FEVER</span>
+      </div>
+
+      <div class="board-wrap" id="boardWrap"></div>
+
+      <div class="tray">
+        <div class="tray-tiles">
+          <span class="tray-label" data-i18n="next">NEXT</span>
+          <div class="tray-tile cur" id="nextMain">2</div>
+          <div class="tray-tile" id="nextSecond">4</div>
+        </div>
+        <div class="tray-hint" id="trayHint" data-i18n="tapHint">Tap a column to drop</div>
+      </div>
+
+      <div class="boosters">
+        <button class="booster" id="btnSwap">
+          <span class="b-ico">⇄</span>
+          <span class="b-name" data-i18n="swapName">Swap</span>
+          <span class="b-cost" id="costSwap">25</span>
+        </button>
+        <button class="booster" id="btnHammer">
+          <span class="b-ico">✕</span>
+          <span class="b-name" data-i18n="hammerName">Hammer</span>
+          <span class="b-cost" id="costHammer">35</span>
+        </button>
+        <button class="booster" id="btnSweep">
+          <span class="b-ico">⇩</span>
+          <span class="b-name" data-i18n="sweepName">Sweep</span>
+          <span class="b-cost" id="costSweep">60</span>
+        </button>
+      </div>
+    </section>
+
+    <div id="modalRoot"></div>
+    <div id="toastRoot"></div>
+  </div>
+</div>
+
+<script src="vendor/phaser.min.js"></script>
+<script src="i18n.js"></script>
+<script src="core.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>
