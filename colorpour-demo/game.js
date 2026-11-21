@@ -593,7 +593,7 @@
 
   function drawTube(x, y, tw, th, balls, opts) {
     opts = opts || {};
-    var ballD = tw * 0.75;
+    var ballD = Math.min(tw * 0.75, th * 0.232);
     var wall = (tw - ballD) / 2;
     var lift = opts.lift || 0;
     y -= lift;
