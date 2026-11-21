@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>Block Pop — screenshot rig</title>
+<style>
+  html,body{margin:0;background:#0d1526;color:#fff;font:16px system-ui}
+  #wrap{padding:16px}
+  #game{width:270px;height:480px;display:block;border-radius:8px;background:#fff}
+  #debug{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;max-width:1000px}
+  #debug button{font:14px/1.4 system-ui;padding:10px 14px;border-radius:10px;border:1px solid #ffffff44;background:#1f2f4d;color:#fff;cursor:pointer}
+  #log{font:12px/1.5 monospace;opacity:.8;margin-top:10px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="1080" height="1920"></canvas>
+  <div id="debug"></div>
+  <div id="log"></div>
+</div>
+<script src="game.js?v=1"></script>
+<script src="shot.js?v=1"></script>
+</body>
+</html>
