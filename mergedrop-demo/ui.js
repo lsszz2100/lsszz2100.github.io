@@ -1177,7 +1177,7 @@
       b.style.animation = 'none';
       b.style.opacity = '1';
       b.style.transform = 'none';
-      b.style.top = '300px';
+      b.style.top = '455px';
       b.style.fontSize = '86px';
       stage.appendChild(b);
     }
