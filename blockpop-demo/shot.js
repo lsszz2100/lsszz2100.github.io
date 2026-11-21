@@ -25,6 +25,12 @@
     save.best = 12480; save.coins = 350; save.games = 128; save.totalLines = 864;
     save.bestCombo = 7; save.maxLines = 3; save.skin = 'candy';
     S.coins = 350; S.lang = 'en';
+    save.quests = [
+      { id: 'lines8', metric: 'lines', target: 8, reward: 25 },
+      { id: 'double3', metric: 'doubles', target: 3, reward: 40 },
+      { id: 'combo3', metric: 'combo3', target: 1, reward: 30 }
+    ];
+    save.daily = { lines: 5, doubles: 3, cross: 0, combo3: 1, combo5: 0, placed: 44, score: 3100, boosters: 1, games: 2, claimed: { combo3: true } };
   }
 
   var SCENES = {
@@ -66,7 +72,7 @@
       S.tray = [P('sq2', 1), P('v4', 4), P('dot', 2)];
       S.score = 2380;
       S.fx = [];
-      S.floaters = [{ text: '+360', x: 540, y: 1180, t0: Date.now() - 120, big: true }];
+      S.floaters = [{ text: '+360', x: 540, y: 1340, t0: Date.now() - 120, big: true }];
       S.toast = null;
       S.toast = null;
     },

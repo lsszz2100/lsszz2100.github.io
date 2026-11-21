@@ -726,7 +726,7 @@
     // 은은한 장식 블록
     c.save();
     c.globalAlpha = 0.55;
-    var deco = [[120, 1730, 66, '#D8F2E6'], [966, 1700, 80, '#E3DBFF']];
+    var deco = [[112, 1846, 58, '#D8F2E6'], [978, 1836, 70, '#E3DBFF']];
     for (var i = 0; i < deco.length; i++) {
       c.save();
       c.translate(deco[i][0], deco[i][1]);
@@ -1446,13 +1446,13 @@
 
   function drawSettings(c) {
     scrim(c);
-    modalPanel(c, 300, 1320);
-    txt(c, T('settingsTitle'), W / 2, 386, 48, 900, UI.ink);
-    closeBtn(c, W - 160, 386, function () { S.modal = null; });
+    modalPanel(c, 330, 930);
+    txt(c, T('settingsTitle'), W / 2, 416, 48, 900, UI.ink);
+    closeBtn(c, W - 160, 416, function () { S.modal = null; });
 
     // 언어
-    txt(c, T('language'), 150, 480, 32, 900, UI.ink, 'left');
-    var lx = 620, ly = 442;
+    txt(c, T('language'), 150, 512, 32, 900, UI.ink, 'left');
+    var lx = 620, ly = 474;
     c.save();
     c.fillStyle = '#EEF4FD';
     rr(c, lx, ly, 300, 76, 38); c.fill();
@@ -1473,7 +1473,7 @@
       { label: T('privacy'), action: function () { S.modal = 'doc'; S.doc = 'privacy'; S.docScroll = 0; } }
     ];
     for (var i = 0; i < rows.length; i++) {
-      var y = 560 + i * 112;
+      var y = 580 + i * 112;
       c.fillStyle = '#F4F8FF';
       rr(c, 130, y, 820, 96, 26); c.fill();
       txt(c, rows[i].label, 168, y + 49, 34, 700, UI.ink, 'left');
@@ -1482,15 +1482,15 @@
     }
 
     // 사이트 링크
-    txt(c, T('opensBrowser') + ' · lsszz2100.github.io/blockpop-privacy', W / 2, 962, 22, 700, UI.ink3);
+    txt(c, T('opensBrowser') + ' · lsszz2100.github.io/blockpop-privacy', W / 2, 932, 22, 700, UI.ink3);
 
     // 데이터 초기화
-    press(c, 130, 1004, 820, 116, T('resetData'), { flat: true, size: 36, color: UI.coral, line: '#FFD9D4' });
-    hit('reset', 130, 1004, 820, 116, function () { S.modal = 'reset'; });
+    press(c, 130, 968, 820, 112, T('resetData'), { flat: true, size: 36, color: UI.coral, line: '#FFD9D4' });
+    hit('reset', 130, 968, 820, 112, function () { S.modal = 'reset'; });
 
     // 데이터 고지
-    txtWrap(c, T('dataNote'), W / 2, 1180, 820, 28, 700, UI.ink2, 24);
-    txt(c, 'Block Pop 1.0.0 · com.mrlee.blockpop', W / 2, 1540, 24, 700, UI.ink3);
+    txtWrap(c, T('dataNote'), W / 2, 1134, 820, 28, 700, UI.ink2, 24);
+    txt(c, 'Block Pop 1.0.0 · com.mrlee.blockpop', W / 2, 1216, 24, 700, UI.ink3);
   }
 
   function drawReset(c) {
@@ -1565,12 +1565,12 @@
 
   function drawSkins(c) {
     scrim(c);
-    modalPanel(c, 500, 920);
-    txt(c, T('skinTitle'), W / 2, 588, 46, 900, UI.ink);
-    closeBtn(c, W - 160, 588, function () { S.modal = null; });
+    modalPanel(c, 490, 860);
+    txt(c, T('skinTitle'), W / 2, 574, 46, 900, UI.ink);
+    closeBtn(c, W - 160, 574, function () { S.modal = null; });
     for (var i = 0; i < SKINS.length; i++) {
       var sk = SKINS[i];
-      var y = 660 + i * 220;
+      var y = 636 + i * 220;
       var owned = save.skins.indexOf(sk.id) >= 0;
       var active = save.skin === sk.id;
       c.fillStyle = active ? '#F0F7FF' : '#F6F9FE';
@@ -1606,16 +1606,16 @@
 
   function drawTutorial(c) {
     scrim(c);
-    modalPanel(c, 360, 1200);
-    txt(c, T('tutTitle'), W / 2, 448, 48, 900, UI.ink);
-    closeBtn(c, W - 160, 448, function () {
+    modalPanel(c, 372, 1150);
+    txt(c, T('tutTitle'), W / 2, 452, 48, 900, UI.ink);
+    closeBtn(c, W - 160, 452, function () {
       if (S.tutFrom === 'settings') S.modal = 'settings'; else S.modal = null;
       if (!save.seenTut) { save.seenTut = true; persist(); }
     });
 
     var step = S.tutStep || 0;
     // 삽화
-    var ix = 150, iy = 530, iw = 780, ih = 440;
+    var ix = 150, iy = 520, iw = 780, ih = 430;
     c.fillStyle = '#F3F8FF';
     rr(c, ix, iy, iw, ih, 32); c.fill();
 
@@ -1664,25 +1664,25 @@
 
     var titles = [T('tut1t'), T('tut2t'), T('tut3t')];
     var bodies = [T('tut1b'), T('tut2b'), T('tut3b')];
-    txt(c, titles[step], W / 2, 1030, 42, 900, UI.ink);
-    txtWrap(c, bodies[step], W / 2, 1100, 760, 30, 700, UI.ink2, 28);
+    txt(c, titles[step], W / 2, 1018, 42, 900, UI.ink);
+    txtWrap(c, bodies[step], W / 2, 1084, 760, 29, 700, UI.ink2, 28);
 
     // 점
     for (var d = 0; d < 3; d++) {
       c.fillStyle = d === step ? UI.sky : '#D8E3F4';
-      c.beginPath(); c.arc(W / 2 - 44 + d * 44, 1270, 12, 0, Math.PI * 2); c.fill();
+      c.beginPath(); c.arc(W / 2 - 44 + d * 44, 1250, 12, 0, Math.PI * 2); c.fill();
     }
 
-    press(c, 150, 1320, 520, 116, step < 2 ? T('next') : T('start'), { bg: UI.coral, size: 42 });
-    hit('tutNext', 150, 1320, 520, 116, function () {
+    press(c, 150, 1300, 520, 116, step < 2 ? T('next') : T('start'), { bg: UI.coral, size: 42 });
+    hit('tutNext', 150, 1300, 520, 116, function () {
       if (S.tutStep < 2) { S.tutStep++; return; }
       if (!save.seenTut) { save.seenTut = true; persist(); }
       if (S.tutFrom === 'settings') S.modal = 'settings';
       else if (S.tutFrom === 'first') { S.modal = null; newGame(); }
       else S.modal = null;
     });
-    press(c, 700, 1320, 230, 116, T('skip'), { flat: true, size: 34 });
-    hit('tutSkip', 700, 1320, 230, 116, function () {
+    press(c, 700, 1300, 230, 116, T('skip'), { flat: true, size: 34 });
+    hit('tutSkip', 700, 1300, 230, 116, function () {
       if (!save.seenTut) { save.seenTut = true; persist(); }
       if (S.tutFrom === 'first') { S.modal = null; newGame(); }
       else S.modal = S.tutFrom === 'settings' ? 'settings' : null;
@@ -1853,7 +1853,12 @@
       c.save();
       c.globalAlpha = 1 - k;
       var y = f.y - 80 * k;
+      c.save();
+      c.shadowColor = 'rgba(255,255,255,0.95)';
+      c.shadowBlur = 18;
       txt(c, f.text, f.x, y, f.big ? 64 : 44, 900, f.big ? UI.coral : UI.sky);
+      txt(c, f.text, f.x, y, f.big ? 64 : 44, 900, f.big ? UI.coral : UI.sky);
+      c.restore();
       c.restore();
     }
   }
