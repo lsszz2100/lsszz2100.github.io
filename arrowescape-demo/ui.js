@@ -380,7 +380,8 @@
       [1, 2, 3].map(function (k) { return '<i class="' + (k <= g.stars ? 'on' : '') + '">★</i>'; }).join('') +
       '</div>' +
       '<div class="score-panel">' +
-      '<div class="score-box"><span>' + T.t('remaining') + '</span><b>0</b></div>' +
+      '<div class="score-box"><span>' + (state.daily ? T.t('starsLabel') : T.t('level')) + '</span><b>' +
+        (state.daily ? g.stars : state.level) + '</b></div>' +
       '<div class="score-box"><span>' + T.t('blockedShort') + '</span><b>' + g.wasted + '</b></div>' +
       '<div class="score-box gold"><span>' + T.t('coins') + '</span><b>+' + fmt(result.coins) + '</b></div>' +
       '</div>' +
