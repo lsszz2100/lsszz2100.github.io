@@ -185,9 +185,9 @@
   function create() {
     scene = this;
     layers.base = this.add.graphics().setDepth(0);
-    layers.preview = this.add.graphics().setDepth(4);
+    layers.preview = this.add.graphics().setDepth(15);
     layers.tiles = this.add.container(0, 0).setDepth(10);
-    layers.hint = this.add.graphics().setDepth(12);
+    layers.hint = this.add.graphics().setDepth(16);
     layers.fx = this.add.container(0, 0).setDepth(20);
     layers.toast = this.add.container(0, 0).setDepth(30);
 

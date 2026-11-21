@@ -175,7 +175,7 @@
     dom.playLabel.textContent = profile.cleared > 0 ? T.t('continuePlay') : T.t('play');
     dom.playSub.textContent = level >= C.TOTAL_LEVELS && profile.stars[String(C.TOTAL_LEVELS)]
       ? T.t('allClear')
-      : T.t('level') + ' ' + fmt(state.level) + (state.level > 1 ? ' · ' + C.levelSpec(state.level).chapterName : '');
+      : T.t('level') + ' ' + fmt(state.level) + (state.level > 1 ? ' · ' + T.chapter(C.levelSpec(state.level).chapterId) : '');
     var daily = profile.daily;
     if (daily && daily.date === todayKey()) {
       dom.homeDaily.textContent = daily.stars ? '★'.repeat(daily.stars) : '—';
@@ -210,7 +210,7 @@
       var firstLevel = i * C.LEVELS_PER_CHAPTER + 1;
       var unlocked = firstLevel <= profile.unlocked;
       return '<button class="ch-pill ' + (i === chapter ? 'on' : '') + (unlocked ? '' : ' locked') +
-        '" data-ch="' + i + '">' + (i + 1) + '. ' + ch.name + '</button>';
+        '" data-ch="' + i + '">' + T.chapter(ch.id) + '</button>';
     }).join('');
     dom.chapterPills.innerHTML = pills;
 
@@ -230,12 +230,12 @@
           [1, 2, 3].map(function (k) { return '<i class="' + (k <= st ? 'on' : '') + '">★</i>'; }).join('') +
           '</span>';
       } else if (locked) {
-        starHtml = '<span class="lv-lock">🔒</span>';
+        starHtml = '<span class="lv-lock"></span>';
       }
       cells += '<button class="' + cls + '" data-lv="' + lv + '">' + lv + starHtml + '</button>';
     }
     dom.levelGrid.innerHTML = cells;
-    dom.chapterName.textContent = C.CHAPTERS[chapter].name;
+    dom.chapterName.textContent = T.chapter(C.CHAPTERS[chapter].id);
     dom.chapterStars.textContent = T.t('chapterStars', { n: stars });
 
     dom.chapterPills.querySelectorAll('[data-ch]').forEach(function (btn) {
@@ -298,7 +298,7 @@
       dom.playLevel.textContent = C.dailyKey(new Date());
     } else {
       var spec = C.levelSpec(state.level);
-      dom.playChapter.textContent = spec.chapterName;
+      dom.playChapter.textContent = T.chapter(spec.chapterId);
       dom.playLevel.textContent = T.t('level') + ' ' + state.level;
     }
     updateBoosterState();

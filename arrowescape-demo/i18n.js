@@ -416,7 +416,22 @@
     }
   };
 
+  var CHAPTER_NAMES = {
+    meadow: { en: 'Meadow', ko: '초원' },
+    sunrise: { en: 'Sunrise', ko: '일출' },
+    lagoon: { en: 'Lagoon', ko: '석호' },
+    orchard: { en: 'Orchard', ko: '과수원' },
+    summit: { en: 'Summit', ko: '정상' },
+    skyline: { en: 'Skyline', ko: '스카이라인' }
+  };
+
   var lang = 'en';
+
+  function chapter(id) {
+    var c = CHAPTER_NAMES[id];
+    if (!c) return id;
+    return c[lang] || c.en;
+  }
 
   function getLang() { return lang; }
 
@@ -460,6 +475,7 @@
 
   root.I18N = {
     t: t,
+    chapter: chapter,
     doc: doc,
     apply: apply,
     setLang: setLang,
