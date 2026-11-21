@@ -59,10 +59,14 @@
       return;
     }
     var scale = Math.min(w / 1080, h / 1920);
+    var ox = Math.round((w - 1080 * scale) / 2);
+    var oy = Math.round((h - 1920 * scale) / 2);
     layers.forEach(function (el) {
-      el.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
-      el.style.left = '50%';
-      el.style.top = '50%';
+      // origin at the top-left so the pixel offset is applied after the scale
+      el.style.transformOrigin = '0 0';
+      el.style.transform = 'translate(' + ox + 'px, ' + oy + 'px) scale(' + scale + ')';
+      el.style.left = '0px';
+      el.style.top = '0px';
       el.style.position = 'absolute';
     });
   }
