@@ -13,17 +13,17 @@
 
   var PALETTES = {
     sunrise: {
-      board: 0xEDF4FE, cell: 0xE2EDFA, rim: 0xD3E4F6,
-      colors: ['#DCEBFF', '#C6E1FF', '#A8CEFF', '#84BDFB', '#6EC8EE', '#5BD6C8',
-        '#4FD1A5', '#FFD166', '#FFB03A', '#FF8A5B', '#FF6B81', '#B983FF', '#7C5CFF']
+      board: 0xFFFFFF, cell: 0xE9F2FC, rim: 0xDCE9F6,
+      colors: ['#B9DBFF', '#8CC5FF', '#5FB0F7', '#3E9BE8', '#2BB9C9', '#21C39A',
+        '#FFC93C', '#FF9F2E', '#FF7A3D', '#FF5C77', '#B983FF', '#8D5BF0', '#2B1E5C']
     },
     candy: {
-      board: 0xFFF1F8, cell: 0xFBE2EF, rim: 0xF4D2E6,
+      board: 0xFFFFFF, cell: 0xFCE7F1, rim: 0xF4D2E6,
       colors: ['#FFE3F1', '#FFCFE7', '#FFB3D9', '#FF95C9', '#FF74B9', '#F65CA6',
         '#E54A94', '#CE3C86', '#AE3078', '#8F2A69', '#74235A', '#5A1B48', '#3F1234']
     },
     ocean: {
-      board: 0xE8F6FB, cell: 0xD8EDF7, rim: 0xC6E3F2,
+      board: 0xFFFFFF, cell: 0xE1F1F9, rim: 0xC6E3F2,
       colors: ['#D6F1FB', '#B7E6F8', '#93D8F2', '#6BC8EA', '#45B6DE', '#2CA3CC',
         '#1F8FB4', '#177B9C', '#126883', '#0E556D', '#0A4457', '#073342', '#04222D']
     }
@@ -485,6 +485,7 @@
     host.style.zIndex = '1';
     host.style.borderRadius = '40px';
     host.style.overflow = 'hidden';
+    host.style.boxShadow = '0 18px 44px rgba(31, 63, 120, .14)';
     host.style.left = parentRect.left + 'px';
     host.style.top = parentRect.top + 'px';
     host.style.width = parentRect.width + 'px';
