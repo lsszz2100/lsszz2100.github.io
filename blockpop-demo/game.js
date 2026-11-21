@@ -39,6 +39,7 @@
       resetData: 'Reset local data', resetAsk: 'Delete all progress, coins, quests and settings stored on this device? This cannot be undone.',
       del: 'DELETE', dataNote: 'All data is stored only on this device.',
       opensBrowser: 'Opens in your browser',
+      openWeb: 'Open web version',
       perfect: 'PERFECT!', nice: 'NICE!', newTray: 'NEW BLOCKS',
       adFail: 'Ad not ready. Try again in a moment.',
       needBooster: 'Out of boosters',
@@ -79,6 +80,7 @@
       resetData: '로컬 데이터 초기화', resetAsk: '이 기기에 저장된 모든 진행 기록·코인·퀘스트·설정을 삭제할까요? 되돌릴 수 없습니다.',
       del: '삭제', dataNote: '모든 데이터는 이 기기에만 저장됩니다.',
       opensBrowser: '브라우저에서 열립니다',
+      openWeb: '웹에서 보기',
       perfect: '완벽해요!', nice: '좋아요!', newTray: '새 블록',
       adFail: '광고를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.',
       needBooster: '부스터가 없어요',
@@ -722,19 +724,6 @@
     g.addColorStop(1, UI.bgBot);
     c.fillStyle = g;
     c.fillRect(0, 0, W, H);
-
-    // 은은한 장식 블록
-    c.save();
-    c.globalAlpha = 0.55;
-    var deco = [[108, 1850, 56, '#D8F2E6'], [982, 1766, 64, '#E3DBFF']];
-    for (var i = 0; i < deco.length; i++) {
-      c.save();
-      c.translate(deco[i][0], deco[i][1]);
-      c.rotate((i % 2 ? 1 : -1) * 0.16);
-      dropBlock(c, -deco[i][2] / 2, -deco[i][2] / 2, deco[i][2], deco[i][3], 0.9);
-      c.restore();
-    }
-    c.restore();
   }
 
   function drawTopBar(c) {
@@ -1816,8 +1805,18 @@
       c.fillStyle = 'rgba(47,155,239,0.22)';
       rr(c, W - 116, barY, 8, barH, 4); c.fill();
     }
-    press(c, 150, 1600, 780, 112, T('gotIt'), { flat: true, size: 38 });
-    hit('docClose', 150, 1600, 780, 112, function () { S.modal = 'settings'; });
+    // 웹 버전(같은 문서) 링크
+    txt(c, T('openWeb') + '  lsszz2100.github.io/blockpop-privacy', W / 2, 1580, 24, 700, UI.sky);
+    hit('docWeb', 150, 1546, 780, 62, function () {
+      var url = 'https://lsszz2100.github.io/blockpop-privacy/' + (S.doc === 'terms' ? (S.lang === 'ko' ? '#terms-ko' : '#terms-en') : (S.lang === 'ko' ? '#privacy-ko' : '#privacy-en'));
+      if (window.AndroidHost && window.AndroidHost.openExternal) {
+        try { window.AndroidHost.openExternal(url); return; } catch (e) { }
+      }
+      try { window.open(url, '_blank'); } catch (e) { }
+    });
+
+    press(c, 150, 1628, 780, 104, T('gotIt'), { flat: true, size: 36 });
+    hit('docClose', 150, 1628, 780, 104, function () { S.modal = 'settings'; });
   }
 
   function wrapLines(c, text, maxW, size, weight) {
