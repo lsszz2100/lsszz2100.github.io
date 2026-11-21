@@ -19,6 +19,7 @@
   var selected = -1;
   var notesMode = false;
   var tutPage = 0;
+  var tutReturn = 'home';
   var timerId = null;
   var toastId = null;
   var pendingModal = null;
@@ -469,11 +470,7 @@
 
   function selectCell(index) {
     if (!game || game.done) return;
-    if (selected === index) {
-      selected = -1;
-    } else {
-      selected = index;
-    }
+    selected = index;
     sound('tap');
     renderBoard();
   }
@@ -750,6 +747,7 @@
 
   function openModal(spec) {
     var root = $('modalRoot');
+    modalOnClose = typeof spec.onClose === 'function' ? spec.onClose : null;
     root.innerHTML = '';
     var back = el('div', 'modal-back');
     back.addEventListener('click', function () {
@@ -784,9 +782,12 @@
 
   function closeModal() {
     var root = $('modalRoot');
+    var after = modalOnClose;
+    modalOnClose = null;
     root.hidden = true;
     root.innerHTML = '';
     modalOpen = false;
+    if (after) after();
   }
 
   function showResultModal(ms, isBest, result, dailyCredit) {
@@ -825,9 +826,11 @@
     openModal({
       title: t('paused'),
       sub: t('shareTime', { t: St.formatTime(currentMs()) }),
+      dismissible: false,
+      onClose: function () { resumeGame(); renderChrome(); },
       actions: [
         { label: t('keepPlaying'), primary: true, onClick: function () { closeModal(); resumeGame(); renderChrome(); } },
-        { label: t('howToPlay'), onClick: function () { closeModal(); showScreen('tutorial'); } },
+        { label: t('howToPlay'), onClick: function () { closeModal(); tutReturn = 'game'; tutPage = 0; showScreen('tutorial'); } },
         { label: t('restart'), onClick: function () { closeModal(); confirmRestart(); } },
         { label: t('quitToHome'), onClick: function () { closeModal(); goHome(); } }
       ]
@@ -1090,6 +1093,15 @@
   function closeTutorial() {
     profile.seenTutorial = true;
     save();
+    if (tutReturn === 'game' && game) {
+      tutReturn = 'home';
+      showScreen('game');
+      resumeGame();
+      startTimer();
+      renderChrome();
+      return;
+    }
+    tutReturn = 'home';
     goHome();
   }
 
@@ -1170,7 +1182,7 @@
     $('btnQuests').addEventListener('click', function () { showScreen('quests'); });
     $('btnThemes').addEventListener('click', function () { showScreen('themes'); });
     $('btnAchievements').addEventListener('click', function () { showScreen('achievements'); });
-    $('btnTutorial').addEventListener('click', function () { tutPage = 0; showScreen('tutorial'); });
+    $('btnTutorial').addEventListener('click', function () { tutReturn = 'home'; tutPage = 0; showScreen('tutorial'); });
     $('btnPrivacyHome').addEventListener('click', function () { openLegal('privacy'); });
     $('btnTermsHome').addEventListener('click', function () { openLegal('terms'); });
 
