@@ -239,12 +239,7 @@
     board.innerHTML = '';
     cellEls = [];
     for (var i = 0; i < 81; i++) {
-      var r = Math.floor(i / 9), c = i % 9;
       var cell = el('div', 'cell');
-      if (c === 8) cell.classList.add('last-col');
-      if (r === 8) cell.classList.add('last-row');
-      if (c === 2 || c === 5) cell.classList.add('c3');
-      if (r === 2 || r === 5) cell.classList.add('r3');
       var val = el('span', 'val');
       var notes = el('div', 'notes');
       for (var n = 1; n <= 9; n++) notes.appendChild(el('span', '', String(n)));
@@ -254,6 +249,8 @@
       board.appendChild(cell);
       cellEls.push({ root: cell, val: val, notes: notes.children, notesBox: notes });
     }
+    var lines = el('div', 'grid-lines');
+    board.appendChild(lines);
     board.addEventListener('click', function (event) {
       var target = event.target;
       while (target && target !== board && !target.getAttribute('data-i')) target = target.parentNode;
@@ -308,11 +305,7 @@
       var cell = cellEls[i];
       var value = game.grid[i];
       var isGiven = !!game.puzzle[i];
-      cell.root.className = 'cell' +
-        (i % 9 === 8 ? ' last-col' : '') +
-        (Math.floor(i / 9) === 8 ? ' last-row' : '') +
-        ((i % 9 === 2 || i % 9 === 5) ? ' c3' : '') +
-        ((Math.floor(i / 9) === 2 || Math.floor(i / 9) === 5) ? ' r3' : '');
+      cell.root.className = 'cell';
 
       if (i === selected) cell.root.classList.add('sel');
       else if (peerSet[i]) cell.root.classList.add('peer');
@@ -332,8 +325,9 @@
         var list = game.notes[i] || [];
         for (var n = 1; n <= 9; n++) {
           var span = cell.notes[n - 1];
-          span.textContent = String(n);
-          span.className = list.indexOf(n) >= 0 ? 'on' : '';
+          var on = list.indexOf(n) >= 0;
+          span.textContent = on ? String(n) : '';
+          span.className = on ? 'on' : '';
         }
       }
     }
@@ -365,7 +359,7 @@
     $('hintCount').textContent = String(profile.hints);
     $('coinCount').textContent = String(profile.coins);
     $('btnUndo').classList.toggle('dim', !game.undoStack.length);
-    $('gfText').textContent = notesMode ? t('notes') + ' ON' : t('saved');
+    $('gfText').textContent = t('saved');
   }
 
   function renderAll() {

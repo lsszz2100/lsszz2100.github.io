@@ -9,6 +9,9 @@
       appName: 'Minimal Sudoku',
       appSub: 'Only the puzzle.',
       tagline: 'Clean paper. Real logic. No noise.',
+      promiseOffline: 'Works offline',
+      promiseNoAds: 'No ads mid-puzzle',
+      promiseSave: 'Saves itself',
 
       continuePlay: 'Continue',
       newPuzzle: 'New puzzle',
@@ -187,6 +190,9 @@
       appName: '미니멀 스도쿠',
       appSub: '오직 퍼즐만.',
       tagline: '깨끗한 종이, 진짜 논리, 잡음 없음.',
+      promiseOffline: '오프라인 지원',
+      promiseNoAds: '풀이 중 광고 없음',
+      promiseSave: '자동 저장',
 
       continuePlay: '이어하기',
       newPuzzle: '새 퍼즐',
