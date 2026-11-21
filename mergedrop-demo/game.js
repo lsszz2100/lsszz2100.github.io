@@ -575,6 +575,14 @@
     celebrate: celebrate,
     isBusy: isBusy,
     destroy: destroy,
-    colorOf: colorOf
+    colorOf: colorOf,
+    debug: function () {
+      var sample = null;
+      if (tiles.size) {
+        var it = tiles.values().next().value;
+        sample = { x: it.x, y: it.y, visible: it.visible, alpha: it.alpha, kids: it.list.length, parent: !!it.parentContainer, depth: it.depth };
+      }
+      return { scene: !!scene, tiles: tiles.size, sample: sample, busy: state.busy };
+    }
   };
 })(typeof window !== 'undefined' ? window : this);
