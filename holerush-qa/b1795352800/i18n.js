@@ -77,6 +77,7 @@
       'result.map': 'Stage list',
       'result.coins': '+{n} coins',
       'result.newBest': 'Best time!',
+      'result.doubleCoins': 'Double +{n} coins (AD)',
       'result.retryAd': 'Watch ad for +15s',
       'result.stars': 'Stars',
 
@@ -216,6 +217,7 @@
       'result.map': '스테이지 목록',
       'result.coins': '+{n} 코인',
       'result.newBest': '최고 기록!',
+      'result.doubleCoins': '코인 +{n} 2배 받기 (광고)',
       'result.retryAd': '광고 보고 +15초',
       'result.stars': '별',
 

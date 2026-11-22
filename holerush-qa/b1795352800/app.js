@@ -374,7 +374,7 @@
         '<span class="quest-claim' + (q.claimed || !ready ? ' off' : '') + '">' +
         (q.claimed ? t('common.claimed') : (ready ? t('common.claim') : '● ' + q.coins)) + '</span></div>' +
         '<div class="quest-bar"><i style="width:' + Math.round((value / q.target) * 100) + '%"></i></div>' +
-        '<div class="quest-bottom"><span>' + value + ' / ' + q.target + '</span><span>● ' + q.coins + '</span></div>';
+        '<div class="quest-bottom"><span>' + value + ' / ' + q.target + '</span></div>';
       if (ready && !q.claimed) {
         el.querySelector('.quest-claim').onclick = function () {
           const got = C.claimQuest(profile, q.id, today);
@@ -606,7 +606,7 @@
     html += '<div class="modal-actions">';
     if (result.win) {
       if (canNext) html += '<button class="btn-primary" data-act="next">' + t('result.next') + '</button>';
-      html += '<div class="row"><button class="btn-accent" data-act="double">' + t('result.coins', { n: applied.coins }) + ' x2 (AD)</button></div>';
+      html += '<div class="row"><button class="btn-accent" data-act="double">' + t('result.doubleCoins', { n: applied.coins }) + '</button></div>';
     } else {
       html += '<button class="btn-accent" data-act="revive">' + t('result.retryAd') + '</button>';
     }
