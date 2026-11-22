@@ -367,12 +367,14 @@
     $('undoCount').textContent = undosLeft;
     $('hintCallout').hidden = true;
     closeAllModals();
-    if (!Game.game) {
-      Game.init('boardHost');
-      setTimeout(function () { Game.render(state); }, 60);
-    } else {
-      requestAnimationFrame(function () { Game.render(state); });
-    }
+    if (!Game.game) Game.init('boardHost');
+    Game.resize();
+    var paint = function () { if (state) Game.render(state); };
+    paint();
+    requestAnimationFrame(paint);
+    setTimeout(paint, 80);
+    setTimeout(paint, 260);
+    setTimeout(paint, 640);
     if (daily) startDailyStreak();
     save.stats.plays++;
     persist();

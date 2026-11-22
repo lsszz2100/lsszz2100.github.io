@@ -535,13 +535,15 @@
         parent: hostId,
         backgroundColor: '#f6f9fc',
         scale: {
-          mode: P.Scale.RESIZE,
-          autoCenter: P.Scale.CENTER_BOTH
+          mode: P.Scale.NONE,
+          width: 430,
+          height: 700
         },
         banner: false,
         audio: { noAudio: true },
         scene: [BoardScene]
       });
+      api.resize();
     },
     sceneRef: function () {
       if (!api.game) return null;
@@ -568,7 +570,17 @@
     shake: function (id) { var s = api.sceneRef(); if (s && s.ready) s.shakeVehicle(id); },
     hint: function (id) { var s = api.sceneRef(); if (s && s.ready) s.hintPulse(id); },
     win: function () { var s = api.sceneRef(); if (s && s.ready) s.winRain(); },
-    resize: function () { if (api.game && api.game.scale) api.game.scale.refresh(); }
+    resize: function () {
+      if (!api.game || !api.game.scale) return;
+      var el = document.getElementById('boardHost');
+      if (!el) return;
+      var w = el.clientWidth, h = el.clientHeight;
+      if (w > 10 && h > 10) {
+        if (api.game.scale.width !== w || api.game.scale.height !== h) {
+          api.game.scale.resize(w, h);
+        }
+      }
+    }
   };
 
   root.Game = api;
