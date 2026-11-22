@@ -1019,6 +1019,87 @@
     if (run.timeLeft <= 0) lose();
   }, 200);
 
+  // ---------------------------------------------------------------- capture (store screenshots)
+
+  function qp(name, def) {
+    const m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1]) : def;
+  }
+
+  function applyCaptureLayout() {
+    const off = parseFloat(qp('offset', '0')) || 0;
+    const scale = parseFloat(qp('scale', '2')) || 2;
+    document.documentElement.classList.add('cap');
+    const app = document.getElementById('app');
+    app.style.width = '432px';
+    app.style.height = '768px';
+    app.style.position = 'absolute';
+    app.style.left = '0';
+    app.style.top = '0';
+    app.style.transformOrigin = '0 0';
+    app.style.transform = 'translateY(' + (-off) + 'px) scale(' + scale + ')';
+  }
+
+  function demoProfile() {
+    const d = C.defaultProfile();
+    d.tutorial = true;
+    d.coins = 1840;
+    d.unlocked = 92;
+    d.themes = ['sunny', 'candy', 'ocean'];
+    d.theme = 'sunny';
+    d.boosters = { time: 3, hammer: 2, bomb: 2 };
+    for (let i = 1; i <= 88; i++) d.stars[i] = (i % 9 === 0) ? 2 : ((i % 13 === 0) ? 1 : 3);
+    d.stats = { clears: 88, stars: 246, escapes: 520, bestCombo: 6, cleanWins: 40, plays: 120, perfects: 62, chaptersDone: 3 };
+    d.ach = { first: true, clear10: true, clear25: true, clear50: true, stars30: true, stars100: true, combo5: true, perfect10: true, chapter1: true, chapter4: true };
+    const y = new Date(); y.setDate(y.getDate() - 1);
+    d.gift = { day: 4, last: C.dateKey(y) };
+    C.dailyRoll(d, new Date());
+    d.daily.prog = { clear2: 1, escape15: 12, stars6: 3 };
+    return d;
+  }
+
+  function capturePlay(thenWin) {
+    const id = parseInt(qp('stage', '92'), 10) || 92;
+    startStage(id);
+    run.timeLeft = 96;
+    updateHud();
+    const stage = STAGES[id - 1];
+    const take = thenWin ? stage.sol.length : Math.max(1, Math.min(3, stage.sol.length - 2));
+    let k = 0;
+    const scene = function () { return window.ColorGame.scene(); };
+    (function step() {
+      if (!run) return;
+      const sc = scene();
+      if (!sc) { setTimeout(step, 120); return; }
+      if (k < take) {
+        sc.attempt(stage.sol[k][0], stage.sol[k][1]);
+        k++;
+        setTimeout(step, 360);
+      } else if (thenWin) {
+        setTimeout(function () { if (run) { run.moves = stage.par; onCleared(); } }, 700);
+      }
+    }());
+  }
+
+  function captureBoot() {
+    p = demoProfile();
+    I.setLang('en');
+    applyI18n();
+    bind();
+    applyCaptureLayout();
+    const name = qp('screen', 'home');
+    if (name === 'map') { chapterView = parseInt(qp('ch', '5'), 10) || 5; show('map'); renderMap(); }
+    else if (name === 'shop') { show('shop'); renderShop(); }
+    else if (name === 'quests') { show('quests'); renderQuests(); }
+    else if (name === 'awards') { show('awards'); renderAwards(); }
+    else if (name === 'settings') { show('settings'); renderSettings(); }
+    else if (name === 'game') { capturePlay(false); }
+    else if (name === 'win') { capturePlay(true); }
+    else if (name === 'tutorial') { showTutorial(); }
+    else if (name === 'splash') { show('splash'); }
+    else { show('home'); renderHome(); }
+  }
+
   // ---------------------------------------------------------------- boot
 
   function boot() {
@@ -1026,6 +1107,7 @@
     if (!Array.isArray(p.themes)) p.themes = ['sunny'];
     if (!p.daily.claimedIds) p.daily.claimedIds = {};
     if (!p.daily.prog) p.daily.prog = {};
+    if (CAPTURE) { captureBoot(); return; }
     I.setLang(p.lang);
     applyI18n();
     bind();
