@@ -171,6 +171,8 @@
 
     onDown: function (pointer) {
       if (!this.ready || !this.engine) return;
+      this.downAt = { x: pointer.x, y: pointer.y };
+      this.dragging = false;
       const w = this.toWorld(pointer.x, pointer.y);
       const pin = this.pinAt(w.x, w.y);
       const api = root.RopeGame;
@@ -179,27 +181,32 @@
         return;
       }
       if (this.selected) {
-        // 선택된 상태에서 다른 핀을 누르면: 옮길 수 있으면 옮기고, 아니면 새로 선택
+        // 선택된 상태에서 다른 핀을 누르면: 옮길 수 있으면 옮기고, 아니면 그 핀을 새로 선택
         if (api && api.onTarget && api.onTarget(pin)) return;
       }
       if (api && api.onPick) api.onPick(pin);
     },
 
     onMove: function (pointer) {
-      if (!this.ready || !this.engine) return;
-      if (!pointer.isDown || !this.selected) return;
-      const w = this.toWorld(pointer.x, pointer.y);
-      this.dragPoint = w;
+      if (!this.ready || !this.engine || !pointer.isDown) return;
+      if (this.downAt) {
+        const moved = Math.hypot(pointer.x - this.downAt.x, pointer.y - this.downAt.y);
+        if (moved > 12) this.dragging = true;
+      }
+      if (this.dragging && this.selected) this.dragPoint = this.toWorld(pointer.x, pointer.y);
     },
 
     onUp: function (pointer) {
       if (!this.ready || !this.engine) return;
+      const wasDragging = this.dragging;
+      this.dragging = false;
+      this.dragPoint = null;
+      if (!wasDragging) return; // 탭은 onDown 에서 처리한다
       const w = this.toWorld(pointer.x, pointer.y);
       const pin = this.pinAt(w.x, w.y);
       const api = root.RopeGame;
-      this.dragPoint = null;
       if (pin < 0) return;
-      if (this.selected && api && api.onTarget && api.onTarget(pin)) return;
+      if (this.selected && api && api.onTarget) api.onTarget(pin);
     },
 
     setSelected: function (sel) { this.selected = sel; this.dragPoint = null; },
@@ -345,7 +352,7 @@
       fxG.clear();
 
       const radius = stage.pinRadius;
-      const width = Math.max(9, radius * 0.42);
+      const width = Math.max(11, radius * 0.62);
       const skin = this.skin || {};
       const pinSkin = skin.pin || { rim: '#E4ECF7', inner: '#F7FAFF', shade: '#C9D8EC' };
       const locked = {};
