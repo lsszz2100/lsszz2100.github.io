@@ -224,7 +224,8 @@ em { font-style: normal; }
 .stage-btn .st-stars i { opacity: .22; }
 .stage-btn .st-stars i.on { opacity: 1; }
 .stage-btn.now { box-shadow: 0 0 0 2px var(--violet), var(--shadow-sm); }
-.stage-btn .st-lock { position: absolute; font-size: 11px; color: #B9C6DA; }
+.stage-btn .st-lock { position: absolute; top: 12px; right: 12px; width: 14px; height: 14px; }
+.stage-btn .st-lock svg { width: 100%; height: 100%; }
 
 /* ---------------------------------------------------------------- game */
 .game { background: #EAF2FF; }

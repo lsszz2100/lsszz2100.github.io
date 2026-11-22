@@ -266,7 +266,9 @@
           '<i class="' + (stars > 2 ? 'on' : '') + '">★</i></span>';
         b.onclick = function () { startStage(i); };
       } else {
-        b.innerHTML = '<span class="st-lock">🔒</span><span>' + (i + 1) + '</span>';
+        b.innerHTML = '<span class="st-lock"><svg viewBox="0 0 24 24" fill="none" stroke="#B9C6DA" stroke-width="2" ' +
+          'stroke-linecap="round"><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M8 10V8a4 4 0 0 1 8 0v2"/></svg></span>' +
+          '<span>' + (i + 1) + '</span>';
         b.onclick = function () { toast(t('toast.stageLocked')); };
       }
       grid.appendChild(b);
