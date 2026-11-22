@@ -247,8 +247,7 @@ em { font-style: normal; }
   display: grid; place-items: center; flex: 0 0 auto; position: relative; }
 .hud-btn.off { opacity: .4; }
 .i-pause { width: 14px; height: 16px; border-left: 5px solid var(--ink); border-right: 5px solid var(--ink); }
-.i-undo { width: 18px; height: 14px; border: 3px solid var(--ink); border-right-color: transparent; border-radius: 50%; position: relative; }
-.i-undo::after { content: ''; position: absolute; right: -2px; top: -5px; width: 0; height: 0; border: 5px solid transparent; border-bottom-color: var(--ink); }
+.i-undo { font-size: 21px; font-weight: 900; line-height: 1; color: var(--ink); }
 .undo-count { position: absolute; top: -5px; right: -4px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 999px;
   background: var(--teal); color: #fff; font-size: 10.5px; font-weight: 900; display: grid; place-items: center; }
 .hud-center { flex: 1; min-width: 0; }

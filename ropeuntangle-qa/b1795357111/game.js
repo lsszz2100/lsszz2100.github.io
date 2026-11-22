@@ -270,7 +270,7 @@
 
     // ------------------------------------------------------------ draw
 
-    drawPin: function (g, pin, radius, skin, opts) {
+    drawPin: function (g, badgeG, pin, radius, skin, opts) {
       const o = opts || {};
       g.fillStyle(0x2a3a5a, 0.07);
       g.fillEllipse(pin.x + 2, pin.y + radius * 0.22, radius * 2.05, radius * 1.7);
@@ -296,20 +296,20 @@
         g.lineStyle(4, 0x2ED6B4, 0.85);
         g.strokeCircle(pin.x, pin.y, radius * 1.25);
       }
-      if (o.lockAt != null) {
+      if (o.lockAt != null && badgeG) {
         const bx = pin.x + radius * 0.74;
         const by = pin.y - radius * 0.76;
         const s = radius * 0.74;
-        g.fillStyle(o.lockOpen ? 0x2FC7A9 : 0x5C6C8A, 1);
-        g.fillCircle(bx, by, s);
-        g.lineStyle(Math.max(2, s * 0.16), 0xFFFFFF, 0.85);
-        g.strokeCircle(bx, by, s);
+        badgeG.fillStyle(0xFFFFFF, 0.9);
+        badgeG.fillCircle(bx, by, s + 2.5);
+        badgeG.fillStyle(o.lockOpen ? 0x2FC7A9 : 0x5C6C8A, 1);
+        badgeG.fillCircle(bx, by, s);
         if (!o.lockOpen) {
           // 잠긴 동안은 자물쇠 고리 표시
-          g.lineStyle(Math.max(2, s * 0.22), 0xFFFFFF, 0.9);
-          g.beginPath();
-          g.arc(bx, by - s * 0.52, s * 0.34, Math.PI, Math.PI * 2, false);
-          g.strokePath();
+          badgeG.lineStyle(Math.max(2, s * 0.22), 0xFFFFFF, 0.9);
+          badgeG.beginPath();
+          badgeG.arc(bx, by - s * 0.55, s * 0.32, Math.PI, Math.PI * 2, false);
+          badgeG.strokePath();
         }
       }
     },
@@ -384,7 +384,7 @@
       const hintMv = this.hint;
       for (let p = 0; p < stage.pins.length; p += 1) {
         const pin = stage.pins[p];
-        this.drawPin(pinsG, pin, radius, pinSkin, {
+        this.drawPin(pinsG, knotsG, pin, radius, pinSkin, {
           selected: !!sel && sel.fromPin === p,
           lockAt: lockAt[p],
           lockOpen: !lockedNow[p],
