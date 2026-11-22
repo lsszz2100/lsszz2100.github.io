@@ -399,7 +399,7 @@
       badge.setAlpha(0.85);
       c.add(badge);
 
-      c.setInteractive(new P.Geom.Rectangle(r.w / 2, r.h / 2, r.w, r.h), P.Geom.Rectangle.Contains);
+      c.setInteractive(new P.Geom.Rectangle(0, 0, r.w, r.h), P.Geom.Rectangle.Contains);
       c.on('pointerdown', function () {
         if (root.App && root.App.onVehicleTap) root.App.onVehicleTap(v.id);
       });
