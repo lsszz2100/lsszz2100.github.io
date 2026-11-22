@@ -1094,10 +1094,37 @@
     else if (name === 'awards') { show('awards'); renderAwards(); }
     else if (name === 'settings') { show('settings'); renderSettings(); }
     else if (name === 'game') { capturePlay(false); }
+    else if (name === 'probe') { startProbe(); }
     else if (name === 'win') { capturePlay(true); }
     else if (name === 'tutorial') { showTutorial(); }
     else if (name === 'splash') { show('splash'); }
     else { show('home'); renderHome(); }
+  }
+
+  function startProbe() {
+    startStage(parseInt(qp('stage', '1'), 10) || 1);
+    setTimeout(function () {
+      const sc = window.ColorGame.scene();
+      if (!sc) return;
+      const cv = document.querySelector('#boardWrap canvas');
+      const r = cv.getBoundingClientRect();
+      const stage = sc.stage;
+      const dirs = ['up', 'down', 'left', 'right'];
+      const dir = dirs.filter(function (d) { return C.slide(stage, sc.state, 0, d); })[0] || 'up';
+      const d = C.DIRS[dir];
+      const cx = r.left + sc.bx + (sc.state.p[0] + 0.5) * sc.cell;
+      const cy = r.top + sc.by + (sc.state.p[1] + 0.5) * sc.cell;
+      const mk = function (id, x, y) {
+        const el = document.createElement('div');
+        el.id = id;
+        el.style.cssText = 'position:fixed;width:26px;height:26px;border:1px solid #0a0;opacity:.05;z-index:60;pointer-events:none;left:' +
+          (x - 13) + 'px;top:' + (y - 13) + 'px';
+        document.body.appendChild(el);
+      };
+      mk('probeFrom', cx, cy);
+      mk('probeTo', cx + d.x * 110, cy + d.y * 110);
+      window.__probe = { dir: dir, from: [cx, cy], to: [cx + d.x * 110, cy + d.y * 110] };
+    }, 900);
   }
 
   // ---------------------------------------------------------------- autotest (QA capture only)
