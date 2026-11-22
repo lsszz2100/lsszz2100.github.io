@@ -912,10 +912,12 @@
     p.skin = 'berry';
     p.skins = ['classic', 'berry'];
     for (let i = 0; i < 77; i += 1) p.stars[i] = (i % 9 === 0) ? 2 : ((i % 13 === 0) ? 1 : 3);
-    p.daily.lastClaim = '';
-    p.daily.streak = 5;
+    const y = new Date();
+    y.setDate(y.getDate() - 1);
+    p.daily.lastClaim = C.todayKey(y);
+    p.daily.streak = 4;
     p.daily.bestStreak = 5;
-    p.daily.day = 4;
+    p.daily.day = 3;
     p.achievements = { first: true, ten: true, forty: true, eat500: true, combo10: true, big: true };
     p.stats.maxCombo = 11;
     p.stats.maxRadius = 126;
