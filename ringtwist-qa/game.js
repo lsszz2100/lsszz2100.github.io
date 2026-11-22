@@ -72,7 +72,7 @@
       var step = N > 1 ? (Rmax - R0) / (N - 1) : Rmax;
       var radii = [];
       for (var i = 0; i < N; i++) radii.push(R0 + i * step);
-      var thick = Math.max(6, step * 0.44);
+      var thick = Math.max(6, step * 0.38);
       var sector = TAU() / level.S;
       return {
         w: w, h: h, cx: w / 2, cy: h / 2,
@@ -82,18 +82,20 @@
       };
     }
 
+    /** 구슬은 안쪽 링(레벨 L-1)에 얹혀 있다 → 그 링 바로 바깥 반경 */
     beadRadius(L) {
       var m = this.m;
       if (L <= 0) return m.radii[0] * 0.5;
-      if (L >= m.N) return m.radii[m.N - 1];
-      return (m.radii[L - 1] + m.radii[L]) / 2;
+      if (L >= m.N) return m.radii[m.N - 1] + m.thick * 0.7;
+      return m.radii[L - 1] + m.thick * 0.70;
     }
 
     beadSize(L) {
       var m = this.m;
       var r = this.beadRadius(L);
       var chord = 2 * r * Math.sin(Math.PI / m.S);
-      return Math.min(m.step * 0.52, chord * 0.60);
+      var room = m.step - m.thick * 1.05;
+      return Math.max(10, Math.min(room, chord * 0.58));
     }
 
     angleOf(sector) { return -Math.PI / 2 + sector * this.m.sector; }
@@ -278,27 +280,25 @@
       var m = this.m;
       for (var i = 0; i < m.N; i++) {
         var R = m.radii[i];
+        var col = COLORS[i % COLORS.length];
         for (var side = -1; side <= 1; side += 2) {
           var a = side > 0 ? 0 : Math.PI;
           var x = m.cx + Math.cos(a) * R;
           var y = m.cy + Math.sin(a) * R;
-          var s = Math.max(10, Math.min(m.step * 0.34, 20));
+          var s = Math.max(6, Math.min(m.thick * 0.42, m.step * 0.20));
           var g = this.add.graphics();
-          g.fillStyle(0xffffff, 0.95);
-          g.fillCircle(x, y, s * 1.12);
-          g.lineStyle(Math.max(1.2, s * 0.11), 0xd7e5f7, 1);
-          g.strokeCircle(x, y, s * 1.12);
-          g.fillStyle(0x7d93ae, 1);
+          g.fillStyle(0x14304f, 0.10);
           g.beginPath();
-          if (side > 0) {
-            g.moveTo(x + s * 0.30, y - s * 0.52);
-            g.lineTo(x - s * 0.26, y);
-            g.lineTo(x + s * 0.30, y + s * 0.52);
-          } else {
-            g.moveTo(x - s * 0.30, y - s * 0.52);
-            g.lineTo(x + s * 0.26, y);
-            g.lineTo(x - s * 0.30, y + s * 0.52);
-          }
+          g.moveTo(x + side * s * 0.28 + side * 1.6, y - s * 0.9 + 2);
+          g.lineTo(x - side * s * 0.75 + side * 1.6, y + 2);
+          g.lineTo(x + side * s * 0.28 + side * 1.6, y + s * 0.9 + 2);
+          g.closePath();
+          g.fillPath();
+          g.fillStyle(0xffffff, 0.94);
+          g.beginPath();
+          g.moveTo(x + side * s * 0.30, y - s * 0.92);
+          g.lineTo(x - side * s * 0.78, y);
+          g.lineTo(x + side * s * 0.30, y + s * 0.92);
           g.closePath();
           g.fillPath();
           this.layerUi.add(g);
