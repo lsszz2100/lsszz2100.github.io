@@ -487,6 +487,7 @@
       },
       onPick: onPick
     });
+    run.state = window.ColorGame.state() || run.state;
   }
 
   function startStage(id) {
@@ -1194,7 +1195,7 @@
       await sleep(120);
       fire(cv, 'mouseup', cx + d.x * 70, cy + d.y * 70);
       await sleep(500);
-      add('pointer drag moves a block', run && run.state.moves >= 1, { dir: dir, moves: run ? run.state.moves : null, diag: diag });
+      add('pointer drag moves a block', sc.state.moves >= 1, { dir: dir, moves: sc.state.moves, diag: diag });
 
       // 2. a stage cleared by its recorded solution
       stopRun();
