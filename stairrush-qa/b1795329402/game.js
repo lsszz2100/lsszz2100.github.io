@@ -386,18 +386,19 @@
         /* 다음 계단 강조 */
         if (isNext) {
           var pulse = 0.5 + 0.5 * Math.sin(this.bob * 5);
-          g.fillStyle(num(th.accent), 0.10 + 0.10 * pulse);
+          g.fillStyle(num(th.accent), 0.12 + 0.10 * pulse);
           g.fillRoundedRect(x - half - 5, y - 18, half * 2 + 10, 25, 10);
-          g.fillStyle(num(th.accent), 0.95);
-          g.fillRoundedRect(x - half, y - 13, half * 2, 3, 1.5);
+          g.lineStyle(2.2, num(th.accent), 0.35 + 0.35 * pulse);
+          g.strokeRoundedRect(x - half - 1, y - 14, half * 2 + 2, 17, 8);
+          g.lineStyle(0);
           var dir = s.dir;
-          var axp = x + dir * (half + 14);
-          var ayp = y - 4 - pulse * 3;
-          g.fillStyle(num(th.accent), 0.95);
+          var axp = x + dir * (half * 0.55);
+          var ayp = y - 26 - pulse * 4;
+          g.fillStyle(num(th.accent), 0.9);
           g.beginPath();
-          g.moveTo(axp + dir * 9, ayp);
-          g.lineTo(axp - dir * 5, ayp - 9);
-          g.lineTo(axp - dir * 5, ayp + 9);
+          g.moveTo(axp + dir * 8, ayp + 6);
+          g.lineTo(axp - dir * 3, ayp);
+          g.lineTo(axp + dir * 8, ayp - 6);
           g.closePath();
           g.fillPath();
         }
@@ -470,10 +471,10 @@
       g.fillRoundedRect(-8, -9, 8, 14, 4);
 
       /* 팔 */
-      g.lineStyle(4.5, body, 1);
-      var armSwing = this.jump ? -10 : 0;
-      g.lineBetween(-12, -6, -20, 2 + armSwing * 0.3);
-      g.lineBetween(12, -6, 20, 2 - armSwing * 0.3);
+      g.lineStyle(5, body, 1);
+      var armSwing = this.jump ? 6 : Math.sin(this.bob * 3.4) * 2;
+      g.lineBetween(-11, -5, -16, 4 + armSwing);
+      g.lineBetween(11, -5, 16, 4 - armSwing);
 
       /* 머리 */
       g.fillStyle(head, 1);
