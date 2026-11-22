@@ -40,14 +40,18 @@
         roundRect(g, cx - s * 0.55, cy - s * 0.62, s * 0.46, s * 1.24, s * 0.10); g.fillPath();
         roundRect(g, cx + s * 0.08, cy - s * 0.50, s * 0.46, s * 1.00, s * 0.10); g.fillPath();
         break;
-      case 1: // 화분 — 잎 두 장
+      case 1: // 화분 — 잎 세 장
+        g.fillStyle(color, 1);
+        g.fillEllipse(cx - s * 0.20, cy - s * 0.34, s * 0.40, s * 0.52);
+        g.fillEllipse(cx + s * 0.20, cy - s * 0.40, s * 0.38, s * 0.50);
+        g.fillEllipse(cx, cy - s * 0.60, s * 0.30, s * 0.40);
         g.beginPath();
-        g.arc(cx - s * 0.22, cy - s * 0.30, s * 0.34, Math.PI * 0.55, Math.PI * 1.75, false);
+        g.moveTo(cx - s * 0.36, cy + s * 0.06);
+        g.lineTo(cx + s * 0.36, cy + s * 0.06);
+        g.lineTo(cx + s * 0.26, cy + s * 0.60);
+        g.lineTo(cx - s * 0.26, cy + s * 0.60);
+        g.closePath();
         g.fillPath();
-        g.beginPath();
-        g.arc(cx + s * 0.30, cy - s * 0.46, s * 0.30, Math.PI * 0.55, Math.PI * 1.75, false);
-        g.fillPath();
-        roundRect(g, cx - s * 0.34, cy + s * 0.16, s * 0.68, s * 0.48, s * 0.14); g.fillPath();
         break;
       case 2: // 머그컵
         roundRect(g, cx - s * 0.46, cy - s * 0.42, s * 0.68, s * 0.88, s * 0.16); g.fillPath();
@@ -56,13 +60,14 @@
         g.strokePath();
         break;
       case 3: // 양초
-        roundRect(g, cx - s * 0.26, cy - s * 0.16, s * 0.52, s * 0.78, s * 0.12); g.fillPath();
+        roundRect(g, cx - s * 0.30, cy - s * 0.10, s * 0.60, s * 0.72, s * 0.14); g.fillPath();
         g.beginPath();
-        g.moveTo(cx, cy - s * 0.78);
-        g.lineTo(cx + s * 0.22, cy - s * 0.30);
-        g.lineTo(cx - s * 0.22, cy - s * 0.30);
+        g.moveTo(cx, cy - s * 0.62);
+        g.lineTo(cx + s * 0.15, cy - s * 0.26);
+        g.lineTo(cx - s * 0.15, cy - s * 0.26);
         g.closePath();
         g.fillPath();
+        g.fillRect(cx - s * 0.035, cy - s * 0.28, s * 0.07, s * 0.16);
         break;
       case 4: // 쿠션
         roundRect(g, cx - s * 0.56, cy - s * 0.46, s * 1.12, s * 0.92, s * 0.30); g.fillPath();
