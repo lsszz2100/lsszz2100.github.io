@@ -31,6 +31,15 @@
     })();
   }
 
+  if (q.get('reset')) {
+    try { localStorage.removeItem('boltjam.save.v1'); } catch (e) {}
+    if (!sessionStorage.getItem('boltjam.qa.reset')) {
+      sessionStorage.setItem('boltjam.qa.reset', '1');
+      location.replace(location.pathname + '?capture=1&tutorial=0');
+      return;
+    }
+  }
+
   afterBoot(function () {
     if (q.get('lang')) {
       app.save.lang = q.get('lang');
