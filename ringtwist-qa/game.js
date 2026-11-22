@@ -125,7 +125,7 @@
       var half = m.radii[m.N - 1] + m.step * 0.74;
       var pad = m.k * 9;
       var cardW = Math.min(m.w - pad * 2, (half + pad) * 2);
-      var cardH = Math.min(m.h - pad * 2, cardW * 1.36);
+      var cardH = Math.min(m.h - pad * 2, cardW * 1.18);
       var x0 = m.cx - cardW / 2, y0 = m.cy - cardH / 2;
 
       // 보드 카드: 링 묶음을 담는 세로 패널

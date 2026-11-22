@@ -1127,17 +1127,17 @@
         }, i * 260);
       }
       if (screen === 'result') {
-        setTimeout(function () {
-          var guard = 0;
-          while (state && state.status === 'playing' && guard++ < 120) {
-            var m = RT.hint(state);
-            if (!m) break;
-            var before = state.used;
-            onRingTurn(m.i, m.d);
-            if (state.used === before) break;
+        var step = function () {
+          if (!state || state.status !== 'playing') {
+            setTimeout(function () { if (state && state.status === 'won') finishLevel(); }, 650);
+            return;
           }
-          setTimeout(function () { if (state.status === 'won') finishLevel(); }, 700);
-        }, turns * 260 + 320);
+          var m2 = RT.hint(state);
+          if (!m2) { setTimeout(function () { if (state.status === 'won') finishLevel(); }, 400); return; }
+          onRingTurn(m2.i, m2.d);
+          setTimeout(step, 320);
+        };
+        setTimeout(step, turns * 260 + 320);
       }
     }, 500);
   }
