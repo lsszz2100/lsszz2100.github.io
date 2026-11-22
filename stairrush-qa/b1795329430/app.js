@@ -366,7 +366,7 @@
       cell.appendChild(h('span', null, String(id)));
       var stars = h('span', 'sc-stars', p ? '★★★'.slice(0, p.stars) : '');
       cell.appendChild(stars);
-      cell.appendChild(h('small', null, st.target + t('floor')));
+      cell.appendChild(h('small', null, st.target + (I.lang === 'ko' ? '' : ' ') + t('floor')));
       if (p) cell.classList.add('done');
       else if (id === nextStageId()) cell.classList.add('now');
       else if (!stageUnlocked(id)) cell.classList.add('lock');
@@ -786,6 +786,37 @@
 
   /* ---------------------------------------------------------------- shop */
 
+  /** 상점 카드용 캐릭터 그림(도형 SVG). */
+  function skinSvg(sk) {
+    var acc = '';
+    if (sk.accessory === 'beak') {
+      acc = '<path d="M62 44l13 5-13 5z" fill="#FFB03A"/>';
+    } else if (sk.accessory === 'ears') {
+      acc = '<path d="M46 40l3-13 9 8z" fill="' + sk.head + '"/><path d="M74 40l-3-13-9 8z" fill="' + sk.head + '"/>';
+    } else if (sk.accessory === 'antenna') {
+      acc = '<line x1="60" y1="30" x2="60" y2="20" stroke="' + sk.cap + '" stroke-width="3"/><circle cx="60" cy="18" r="4" fill="' + sk.cap + '"/>';
+    } else if (sk.accessory === 'band') {
+      acc = '<rect x="43" y="32" width="34" height="7" rx="3.5" fill="' + sk.cap + '"/><path d="M43 35l-12 9 12 2z" fill="' + sk.cap + '"/><path d="M77 35l12 9-12 2z" fill="' + sk.cap + '"/>';
+    } else if (sk.accessory === 'helmet') {
+      acc = '<circle cx="60" cy="42" r="20" fill="#DFF3FF" opacity=".45"/><circle cx="60" cy="42" r="20" fill="none" stroke="' + sk.cap + '" stroke-width="2.2"/><rect x="46" y="36" width="28" height="12" rx="6" fill="' + sk.cap + '" opacity=".55"/>';
+    } else {
+      acc = '<path d="M43 40a17 17 0 0 1 34 0z" fill="' + sk.cap + '"/><rect x="74" y="37" width="13" height="5.5" rx="2.7" fill="' + sk.cap + '"/>';
+    }
+    return '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+      '<ellipse cx="60" cy="112" rx="28" ry="4.5" fill="#2E4A5C" opacity=".07"/>' +
+      '<rect x="44" y="92" width="7" height="12" rx="3.5" fill="' + sk.body2 + '"/>' +
+      '<rect x="69" y="92" width="7" height="12" rx="3.5" fill="' + sk.body2 + '"/>' +
+      '<rect x="40" y="58" width="40" height="38" rx="15" fill="' + sk.body + '"/>' +
+      '<rect x="33" y="64" width="9" height="20" rx="4.5" fill="' + sk.body + '"/>' +
+      '<rect x="78" y="64" width="9" height="20" rx="4.5" fill="' + sk.body + '"/>' +
+      '<circle cx="60" cy="42" r="17" fill="' + sk.head + '"/>' + acc +
+      '<circle cx="53" cy="45" r="2.6" fill="#2E4A5C"/><circle cx="67" cy="45" r="2.6" fill="#2E4A5C"/>' +
+      '<ellipse cx="47" cy="51" rx="3.6" ry="2.8" fill="#FFB3A0" opacity=".75"/>' +
+      '<ellipse cx="73" cy="51" rx="3.6" ry="2.8" fill="#FFB3A0" opacity=".75"/>' +
+      '</svg>';
+  }
+
+
   function renderShop() {
     $('shopCoins').textContent = save.coins;
     var sg = $('skinGrid');
@@ -796,13 +827,7 @@
       var used = save.skin === key;
       var cell = h('div', 'skin-card' + (used ? ' on' : ''));
       var art = h('div', 'skin-art');
-      var body = h('span', 'sa-body'); body.style.background = sk.body; art.appendChild(body);
-      var leg1 = h('span', 'sa-leg'); leg1.style.background = sk.body2; leg1.style.left = 'calc(50% - 9px)'; art.appendChild(leg1);
-      var leg2 = h('span', 'sa-leg'); leg2.style.background = sk.body2; leg2.style.left = 'calc(50% + 3px)'; art.appendChild(leg2);
-      var head = h('span', 'sa-head'); head.style.background = sk.head; art.appendChild(head);
-      if (sk.accessory === 'cap' || sk.accessory === 'band' || sk.accessory === 'helmet') {
-        var cap = h('span', 'sa-cap'); cap.style.background = sk.cap; art.appendChild(cap);
-      }
+      art.innerHTML = skinSvg(sk);
       cell.appendChild(art);
       cell.appendChild(h('div', 'skin-name', t(sk.nameKey)));
       cell.appendChild(h('div', 'skin-desc', t(sk.descKey)));
