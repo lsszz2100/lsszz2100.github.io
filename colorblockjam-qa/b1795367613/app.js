@@ -1174,16 +1174,15 @@
       const cx = r.left + sc.bx + (sc.state.p[0] + 0.5) * sc.cell;
       const cy = r.top + sc.by + (sc.state.p[1] + 0.5) * sc.cell;
       const d = C.DIRS[dir];
-      fire(cv, 'pointerdown', cx, cy);
       fire(cv, 'mousedown', cx, cy);
-      await sleep(60);
-      fire(cv, 'pointermove', cx + d.x * 70, cy + d.y * 70);
+      await sleep(120);
+      const ptr = sc.input.activePointer;
+      const diag = { px: ptr && Math.round(ptr.x), py: ptr && Math.round(ptr.y), wantX: Math.round(cx), wantY: Math.round(cy), over: ptr && ptr.over ? ptr.over.length : null };
       fire(cv, 'mousemove', cx + d.x * 70, cy + d.y * 70);
-      await sleep(90);
-      fire(cv, 'pointerup', cx + d.x * 70, cy + d.y * 70);
+      await sleep(120);
       fire(cv, 'mouseup', cx + d.x * 70, cy + d.y * 70);
       await sleep(500);
-      add('pointer drag moves a block', run && run.state.moves >= 1, { dir: dir, moves: run ? run.state.moves : null });
+      add('pointer drag moves a block', run && run.state.moves >= 1, { dir: dir, moves: run ? run.state.moves : null, diag: diag });
 
       // 2. a stage cleared by its recorded solution
       stopRun();
