@@ -215,7 +215,7 @@ em { font-style: normal; }
 .chapter-head { display: flex; align-items: baseline; justify-content: space-between; margin: 6px 2px 12px; }
 .chapter-head b { font-size: 17px; }
 .chapter-head span { color: var(--soft); font-size: 12.5px; }
-.stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.stage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .stage-btn { position: relative; aspect-ratio: 1/1; border-radius: 18px; background: #fff; box-shadow: var(--shadow-sm);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-weight: 900; font-size: 16px; color: var(--ink); }
 .stage-btn.locked { color: #B9C6DA; background: #F7FAFF; box-shadow: none; }
