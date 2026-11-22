@@ -342,7 +342,7 @@
         type: Phaser.AUTO,
         parent: parentId,
         backgroundColor: '#EAF2FF',
-        scale: { mode: Phaser.Scale.RESIZE, width: '100%', height: '100%' },
+        scale: { mode: Phaser.Scale.NONE, width: 432, height: 768 },
         render: { antialias: true, roundPixels: false },
         banner: false,
         scene: [BoardScene]
@@ -353,11 +353,7 @@
 
     start: function (opts) {
       if (!this.game) this.init('board');
-      // offsetWidth/Height 는 CSS transform 의 영향을 받지 않는 레이아웃 크기다.
-      const app = document.getElementById('app');
-      const w = (app && app.offsetWidth) || window.innerWidth;
-      const h = (app && app.offsetHeight) || window.innerHeight;
-      if (w > 0 && h > 0) this.game.scale.resize(w, h);
+      this.fit();
       const scene = this.game.scene.getScene('board');
       this.scene = scene;
       if (scene && scene.bg) {
@@ -377,7 +373,25 @@
 
     pause: function () { if (this.scene) this.scene.setPaused(true); },
     resume: function () { if (this.scene) this.scene.setPaused(false); },
-    resize: function () { if (this.scene) this.scene.layout(); }
+
+    /** #app 의 레이아웃 크기(transform 영향 없음)에 캔버스를 맞춘다. */
+    fit: function () {
+      const app = document.getElementById('app');
+      const w = (app && app.offsetWidth) || window.innerWidth;
+      const h = (app && app.offsetHeight) || window.innerHeight;
+      if (!this.game || w <= 0 || h <= 0) return;
+      if (this.game.scale.width !== w || this.game.scale.height !== h) {
+        this.game.scale.resize(w, h);
+        const cv = this.game.canvas;
+        if (cv) { cv.style.width = w + 'px'; cv.style.height = h + 'px'; }
+      }
+      if (this.scene && this.scene.layout) this.scene.layout();
+    },
+
+    resize: function () {
+      this.fit();
+      if (this.scene) this.scene.layout();
+    }
   };
 
   root.HoleRushGame = Game;
