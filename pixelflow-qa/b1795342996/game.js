@@ -593,6 +593,8 @@
       if (sc && sc.ready) {
         var first = !sc.run;
         sc.run = run;
+        sc.onFrame = api.onFrame;          /* 씬이 늦게 준비돼도 프레임 콜백을 붙인다 */
+        sc.onCellTap = api.onCellTap;
         if (sc.theme) sc.setTheme(sc.theme);
         sc.setRun(run);
         if (first) sc.layout();
