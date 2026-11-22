@@ -164,6 +164,7 @@
         this.cellAt[HX.keyOf(run.cells[i].q, run.cells[i].r)] = i;
       }
       this.pending.length = 0;
+      this.popShown = 0;
       this.selected = -1;
       this.valid = {};
       this.particles.length = 0;
@@ -403,6 +404,7 @@
         return 0.055 * Math.min(3, count);
       }
       if (e.type === 'pop') {
+        this.popShown = (this.popShown || 0) + 1;
         var pc = this.disp[e.cell];
         if (pc) pc.tiles.splice(Math.max(0, pc.tiles.length - e.count), e.count);
         var p = this.cellXY(e.cell);

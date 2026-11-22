@@ -1609,11 +1609,19 @@
         HX.place(run, best.slot, best.cell, ev2);
         Game.process(ev2);
         renderTray();
-        setTimeout(function () {
+        var waited = 0;
+        var timer = setInterval(function () {
           var sc2 = Game.sceneRef();
-          if (sc2 && sc2.scene) sc2.scene.pause();
-          renderHud();
-        }, 340);
+          waited += 40;
+          if (!sc2 || waited > 3000) { clearInterval(timer); return; }
+          if (sc2.popShown > 0) {
+            clearInterval(timer);
+            setTimeout(function () {
+              if (sc2.scene) sc2.scene.pause();
+              renderHud();
+            }, 110);
+          }
+        }, 40);
       }, 460);
       return;
     }
