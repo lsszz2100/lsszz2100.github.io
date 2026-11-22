@@ -388,6 +388,8 @@
     $('gameCoins').textContent = save.coins;
     $('goalFill').style.width = Math.round(pct * 100) + '%';
     $('goalPct').textContent = Math.round(pct * 100) + '%';
+    var fl = $('footLeft');
+    if (fl) fl.textContent = left;
     var comboTxt = $('comboInline');
     if (run.combo >= 2 && run.status === 'running') {
       comboTxt.hidden = false;

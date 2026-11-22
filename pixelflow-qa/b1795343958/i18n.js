@@ -105,6 +105,7 @@
       stageClear: 'Stage clear', starsWord: 'stars', par: 'Par {n}s',
       resumeHint: 'Tap the queue to send a blaster', loading: 'Loading',
       beltBusy: 'The belt is busy — one moment.',
+      leftBlocks: 'blocks left',
       firstRunHint: 'Tap a blaster to load the belt'
     },
     ko: {
@@ -207,6 +208,7 @@
       stageClear: '스테이지 클리어', starsWord: '별', par: '기준 {n}초',
       resumeHint: '대기열을 탭해 블래스터를 올리세요', loading: '불러오는 중',
       beltBusy: '벨트가 바쁩니다 — 잠시만요.',
+      leftBlocks: '칸 남음',
       firstRunHint: '블래스터를 탭해 벨트에 올리세요'
     }
   };
