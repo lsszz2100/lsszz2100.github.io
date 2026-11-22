@@ -118,8 +118,8 @@
       size = Math.max(11, size);
       /* 보드 판(테두리)까지 화면 안에 들어오게 한 번 더 줄인다. */
       var platePad = 0.42;
-      var totalW = bw * size * (1 + platePad * 2);
-      var totalH = bh * size * (1 + platePad);
+      var totalW = (bw + platePad * 2) * size;
+      var totalH = (bh + platePad * 2) * size;
       if (totalW > v.w) size *= v.w / totalW;
       if (totalH > v.h) size *= v.h / totalH;
       this.geo = {
