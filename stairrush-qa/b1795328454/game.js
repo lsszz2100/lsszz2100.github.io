@@ -247,7 +247,7 @@
           var drift = ((camY * lay.sp) + seed * 3.1) % span;
           var cy = ((span - drift) + span) % span - 110;
           var cx = baseX - camX * lay.sp * 0.5 + Math.sin((camY + seed) * 0.004) * 12;
-          this.cloud(g, cx + sx * 0.2, cy + sy * 0.2, 44 * lay.size, num(th.cloud), lay.alpha, th);
+          this.cloud(g, cx + sx * 0.2, cy + sy * 0.2, 34 * lay.size, num(th.cloud), lay.alpha * 0.85, th);
         }
       }
 
@@ -313,11 +313,11 @@
         g.fillCircle(w * 0.18 + 12, pyy + 6, 6);
       } else {
         /* morning: 해와 먼 산 */
-        var sunY = h * 0.16 - (camY * 0.04) % 90;
-        g.fillStyle(num('#FFE7A3'), 0.55);
-        g.fillCircle(w * 0.76, sunY, 46);
-        g.fillStyle(num('#FFD166'), 0.85);
-        g.fillCircle(w * 0.76, sunY, 30);
+        var sunY = h * 0.10 - (camY * 0.04) % 90;
+        g.fillStyle(num('#FFE7A3'), 0.4);
+        g.fillCircle(w * 0.80, sunY, 40);
+        g.fillStyle(num('#FFD166'), 0.8);
+        g.fillCircle(w * 0.80, sunY, 24);
       }
 
       /* 언덕(아주 느린 시차) — 화면 아래쪽에만 */
@@ -346,8 +346,8 @@
       var st = this.state;
       var th = this.theme;
       var g = this.gStairs;
-      var from = Math.max(0, Math.floor(this.camF) - 4);
-      var to = Math.ceil(this.camF) + 16;
+      var from = Math.max(0, Math.floor(this.camF) - 5);
+      var to = Math.ceil(this.camF) + 17;
       var stepTop = num(th.step);
       var stepFace = num(th.step2);
       var stepEdge = num(th.stepEdge);
@@ -358,49 +358,57 @@
         var p = this.stepPos(k, s.col);
         var x = p.x + sx, y = p.y + sy;
         var half = L.stepLen / 2;
-        var depth = L.stepDepth;
+        var d = L.stepDepth;
         var isNext = (k === st.floor + 1) && st.status === 'running';
         var passed = k <= st.floor;
+        var fade = passed ? 1 : 1;
 
-        /* 앞면 */
-        g.fillStyle(stepSide, passed ? 0.95 : 0.9);
-        this.slab(g, x - half, y + depth * 0.35, half * 2, depth * 1.5, 6);
+        /* 바닥 그림자 */
+        g.fillStyle(0x2E4A5C, 0.055);
+        g.fillEllipse(x, y + d * 1.9, half * 2.0, d * 0.85);
+
+        /* 앞면(아래층 몸통) */
+        g.fillStyle(stepSide, 0.95 * fade);
+        g.fillRoundedRect(x - half, y - d * 0.12, half * 2, d * 1.5, 8);
+
         /* 윗면 */
         g.fillStyle(isNext ? num(th.step2) : stepTop, 1);
-        this.slab(g, x - half, y - depth * 0.5, half * 2, depth * 1.1, 6);
-        /* 테두리 */
+        g.fillRoundedRect(x - half, y - d * 0.95, half * 2, d * 1.05, 8);
+
+        /* 윗면 테두리 */
         if (isNext) {
           var pulse = 0.55 + 0.45 * Math.sin(this.bob * 5);
-          g.lineStyle(3, num(th.accent), 0.55 + pulse * 0.4);
-          this.slab(g, x - half, y - depth * 0.5, half * 2, depth * 1.1, 6);
+          g.lineStyle(3, num(th.accent), 0.6 + pulse * 0.4);
+          g.strokeRoundedRect(x - half, y - d * 0.95, half * 2, d * 1.05, 8);
           g.lineStyle(0);
-          /* 다음 방향 표시(작은 갈매기) */
+          /* 다음 방향 갈매기 */
           var dir = s.dir;
-          g.fillStyle(num(th.accent), 0.85);
+          g.fillStyle(num(th.accent), 0.9);
           g.beginPath();
-          var axp = x + dir * (half + 10);
-          var ayp = y - 22 - pulse * 3;
+          var axp = x + dir * (half + 12);
+          var ayp = y - d * 0.45 - pulse * 4;
           g.moveTo(axp + dir * 9, ayp);
-          g.lineTo(axp - dir * 3, ayp - 8);
-          g.lineTo(axp - dir * 3, ayp + 8);
+          g.lineTo(axp - dir * 4, ayp - 9);
+          g.lineTo(axp - dir * 4, ayp + 9);
           g.closePath();
           g.fillPath();
         } else {
-          g.lineStyle(1.5, stepEdge, passed ? 0.55 : 0.9);
-          this.slab(g, x - half, y - depth * 0.5, half * 2, depth * 1.1, 6);
+          g.lineStyle(1.4, stepEdge, 0.85);
+          g.strokeRoundedRect(x - half, y - d * 0.95, half * 2, d * 1.05, 8);
           g.lineStyle(0);
         }
 
         /* 황금 계단 */
         if (s.star) {
           var tw = 0.75 + 0.25 * Math.sin(this.bob * 4 + k);
-          g.fillStyle(num('#FFC93C'), 0.9 * tw);
-          g.fillCircle(x, y - depth * 0.2, 12);
-          this.starShape(g, x, y - depth * 0.2, 8.5, num('#FFF3C4'));
+          g.fillStyle(num('#FFC93C'), 0.32 * tw);
+          g.fillCircle(x, y - d * 0.4, 17);
+          this.starShape(g, x, y - d * 0.42, 9, num('#FFB300'));
+          this.starShape(g, x, y - d * 0.42, 6.5, num('#FFF3C4'));
         }
         if (s.boost) {
-          g.fillStyle(num(th.accent2), 0.85);
-          g.fillRoundedRect(x - 13, y - 6 - depth * 0.5, 26, 5, 2.5);
+          g.fillStyle(num(th.accent2), 0.9);
+          g.fillRoundedRect(x - 15, y - d * 0.72, 30, 5, 2.5);
         }
       }
     }

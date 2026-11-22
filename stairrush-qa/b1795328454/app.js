@@ -407,8 +407,9 @@
     e.comboBadge.hidden = !showCombo;
     e.comboInline.hidden = !showCombo;
     if (showCombo) {
-      e.comboNum.textContent = SR.multiplier(run.combo);
+      e.comboNum.textContent = run.combo;
       e.comboInlineVal.textContent = SR.multiplier(run.combo);
+      e.comboInline.hidden = !run.fever;
     }
   }
 
@@ -1295,7 +1296,8 @@
       Game.resize();
       updateHud();
       if (screen === 'fall') { Game.fall(); handleFall({ reason: 'miss' }); }
-      if (screen === 'clear') { run.status = 'finished'; run.stars = 3; handleClear(); }
+      else if (screen === 'clear') { run.status = 'finished'; run.stars = 3; handleClear(); }
+      else paused = true;
     }, 500);
   }
 
