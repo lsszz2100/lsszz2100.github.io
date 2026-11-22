@@ -41,7 +41,7 @@
   };
 
   const THEMES = [
-    { id: 'sunny', name: 'Sunny', cost: 0, board: 0xfff8f1, cell: 0xf1e7dc, line: 0xe6d8c8, accent: 0xff7f6b },
+    { id: 'sunny', name: 'Sunny', cost: 0, board: 0xfff8f1, cell: 0xeee1d3, line: 0xe2d0be, accent: 0xff7f6b },
     { id: 'candy', name: 'Candy', cost: 200, board: 0xfff6fb, cell: 0xffe9f3, line: 0xf6d6e5, accent: 0xff5f96 },
     { id: 'ocean', name: 'Ocean', cost: 300, board: 0xf1faff, cell: 0xe1f2fb, line: 0xcce6f4, accent: 0x2f9fd6 },
     { id: 'forest', name: 'Forest', cost: 400, board: 0xf6fdf4, cell: 0xe7f5e3, line: 0xd3e9cc, accent: 0x5aa94a },

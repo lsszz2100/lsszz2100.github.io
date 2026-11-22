@@ -103,27 +103,23 @@
         const span = gate.span * cell;
         let gx, gy, gw, gh, ax, ay, rot;
 
+        const depth = Math.max(10, cell * 0.30);
         if (gate.edge === 'top' || gate.edge === 'bottom') {
           gx = bx + gate.start * cell + 2;
           gw = span - 4;
-          gh = Math.max(10, cell * 0.34);
-          gy = gate.edge === 'top' ? by - gh - 3 : by + cell * st.h + 3;
+          gh = depth;
+          gy = gate.edge === 'top' ? by - gh - 15 : by + cell * st.h + 15;
           ax = gx + gw / 2;
-          ay = gate.edge === 'top' ? gy + gh / 2 : gy + gh / 2;
+          ay = gy + gh / 2;
           rot = gate.edge === 'top' ? -Math.PI / 2 : Math.PI / 2;
-          // lane tint
-          g.fillStyle(color, 0.08);
-          g.fillRect(gx, gate.edge === 'top' ? by : by, gw, cell * st.h);
         } else {
-          gx = gate.edge === 'left' ? bx - Math.max(10, cell * 0.34) - 3 : bx + cell * st.w + 3;
-          gw = Math.max(10, cell * 0.34);
+          gx = gate.edge === 'left' ? bx - depth - 15 : bx + cell * st.w + 15;
+          gw = depth;
           gy = by + gate.start * cell + 2;
           gh = span - 4;
           ax = gx + gw / 2;
           ay = gy + gh / 2;
           rot = gate.edge === 'left' ? Math.PI : 0;
-          g.fillStyle(color, 0.08);
-          g.fillRect(gate.edge === 'left' ? bx : bx, by + gate.start * cell + 2, cell * st.w, gh);
         }
 
         g.fillStyle(color, 1);
@@ -135,14 +131,15 @@
       st.gates.forEach((gate) => {
         const color = COLORS[gate.color] || 0x999999;
         let cx, cy, rot;
+        const depth = Math.max(10, cell * 0.30);
         if (gate.edge === 'top' || gate.edge === 'bottom') {
           const w = gate.span * cell - 4;
           cx = bx + gate.start * cell + 2 + w / 2;
-          cy = gate.edge === 'top' ? by - cell * 0.34 - 3 + cell * 0.17 : by + cell * st.h + 3 + cell * 0.17;
+          cy = gate.edge === 'top' ? by - depth / 2 - 15 : by + cell * st.h + depth / 2 + 15;
           rot = gate.edge === 'top' ? -Math.PI / 2 : Math.PI / 2;
         } else {
           const h = gate.span * cell - 4;
-          cx = gate.edge === 'left' ? bx - cell * 0.34 - 3 + cell * 0.17 : bx + cell * st.w + 3 + cell * 0.17;
+          cx = gate.edge === 'left' ? bx - depth / 2 - 15 : bx + cell * st.w + depth / 2 + 15;
           cy = by + gate.start * cell + 2 + h / 2;
           rot = gate.edge === 'left' ? Math.PI : 0;
         }
