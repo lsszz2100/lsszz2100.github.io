@@ -52,27 +52,27 @@
     blossom: {
       nameKey: 'theme_blossom', descKey: 'theme_blossom_d', price: 0,
       bg: '#FFF7F2', bg2: '#FFE7DE', board: '#FFFFFF', boardEdge: '#F3D8C9',
-      cell: '#FFF1EA', cellEdge: '#F6DFD1', ink: '#4A3A33', tray: '#FFFFFF'
+      cell: '#FCE7DA', cellEdge: '#EECCB8', ink: '#4A3A33', tray: '#FFFFFF'
     },
     mint: {
       nameKey: 'theme_mint', descKey: 'theme_mint_d', price: 240,
       bg: '#EEFBF5', bg2: '#D7F5E8', board: '#FFFFFF', boardEdge: '#C3E7D8',
-      cell: '#EDFBF4', cellEdge: '#CFEDE0', ink: '#2C4A40', tray: '#FFFFFF'
+      cell: '#DCF7EC', cellEdge: '#BCE3D3', ink: '#2C4A40', tray: '#FFFFFF'
     },
     sky: {
       nameKey: 'theme_sky', descKey: 'theme_sky_d', price: 300,
       bg: '#EEF6FF', bg2: '#DBEAFF', board: '#FFFFFF', boardEdge: '#C4DDF7',
-      cell: '#F0F7FF', cellEdge: '#D4E5F8', ink: '#2B3F55', tray: '#FFFFFF'
+      cell: '#E2EFFF', cellEdge: '#C4DBF3', ink: '#2B3F55', tray: '#FFFFFF'
     },
     lemon: {
       nameKey: 'theme_lemon', descKey: 'theme_lemon_d', price: 360,
       bg: '#FFFBE9', bg2: '#FFF2C4', board: '#FFFFFF', boardEdge: '#F2E0A8',
-      cell: '#FFFAE8', cellEdge: '#F5E6B8', ink: '#4A4020', tray: '#FFFFFF'
+      cell: '#FDF3CE', cellEdge: '#EFDDA2', ink: '#4A4020', tray: '#FFFFFF'
     },
     lilac: {
       nameKey: 'theme_lilac', descKey: 'theme_lilac_d', price: 440,
       bg: '#F6F1FF', bg2: '#E9DEFF', board: '#FFFFFF', boardEdge: '#D8C9F6',
-      cell: '#F8F3FF', cellEdge: '#E0D3F8', ink: '#382C50', tray: '#FFFFFF'
+      cell: '#ECE2FF', cellEdge: '#D3C2F2', ink: '#382C50', tray: '#FFFFFF'
     }
   };
 
