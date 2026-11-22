@@ -202,6 +202,10 @@
   function renderHome() {
     const nextStage = Math.min(C.STAGE_COUNT, Math.max(1, profile.unlocked));
     $('#homeStage').textContent = t('home.level', { n: nextStage });
+    const chIdx = Math.min(C.CHAPTERS.length - 1, Math.floor((nextStage - 1) / C.STAGES_PER_CHAPTER));
+    const chName = pick({ en: C.CHAPTERS[chIdx].en, ko: C.CHAPTERS[chIdx].ko });
+    $('#homeChapter').textContent = t('map.chapterN', { n: chIdx + 1 }) + ' · ' + chName;
+    $('#homeStars').textContent = '★ ' + C.totalStars(profile) + ' / ' + (C.STAGE_COUNT * 3);
     $('#homeProgress').textContent = t('home.progress', { done: profile.cleared, total: C.STAGE_COUNT });
     refreshCoins();
     I.apply(document.getElementById('home'));
@@ -519,8 +523,7 @@
     fill.style.width = (ratio * 100).toFixed(1) + '%';
     fill.className = ratio < 0.18 ? 'crit' : (ratio < 0.4 ? 'warn' : '');
 
-    const sizePct = Math.min(100, (snap.r / 175) * 100);
-    $('#sizeFill').style.height = sizePct.toFixed(0) + '%';
+    $('#hudSize').textContent = String(Math.round(snap.r));
   }
 
   function onEat(ev) {
@@ -888,12 +891,12 @@
     const p = C.defaultProfile();
     p.tutorialDone = true;
     p.coins = 1240;
-    p.unlocked = 57;
-    p.cleared = 40;
+    p.unlocked = 78;
+    p.cleared = 77;
     p.totalEaten = 640;
     p.skin = 'berry';
     p.skins = ['classic', 'berry'];
-    for (let i = 0; i < 56; i += 1) p.stars[i] = (i % 9 === 0) ? 2 : ((i % 13 === 0) ? 1 : 3);
+    for (let i = 0; i < 77; i += 1) p.stars[i] = (i % 9 === 0) ? 2 : ((i % 13 === 0) ? 1 : 3);
     p.daily.lastClaim = '';
     p.daily.streak = 5;
     p.daily.bestStreak = 5;
@@ -989,9 +992,11 @@
       bg.step(1 / 60);
       bg.events.length = 0;
     }
+    engine = bg;
     const skin = C.SKINS.find(function (s) { return s.id === profile.skin; }) || C.SKINS[0];
     window.HoleRushGame.start({ engine: bg, stage: stage, skin: skin, theme: C.themeFor(profile, stage) });
-    window.HoleRushGame.pause();
+    setTimeout(function () { window.HoleRushGame.pause(); }, 260);
+    updateHud();
   }
 
   function boot() {

@@ -248,8 +248,8 @@
           objG.fillEllipse(o.x + 2, o.y + o.r * 0.16, o.r * 1.9, o.r * 1.5);
           drawShape(objG, o.shape, o.x, o.y, o.r, rot, o.color, eatable ? 1 : 0.9);
           if (!eatable) {
-            objG.lineStyle(Math.max(2, o.r * 0.07), 0xFFFFFF, 0.55);
-            objG.strokeCircle(o.x, o.y, o.r * 1.02);
+            objG.lineStyle(Math.max(2, o.r * 0.06), 0xFFFFFF, 0.38);
+            objG.strokeCircle(o.x, o.y, o.r * 1.03);
           }
           if (o.type === 'clock') {
             objG.fillStyle(0xffffff, 0.95);

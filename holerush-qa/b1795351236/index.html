@@ -91,6 +91,8 @@
     </header>
 
     <div class="home-hero">
+      <div class="hero-deco"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <span class="hero-chapter" id="homeChapter">Chapter 1 · Orchard</span>
       <button class="play-orb" id="playBtn">
         <span class="orb-hole"></span>
         <span class="orb-label" data-i18n="home.continue">Continue</span>
@@ -99,6 +101,7 @@
         <strong id="homeStage">Stage 1</strong>
         <span id="homeProgress">0/160 cleared</span>
       </div>
+      <div class="hero-stars" id="homeStars">★ 0 / 480</div>
     </div>
 
     <div class="home-gift" id="homeGift">
@@ -156,9 +159,9 @@
           <span class="hud-chip"><em data-i18n="hud.time">Time</em><b id="hudTime">0:00</b></span>
           <span class="hud-chip"><em data-i18n="hud.goal">Left</em><b id="hudLeft">0</b></span>
           <span class="hud-chip combo" id="hudComboChip"><em data-i18n="hud.combo">Combo</em><b id="hudCombo">x0</b></span>
+          <span class="hud-chip size"><em data-i18n="hud.size">Size</em><b id="hudSize">0</b></span>
         </div>
       </div>
-      <div class="size-meter"><i id="sizeFill"></i></div>
     </div>
 
     <div id="board"></div>
