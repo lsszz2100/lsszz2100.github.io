@@ -321,6 +321,14 @@ html, body {
 .sub-note { font-size: 24px; color: var(--ink-soft); margin: 0 40px 18px; line-height: 1.5; }
 
 /* stages */
+.chapter-card {
+  margin-top: 24px; background: #fff; border: 3px solid var(--line); border-radius: 28px;
+  padding: 24px 26px; box-shadow: var(--shadow-sm);
+}
+.chapter-head { display: flex; align-items: baseline; justify-content: space-between; }
+.chapter-head strong { font-size: 28px; font-weight: 900; }
+.chapter-head span { font-size: 22px; color: var(--ink-soft); font-weight: 700; }
+.chapter-note { font-size: 21px; color: var(--ink-soft); line-height: 1.5; margin: 14px 0 0; }
 .chapter-tabs {
   display: flex; gap: 12px; padding: 0 40px 18px; overflow-x: auto; flex: none;
 }
@@ -330,7 +338,7 @@ html, body {
 }
 .chapter-tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .level-scroll { flex: 1; overflow-y: auto; padding: 0 40px 40px; }
-.level-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.level-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
 .level-cell {
   aspect-ratio: 1 / 1; border-radius: 22px; border: 3px solid var(--line);
   background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center;

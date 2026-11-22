@@ -282,6 +282,12 @@
     var grid = $('levelGrid');
     clear(grid);
     var from = chapter * CHAPTER + 1, to = Math.min(TOTAL, (chapter + 1) * CHAPTER);
+    var done = 0;
+    for (var cid = from; cid <= to; cid++) if (progressOf(cid)) done++;
+    $('chapterTitle').textContent = t('chapter', { n: chapter + 1 });
+    $('chapterSub').textContent = done + ' / ' + (to - from + 1) + ' ' + t('clearedWord');
+    var bar = $('chapterBar');
+    if (bar) bar.style.width = Math.round((done / (to - from + 1)) * 100) + '%';
     for (var id = from; id <= to; id++) {
       (function (lid) {
         var locked = lid > save.unlocked;
