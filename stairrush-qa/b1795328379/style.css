@@ -39,6 +39,7 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
 
 html, body {
   margin: 0;
@@ -606,7 +607,7 @@ ol, ul { padding-left: 20px; }
   min-height: 180px;
 }
 .play-host { position: absolute; inset: 0; }
-.play-host canvas { display: block; }
+.play-host canvas { display: block; width: 100%; height: 100%; }
 
 .combo-badge {
   position: absolute;

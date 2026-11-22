@@ -407,8 +407,8 @@
     e.comboBadge.hidden = !showCombo;
     e.comboInline.hidden = !showCombo;
     if (showCombo) {
-      e.comboNum.textContent = run.combo;
-      e.comboInlineVal.textContent = 'x' + SR.multiplier(run.combo);
+      e.comboNum.textContent = SR.multiplier(run.combo);
+      e.comboInlineVal.textContent = SR.multiplier(run.combo);
     }
   }
 

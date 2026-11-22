@@ -111,6 +111,9 @@
       if (this.scale.width !== dw || this.scale.height !== dh) {
         this.scale.resize(dw, dh);
       }
+      /* 캔버스는 2배 해상도로 그리되 화면에는 영역에 맞춰 표시한다 */
+      var cv = this.game.canvas;
+      if (cv) { cv.style.width = '100%'; cv.style.height = '100%'; }
       if (this.rootG) this.rootG.setScale(2);
     }
 
@@ -166,7 +169,7 @@
       var v = this.view();
       var y0 = v.h * L.anchor;
       return {
-        x: v.w + (col - this.camX) * L.stepW,
+        x: v.w / 2 + (col - this.camX) * L.stepW,
         y: y0 - (floor - this.camF) * L.stepH
       };
     }
