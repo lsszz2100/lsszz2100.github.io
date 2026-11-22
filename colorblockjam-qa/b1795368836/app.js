@@ -230,6 +230,9 @@
     $('#homeProgress').textContent = t('home.progress', { n: clearedCount(), total: C.TOTAL_STAGES });
     $('#homeStars').textContent = t('home.stars', { n: C.totalStars(p), max: C.TOTAL_STAGES * 3 });
     $('#homeBar').style.width = Math.round(clearedCount() / C.TOTAL_STAGES * 100) + '%';
+    $('#statCleared').textContent = String(clearedCount());
+    $('#statStars').textContent = String(C.totalStars(p));
+    $('#statCombo').textContent = 'x' + (p.stats.bestCombo || 0);
     const ready = giftReady();
     $('#homeGift').classList.toggle('ready', ready);
     $('#giftText').textContent = ready ? t('home.giftReady') : t('home.giftDone');

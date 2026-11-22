@@ -42,7 +42,7 @@ h1, h2, h3, p { margin: 0; }
   padding-bottom: env(safe-area-inset-bottom);
   background:
     radial-gradient(120% 60% at 10% 0%, #FFEEDF 0%, rgba(255,238,223,0) 60%),
-    radial-gradient(90% 50% at 100% 100%, #E9FBF6 0%, rgba(233,251,246,0) 55%),
+    radial-gradient(80% 40% at 100% 100%, rgba(233,251,246,.55) 0%, rgba(233,251,246,0) 60%),
     var(--paper);
 }
 
@@ -217,6 +217,10 @@ h1, h2, h3, p { margin: 0; }
   box-shadow: var(--shadow-soft); text-align: left;
 }
 .gift-card.ready { background: linear-gradient(120deg, #FFF9EC, #FFF1D8); }
+.home-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 12px; }
+.stat { background: #fff; border-radius: 18px; padding: 11px 6px 10px; text-align: center; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 2px; }
+.stat b { font-size: 17px; font-weight: 900; }
+.stat span { font-size: 10px; font-weight: 800; color: var(--soft); }
 .gift-ico { font-size: 26px; }
 .gift-copy { flex: 1; display: flex; flex-direction: column; gap: 2px; }
 .gift-copy b { font-size: 15px; font-weight: 900; }
