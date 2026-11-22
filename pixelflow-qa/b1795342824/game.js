@@ -93,7 +93,7 @@
       cell = Math.max(14, cell);
       var bw = cell * st.cols, bh = cell * st.rows;
       var bx = (v.w - bw) / 2;
-      var by = pad + 12 + Math.max(0, (availH - bh) / 2);
+      var by = pad + 8 + Math.max(0, (availH - bh) * 0.34);
       return {
         cell: cell, bw: bw, bh: bh, bx: bx, by: by,
         gap: gap, w: v.w, h: v.h,
