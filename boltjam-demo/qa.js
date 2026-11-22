@@ -13,6 +13,9 @@
   'use strict';
   var q = new URLSearchParams(location.search);
   var app = window.BoltApp;
+  window.__qaErrors = [];
+  window.addEventListener('error', function (e) { window.__qaErrors.push(String(e.message) + ' @' + (e.filename || '') + ':' + (e.lineno || '')); });
+  window.addEventListener('unhandledrejection', function (e) { window.__qaErrors.push('reject ' + String(e.reason)); });
 
   function num(key, def) {
     var v = parseInt(q.get(key), 10);
@@ -59,15 +62,19 @@
         var level = app.state().game.level;
         var order = level.witnessOrder || [];
         var i = 0;
-        var timer = setInterval(function () {
-          if (!app.game || i >= order.length || i >= moves) {
-            clearInterval(timer);
+        var step = function () {
+          var g = app.state().game;
+          if (!g || g.over || i >= order.length || i >= moves) {
+            window.__qaDone = true;
             if (q.get('stuck')) setTimeout(function () { app.openModal('modalStuck'); }, 300);
             return;
           }
+          if (g.busy) { setTimeout(step, 90); return; }
           app.tapScrew(order[i]);
           i++;
-        }, 460);
+          setTimeout(step, 190);
+        };
+        setTimeout(step, 60);
       } else if (q.get('stuck')) {
         setTimeout(function () { app.openModal('modalStuck'); }, 400);
       }
