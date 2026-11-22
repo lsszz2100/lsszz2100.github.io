@@ -353,9 +353,10 @@
 
     start: function (opts) {
       if (!this.game) this.init('board');
-      const board = document.getElementById('board');
-      const w = (board && board.clientWidth) || window.innerWidth;
-      const h = (board && board.clientHeight) || window.innerHeight;
+      // offsetWidth/Height 는 CSS transform 의 영향을 받지 않는 레이아웃 크기다.
+      const app = document.getElementById('app');
+      const w = (app && app.offsetWidth) || window.innerWidth;
+      const h = (app && app.offsetHeight) || window.innerHeight;
       if (w > 0 && h > 0) this.game.scale.resize(w, h);
       const scene = this.game.scene.getScene('board');
       this.scene = scene;
