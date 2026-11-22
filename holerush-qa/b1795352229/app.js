@@ -232,6 +232,13 @@
       b.textContent = (i + 1) + '. ' + pick({ en: ch.en, ko: ch.ko });
       b.onclick = function () { sfx.click(); renderMap(i); };
       tabs.appendChild(b);
+      if (i === chapterView) {
+        // 현재 챕터 탭이 화면 안에 오도록 가로 스크롤을 맞춘다
+        setTimeout(function () {
+          const left = b.offsetLeft - tabs.clientWidth / 2 + b.offsetWidth / 2;
+          tabs.scrollLeft = Math.max(0, left);
+        }, 0);
+      }
     });
 
     const ch = C.CHAPTERS[chapterView];
