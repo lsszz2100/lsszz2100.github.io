@@ -313,8 +313,8 @@
         g.fillCircle(w * 0.18 + 12, pyy + 6, 6);
       } else {
         /* morning: 해와 먼 산 */
-        var sunY = h * 0.10 - (camY * 0.04) % 90;
-        g.fillStyle(num('#FFE7A3'), 0.4);
+        var sunY = h * 0.08 - (camY * 0.04) % 90;
+        g.fillStyle(num('#FFE7A3'), 0.3);
         g.fillCircle(w * 0.80, sunY, 40);
         g.fillStyle(num('#FFD166'), 0.8);
         g.fillCircle(w * 0.80, sunY, 24);
@@ -349,66 +349,77 @@
       var from = Math.max(0, Math.floor(this.camF) - 5);
       var to = Math.ceil(this.camF) + 17;
       var stepTop = num(th.step);
-      var stepFace = num(th.step2);
+      var stepFace = num(th.stepSide);
+      var stepFace2 = num(SR.shade(th.stepSide, -0.07));
       var stepEdge = num(th.stepEdge);
-      var stepSide = num(th.stepSide);
+      var HT = 13, HF = 14, R = 7;
 
+      /* 1) 계단 사이를 잇는 빛의 사다리(경로가 한눈에 보이게) */
+      g.lineStyle(5, num(th.step), 0.5);
+      for (var c = from; c < to; c++) {
+        var s1 = SR.stepAt(st, c);
+        var s2 = SR.stepAt(st, c + 1);
+        var p1 = this.stepPos(c, s1.col);
+        var p2 = this.stepPos(c + 1, s2.col);
+        g.lineBetween(p1.x + sx, p1.y + sy - HF - 2, p2.x + sx, p2.y + sy - HF - 2);
+      }
+
+      /* 2) 계단 */
       for (var k = from; k <= to; k++) {
         var s = SR.stepAt(st, k);
         var p = this.stepPos(k, s.col);
         var x = p.x + sx, y = p.y + sy;
         var half = L.stepLen / 2;
-        var d = L.stepDepth;
         var isNext = (k === st.floor + 1) && st.status === 'running';
-        var passed = k <= st.floor;
-        var fade = passed ? 1 : 1;
 
         /* 바닥 그림자 */
-        g.fillStyle(0x2E4A5C, 0.055);
-        g.fillEllipse(x, y + d * 1.9, half * 2.0, d * 0.85);
+        g.fillStyle(0x2E4A5C, 0.06);
+        g.fillEllipse(x, y + 12, half * 1.9, 9);
 
-        /* 앞면(아래층 몸통) */
-        g.fillStyle(stepSide, 0.95 * fade);
-        g.fillRoundedRect(x - half, y - d * 0.12, half * 2, d * 1.5, 8);
+        /* 아래(앞)면 */
+        g.fillStyle(stepFace, 1);
+        g.fillRoundedRect(x - half, y - 3, half * 2, HF + 4, R);
+        g.fillStyle(stepFace2, 0.55);
+        g.fillRoundedRect(x - half, y + HF * 0.45, half * 2, HF * 0.55 + 1, R);
 
         /* 윗면 */
         g.fillStyle(isNext ? num(th.step2) : stepTop, 1);
-        g.fillRoundedRect(x - half, y - d * 0.95, half * 2, d * 1.05, 8);
+        g.fillRoundedRect(x - half, y - HT - 3, half * 2, HT + 6, R);
 
-        /* 윗면 테두리 */
+        /* 테두리 */
         if (isNext) {
           var pulse = 0.55 + 0.45 * Math.sin(this.bob * 5);
-          g.lineStyle(3, num(th.accent), 0.6 + pulse * 0.4);
-          g.strokeRoundedRect(x - half, y - d * 0.95, half * 2, d * 1.05, 8);
+          g.lineStyle(3, num(th.accent), 0.55 + pulse * 0.45);
+          g.strokeRoundedRect(x - half, y - HT - 3, half * 2, HT + 6, R);
           g.lineStyle(0);
           /* 다음 방향 갈매기 */
           var dir = s.dir;
-          g.fillStyle(num(th.accent), 0.9);
+          g.fillStyle(num(th.accent), 0.92);
           g.beginPath();
-          var axp = x + dir * (half + 12);
-          var ayp = y - d * 0.45 - pulse * 4;
-          g.moveTo(axp + dir * 9, ayp);
-          g.lineTo(axp - dir * 4, ayp - 9);
-          g.lineTo(axp - dir * 4, ayp + 9);
+          var axp = x + dir * (half + 13);
+          var ayp = y - HT * 0.4 - pulse * 4;
+          g.moveTo(axp + dir * 10, ayp);
+          g.lineTo(axp - dir * 5, ayp - 10);
+          g.lineTo(axp - dir * 5, ayp + 10);
           g.closePath();
           g.fillPath();
         } else {
-          g.lineStyle(1.4, stepEdge, 0.85);
-          g.strokeRoundedRect(x - half, y - d * 0.95, half * 2, d * 1.05, 8);
+          g.lineStyle(1.4, stepEdge, 0.9);
+          g.strokeRoundedRect(x - half, y - HT - 3, half * 2, HT + 6, R);
           g.lineStyle(0);
         }
 
         /* 황금 계단 */
         if (s.star) {
           var tw = 0.75 + 0.25 * Math.sin(this.bob * 4 + k);
-          g.fillStyle(num('#FFC93C'), 0.32 * tw);
-          g.fillCircle(x, y - d * 0.4, 17);
-          this.starShape(g, x, y - d * 0.42, 9, num('#FFB300'));
-          this.starShape(g, x, y - d * 0.42, 6.5, num('#FFF3C4'));
+          g.fillStyle(num('#FFC93C'), 0.30 * tw);
+          g.fillCircle(x, y - 12, 18);
+          this.starShape(g, x, y - 12, 9.5, num('#FFB300'));
+          this.starShape(g, x, y - 12, 6.8, num('#FFF6CE'));
         }
         if (s.boost) {
-          g.fillStyle(num(th.accent2), 0.9);
-          g.fillRoundedRect(x - 15, y - d * 0.72, 30, 5, 2.5);
+          g.fillStyle(num(th.accent2), 0.95);
+          g.fillRoundedRect(x - 16, y - HT - 1, 32, 4.5, 2.5);
         }
       }
     }

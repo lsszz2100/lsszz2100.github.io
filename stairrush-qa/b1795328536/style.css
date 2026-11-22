@@ -623,7 +623,8 @@ ol, ul { padding-left: 20px; }
   box-shadow: var(--shadow);
   pointer-events: none;
 }
-.combo-badge b { font-size: 21px; font-weight: 900; color: var(--accent); line-height: 1.1; }
+.combo-badge b { font-size: 21px; font-weight: 900; color: var(--accent); line-height: 1.1; display: flex; align-items: baseline; gap: 2px; }
+.combo-badge b em { font-style: normal; font-size: 11px; color: var(--ink-3); }
 .combo-badge span { font-size: 8.5px; font-weight: 800; color: var(--ink-3); letter-spacing: .6px; text-transform: uppercase; }
 
 .fever-flash {
