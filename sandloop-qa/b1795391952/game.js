@@ -8,8 +8,8 @@
   const RAIL = { x: 36, y: 190, w: 928, h: 200 };
   const DISPENSER = { x: 176, y: 300, r: 66 };
   const TRACK = { x: 286, y: 300, w: 646, h: 46 };
-  const JAR_BOTTOM = 1124;
-  const HOLD = { x: 336, y: 1176, w: 328, h: 136 };
+  const JAR_BOTTOM = 1152;
+  const HOLD = { x: 336, y: 1200, w: 328, h: 134 };
 
   function col(hex) { return Phaser.Display.Color.HexStringToColor(hex).color; }
 
@@ -83,7 +83,7 @@
       const jarW = Math.min(252, (totalW - gap * (n - 1)) / n);
       const rowW = jarW * n + gap * (n - 1);
       const left = (W - rowW) / 2;
-      const layerH = Math.min(66, 396 / Math.max(1, maxLayers));
+      const layerH = Math.max(60, Math.min(118, 470 / Math.max(1, maxLayers)));
       const jarH = 116 + maxLayers * layerH;
       const jars = [];
       for (let i = 0; i < n; i += 1) {
