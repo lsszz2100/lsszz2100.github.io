@@ -355,7 +355,7 @@
       var cell = h('button', 'stage-cell');
       cell.appendChild(h('span', null, String(id)));
       cell.appendChild(h('span', 'sc-stars', p ? '★★★'.slice(0, p.stars) : ''));
-      cell.appendChild(h('small', null, st.art));
+      cell.appendChild(h('small', null, st.par3 + 's'));
       if (p) cell.classList.add('done');
       else if (id === nextStageId()) cell.classList.add('now');
       else if (!stageUnlocked(id)) cell.classList.add('lock');
