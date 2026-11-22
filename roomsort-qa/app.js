@@ -1075,6 +1075,7 @@
     save = load();
     if (save.lang !== 'ko') save.lang = 'en';
     if (CAPTURE) {
+      if (qp('reset', '') === '1') save = defaultSave();
       save.lang = qp('lang', 'en') === 'ko' ? 'ko' : 'en';
       save.tutorialDone = true;
       if (qp('seed', '') === '1') {
