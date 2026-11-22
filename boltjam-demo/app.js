@@ -764,14 +764,14 @@
       }
       card.appendChild(priceRow);
       var btn = h('button', 'skin-btn' + (equipped ? ' on' : owned ? ' owned' : ''),
-        equipped ? 'Equipped' : owned ? 'Equip' : t('claim'));
+        equipped ? t('equipped') : owned ? t('equip') : t('buy'));
       btn.addEventListener('click', function () {
         if (!owned) {
           if (save.coins < skin.price) { toast(t('needCoins')); return; }
           save.coins -= skin.price;
           save.owned.push(key);
           save.stats.skinsUsed++;
-          toast(skin.name + ' · ' + t('claim'));
+          toast(skin.name + ' · ' + t('equip'));
         }
         save.skin = key;
         persist();
