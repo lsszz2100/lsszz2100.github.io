@@ -1376,6 +1376,9 @@
     var scale = parseFloat(qp('scale', '2')) || 2;
     document.documentElement.classList.add('cap');
     var stage = $('stage');
+    stage.style.position = 'absolute';
+    stage.style.left = '0';
+    stage.style.top = '0';
     stage.style.transformOrigin = '0 0';
     stage.style.transform = 'translateY(' + (-off) + 'px) scale(' + scale + ')';
   }
