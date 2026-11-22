@@ -43,6 +43,12 @@
     if (q.get('tutorial')) {
       app.openModal('modalTutorial');
     }
+    if (q.get('exit')) {
+      setTimeout(function () { app.openModal('modalExit'); }, 260);
+    }
+    if (q.get('info')) {
+      setTimeout(function () { app.openModal('modalInfo'); }, 260);
+    }
 
     if (q.get('level') || q.get('screen')) {
       setTimeout(function () { app.closeAllModals(); }, 320);

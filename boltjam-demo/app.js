@@ -336,7 +336,7 @@
     var st = C.createState(lvl, { trayCap: lvl.tray });
     game = { id: cfgId, level: lvl, st: st, history: [], undos: UNDO_PER_STAGE, daily: true, busy: false, over: false };
     $('gameMode').textContent = t('daily');
-    $('gameLevel').textContent = '';
+    $('gameLevel').textContent = '★';
     showScreen('game');
     V.init($('boardHost'), { onTap: tapScrew });
     V.loadLevel(lvl, skinObj(), st);
@@ -413,6 +413,8 @@
     undoBtn.disabled = game.undos <= 0 || game.history.length === 0;
     $('trayNote').textContent = t('trayNote');
     I.apply();
+    $('gameMode').textContent = game.daily ? t('daily') : t('stage');
+    $('gameLevel').textContent = game.daily ? '★' : String(game.id);
   }
 
   // A completed box leaves a ghost of itself over the freshly dealt box, so the
