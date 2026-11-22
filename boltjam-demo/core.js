@@ -143,6 +143,36 @@
 
   /* ------------------------------------------------------------------ generator */
 
+  /**
+   * Spread the finished layout over the whole board so a stage always fills its
+   * frame the same way (level 3 and level 150 should look equally placed).
+   * Scaling keeps every containment relationship, so occlusion is unchanged.
+   */
+  function normaliseLayout(planks, screws) {
+    var minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+    planks.forEach(function (p) {
+      minX = Math.min(minX, p.x); minY = Math.min(minY, p.y);
+      maxX = Math.max(maxX, p.x + p.w); maxY = Math.max(maxY, p.y + p.h);
+    });
+    var w = maxX - minX, h = maxY - minY;
+    if (w <= 0 || h <= 0) return;
+    var TARGET_W = 960, TARGET_H = 1000;
+    var k = Math.min(TARGET_W / w, TARGET_H / h);
+    if (k > 4) k = 4;
+    var ox = (1000 - w * k) / 2 - minX * k;
+    var oy = (1040 - h * k) / 2 - minY * k;
+    planks.forEach(function (p) {
+      p.x = Math.round(p.x * k + ox);
+      p.y = Math.round(p.y * k + oy);
+      p.w = Math.round(p.w * k);
+      p.h = Math.round(p.h * k);
+    });
+    screws.forEach(function (s) {
+      s.x = Math.round(s.x * k + ox);
+      s.y = Math.round(s.y * k + oy);
+    });
+  }
+
   function makePlanks(rnd, cfg) {
     var planks = [];
     var W = 1000, H = 1040;
@@ -557,6 +587,7 @@
     var counts = planks.map(function () { return 0; });
     screws.forEach(function (s) { counts[s.plank]++; });
     if (counts.some(function (c) { return c === 0; })) { diag.reason = 'emptyPlank'; return null; }
+    normaliseLayout(planks, screws);
 
     var level = { id: id, seed: seed, tray: cfg.tray, colors: cfg.colors, planks: planks, screws: screws, boxes: [] };
     var order = computeRemovalOrder(level, rnd);

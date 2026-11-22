@@ -76,10 +76,10 @@
     // socket left behind when a bolt is pulled
     if (!scene.textures.exists('socket')) {
       var s = scene.make.graphics({ x: 0, y: 0, add: false });
-      s.fillStyle(0xFFFFFF, 0.75);
+      s.fillStyle(0xFFFFFF, 0.55);
       s.fillCircle(64, 64, 20);
-      s.fillStyle(0x9A7B52, 0.30);
-      s.fillCircle(64, 64, 13);
+      s.fillStyle(0x9A7B52, 0.22);
+      s.fillCircle(64, 64, 12);
       s.generateTexture('socket', 128, 128);
       s.destroy();
     }
@@ -207,7 +207,7 @@
     var s = level.screws[index];
     // a faint hole mark where the bolt stood, removed with its plate
     var socket = scene.add.image(PAD_X + s.x, PAD_Y + s.y, 'socket');
-    socket.setDisplaySize(52, 52);
+    socket.setDisplaySize(44, 44);
     socket.setDepth(level.planks[s.plank].z * 10 + 4);
     socket.setAlpha(0);
     socket.plateIndex = s.plank;
