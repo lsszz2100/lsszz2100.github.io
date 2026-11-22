@@ -137,7 +137,7 @@
       /* 카메라: 현재 층을 화면 60% 지점에 부드럽게 붙인다 */
       var kf = 1 - Math.pow(0.0008, dt);
       this.camF += (st.floor - this.camF) * Math.min(1, kf * 1.6);
-      this.camX += (st.col - this.camX) * Math.min(1, kf * 1.6);
+      this.camX += (st.col - this.camX) * Math.min(1, kf * 2.4);
       if (Math.abs(st.floor - this.camF) < 0.001) this.camF = st.floor;
       if (Math.abs(st.col - this.camX) < 0.001) this.camX = st.col;
 
@@ -383,22 +383,21 @@
         g.fillStyle(isNext ? num(th.step2) : 0xffffff, 1);
         g.fillRoundedRect(x - half, y - 13, half * 2, 15, 7);
 
-        /* 다음 계단 강조 */
+        /* 다음 계단 강조: 은은한 색 + 위쪽 갈매기 */
         if (isNext) {
           var pulse = 0.5 + 0.5 * Math.sin(this.bob * 5);
-          g.fillStyle(num(th.accent), 0.12 + 0.10 * pulse);
-          g.fillRoundedRect(x - half - 5, y - 18, half * 2 + 10, 25, 10);
-          g.lineStyle(2.2, num(th.accent), 0.35 + 0.35 * pulse);
-          g.strokeRoundedRect(x - half - 1, y - 14, half * 2 + 2, 17, 8);
-          g.lineStyle(0);
+          g.fillStyle(num(th.accent), 0.16 + 0.10 * pulse);
+          g.fillRoundedRect(x - half - 3, y - 15, half * 2 + 6, 17, 8);
+          g.fillStyle(num(th.accent2), 0.22 + 0.12 * pulse);
+          g.fillRoundedRect(x - half - 3, y - 15, half * 2 + 6, 4, 2);
           var dir = s.dir;
-          var axp = x + dir * (half * 0.55);
-          var ayp = y - 26 - pulse * 4;
-          g.fillStyle(num(th.accent), 0.9);
+          var axp = x - dir * 6;
+          var ayp = y - 27 - pulse * 3;
+          g.fillStyle(num(th.accent), 0.95);
           g.beginPath();
-          g.moveTo(axp + dir * 8, ayp + 6);
-          g.lineTo(axp - dir * 3, ayp);
-          g.lineTo(axp + dir * 8, ayp - 6);
+          g.moveTo(axp + dir * 9, ayp + 7);
+          g.lineTo(axp - dir * 4, ayp);
+          g.lineTo(axp + dir * 9, ayp - 7);
           g.closePath();
           g.fillPath();
         }
