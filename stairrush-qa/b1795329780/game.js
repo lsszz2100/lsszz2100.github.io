@@ -391,13 +391,13 @@
           g.fillStyle(num(th.accent2), 0.22 + 0.12 * pulse);
           g.fillRoundedRect(x - half - 3, y - 15, half * 2 + 6, 4, 2);
           var dir = s.dir;
-          var axp = x - dir * 6;
+          var axp = x;
           var ayp = y - 27 - pulse * 3;
           g.fillStyle(num(th.accent), 0.95);
           g.beginPath();
-          g.moveTo(axp + dir * 9, ayp + 7);
-          g.lineTo(axp - dir * 4, ayp);
-          g.lineTo(axp + dir * 9, ayp - 7);
+          g.moveTo(axp - dir * 5, ayp + 7);
+          g.lineTo(axp + dir * 8, ayp);
+          g.lineTo(axp - dir * 5, ayp - 7);
           g.closePath();
           g.fillPath();
         }
