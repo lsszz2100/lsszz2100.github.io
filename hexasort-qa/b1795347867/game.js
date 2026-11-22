@@ -206,8 +206,11 @@
       ];
       for (var b = 0; b < blobs.length; b++) {
         var bl = blobs[b];
-        g.fillStyle(num(bl.c), bl.a);
-        g.fillCircle(bl.x, bl.y, bl.r);
+        /* 안쪽일수록 진하게 겹쳐 부드러운 그라데이션을 만든다. */
+        for (var ring = 0; ring < 7; ring++) {
+          g.fillStyle(num(bl.c), bl.a / 7);
+          g.fillCircle(bl.x, bl.y, bl.r * (1 - ring * 0.09));
+        }
       }
       /* 아주 옅은 육각 무늬 */
       var step = 46, r = 15;
