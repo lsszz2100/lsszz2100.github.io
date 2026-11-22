@@ -400,33 +400,45 @@
     var row = $('queueRow');
     var busy = run.belt.length >= PF.MAX_BELT;
     for (var i = 0; i < run.belt.length; i++) if (run.belt[i].pos < PF.GAP_SLOTS) busy = true;
-    var sig = n + '|' + busy + '|' + run.queue.map(function (b) { return b.color + ':' + b.ammo + (b.rainbow ? 'r' : ''); }).join(',');
-    if (sig === queueSig) return;
-    queueSig = sig;
-    row.style.gridTemplateColumns = 'repeat(' + n + ', 1fr)';
-    clear(row);
-    for (var k = 0; k < n; k++) {
-      var b = run.queue[k];
-      var slot = h('button', 'q-slot');
-      slot.setAttribute('aria-label', 'queue slot ' + (k + 1));
-      if (!b) {
-        slot.classList.add('empty');
+
+    /* 칸 수가 바뀔 때만 노드를 새로 만든다(탭 노드가 사라지지 않게). */
+    if (row.children.length !== n) {
+      row.style.gridTemplateColumns = 'repeat(' + n + ', 1fr)';
+      clear(row);
+      for (var k = 0; k < n; k++) {
+        var slot = h('button', 'q-slot empty');
+        slot.setAttribute('aria-label', 'queue slot ' + (k + 1));
         slot.appendChild(h('span', 'q-ball'));
-      } else {
-        var ball = h('span', 'q-ball' + (b.rainbow ? ' rainbow' : ''));
-        if (!b.rainbow) ball.style.background = PF.COLORS[b.color].hex;
-        slot.appendChild(ball);
-        var ammo = h('span', 'q-ammo');
-        for (var a = 0; a < Math.min(b.ammo, 6); a++) ammo.appendChild(h('i'));
-        slot.appendChild(ammo);
-        if (busy) slot.classList.add('cooldown');
+        slot.appendChild(h('span', 'q-ammo'));
         slot.addEventListener('click', (function (idx) {
           return function () { launchAt(idx); };
         })(k));
+        row.appendChild(slot);
       }
-      row.appendChild(slot);
+    }
+
+    for (var j = 0; j < n; j++) {
+      var s2 = row.children[j];
+      var b = run.queue[j];
+      var ball = s2.querySelector('.q-ball');
+      var ammo = s2.querySelector('.q-ammo');
+      s2.classList.toggle('empty', !b);
+      s2.classList.toggle('cooldown', !!b && busy);
+      s2.classList.toggle('next', !!b && j === 0);
+      if (!b) {
+        ball.className = 'q-ball';
+        ball.style.background = '';
+        ammo.innerHTML = '';
+      } else {
+        ball.className = 'q-ball' + (b.rainbow ? ' rainbow' : '');
+        ball.style.background = b.rainbow ? '' : PF.COLORS[b.color].hex;
+        var pips = '';
+        for (var a = 0; a < Math.min(b.ammo, 6); a++) pips += '<i></i>';
+        if (ammo.innerHTML !== pips) ammo.innerHTML = pips;
+      }
     }
     $('queueCount').textContent = run.queue.length + '/' + n;
+    queueSig = 'ok';
   }
 
   function beginStage(kind, id, opts) {

@@ -430,7 +430,9 @@
 
     var hits = cells.reduce(function (a, cl) { return a + cl.hp; }, 0);
     var est = hits * 0.40 + 5;
-    var spawn = clamp(est / Math.max(6, seq.length) * 1.15, 0.62, 2.6);
+    /* 초반 챕터는 더 느긋하게: 손이 익숙해지기 전에 대기열이 차지 않도록. */
+    var pace = ch <= 1 ? 1.55 : (ch <= 3 ? 1.25 : 1.0);
+    var spawn = clamp(est / Math.max(6, seq.length) * 1.15 * pace, 0.66, 3.0);
 
     return {
       id: id,
@@ -576,7 +578,7 @@
       queue: [],
       belt: [],
       seqIndex: 0,
-      spawnTimer: st.spawnInterval * 0.9,
+      spawnTimer: st.spawnInterval * 1.25,
       maxSlots: MAX_SLOTS + (opts.extraSlot ? 1 : 0),
       elapsed: 0,
       score: 0,
