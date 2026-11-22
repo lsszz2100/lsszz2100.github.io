@@ -101,7 +101,7 @@
       const vh = this.scale.height;
       const scale = Math.min(vw / W, vh / H);
       cam.setZoom(scale);
-      cam.centerOn(W / 2, H / 2);
+      cam.setScroll(Math.round((W - vw / scale) / 2), Math.round((H - vh / scale) / 2));
       this.drawBackground();
     },
 
