@@ -29,27 +29,27 @@
   var SKINS = {
     classic: {
       name: 'Classic', price: 0,
-      board: '#FFF7E9', planks: ['#F7E1BE', '#EFCF9C', '#E3B87E'], edge: '#C99A5D',
+      board: '#FFF7E9', planks: ['#FCEEDA', '#F6DFBC', '#EFCEA0'], edge: '#D3AB74',
       accent: '#E8833A'
     },
     candy: {
       name: 'Candy', price: 400,
-      board: '#FFF4F8', planks: ['#FFDFEC', '#FFC9DE', '#F9B2CD'], edge: '#E58AAE',
+      board: '#FFF4F8', planks: ['#FFE9F2', '#FFD9E7', '#FCC3D8'], edge: '#E9A0BC',
       accent: '#F2659B'
     },
     neon: {
       name: 'Neon', price: 800,
-      board: '#F1F6FF', planks: ['#D9E8FF', '#BFD8FF', '#A6C7FB'], edge: '#6E9BE0',
+      board: '#F1F6FF', planks: ['#E4EFFF', '#D2E4FF', '#BFD6FB'], edge: '#8FB0E0',
       accent: '#3D7BF5'
     },
     stone: {
       name: 'Stone', price: 1200,
-      board: '#F6F6F2', planks: ['#E6E3DA', '#D6D2C6', '#C3BEB0'], edge: '#9C9688',
+      board: '#F6F6F2', planks: ['#EFEDE6', '#E2DFD5', '#D2CEC2'], edge: '#A8A294',
       accent: '#6C7A89'
     },
     gem: {
       name: 'Gem', price: 1600,
-      board: '#F3FBFA', planks: ['#D8F3EC', '#BFEADF', '#A4DFD0'], edge: '#62B8A4',
+      board: '#F3FBFA', planks: ['#E2F8F2', '#CDEFE6', '#B6E4D7'], edge: '#7FC4B0',
       accent: '#2AA98C'
     }
   };

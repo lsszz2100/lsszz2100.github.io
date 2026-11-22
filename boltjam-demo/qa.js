@@ -41,6 +41,10 @@
       app.openModal('modalTutorial');
     }
 
+    if (q.get('level') || q.get('screen')) {
+      setTimeout(function () { app.closeAllModals(); }, 320);
+    }
+
     var startDelay = 260;
 
     setTimeout(function () {

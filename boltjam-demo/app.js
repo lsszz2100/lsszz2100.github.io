@@ -383,9 +383,9 @@
     clear(nextRow);
     for (var k = 0; k < C.NEXT_PREVIEW; k++) {
       var cIdx = st.level.boxes[st.queueIdx + k];
+      if (cIdx == null) break;
       var chip = h('span', 'next-chip');
-      if (cIdx == null) chip.style.background = '#F1E6D4';
-      else chip.style.background = C.PALETTE[cIdx % C.PALETTE.length].hex;
+      chip.style.background = C.PALETTE[cIdx % C.PALETTE.length].hex;
       nextRow.appendChild(chip);
     }
 

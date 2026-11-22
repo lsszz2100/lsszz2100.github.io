@@ -76,10 +76,10 @@
     // socket left behind when a bolt is pulled
     if (!scene.textures.exists('socket')) {
       var s = scene.make.graphics({ x: 0, y: 0, add: false });
-      s.fillStyle(0x8C7350, 0.22);
-      s.fillCircle(64, 64, 22);
-      s.fillStyle(0x6B5232, 0.34);
-      s.fillCircle(64, 64, 14);
+      s.fillStyle(0xFFFFFF, 0.75);
+      s.fillCircle(64, 64, 20);
+      s.fillStyle(0x9A7B52, 0.30);
+      s.fillCircle(64, 64, 13);
       s.generateTexture('socket', 128, 128);
       s.destroy();
     }
@@ -142,7 +142,7 @@
     var s = level.screws[index];
     var col = root.BoltCore.PALETTE[s.color % root.BoltCore.PALETTE.length];
     var img = scene.add.image(PAD_X + s.x, PAD_Y + s.y, 'bolt_' + col.key);
-    img.setDisplaySize(104, 104);
+    img.setDisplaySize(108, 108);
     img.setDepth(level.planks[s.plank].z * 10 + 5);
     img.screwIndex = index;
     screwNodes[index] = img;
@@ -205,11 +205,13 @@
   function pullScrew(index, targetCol, done) {
     var img = screwNodes[index];
     var s = level.screws[index];
+    // a faint hole mark where the bolt stood, removed with its plate
     var socket = scene.add.image(PAD_X + s.x, PAD_Y + s.y, 'socket');
-    socket.setDisplaySize(70, 70);
-    socket.setDepth(level.planks[s.plank].z * 10 + 1);
+    socket.setDisplaySize(52, 52);
+    socket.setDepth(level.planks[s.plank].z * 10 + 4);
     socket.setAlpha(0);
-    scene.tweens.add({ targets: socket, alpha: 1, duration: 200 });
+    socket.plateIndex = s.plank;
+    scene.tweens.add({ targets: socket, alpha: 1, duration: 220 });
     if (!img) { if (done) done(); return; }
     delete screwNodes[index];
     var tx = 180 + Math.max(0, Math.min(2, targetCol)) * 360;
@@ -232,13 +234,10 @@
     var node = plankNodes[index];
     plankNodes[index] = null;
     // sockets left on that plate go with it
-    Object.keys(screwNodes).forEach(function (k) {
-      var sc = level.screws[Number(k)];
-      if (!sc || sc.plank !== index) return;
-      var img = screwNodes[k];
-      var socketOwner = img;
-      scene.tweens.add({ targets: socketOwner, alpha: 0, duration: 200, onComplete: function () { socketOwner.destroy(); } });
-      delete screwNodes[k];
+    scene.children.list.slice().forEach(function (child) {
+      if (child && child.plateIndex === index && child !== node) {
+        child.destroy();
+      }
     });
     if (!node) { if (done) done(); return; }
     var dir = node.x > W / 2 ? 1 : -1;
