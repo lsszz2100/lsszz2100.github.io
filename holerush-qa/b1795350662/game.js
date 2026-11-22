@@ -72,6 +72,12 @@
       this.paused = false;
       this.pulse = 0;
 
+      if (root.HoleRushGame && root.HoleRushGame.pending) {
+        const opts = root.HoleRushGame.pending;
+        root.HoleRushGame.pending = null;
+        this.begin(opts);
+      }
+
       this.scale.on('resize', this.layout, this);
       this.input.on('pointerdown', this.onPointer, this);
       this.input.on('pointermove', this.onPointer, this);
@@ -112,7 +118,7 @@
       this.drawBackground();
     },
 
-    stop: function () {
+    clearBoard: function () {
       this.ready = false;
       this.engine = null;
       this.particles.length = 0;
@@ -350,12 +356,19 @@
       if (w > 0 && h > 0) this.game.scale.resize(w, h);
       const scene = this.game.scene.getScene('board');
       this.scene = scene;
-      scene.begin(opts);
-      if (this.game.scene.isPaused('board')) this.game.scene.resume('board');
+      if (scene && scene.bg) {
+        scene.begin(opts);
+        this.pending = null;
+      } else {
+        // 씬이 아직 만들어지기 전이면 create() 에서 이어받는다
+        this.pending = opts;
+        if (this.game.scene.isPaused('board')) this.game.scene.resume('board');
+      }
     },
 
     stop: function () {
-      if (this.scene) this.scene.stop();
+      if (this.scene && this.scene.clearBoard) this.scene.clearBoard();
+      this.pending = null;
     },
 
     pause: function () { if (this.scene) this.scene.setPaused(true); },

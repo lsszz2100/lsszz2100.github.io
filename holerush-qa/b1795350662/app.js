@@ -894,7 +894,7 @@
     p.skin = 'berry';
     p.skins = ['classic', 'berry'];
     for (let i = 0; i < 56; i += 1) p.stars[i] = (i % 9 === 0) ? 2 : ((i % 13 === 0) ? 1 : 3);
-    p.daily.lastClaim = C.todayKey();
+    p.daily.lastClaim = '';
     p.daily.streak = 5;
     p.daily.bestStreak = 5;
     p.daily.day = 4;
@@ -923,7 +923,7 @@
     const skin = C.SKINS.find(function (s) { return s.id === profile.skin; }) || C.SKINS[0];
     const theme = C.themeFor(profile, stage);
     window.HoleRushGame.start({ engine: engine, stage: stage, skin: skin, theme: theme });
-    window.HoleRushGame.pause();
+    setTimeout(function () { window.HoleRushGame.pause(); }, 260);
     updateHud();
   }
 
