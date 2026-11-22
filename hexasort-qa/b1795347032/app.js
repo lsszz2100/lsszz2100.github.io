@@ -1585,6 +1585,39 @@
       }, 420);
       return;
     }
+    if (screen === 'pop') {
+      beginStage('stage', parseInt(qp('stage', '12'), 10) || 12);
+      setTimeout(function () {
+        simulateProgress(parseInt(qp('moves', '4'), 10) || 4);
+        paused = true;
+        Game.setRun(run);
+        Game.resize();
+        renderHud();
+        renderTray();
+        /* 10장이 터지는 순간을 잡으려고 한 수 더 두고 화면을 멈춘다. */
+        var best = null;
+        for (var s2 = 0; s2 < HX.TRAY_SLOTS; s2++) {
+          if (!run.tray[s2]) continue;
+          for (var i2 = 0; i2 < run.cells.length; i2++) {
+            if (!HX.canPlace(run, i2, run.tray[s2])) continue;
+            var sc = run.cells[i2].tiles.length ? 100 + HX.topRun(run.cells[i2]) : 1;
+            if (!best || sc > best.score) best = { slot: s2, cell: i2, score: sc };
+          }
+        }
+        if (!best) return;
+        var ev2 = [];
+        HX.place(run, best.slot, best.cell, ev2);
+        Game.process(ev2);
+        renderTray();
+        setTimeout(function () {
+          var sc2 = Game.sceneRef();
+          if (sc2 && sc2.scene) sc2.scene.pause();
+          renderHud();
+        }, 340);
+      }, 460);
+      return;
+    }
+
     if (screen === 'lose') {
       beginStage('stage', parseInt(qp('stage', '12'), 10) || 12);
       setTimeout(function () {
