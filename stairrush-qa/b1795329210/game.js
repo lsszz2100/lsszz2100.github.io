@@ -158,7 +158,7 @@
 
       /* 장식·불꽃 */
       this.feverT = st.fever ? Math.min(1, this.feverT + dt * 3) : Math.max(0, this.feverT - dt * 3);
-      if (st.fever && Math.random() < dt * 12) this.spawnConfetti();
+      if (st.fever && Math.random() < dt * 7) this.spawnConfetti();
       this.stepSparks(dt);
       if (this.shakeT > 0) this.shakeT = Math.max(0, this.shakeT - dt);
       if (this.flash > 0) this.flash = Math.max(0, this.flash - dt * 2.2);
@@ -313,11 +313,11 @@
         g.fillCircle(w * 0.18 + 12, pyy + 6, 6);
       } else {
         /* morning: 해와 먼 산 */
-        var sunY = h * 0.08 - (camY * 0.04) % 90;
-        g.fillStyle(num('#FFE7A3'), 0.3);
-        g.fillCircle(w * 0.80, sunY, 40);
-        g.fillStyle(num('#FFD166'), 0.8);
-        g.fillCircle(w * 0.80, sunY, 24);
+        var sunY = h * 0.14 - (camY * 0.03) % 80;
+        g.fillStyle(num('#FFE7A3'), 0.28);
+        g.fillCircle(w * 0.17, sunY, 34);
+        g.fillStyle(num('#FFD166'), 0.72);
+        g.fillCircle(w * 0.17, sunY, 20);
       }
 
       /* 언덕(아주 느린 시차) — 화면 아래쪽에만 */
@@ -354,17 +354,7 @@
       var stepEdge = num(th.stepEdge);
       var HT = 12, HF = 18, R = 7;
 
-      /* 1) 계단 사이를 잇는 빛의 사다리(경로가 한눈에 보이게) */
-      g.lineStyle(5, num(th.step), 0.5);
-      for (var c = from; c < to; c++) {
-        var s1 = SR.stepAt(st, c);
-        var s2 = SR.stepAt(st, c + 1);
-        var p1 = this.stepPos(c, s1.col);
-        var p2 = this.stepPos(c + 1, s2.col);
-        g.lineBetween(p1.x + sx, p1.y + sy - HF - 2, p2.x + sx, p2.y + sy - HF - 2);
-      }
-
-      /* 2) 계단 */
+      /* 계단 */
       for (var k = from; k <= to; k++) {
         var s = SR.stepAt(st, k);
         var p = this.stepPos(k, s.col);
@@ -372,54 +362,50 @@
         var half = L.stepLen / 2;
         var isNext = (k === st.floor + 1) && st.status === 'running';
 
-        /* 바닥 그림자 */
-        g.fillStyle(0x2E4A5C, 0.06);
-        g.fillEllipse(x, y + 12, half * 1.9, 9);
+        /* 부드러운 그림자 */
+        g.fillStyle(0x2E4A5C, 0.07);
+        g.fillEllipse(x, y + 20, half * 1.85, 8);
 
         /* 아래(앞)면 */
-        g.fillStyle(stepFace, 1);
-        g.fillRoundedRect(x - half, y - 4, half * 2, HF + 6, R);
-        g.fillStyle(stepFace2, 0.7);
-        g.fillRoundedRect(x - half, y + HF * 0.40, half * 2, HF * 0.60 + 1, R);
+        g.fillStyle(num(th.shadeSide || th.stepSide), 1);
+        g.fillRoundedRect(x - half, y - 2, half * 2, 20, 7);
+        g.fillStyle(num(th.stepEdge), 0.45);
+        g.fillRoundedRect(x - half, y + 10, half * 2, 8, 6);
 
         /* 윗면 */
-        g.fillStyle(isNext ? num(th.step2) : stepTop, 1);
-        g.fillRoundedRect(x - half, y - HT - 3, half * 2, HT + 6, R);
+        g.fillStyle(isNext ? num(th.step2) : 0xffffff, 1);
+        g.fillRoundedRect(x - half, y - 14, half * 2, 18, 7);
 
-        /* 테두리 */
+        /* 다음 계단 강조 */
         if (isNext) {
-          var pulse = 0.55 + 0.45 * Math.sin(this.bob * 5);
-          g.lineStyle(3, num(th.accent), 0.55 + pulse * 0.45);
-          g.strokeRoundedRect(x - half, y - HT - 3, half * 2, HT + 6, R);
-          g.lineStyle(0);
-          /* 다음 방향 갈매기 */
+          var pulse = 0.5 + 0.5 * Math.sin(this.bob * 5);
+          g.fillStyle(num(th.accent), 0.10 + 0.10 * pulse);
+          g.fillRoundedRect(x - half - 5, y - 19, half * 2 + 10, 28, 10);
+          g.fillStyle(num(th.accent), 0.95);
+          g.fillRoundedRect(x - half, y - 14, half * 2, 3.2, 1.6);
           var dir = s.dir;
-          g.fillStyle(num(th.accent), 0.92);
+          var axp = x + dir * (half + 14);
+          var ayp = y - 4 - pulse * 3;
+          g.fillStyle(num(th.accent), 0.95);
           g.beginPath();
-          var axp = x + dir * (half + 13);
-          var ayp = y - HT * 0.4 - pulse * 4;
-          g.moveTo(axp + dir * 10, ayp);
-          g.lineTo(axp - dir * 5, ayp - 10);
-          g.lineTo(axp - dir * 5, ayp + 10);
+          g.moveTo(axp + dir * 9, ayp);
+          g.lineTo(axp - dir * 5, ayp - 9);
+          g.lineTo(axp - dir * 5, ayp + 9);
           g.closePath();
           g.fillPath();
-        } else {
-          g.lineStyle(1.6, stepEdge, 1);
-          g.strokeRoundedRect(x - half, y - HT - 3, half * 2, HT + 6, R);
-          g.lineStyle(0);
         }
 
         /* 황금 계단 */
         if (s.star) {
           var tw = 0.75 + 0.25 * Math.sin(this.bob * 4 + k);
-          g.fillStyle(num('#FFC93C'), 0.30 * tw);
-          g.fillCircle(x, y - 12, 18);
-          this.starShape(g, x, y - 12, 9.5, num('#FFB300'));
-          this.starShape(g, x, y - 12, 6.8, num('#FFF6CE'));
+          g.fillStyle(num('#FFD166'), 0.40 * tw);
+          g.fillCircle(x, y - 6, 17);
+          this.starShape(g, x, y - 6, 9.5, num('#FFB300'));
+          this.starShape(g, x, y - 6, 6.8, num('#FFF6CE'));
         }
         if (s.boost) {
           g.fillStyle(num(th.accent2), 0.95);
-          g.fillRoundedRect(x - 16, y - HT - 1, 32, 4.5, 2.5);
+          g.fillRoundedRect(x - 16, y - 2, 32, 4.5, 2.5);
         }
       }
     }
@@ -578,8 +564,8 @@
         y: -10,
         vx: (Math.random() - 0.5) * 40,
         vy: 80 + Math.random() * 90,
-        w: 5 + Math.random() * 5,
-        h: 8 + Math.random() * 6,
+        w: 3 + Math.random() * 3,
+        h: 5 + Math.random() * 4,
         life: 1.6, max: 1.6,
         color: num([th.accent, th.accent2, '#FFD166', '#8FD3FF'][Math.floor(Math.random() * 4)])
       });

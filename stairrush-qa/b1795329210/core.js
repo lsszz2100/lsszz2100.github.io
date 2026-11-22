@@ -53,7 +53,7 @@
       land: '#BFE4CF', land2: '#9FD4B8',
       step: '#FFFFFF', step2: '#E7F4FC', stepEdge: '#A9CCE0', stepSide: '#CFE8F6',
       accent: '#FF9A76', accent2: '#FFC48C', ink: '#2E4A5C'
-    },
+    , shadeSide: '#B8D7EC'},
     blossom: {
       nameKey: 'theme_blossom', descKey: 'theme_blossom_d', price: 220,
       sky: '#FFE8F0', sky2: '#FFF3F7', sky3: '#FFFDF9',
@@ -61,7 +61,7 @@
       land: '#FFD8E4', land2: '#F9C2D4',
       step: '#FFFFFF', step2: '#FFF0F5', stepEdge: '#E8B6CA', stepSide: '#FADAE6',
       accent: '#F27A9B', accent2: '#FFB3C6', ink: '#5C3A46'
-    },
+    , shadeSide: '#F2B9CF'},
     funpark: {
       nameKey: 'theme_funpark', descKey: 'theme_funpark_d', price: 320,
       sky: '#DDF3E8', sky2: '#F0FAF3', sky3: '#FFFDF4',
@@ -69,7 +69,7 @@
       land: '#C7E7C1', land2: '#A9D9A2',
       step: '#FFFFFF', step2: '#EEF9EF', stepEdge: '#AFD3AE', stepSide: '#D8EFD7',
       accent: '#FF8B5E', accent2: '#FFD166', ink: '#2F4A3A'
-    },
+    , shadeSide: '#BEDDBC'},
     neon: {
       nameKey: 'theme_neon', descKey: 'theme_neon_d', price: 420,
       sky: '#E6E2FF', sky2: '#F4F0FF', sky3: '#FFF7FE',
@@ -77,13 +77,13 @@
       land: '#CDBFF6', land2: '#B4A2EE',
       step: '#FFFFFF', step2: '#F0EBFF', stepEdge: '#B4A2EE', stepSide: '#DBD1FA',
       accent: '#9B6BFF', accent2: '#FF8FD1', ink: '#3B3057'
-    },
+    , shadeSide: '#C2B2F2'},
     space: {
       nameKey: 'theme_space', descKey: 'theme_space_d', price: 520,
       sky: '#DCEAFB', sky2: '#EFF6FE', sky3: '#FFFFFF',
       cloud: '#FFFFFF', cloud2: '#DDE9FA',
       land: '#C9D8F2', land2: '#AEC3E8',
-      step: '#FFFFFF', step2: '#EEF3FD', stepEdge: '#AFC4E4', stepSide: '#D9E4F8',
+      step: '#FFFFFF', step2: '#EEF3FD', stepEdge: '#AFC4E4', stepSide: '#D9E4F8', shadeSide: '#BCCEE9',
       accent: '#5B8DEF', accent2: '#8FD3FF', ink: '#26364F'
     }
   };
@@ -94,7 +94,7 @@
     runner: {
       nameKey: 'skin_runner', descKey: 'skin_runner_d', price: 0,
       body: '#FF9A76', body2: '#F07A56', head: '#FFD9C4', hair: '#4A3A32', accessory: 'cap', cap: '#FF8B5E'
-    },
+    , shadeSide: '#BCCEE9'},
     chick: {
       nameKey: 'skin_chick', descKey: 'skin_chick_d', price: 180,
       body: '#FFD166', body2: '#F0B93F', head: '#FFE39B', hair: '#FFB03A', accessory: 'beak', cap: '#FFB03A'
