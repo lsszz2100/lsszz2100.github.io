@@ -341,8 +341,17 @@ html.cap #stage { box-shadow: none; border-radius: 0; }
 .hud-level { font-size: 19px; font-weight: 900; }
 .hud-right { display: flex; align-items: center; gap: 8px; }
 
-.board-wrap { position: relative; flex: 1; min-height: 0; }
+.board-wrap { position: relative; flex: 1; min-height: 0; padding: 0 6px; }
 .board-host { position: absolute; inset: 0; }
+.board-host canvas {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
 
 .combo-banner {
   position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
