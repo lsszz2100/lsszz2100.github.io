@@ -258,6 +258,9 @@
     $('questsMeta').textContent = questsClaimed() + ' / 3';
     $('achMeta').textContent = Object.keys(save.achievements).length + ' / 12';
     $('shopMeta').textContent = (C.SKINS[save.skin] || C.SKINS.classic).name;
+    $('hstatStars').textContent = totalStars();
+    $('hstatLevels').textContent = clearedCount();
+    $('hstatStreak').textContent = save.stats.streak;
     I.apply();
   }
 
