@@ -30,11 +30,15 @@
 
       this.geom = null;          // board/belt geometry
       this.cellG = null;         // cell graphics
+      this.rootScale = 2;
+      this.rootG = this.add.container(0, 0);
       this.beltG = this.add.graphics();
       this.blastG = this.add.graphics();
       this.fxG = this.add.graphics();
       this.hintG = this.add.graphics();
       this.cellLayer = this.add.container(0, 0);
+      this.rootG.add([this.beltG, this.cellLayer, this.blastG, this.fxG, this.hintG]);
+      this.rootG.setScale(this.rootScale);
 
       this.cellViews = {};       // key -> {x,y,flash,scale,alive}
       this.shots = [];           // flying bullets
@@ -67,12 +71,14 @@
       var cv = this.game.canvas;
       if (cv) { cv.style.width = '100%'; cv.style.height = '100%'; }
       this.rootScale = 2;
+      if (this.rootG) this.rootG.setScale(this.rootScale);
       if (this.run) this.buildBoard();
       this.drawBelt();
       this.drawCells(true);
     }
 
-    view() { return { w: this.scale.width / 2, h: this.scale.height / 2 }; }
+    /* 논리 좌표(CSS px). 그리기는 rootG 를 2배로 확대해 고해상도로 그린다. */
+    view() { return { w: this.scale.width / (this.rootScale || 1), h: this.scale.height / (this.rootScale || 1) }; }
 
     /** 보드·벨트 좌표를 계산한다. */
     computeGeom() {
@@ -230,13 +236,10 @@
         var key = cl.c + ':' + cl.r;
         var view = this.cellViews[key];
         if (!cl.alive) {
-          if (view && view.alive) {
-            view.alive = false;
-            view.scale = 1;
-            view.fade = 1;
-          }
+          if (view) delete this.cellViews[key];
           continue;
         }
+        if (!view) { view = this.cellViews[key] = { flash: 0 }; }
         var p = this.cellXY(cl.c, cl.r);
         var col = PF.COLORS[cl.color];
         var blink = (view && view.flash > 0) ? view.flash : 0;
@@ -531,8 +534,10 @@
       if (!this.run || !this.geom) return;
       if (!this.targetMode) return;
       var g = this.geom;
-      var c = Math.floor((pointer.x - g.bx) / g.cell);
-      var r = Math.floor((pointer.y - g.by) / g.cell);
+      var k = this.rootScale || 1;
+      var px = pointer.x / k, py = pointer.y / k;
+      var c = Math.floor((px - g.bx) / g.cell);
+      var r = Math.floor((py - g.by) / g.cell);
       if (c < 0 || c >= this.run.stage.cols || r < 0 || r >= this.run.stage.rows) return;
       var fn = this.onCellTap;
       var mode = this.targetMode;
