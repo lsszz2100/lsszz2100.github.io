@@ -41,6 +41,8 @@ body {
 .screen.subpage { padding: 0 18px calc(18px + env(safe-area-inset-bottom, 0)); overflow-y: auto; }
 /* 스크롤 페이지의 자식들은 찌그러지지 않고 페이지가 스크롤되게 한다 */
 .screen.subpage > * { flex: 0 0 auto; }
+.screen.subpage::-webkit-scrollbar { width: 0; height: 0; }
+.screen.subpage { scrollbar-width: none; }
 
 h1, h2, h3 { margin: 0; letter-spacing: -0.02em; }
 button { font: inherit; color: inherit; border: 0; background: none; padding: 0; cursor: pointer; }
