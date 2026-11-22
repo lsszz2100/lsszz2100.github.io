@@ -156,9 +156,9 @@
 
       const board = col(this.theme.board);
       g.fillStyle(board, 0.94);
-      g.fillRoundedRect(28, 214, W - 56, 966, 52);
+      g.fillRoundedRect(28, 214, W - 56, 1188, 52);
       g.lineStyle(5, 0xffffff, 0.9);
-      g.strokeRoundedRect(28, 214, W - 56, 966, 52);
+      g.strokeRoundedRect(28, 214, W - 56, 1188, 52);
     },
 
     // ------------------------------------------------------------ input
