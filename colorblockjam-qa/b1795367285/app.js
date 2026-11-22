@@ -1100,6 +1100,145 @@
     else { show('home'); renderHome(); }
   }
 
+  // ---------------------------------------------------------------- autotest (QA capture only)
+
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  function waitScene() {
+    return new Promise(function (resolve) {
+      let n = 0;
+      (function poll() {
+        const sc = window.ColorGame.scene();
+        if (sc && sc.blockMap && sc.blockMap.length) return resolve(sc);
+        if (n++ > 80) return resolve(null);
+        setTimeout(poll, 100);
+      }());
+    });
+  }
+
+  function fire(el, type, x, y) {
+    const opts = { bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0, buttons: type === 'pointerup' || type === 'mouseup' ? 0 : 1 };
+    if (type.indexOf('mouse') === 0) el.dispatchEvent(new MouseEvent(type, opts));
+    else el.dispatchEvent(new PointerEvent(type, Object.assign({ pointerId: 1, pointerType: 'touch', isPrimary: true }, opts)));
+  }
+
+  async function runAutotest() {
+    const out = { checks: [], errors: [] };
+    const add = function (name, ok, info) { out.checks.push({ name: name, ok: !!ok, info: info === undefined ? null : info }); };
+    try {
+      p.unlocked = C.TOTAL_STAGES;
+      // 1. real pointer drag moves a block
+      startStage(1);
+      let sc = await waitScene();
+      await sleep(350);
+      let stage = run.stageObj;
+      let dirs = ['up', 'down', 'left', 'right'];
+      let dir = dirs.filter(function (d) { return C.slide(stage, sc.state, 0, d); })[0];
+      if (!dir) dir = 'up';
+      const cv = document.querySelector('#boardWrap canvas');
+      const r = cv.getBoundingClientRect();
+      const cx = r.left + sc.bx + (sc.state.p[0] + 0.5) * sc.cell;
+      const cy = r.top + sc.by + (sc.state.p[1] + 0.5) * sc.cell;
+      const d = C.DIRS[dir];
+      fire(cv, 'pointerdown', cx, cy);
+      fire(cv, 'mousedown', cx, cy);
+      await sleep(60);
+      fire(cv, 'pointermove', cx + d.x * 70, cy + d.y * 70);
+      fire(cv, 'mousemove', cx + d.x * 70, cy + d.y * 70);
+      await sleep(90);
+      fire(cv, 'pointerup', cx + d.x * 70, cy + d.y * 70);
+      fire(cv, 'mouseup', cx + d.x * 70, cy + d.y * 70);
+      await sleep(500);
+      add('pointer drag moves a block', run && run.state.moves >= 1, { dir: dir, moves: run ? run.state.moves : null });
+
+      // 2. a stage cleared by its recorded solution
+      stopRun();
+      startStage(92);
+      sc = await waitScene();
+      await sleep(250);
+      stage = run.stageObj;
+      for (let i = 0; i < stage.sol.length; i++) {
+        const cur = window.ColorGame.scene();
+        if (!cur) break;
+        cur.attempt(stage.sol[i][0], stage.sol[i][1]);
+        await sleep(330);
+      }
+      await sleep(900);
+      add('stage 92 cleared by solution', !!(run && run.done) && p.stars[92] >= 1, { stars: p.stars[92] || 0, moves: run ? run.moves : null });
+      add('win modal shown', document.querySelector('#overlay').classList.contains('show'));
+      closeOverlay();
+
+      // 3. hammer removes one block
+      stopRun();
+      startStage(3);
+      sc = await waitScene();
+      await sleep(250);
+      p.boosters.hammer = 1;
+      armBooster('hammer');
+      onPick('hammer', 0);
+      await sleep(400);
+      add('hammer removes a block', sc.state.gone[0] === 1, { gone: sc.state.gone[0] });
+      add('hammer stock consumed', p.boosters.hammer === 0);
+
+      // 4. bomb clears one colour
+      stopRun();
+      startStage(5);
+      sc = await waitScene();
+      await sleep(250);
+      p.boosters.bomb = 1;
+      const color = sc.stage.blocks[1].color;
+      armBooster('bomb');
+      onPick('bomb', 1);
+      await sleep(500);
+      let gone = 0;
+      sc.stage.blocks.forEach(function (b, i) { if (b.color === color && sc.state.gone[i]) gone++; });
+      add('bomb clears every block of a colour', gone >= 2, { color: color, gone: gone });
+
+      // 5. time booster adds 30s
+      stopRun();
+      startStage(6);
+      sc = await waitScene();
+      await sleep(250);
+      const before = run.timeLeft;
+      p.boosters.time = 1;
+      armBooster('time');
+      add('time booster adds 30 seconds', Math.round(run.timeLeft - before) === 30, { delta: Math.round(run.timeLeft - before) });
+
+      // 6. lose then revive by reward
+      run.timeLeft = 0.05;
+      await sleep(500);
+      add('timer loss opens the fail modal', document.querySelector('#overlay').classList.contains('show') && run.done);
+      handleAct('revive', {});
+      await sleep(1100);
+      add('rewarded revive restarts the clock', !run.done && run.timeLeft > 20, { time: run ? Math.round(run.timeLeft) : null });
+      closeOverlay();
+      stopRun();
+
+      // 7. back chain and exit dialog
+      show('home');
+      const back = window.onAndroidBack();
+      add('back on home opens the exit dialog', back === true && document.querySelector('#overlay').classList.contains('show'));
+      closeOverlay();
+      go('shop');
+      add('back from shop returns home', window.onAndroidBack() === true && screen === 'home');
+
+      // 8. language switch
+      p.lang = 'ko'; applyI18n(); renderHome();
+      const ko = document.querySelector('[data-i18n="nav.play"]').textContent;
+      p.lang = 'en'; applyI18n(); renderHome();
+      add('language switch updates the UI', ko === '플레이' && document.querySelector('[data-i18n="nav.play"]').textContent === 'Play', { ko: ko });
+    } catch (e) {
+      out.errors.push(String(e && e.stack || e));
+    }
+    out.failed = out.checks.filter(function (c) { return !c.ok; }).length + out.errors.length;
+    window.__autotest = out;
+    const box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:0;top:0;width:100%;background:#fff;color:#111;font:12px/1.4 monospace;padding:8px;z-index:99999';
+    box.textContent = 'AUTOTEST ' + (out.failed ? 'FAIL ' + out.failed : 'PASS ' + out.checks.length) + ' | ' +
+      out.checks.map(function (c) { return (c.ok ? '✓' : '✗') + c.name; }).join(' | ');
+    document.body.appendChild(box);
+  }
+
   // ---------------------------------------------------------------- boot
 
   function boot() {
@@ -1107,7 +1246,11 @@
     if (!Array.isArray(p.themes)) p.themes = ['sunny'];
     if (!p.daily.claimedIds) p.daily.claimedIds = {};
     if (!p.daily.prog) p.daily.prog = {};
-    if (CAPTURE) { captureBoot(); return; }
+    if (CAPTURE) {
+      captureBoot();
+      if (/[?&]autotest=1/.test(location.search)) setTimeout(runAutotest, 400);
+      return;
+    }
     I.setLang(p.lang);
     applyI18n();
     bind();
