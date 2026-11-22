@@ -545,9 +545,9 @@
     const snap = engine.snapshot();
     $('#hudStage').textContent = t('hud.stage', { n: stageIndex + 1 });
     $('#hudPacks').textContent = String(snap.packs);
-    $('#hudGoal').textContent = String(snap.goal);
+    $('#hudGoal').textContent = '/ ' + snap.goal;
     $('#hudPlays').textContent = String(snap.plays);
-    $('#hudPar').textContent = String(stage.par);
+    $('#hudPar').textContent = '/ ' + stage.par;
     $('#hudScore').textContent = String(snap.score);
     const fill = $('#goalFill');
     if (fill) fill.style.width = Math.max(0, Math.min(100, (snap.packs / snap.goal) * 100)).toFixed(1) + '%';

@@ -391,7 +391,7 @@
       const ih = (h - py * 2) / rows;
       const c = k % cols;
       const r = Math.floor(k / cols);
-      return { x: x + px + iw * (c + 0.5), y: y + py + ih * (r + 0.5), r: Math.min(iw, ih) * 0.38 };
+      return { x: x + px + iw * (c + 0.5), y: y + py + ih * (r + 0.5), r: Math.min(iw, ih) * 0.42 };
     },
 
     drawTray: function (g, x, y, w, h, items, opts) {
@@ -400,7 +400,7 @@
       // 빈 슬롯
       for (let k = 0; k < 6; k += 1) {
         const p = this.slotPos(x, y, w, h, k);
-        g.fillStyle(col((this.tray && this.tray.slot) || '#F1F6FE'), 1);
+        g.fillStyle(col((this.tray && this.tray.slot) || '#EDF3FD'), 1);
         g.fillRoundedRect(p.x - p.r * 1.2, p.y - p.r * 1.2, p.r * 2.4, p.r * 2.4, p.r * 0.7);
       }
       if (!items) return radius;
