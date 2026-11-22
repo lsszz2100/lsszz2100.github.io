@@ -432,7 +432,7 @@
       var g = run.tray[s];
       el.classList.toggle('empty', !g);
       el.classList.toggle('sel', selectedSlot === s);
-      el.classList.toggle('busy', animating || Game.busy());
+      el.classList.toggle('busy', animating);
       clear(el);
       if (g) {
         var count = h('span', 'ts-count', String(g.tiles.length));
