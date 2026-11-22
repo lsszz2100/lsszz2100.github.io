@@ -164,20 +164,35 @@
       const cont = this.add.container(bx + this.state.p[i * 2] * cell, by + this.state.p[i * 2 + 1] * cell);
       const g = this.add.graphics();
 
-      // drop shadow
-      g.fillStyle(0x2c3350, 0.10);
-      b.cells.forEach((c) => {
-        g.fillRoundedRect(c[0] * cell + 3, c[1] * cell + 6, cell - 4, cell - 5, cell * 0.16);
-      });
+      const r = Math.max(4, cell * 0.16);
+      const has = {};
+      b.cells.forEach(function (c) { has[c[0] + ',' + c[1]] = true; });
 
-      b.cells.forEach((c) => {
-        g.fillStyle(shade, 1);
-        g.fillRoundedRect(c[0] * cell + 1, c[1] * cell + 1, cell - 2, cell - 2, cell * 0.16);
-        g.fillStyle(color, 1);
-        g.fillRoundedRect(c[0] * cell + 1, c[1] * cell + 1, cell - 2, cell - 7, cell * 0.16);
-        g.fillStyle(0xffffff, 0.22);
-        g.fillRoundedRect(c[0] * cell + 5, c[1] * cell + 4, cell - 10, Math.max(3, cell * 0.13), cell * 0.06);
-      });
+      // One silhouette: cells plus small bridges over the joins, so multi-cell
+      // blocks read as a single piece instead of separate tiles.
+      const stamp = function (gfx, dy, color, alpha) {
+        gfx.fillStyle(color, alpha == null ? 1 : alpha);
+        b.cells.forEach(function (c) {
+          gfx.fillRoundedRect(c[0] * cell + 1, c[1] * cell + 1 + dy, cell - 2, cell - 2, r);
+        });
+        b.cells.forEach(function (c) {
+          if (has[(c[0] + 1) + ',' + c[1]]) {
+            gfx.fillRect((c[0] + 1) * cell - r, c[1] * cell + 1 + dy, r * 2, cell - 2);
+          }
+          if (has[c[0] + ',' + (c[1] + 1)]) {
+            gfx.fillRect(c[0] * cell + 1, (c[1] + 1) * cell - r + dy, cell - 2, r * 2);
+          }
+        });
+      };
+
+      // soft drop shadow, then the darker underside, then the face
+      stamp(g, cell * 0.10, 0x2c3350, 0.10);
+      stamp(g, 5, shade);
+      stamp(g, 0, color);
+      // top sheen across the whole block
+      const bw = (maxX - minX + 1) * cell;
+      g.fillStyle(0xffffff, 0.20);
+      g.fillRoundedRect(minX * cell + 6, minY * cell + 5, bw - 12, Math.max(3, cell * 0.12), cell * 0.06);
 
       cont.add(g);
 
