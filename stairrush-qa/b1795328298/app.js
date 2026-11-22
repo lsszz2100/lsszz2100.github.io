@@ -951,35 +951,62 @@
   function tutArt(step) {
     var a = $('tutArt');
     clear(a);
-    var gauge = h('div', 'ta-gauge'); var fill = h('i');
-    fill.style.width = step === 1 ? '42%' : (step === 2 ? '88%' : '100%');
-    gauge.appendChild(fill); a.appendChild(gauge);
-    var positions = [[26, 46], [64, 62], [102, 78], [140, 94]];
+    /* 게이지 */
+    var gauge = h('div', 'ta-gauge');
+    var fill = h('i');
+    fill.style.width = step === 1 ? '38%' : (step === 2 ? '92%' : '100%');
+    if (step === 1) fill.style.background = 'linear-gradient(90deg,#FFB36B,#FF7A5C)';
+    gauge.appendChild(fill);
+    a.appendChild(gauge);
+
+    /* 계단 4칸 */
+    var positions = [[14, 18], [50, 34], [86, 50], [122, 66]];
     positions.forEach(function (p) {
       var s = h('div', 'ta-step');
-      s.style.left = p[0] + 'px'; s.style.bottom = p[1] + 'px';
+      s.style.left = p[0] + 'px';
+      s.style.bottom = p[1] + 'px';
       a.appendChild(s);
     });
+
     var runner = h('div', 'ta-run');
+    runner.style.left = '138px';
+    runner.style.bottom = '78px';
+    runner.style.width = '18px';
+    runner.style.height = '24px';
+
     if (step === 0) {
-      runner.style.left = '152px'; runner.style.bottom = '110px';
-      var b1 = h('div', 'ta-btn'); b1.style.left = '22px'; b1.style.width = '88px';
-      var b2 = h('div', 'ta-btn'); b2.style.right = '22px'; b2.style.width = '88px';
-      a.appendChild(b1); a.appendChild(b2);
-      var ar = h('div', 'ta-arrow'); ar.textContent = '›'; ar.style.left = '196px'; ar.style.bottom = '44px';
+      var ar = h('div', 'ta-arrow');
+      ar.textContent = '›';
+      ar.style.left = '176px';
+      ar.style.bottom = '58px';
+      ar.style.fontSize = '22px';
       a.appendChild(ar);
+      var ar2 = h('div', 'ta-arrow');
+      ar2.textContent = '‹';
+      ar2.style.left = '8px';
+      ar2.style.bottom = '8px';
+      ar2.style.fontSize = '18px';
+      ar2.style.color = '#5B8DEF';
+      a.appendChild(ar2);
     } else if (step === 1) {
-      runner.style.left = '196px'; runner.style.bottom = '96px';
-      var g2 = h('div', 'ta-gauge');
-      g2.style.background = '#FFE0D2';
-      var f2 = h('i'); f2.style.width = '34%'; f2.style.background = 'linear-gradient(90deg,#FFB36B,#FF7A5C)';
-      g2.appendChild(f2);
-      a.replaceChild(g2, a.firstChild);
+      var warn = h('div', 'ta-arrow');
+      warn.textContent = '!';
+      warn.style.left = '196px';
+      warn.style.top = '6px';
+      warn.style.fontSize = '16px';
+      warn.style.color = '#FF7A5C';
+      a.appendChild(warn);
     } else {
-      runner.style.left = '60px'; runner.style.bottom = '64px';
-      var st = h('div', 'ta-star'); st.textContent = '★'; st.style.left = '150px'; st.style.bottom = '86px';
+      var st = h('div', 'ta-star');
+      st.textContent = '★';
+      st.style.left = '104px';
+      st.style.top = '44px';
       a.appendChild(st);
-      var st2 = h('div', 'ta-star'); st2.textContent = '★'; st2.style.left = '176px'; st2.style.bottom = '104px'; st2.style.fontSize = '14px';
+      var st2 = h('div', 'ta-star');
+      st2.textContent = '★';
+      st2.style.left = '160px';
+      st2.style.top = '30px';
+      st2.style.fontSize = '13px';
       a.appendChild(st2);
     }
     a.appendChild(runner);
