@@ -415,14 +415,29 @@
     I.apply();
   }
 
-  function popBox(index, events) {
+  // A completed box leaves a ghost of itself over the freshly dealt box, so the
+  // pop lands on the box that closed rather than on the box that replaced it.
+  function captureGhosts(events) {
+    var ghosts = [];
     var row = $('boxRow');
-    var node = row.children[index];
-    if (!node) return;
-    var done = events.filter(function (e) { return e.type === 'boxDone'; })[0];
-    node.classList.add('pop');
-    if (done) {
-      var combo = done.combo || 1;
+    events.filter(function (e) { return e.type === 'boxDone'; }).forEach(function (e) {
+      var node = row.children[e.box];
+      if (!node) return;
+      var clone = node.cloneNode(true);
+      clone.className = 'box ghost-box';
+      clone.style.left = node.offsetLeft + 'px';
+      clone.style.top = node.offsetTop + 'px';
+      clone.style.width = node.offsetWidth + 'px';
+      ghosts.push({ node: clone, combo: e.combo, color: e.color, index: e.box });
+    });
+    return ghosts;
+  }
+
+  function playGhosts(ghosts) {
+    var row = $('boxRow');
+    ghosts.forEach(function (g) {
+      row.appendChild(g.node);
+      var combo = g.combo || 1;
       if (combo > 1) {
         $('comboValue').textContent = 'x' + combo;
         var banner = $('comboBanner');
@@ -434,9 +449,9 @@
       }
       Sfx.pop(combo);
       vibrate(22);
-      V.boxSpark(index);
-    }
-    setTimeout(function () { node.classList.remove('pop'); }, 460);
+      V.boxSpark(g.index);
+      setTimeout(function () { if (g.node.parentNode) g.node.parentNode.removeChild(g.node); }, 520);
+    });
   }
 
   /* ------------------------------------------------------------ the move */
@@ -446,6 +461,7 @@
   function tapScrew(idx) {
     if (!game || game.busy || game.over) return;
     var st = game.st;
+    var snapshot = C.cloneState(st);      // undo point, taken before the move
     var res = C.tap(st, idx, Date.now());
     if (!res.ok) {
       if (res.reason === 'blocked') {
@@ -468,15 +484,16 @@
     Sfx.tap();
     if (!game.firstTapDone) { game.firstTapDone = true; setCoach(''); }
 
-    game.history.push(C.cloneState(st));
+    game.history.push(snapshot);
     if (game.history.length > 40) game.history.shift();
+
+    var ghosts = captureGhosts(res.events);
 
     V.pullScrew(idx, targetCol, function () {
       if (!game) return;
       V.applyState(game.st);
-      var doneBoxes = res.events.filter(function (e) { return e.type === 'boxDone'; });
       renderGame();
-      doneBoxes.forEach(function (e) { popBox(e.box, res.events); });
+      playGhosts(ghosts);
       game.busy = false;
       afterMove(res.events);
     });

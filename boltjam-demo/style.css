@@ -319,7 +319,16 @@ html, body {
 .hud-right { margin-left: auto; }
 
 .box-area { padding: 4px 40px 0; flex: none; }
-.box-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.box-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; position: relative; }
+.ghost-box {
+  position: absolute; pointer-events: none; z-index: 5; opacity: 1;
+  animation: ghostPop .5s ease forwards;
+}
+@keyframes ghostPop {
+  0% { transform: scale(1); opacity: 1; }
+  40% { transform: scale(1.12) rotate(-1.5deg); opacity: 1; }
+  100% { transform: scale(.82) translateY(-16px); opacity: 0; }
+}
 .box {
   background: #fff; border-radius: 28px; border: 3px solid var(--line);
   padding: 12px; box-shadow: var(--shadow-sm); position: relative;
