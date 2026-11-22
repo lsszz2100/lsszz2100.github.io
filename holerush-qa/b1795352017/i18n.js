@@ -83,6 +83,9 @@
       'map.title': 'Stages',
       'map.chapterN': 'Chapter {n}',
       'map.hint': 'Tap a stage to play',
+      'map.stars': 'Stars',
+      'map.cleared': 'Cleared',
+      'map.playNext': 'Play stage {n}',
 
       'shop.title': 'Shop',
       'shop.skins': 'Hole skins',
@@ -219,6 +222,9 @@
       'map.title': '스테이지',
       'map.chapterN': '챕터 {n}',
       'map.hint': '스테이지를 눌러 시작하세요',
+      'map.stars': '별',
+      'map.cleared': '클리어',
+      'map.playNext': '스테이지 {n} 시작',
 
       'shop.title': '상점',
       'shop.skins': '홀 스킨',

@@ -386,3 +386,9 @@ em { font-style: normal; }
 /* 스토어 스크린샷 캡처 모드 (?capture=1) */
 html.cap, html.cap body { overflow: hidden; background: #EAF2FF; }
 html.cap #app { border-radius: 0; box-shadow: none; }
+
+.map-foot { display: flex; align-items: center; gap: 12px; margin: 22px 0 10px; }
+.map-stat { flex: 0 0 auto; text-align: center; background: #fff; border-radius: 18px; padding: 10px 16px; box-shadow: var(--shadow-sm); }
+.map-stat b { display: block; font-size: 17px; }
+.map-stat span { font-size: 11px; color: var(--soft); font-weight: 800; }
+.map-foot .btn-primary { flex: 1; font-size: 15px; padding: 15px 12px; }

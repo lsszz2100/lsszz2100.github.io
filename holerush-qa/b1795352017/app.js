@@ -264,6 +264,12 @@
       }
       grid.appendChild(b);
     }
+    $('#mapStars').textContent = String(C.totalStars(profile));
+    $('#mapCleared').textContent = String(profile.cleared);
+    const nextIdx = Math.min(C.STAGE_COUNT - 1, Math.max(0, profile.unlocked - 1));
+    const playBtn = $('#mapPlay');
+    playBtn.textContent = t('map.playNext', { n: nextIdx + 1 });
+    playBtn.onclick = function () { startStage(nextIdx); };
     refreshCoins();
   }
 
