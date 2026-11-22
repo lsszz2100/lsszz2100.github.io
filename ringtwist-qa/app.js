@@ -1102,7 +1102,11 @@
     checkAchievements(true);
     renderHome();
 
-    if (screen === 'home') { showScreen('home'); return; }
+    if (screen === 'home') {
+      showScreen('home');
+      if (qp('tut', '') === '1') openTutorial();
+      return;
+    }
     if (screen === 'levels') {
       chapter = Math.min(6, Math.floor((nextLevelId() - 1) / 30) + 1);
       renderLevels();

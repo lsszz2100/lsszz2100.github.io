@@ -67,7 +67,7 @@
       var w = this.scale.width, h = this.scale.height;
       var level = this.state.level;
       var N = level.N;
-      var Rmax = Math.min(w, h) * 0.445;
+      var Rmax = Math.min(w, h) * 0.425;
       var R0 = N > 1 ? Rmax * 0.40 : Rmax;
       var step = N > 1 ? (Rmax - R0) / (N - 1) : Rmax;
       var radii = [];
@@ -122,17 +122,18 @@
 
     drawFrame() {
       var m = this.m, g = this.add.graphics();
-      var half = m.radii[m.N - 1] + m.step * 0.60;
-      var pad = m.k * 6;
-      var x0 = m.cx - half - pad, y0 = m.cy - half - pad;
-      var w0 = (half + pad) * 2, h0 = (half + pad) * 2;
+      var half = m.radii[m.N - 1] + m.step * 0.74;
+      var pad = m.k * 9;
+      var cardW = Math.min(m.w - pad * 2, (half + pad) * 2);
+      var cardH = Math.min(m.h - pad * 2, cardW * 1.36);
+      var x0 = m.cx - cardW / 2, y0 = m.cy - cardH / 2;
 
-      // 보드 카드: 링 묶음에 딱 맞춰 빈 공간이 의도된 여백으로 보이게 한다
-      g.fillStyle(0xffffff, 0.72);
-      roundRect(g, x0, y0, w0, h0, m.k * 24);
+      // 보드 카드: 링 묶음을 담는 세로 패널
+      g.fillStyle(0xffffff, 0.74);
+      roundRect(g, x0, y0, cardW, cardH, m.k * 26);
       g.fillPath();
       g.lineStyle(Math.max(1, m.k * 1.2), 0xe6eefa, 1);
-      roundRect(g, x0, y0, w0, h0, m.k * 24);
+      roundRect(g, x0, y0, cardW, cardH, m.k * 26);
       g.strokePath();
 
       // 링 뒤 은은한 원
