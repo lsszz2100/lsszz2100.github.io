@@ -139,7 +139,8 @@
       const skyTop = Phaser.Display.Color.HexStringToColor(this.theme.sky[0]).color;
       const skyBottom = Phaser.Display.Color.HexStringToColor(this.theme.sky[1]).color;
       g.fillGradientStyle(skyTop, skyTop, skyBottom, skyBottom, 1);
-      g.fillRect(0, 0, W, H);
+      // 월드 밖(레터박스)까지 같은 배경으로 채워 이음새를 없앤다
+      g.fillRect(-500, -500, W + 1000, H + 1000);
 
       // 부드러운 원형 장식
       g.fillStyle(0xffffff, 0.55);
