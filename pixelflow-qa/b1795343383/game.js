@@ -32,13 +32,14 @@
       this.cellG = this.add.graphics();   // 보드 픽셀(한 번만 만든다)
       this.rootScale = 2;
       this.rootG = this.add.container(0, 0);
+      this.bgG = this.add.graphics();
       this.beltG = this.add.graphics();
       this.blastG = this.add.graphics();
       this.fxG = this.add.graphics();
       this.hintG = this.add.graphics();
       this.cellLayer = this.add.container(0, 0);
       this.cellLayer.add(this.cellG);
-      this.rootG.add([this.beltG, this.cellLayer, this.blastG, this.fxG, this.hintG]);
+      this.rootG.add([this.bgG, this.beltG, this.cellLayer, this.blastG, this.fxG, this.hintG]);
       this.rootG.setScale(this.rootScale);
 
       this.cellViews = {};       // key -> {x,y,flash,scale,alive}
@@ -93,7 +94,7 @@
       cell = Math.max(14, cell);
       var bw = cell * st.cols, bh = cell * st.rows;
       var bx = (v.w - bw) / 2;
-      var by = pad + 10 + Math.max(0, (availH - bh) * 0.5);
+      var by = pad + 10 + Math.max(0, (availH - bh) * 0.45);
       return {
         cell: cell, bw: bw, bh: bh, bx: bx, by: by,
         gap: gap, w: v.w, h: v.h,
@@ -161,6 +162,7 @@
       if (!this.run) return;
       this.poly = this.polyline();
       this.totalSlots = PF.slotCount(this.run.stage);
+      this.drawBackdrop();
       var g = this.beltG;
       var th = this.theme;
       g.clear();
@@ -197,6 +199,26 @@
         g.fillStyle(0xffffff, 0.9);
         g.fillCircle(p[0], p[1], 1.8);
       });
+    }
+
+    /** 빈 공간을 채우는 아주 옅은 장식(픽셀 블록 몇 개). */
+    drawBackdrop() {
+      var v = this.view(), g = this.bgG, G = this.geom;
+      g.clear();
+      var rnd = PF.rngFrom(this.run.stage.seed || 7);
+      var spots = [];
+      for (var i = 0; i < 14; i++) {
+        var x = 14 + rnd() * (v.w - 28);
+        var y = 10 + rnd() * (v.h - 20);
+        /* 보드·벨트 근처는 피한다 */
+        if (x > G.beltL - 26 && x < G.beltR + 26 && y > G.beltT - 26 && y < G.beltB + 26) continue;
+        spots.push({ x: x, y: y, s: 10 + rnd() * 16, c: Math.floor(rnd() * 5), a: 0.05 + rnd() * 0.06 });
+      }
+      for (var k = 0; k < spots.length; k++) {
+        var p = spots[k];
+        g.fillStyle(num(PF.COLORS[p.c].hex), p.a);
+        g.fillRoundedRect(p.x, p.y, p.s, p.s, p.s * 0.28);
+      }
     }
 
     roundRectPath(g, x, y, w, h, r) {
