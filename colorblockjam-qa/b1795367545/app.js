@@ -1117,8 +1117,11 @@
       const mk = function (id, x, y) {
         const el = document.createElement('div');
         el.id = id;
-        el.style.cssText = 'position:fixed;width:26px;height:26px;border:1px solid #0a0;opacity:.05;z-index:60;pointer-events:none;left:' +
-          (x - 13) + 'px;top:' + (y - 13) + 'px';
+        el.setAttribute('role', 'button');
+        el.setAttribute('aria-label', id);
+        el.textContent = id === 'probeFrom' ? 'A' : 'B';
+        el.style.cssText = 'position:fixed;width:26px;height:26px;border:1px solid #0a0;opacity:.06;z-index:60;pointer-events:none;left:' +
+          (x - 13) + 'px;top:' + (y - 13) + 'px;font-size:1px;color:#0a0';
         document.body.appendChild(el);
       };
       mk('probeFrom', cx, cy);
