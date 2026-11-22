@@ -330,18 +330,18 @@ html, body {
 }
 .chapter-tab.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 .level-scroll { flex: 1; overflow-y: auto; padding: 0 40px 40px; }
-.level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.level-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
 .level-cell {
-  aspect-ratio: 1 / 1; border-radius: 26px; border: 3px solid var(--line);
+  aspect-ratio: 1 / 1; border-radius: 22px; border: 3px solid var(--line);
   background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 6px; font-size: 34px; font-weight: 900; color: var(--ink); box-shadow: var(--shadow-sm);
+  gap: 2px; font-size: 30px; font-weight: 900; color: var(--ink); box-shadow: var(--shadow-sm);
 }
 .level-cell.locked { background: #F6ECDB; color: #BCAB93; border-color: #EFE3D0; box-shadow: none; }
 .level-cell.done { background: #F3FBF7; border-color: #A8E4D2; }
 .level-cell.current { border-color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); }
-.cell-stars { display: flex; gap: 3px; font-size: 20px; color: #DCCBB2; }
+.cell-stars { display: flex; gap: 2px; font-size: 15px; color: #DCCBB2; }
 .cell-stars span.on { color: #F2AE2E; }
-.cell-lock { font-size: 26px; }
+.cell-lock { font-size: 20px; }
 
 /* ------------------------------------------------------------- game */
 
