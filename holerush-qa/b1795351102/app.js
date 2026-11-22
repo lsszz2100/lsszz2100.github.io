@@ -919,6 +919,16 @@
       engine.step(1 / 60);
       engine.events.length = 0;
     }
+    // 홀을 남은 오브젝트 무리의 가운데로 옮겨 스크린샷 구도를 잡는다
+    const alive = engine.objects.filter(function (o) { return !o.dead; });
+    if (alive.length) {
+      const cx = alive.reduce(function (s, o) { return s + o.x; }, 0) / alive.length;
+      const cy = alive.reduce(function (s, o) { return s + o.y; }, 0) / alive.length;
+      engine.x = Math.max(120, Math.min(C.WORLD.w - 120, cx));
+      engine.y = Math.max(220, Math.min(C.WORLD.h - 160, cy));
+      engine.tx = engine.x;
+      engine.ty = engine.y;
+    }
     showScreen('game');
     const skin = C.SKINS.find(function (s) { return s.id === profile.skin; }) || C.SKINS[0];
     const theme = C.themeFor(profile, stage);
