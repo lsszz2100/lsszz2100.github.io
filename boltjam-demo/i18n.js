@@ -54,7 +54,7 @@
       needCoins: 'Not enough coins.',
       slotsAdded: '+1 tray slot',
       undoEmpty: 'Nothing to undo.',
-      tutorial1Title: 'Uncrew the bolts', tutorial1Text: 'Tap a bolt that no plate covers. It flies into the box of its colour.',
+      tutorial1Title: 'Unscrew the bolts', tutorial1Text: 'Tap a bolt that no plate covers. It flies into the box of its colour.',
       tutorial2Title: 'Fill boxes of three', tutorial2Text: 'Three bolts close a box. A new colour moves in and scores.',
       tutorial3Title: 'Mind the tray', tutorial3Text: 'No matching box? The bolt waits in the tray. When it fills up, only box colours fit — plan ahead.',
       tutorial4Title: 'Drop the plates', tutorial4Text: 'The last bolt out drops a plate and uncovers the bolts beneath it.',
