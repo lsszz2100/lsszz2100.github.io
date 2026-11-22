@@ -6,7 +6,7 @@
   const W = 1000;
   const H = 1780;
   const BOARD = { x: 34, y: 214, w: 932, h: 872 };
-  const TRAY = { x: 44, y: 1112, w: 912, h: 236 };
+  const TRAY = { x: 44, y: 1266, w: 912, h: 228 };
 
   function col(hex) { return Phaser.Display.Color.HexStringToColor(hex).color; }
 
@@ -229,7 +229,7 @@
       if (!stage) return;
       const band = BOARD.h / stage.shelves;
       const slotW = BOARD.w / stage.perShelf;
-      const itemW = Math.min(slotW * 0.74, band * 0.46);
+      const itemW = Math.min(slotW * 0.78, band * 0.52);
       this.grid = {
         band: band,
         slotW: slotW,
@@ -244,7 +244,7 @@
       const c = i % this.perShelf;
       return {
         x: g.x + g.slotW * (c + 0.5),
-        y: g.y + (Math.floor(i / this.perShelf) + 0.72) * g.band
+        y: g.y + (Math.floor(i / this.perShelf) + 0.74) * g.band
       };
     },
 
@@ -253,10 +253,10 @@
       const pad = 16;
       const inner = TRAY.w - pad * 2;
       const step = inner / n;
-      const r = Math.min(step * 0.44, TRAY.h * 0.3);
+      const r = Math.min(step * 0.46, TRAY.h * 0.33);
       return {
         x: TRAY.x + pad + step * (k + 0.5),
-        y: TRAY.y + TRAY.h * 0.46,
+        y: TRAY.y + TRAY.h * 0.5,
         r: r
       };
     },
@@ -438,7 +438,7 @@
 
     drawShelfPlank: function (g, row) {
       const gr = this.grid;
-      const y = gr.y + (row + 1) * gr.band - gr.band * 0.06;
+      const y = gr.y + (row + 1) * gr.band - gr.band * 0.08;
       g.fillStyle(0x1f2a44, 0.07);
       g.fillRoundedRect(gr.x + 8, y + gr.band * 0.02, BOARD.w - 16, gr.band * 0.1, gr.band * 0.04);
       g.fillStyle(0xE9D7BE, 1);
@@ -456,7 +456,6 @@
       const gr = this.grid;
 
       for (let row = 0; row < stage.shelves; row += 1) {
-        const locked = stage.locks.some(function (l) { return l.shelf === row && false; });
         this.drawShelfPlank(g, row);
         const lock = stage.locks.find(function (l) { return l.shelf === row; });
         const open = !lock || e.matches >= lock.at;
