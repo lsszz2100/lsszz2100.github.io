@@ -1117,7 +1117,11 @@
   }
 
   function fire(el, type, x, y) {
-    const opts = { bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0, buttons: type === 'pointerup' || type === 'mouseup' ? 0 : 1 };
+    const opts = {
+      bubbles: true, cancelable: true, clientX: x, clientY: y, pageX: x, pageY: y,
+      screenX: x, screenY: y, button: 0,
+      buttons: type === 'pointerup' || type === 'mouseup' ? 0 : 1
+    };
     if (type.indexOf('mouse') === 0) el.dispatchEvent(new MouseEvent(type, opts));
     else el.dispatchEvent(new PointerEvent(type, Object.assign({ pointerId: 1, pointerType: 'touch', isPrimary: true }, opts)));
   }
@@ -1190,9 +1194,9 @@
       armBooster('bomb');
       onPick('bomb', 1);
       await sleep(500);
-      let gone = 0;
-      sc.stage.blocks.forEach(function (b, i) { if (b.color === color && sc.state.gone[i]) gone++; });
-      add('bomb clears every block of a colour', gone >= 2, { color: color, gone: gone });
+      let gone = 0, total = 0;
+      sc.stage.blocks.forEach(function (b, i) { if (b.color === color) { total++; if (sc.state.gone[i]) gone++; } });
+      add('bomb clears every block of a colour', gone === total && total >= 1, { color: color, gone: gone, total: total });
 
       // 5. time booster adds 30s
       stopRun();
