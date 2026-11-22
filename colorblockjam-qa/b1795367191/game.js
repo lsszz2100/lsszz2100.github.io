@@ -57,10 +57,10 @@
       const st = this.stage;
       const W = this.scale.width;
       const H = this.scale.height;
-      const pad = 26;
+      const pad = 12;
 
-      const cellW = (W - pad * 2) / (st.w + 0.9);
-      const cellH = (H - pad * 2) / (st.h + 1.1);
+      const cellW = (W - pad * 2) / (st.w + 0.72);
+      const cellH = (H - pad * 2) / (st.h + 0.86);
       const cell = Math.max(28, Math.floor(Math.min(cellW, cellH)));
       this.cell = cell;
       this.bx = Math.round((W - cell * st.w) / 2);
@@ -146,7 +146,8 @@
           cy = by + gate.start * cell + 2 + h / 2;
           rot = gate.edge === 'left' ? Math.PI : 0;
         }
-        const tri = this.add.triangle(cx, cy, -5, -6, 7, 0, -5, 6, 0xffffff, 0.95);
+        const a = Math.max(5, cell * 0.16);
+        const tri = this.add.triangle(cx, cy, -a, -a * 0.9, a * 1.1, 0, -a, a * 0.9, 0xffffff, 0.98);
         tri.setRotation(rot);
         tri.setDepth(2);
       });
@@ -166,16 +167,16 @@
       // drop shadow
       g.fillStyle(0x2c3350, 0.10);
       b.cells.forEach((c) => {
-        g.fillRoundedRect(c[0] * cell + 4, c[1] * cell + 7, cell - 6, cell - 6, cell * 0.20);
+        g.fillRoundedRect(c[0] * cell + 3, c[1] * cell + 6, cell - 4, cell - 5, cell * 0.16);
       });
 
       b.cells.forEach((c) => {
         g.fillStyle(shade, 1);
-        g.fillRoundedRect(c[0] * cell + 2, c[1] * cell + 2, cell - 4, cell - 4, cell * 0.20);
+        g.fillRoundedRect(c[0] * cell + 1, c[1] * cell + 1, cell - 2, cell - 2, cell * 0.16);
         g.fillStyle(color, 1);
-        g.fillRoundedRect(c[0] * cell + 2, c[1] * cell + 1, cell - 4, cell - 8, cell * 0.20);
-        g.fillStyle(0xffffff, 0.30);
-        g.fillRoundedRect(c[0] * cell + 6, c[1] * cell + 5, cell - 12, Math.max(4, cell * 0.16), cell * 0.08);
+        g.fillRoundedRect(c[0] * cell + 1, c[1] * cell + 1, cell - 2, cell - 7, cell * 0.16);
+        g.fillStyle(0xffffff, 0.22);
+        g.fillRoundedRect(c[0] * cell + 5, c[1] * cell + 4, cell - 10, Math.max(3, cell * 0.13), cell * 0.06);
       });
 
       cont.add(g);

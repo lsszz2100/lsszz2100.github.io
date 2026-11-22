@@ -200,7 +200,7 @@ h1, h2, h3, p { margin: 0; }
   transition: transform .08s ease, box-shadow .08s ease;
 }
 .play-orb:active { transform: translateY(5px); box-shadow: 0 5px 0 #C94A38, 0 12px 20px rgba(232, 92, 73, .3); }
-.orb-blocks { position: absolute; inset: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; opacity: .35; }
+.orb-blocks { display: none; }
 .orb-blocks i { border-radius: 10px; background: #fff; }
 .orb-label { position: relative; color: #fff; font-size: 22px; font-weight: 900; letter-spacing: .3px; text-shadow: 0 2px 0 rgba(0,0,0,.08); }
 .hero-meta { display: flex; align-items: baseline; gap: 10px; z-index: 1; }
