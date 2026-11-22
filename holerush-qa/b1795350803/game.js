@@ -66,6 +66,8 @@
       this.obj = this.add.graphics();
       this.hole = this.add.graphics();
       this.fx = this.add.graphics();
+      this.root = this.add.container(0, 0, [this.bg, this.obj, this.hole, this.fx]);
+      this.view = { scale: 1, ox: 0, oy: 0 };
       this.particles = [];
       this.flash = 0;
       this.ready = false;
@@ -92,16 +94,17 @@
     onPointer: function (pointer) {
       if (!this.ready || this.paused || !this.engine) return;
       if (!pointer.isDown) return;
-      this.engine.setTarget(pointer.worldX, pointer.worldY);
+      const v = this.view;
+      this.engine.setTarget((pointer.x - v.ox) / v.scale, (pointer.y - v.oy) / v.scale);
     },
 
     layout: function () {
-      const cam = this.cameras.main;
       const vw = this.scale.width;
       const vh = this.scale.height;
       const scale = Math.min(vw / W, vh / H);
-      cam.setZoom(scale);
-      cam.setScroll(Math.round((W - vw / scale) / 2), Math.round((H - vh / scale) / 2));
+      this.view = { scale: scale, ox: (vw - W * scale) / 2, oy: (vh - H * scale) / 2 };
+      this.root.setScale(scale);
+      this.root.setPosition(this.view.ox, this.view.oy);
       this.drawBackground();
     },
 
