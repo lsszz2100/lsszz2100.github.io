@@ -114,15 +114,22 @@
       this.clearLabels();
       if (!this.engine || !this.engine.stage) return;
       const locks = this.engine.stage.locks;
+      const radius = this.engine.stage.pinRadius;
       for (let i = 0; i < locks.length; i += 1) {
         const pin = this.engine.stage.pins[locks[i].pin];
-        const label = this.add.text(pin.x, pin.y - 2, '≤' + locks[i].at, {
-          fontFamily: 'NotoKR, sans-serif',
-          fontSize: '26px',
-          fontStyle: 'bold',
-          color: '#FFFFFF',
-          align: 'center'
-        }).setOrigin(0.5);
+        const size = Math.max(14, Math.round(radius * 0.78));
+        const label = this.add.text(
+          pin.x + radius * 0.74,
+          pin.y - radius * 0.76,
+          String(locks[i].at),
+          {
+            fontFamily: 'NotoKR, sans-serif',
+            fontSize: size + 'px',
+            fontStyle: 'bold',
+            color: '#FFFFFF',
+            align: 'center'
+          }
+        ).setOrigin(0.5);
         label.setResolution(2);
         this.root.add(label);
         this.labels.push(label);
@@ -271,10 +278,12 @@
       g.fillCircle(pin.x, pin.y, radius);
       g.fillStyle(col(skin.inner), 1);
       g.fillCircle(pin.x, pin.y, radius * 0.82);
-      g.fillStyle(col(skin.shade), 0.55);
-      g.fillCircle(pin.x, pin.y, radius * 0.63);
-      g.fillStyle(0x1f2a44, 0.28);
-      g.fillCircle(pin.x, pin.y, radius * 0.47);
+      g.fillStyle(col(skin.shade), 0.7);
+      g.fillCircle(pin.x, pin.y, radius * 0.64);
+      g.fillStyle(0x1f2a44, 0.42);
+      g.fillCircle(pin.x, pin.y, radius * 0.5);
+      g.fillStyle(0x1f2a44, 0.5);
+      g.fillCircle(pin.x, pin.y, radius * 0.33);
       g.lineStyle(Math.max(2, radius * 0.09), 0xffffff, 0.75);
       g.beginPath();
       g.arc(pin.x, pin.y, radius * 0.9, Math.PI * 0.95, Math.PI * 1.5, false);
@@ -288,17 +297,13 @@
         g.strokeCircle(pin.x, pin.y, radius * 1.25);
       }
       if (o.locked) {
-        const bx = pin.x + radius * 0.72;
-        const by = pin.y - radius * 0.78;
-        const s = radius * 0.72;
-        g.fillStyle(0x6C7C99, 1);
+        const bx = pin.x + radius * 0.74;
+        const by = pin.y - radius * 0.76;
+        const s = radius * 0.74;
+        g.fillStyle(0x5C6C8A, 1);
         g.fillCircle(bx, by, s);
-        g.lineStyle(Math.max(2, s * 0.2), 0xFFFFFF, 1);
-        g.beginPath();
-        g.arc(bx, by - s * 0.18, s * 0.42, Math.PI, Math.PI * 2, false);
-        g.strokePath();
-        g.fillStyle(0xFFFFFF, 1);
-        g.fillRoundedRect(bx - s * 0.5, by - s * 0.05, s, s * 0.62, s * 0.16);
+        g.lineStyle(Math.max(2, s * 0.16), 0xFFFFFF, 0.85);
+        g.strokeCircle(bx, by, s);
       }
     },
 
