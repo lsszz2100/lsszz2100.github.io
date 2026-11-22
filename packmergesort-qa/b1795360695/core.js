@@ -945,9 +945,13 @@
     const rand = mulberry32(seed >>> 0);
     const pool = QUEST_POOL.slice();
     const picked = [];
+    const usedStats = {};
     while (picked.length < 3 && pool.length > 0) {
       const idx = Math.floor(rand() * pool.length);
-      picked.push(pool.splice(idx, 1)[0]);
+      const q = pool.splice(idx, 1)[0];
+      if (usedStats[q.stat]) continue;
+      usedStats[q.stat] = true;
+      picked.push(q);
     }
     return picked.map(function (q) {
       return {
