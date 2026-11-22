@@ -33,56 +33,56 @@
     {
       key: 'orchard', shape: 'circle',
       en: 'Orchard', ko: '과수원',
-      count: [12, 18], rMax: [30, 38], rMin: 13, time: [42, 46], startR: 40, bombs: [0, 0],
+      count: [16, 23], rMax: [38, 46], rMin: 18, time: [42, 46], startR: 50, bombs: [0, 0],
       sky: ['#EAFBF2', '#FFF7E8'], board: '#F2FBF5',
       palette: ['#FF8A65', '#FFB300', '#7CB342', '#4DD0E1', '#F06292', '#8BC34A', '#FF7043']
     },
     {
       key: 'candy', shape: 'hex',
       en: 'Candy Shop', ko: '사탕 가게',
-      count: [16, 22], rMax: [38, 46], rMin: 13, time: [46, 50], startR: 41, bombs: [1, 1],
+      count: [21, 29], rMax: [46, 56], rMin: 18, time: [46, 50], startR: 52, bombs: [1, 1],
       sky: ['#FFF1F6', '#F3F0FF'], board: '#FFF5FA',
       palette: ['#F06292', '#BA68C8', '#64B5F6', '#4DD0E1', '#FFD54F', '#FF8A65', '#AED581']
     },
     {
       key: 'gems', shape: 'diamond',
       en: 'Gem Cave', ko: '보석 동굴',
-      count: [20, 26], rMax: [46, 54], rMin: 13, time: [48, 52], startR: 42, bombs: [1, 2],
+      count: [26, 35], rMax: [56, 66], rMin: 19, time: [48, 52], startR: 54, bombs: [1, 2],
       sky: ['#E8F6FF', '#F1ECFF'], board: '#F0F8FF',
       palette: ['#29B6F6', '#7E57C2', '#26A69A', '#EC407A', '#FFA726', '#66BB6A', '#AB47BC']
     },
     {
       key: 'space', shape: 'star',
       en: 'Space Dust', ko: '우주 먼지',
-      count: [24, 30], rMax: [54, 62], rMin: 14, time: [52, 56], startR: 44, bombs: [2, 3],
+      count: [31, 41], rMax: [64, 76], rMin: 19, time: [52, 56], startR: 56, bombs: [2, 3],
       sky: ['#EEF1FF', '#E6F7FF'], board: '#F1F3FF',
       palette: ['#5C6BC0', '#42A5F5', '#26C6DA', '#FFCA28', '#EF5350', '#AB47BC', '#66BB6A']
     },
     {
       key: 'donut', shape: 'ring',
       en: 'Donut Day', ko: '도넛 데이',
-      count: [28, 34], rMax: [60, 68], rMin: 14, time: [56, 60], startR: 46, bombs: [2, 3],
+      count: [36, 48], rMax: [74, 86], rMin: 20, time: [56, 60], startR: 58, bombs: [2, 3],
       sky: ['#FFF6EC', '#FFF1F1'], board: '#FFFAF2',
       palette: ['#FFB74D', '#F06292', '#8D6E63', '#4DB6AC', '#FFD54F', '#9575CD', '#FF8A65']
     },
     {
       key: 'ocean', shape: 'bubble',
       en: 'Deep Blue', ko: '깊은 바다',
-      count: [32, 40], rMax: [66, 74], rMin: 14, time: [60, 64], startR: 48, bombs: [3, 4],
+      count: [42, 56], rMax: [82, 94], rMin: 20, time: [60, 64], startR: 60, bombs: [3, 4],
       sky: ['#E9F8FF', '#E8FFF7'], board: '#EFFAFF',
       palette: ['#26C6DA', '#29B6F6', '#66BB6A', '#FFB74D', '#EC407A', '#7E57C2', '#4DD0E1']
     },
     {
       key: 'garden', shape: 'diamond',
       en: 'Secret Garden', ko: '비밀 정원',
-      count: [38, 46], rMax: [72, 80], rMin: 15, time: [64, 68], startR: 50, bombs: [3, 4],
+      count: [48, 64], rMax: [90, 102], rMin: 21, time: [64, 68], startR: 62, bombs: [3, 4],
       sky: ['#F1FBEA', '#EAF8FF'], board: '#F5FCF0',
       palette: ['#66BB6A', '#9CCC65', '#FFB300', '#EC407A', '#26A69A', '#AB47BC', '#8BC34A']
     },
     {
       key: 'neon', shape: 'square',
       en: 'Neon Night', ko: '네온 나이트',
-      count: [44, 52], rMax: [78, 88], rMin: 15, time: [68, 74], startR: 52, bombs: [4, 5],
+      count: [56, 74], rMax: [98, 110], rMin: 21, time: [68, 74], startR: 64, bombs: [4, 5],
       sky: ['#F3EEFF', '#E9FBFF'], board: '#F6F1FF',
       palette: ['#7C4DFF', '#00BCD4', '#FF4081', '#FFC400', '#00E676', '#448AFF', '#FF6E40']
     }
@@ -92,18 +92,30 @@
   const STAGE_COUNT = CHAPTERS.length * STAGES_PER_CHAPTER;
 
   // tools/calibrate_limits.js 가 봇 클리어 시간에 여유 배수를 곱해 만든 제한 시간(초).
-  const LIMITS = [17,19,15,19,22,18,18,18,20,19,20,18,17,21,18,17,19,20,19,21,19,15,18,18,19,23,18,19,22,18,20,19,21,24,18,18,20,18,18,22,21,19,19,20,24,22,18,25,18,20,22,23,20,21,20,22,24,19,26,26,22,18,20,22,20,22,22,20,23,21,21,18,24,22,18,21,21,20,25,23,21,23,24,18,23,19,19,21,21,23,21,23,24,23,21,26,26,22,19,21,23,20,20,21,23,24,20,23,20,25,23,25,23,20,26,25,28,28,24,26,23,23,22,24,24,20,22,23,23,22,21,24,24,24,25,23,28,23,23,29,23,21,22,22,25,21,22,21,23,23,28,25,25,25,23,26,24,27,25,25];
+  const LIMITS = [21,23,19,20,22,22,21,21,23,19,26,24,19,21,23,22,25,26,24,25,18,20,22,20,24,21,22,23,22,23,22,25,22,23,21,21,21,22,25,21,24,23,23,25,26,24,24,21,25,24,25,22,24,22,26,23,27,28,28,29,23,25,25,22,22,22,29,26,27,27,25,22,25,24,25,25,28,26,25,29,26,26,21,20,24,28,27,26,25,25,23,23,26,24,26,28,29,28,27,29,27,26,24,27,26,23,26,30,28,24,27,25,25,26,25,31,24,26,24,26,22,23,24,24,22,24,26,25,26,26,26,25,26,27,27,26,27,26,27,27,22,23,25,23,24,25,25,26,24,22,25,26,26,28,27,25,24,26,23,24];
 
   // ---------------------------------------------------------------- stage build
 
-  function placeObjects(rand, count, rMin, rMax, t) {
+  function placeObjects(rand, count, rMin, rMax, t, bossR) {
     const objects = [];
     const maxTries = 260;
+    // 가장 큰 '보스' 오브젝트를 먼저 놓아 스테이지마다 성장 목표가 생기게 한다.
+    if (bossR) {
+      for (let attempt = 0; attempt < 80; attempt += 1) {
+        const x = Math.round(lerp(PAD.left + bossR, WORLD.w - PAD.right - bossR, rand()));
+        const y = Math.round(lerp(PAD.top + bossR, WORLD.h - PAD.bottom - bossR, rand()));
+        const dx0 = x - WORLD.w / 2;
+        const dy0 = y - WORLD.h / 2;
+        if (dx0 * dx0 + dy0 * dy0 < (bossR + 210) * (bossR + 210)) continue;
+        objects.push({ x: x, y: y, r: bossR });
+        break;
+      }
+    }
     for (let i = 0; i < count; i += 1) {
-      const bias = Math.pow(rand(), 1.7); // 작은 오브젝트가 더 많다
-      let r = round(lerp(rMin, lerp(rMax * 0.55, rMax, t), bias));
+      const bias = Math.pow(rand(), 1.15); // 작은 쪽이 조금 더 많되 큰 것도 고르게
+      let r = round(lerp(rMin, lerp(rMax * 0.6, rMax, t), bias));
       // 큰 오브젝트는 뒤쪽에 배치해 초반 흐름을 부드럽게
-      if (i < count * 0.55) r = Math.min(r, round(rMax * 0.62));
+      if (i < count * 0.55) r = Math.min(r, round(rMax * 0.72));
       let placed = null;
       let localR = r;
       for (let attempt = 0; attempt < maxTries; attempt += 1) {
@@ -143,7 +155,8 @@
     const bombCount = Math.round(lerp(ch.bombs[0], ch.bombs[1], t));
     const startR = ch.startR;
 
-    const placed = placeObjects(rand, count, ch.rMin, rMax, t);
+    const bossR = Math.max(rMax, Math.round(startR * 1.2));
+    const placed = placeObjects(rand, count, ch.rMin, rMax, t, bossR);
     const objects = placed.map(function (p, i) {
       const isClock = rand() < 0.06 && i > 2;
       return {
@@ -230,7 +243,7 @@
     attractBase: 40,
     pullAccel: 950,
     damping: 0.89,
-    maxBaseRadius: 175,
+    maxBaseRadius: 210,
     bombPenalty: 4,          // 폭탄 삼키면 남은 시간 -4초
     clockBonus: 3,           // 시계 오브젝트 +3초
     comboWindow: 1.05,
