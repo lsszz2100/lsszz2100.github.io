@@ -484,10 +484,11 @@
         backgroundColor: '#FFF7F0',
         transparent: true,
         scale: {
-          mode: Phaser.Scale.RESIZE,
-          autoCenter: Phaser.Scale.CENTER_BOTH,
-          width: el.clientWidth || 360,
-          height: el.clientHeight || 480
+          // Fixed to the element's layout size: a CSS transform on an ancestor
+          // (used for store screenshots) must not feed back into the canvas size.
+          mode: Phaser.Scale.NONE,
+          width: Math.max(280, el.clientWidth || 360),
+          height: Math.max(320, el.clientHeight || 480)
         },
         render: { antialias: true, roundPixels: false },
         scene: [],
@@ -501,6 +502,17 @@
         originalInit(Object.assign({}, scene.__data, data || {}));
       };
       game.scene.add('board', scene, true);
+      if (!game.__cbjResize) {
+        game.__cbjResize = function () {
+          if (!game || !el) return;
+          const w = Math.max(280, el.clientWidth || 360);
+          const h = Math.max(320, el.clientHeight || 480);
+          if (game.scale && (game.scale.width !== w || game.scale.height !== h)) {
+            game.scale.resize(w, h);
+          }
+        };
+        window.addEventListener('resize', game.__cbjResize);
+      }
       return scene;
     },
     scene: function () { return scene; },
