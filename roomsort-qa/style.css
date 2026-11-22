@@ -167,8 +167,8 @@ html.cap #stage { box-shadow: none; border-radius: 0; }
 /* ---------------------------------------------------------------- home */
 .home-body {
   flex: 1; min-height: 0;
-  display: flex; flex-direction: column; gap: 13px;
-  padding: 2px 18px 18px;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 12px;
+  padding: 2px 18px 20px;
   overflow: hidden;
 }
 .hero { text-align: center; padding: 0; }
@@ -251,8 +251,8 @@ html.cap #stage { box-shadow: none; border-radius: 0; }
 .step-art i { position: absolute; }
 .art-lift .st-box { left: 12px; top: 12px; width: 24px; height: 18px; border-radius: 5px; background: #e2705a; box-shadow: 0 14px 0 -0 #4f9e6b; }
 .art-lift .st-hand { right: 2px; top: 0; width: 14px; height: 14px; border-radius: 50% 50% 40% 40%; background: #f0c9a0; }
-.art-match .st-box.a { left: 2px; top: 12px; width: 18px; height: 14px; border-radius: 4px; background: #5b8fd9; }
-.art-match .st-box.b { left: 2px; bottom: 4px; width: 18px; height: 14px; border-radius: 4px; background: #5b8fd9; }
+.art-match .st-box.a { left: 2px; top: 4px; width: 18px; height: 13px; border-radius: 4px; background: #5b8fd9; }
+.art-match .st-box.b { left: 2px; top: 20px; width: 18px; height: 13px; border-radius: 4px; background: #5b8fd9; }
 .art-match .st-arw { right: 4px; top: 4px; font-size: 20px; color: #c4773f; font-weight: 900; }
 .art-tidy .st-box.done { left: 8px; top: 10px; width: 26px; height: 18px; border-radius: 5px; background: #58936b; }
 .art-tidy .st-spark { right: 0; top: 2px; width: 14px; height: 14px; background: radial-gradient(circle, #f0b64e 0 32%, transparent 34%); }
