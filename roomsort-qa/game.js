@@ -302,7 +302,7 @@
         var items = st.trays[i];
         for (var k = 0; k < items.length; k++) {
           var iy = sg.baseY - sg.slotH * (k + 1) + 3;
-          var tile = this.makeItem(items[k], sg.w - 4, sg.slotH - 6, sg.x + 2, iy);
+          var tile = this.makeItem(items[k], sg.w - 4, sg.slotH - 8, sg.x + 2, iy);
           tile.setData('slot', k);
           c.add(tile);
         }
@@ -328,8 +328,8 @@
       roundRect(g, 3, 2, w - 6, Math.max(3, h * 0.20), r * 0.6);
       g.fillPath();
       // 기호
-      var s = Math.min(h * 0.78, w * 0.40);
-      glyph(g, type, w * 0.5, h * 0.42, s, 0xffffff);
+      var s = Math.min(h * 0.52, w * 0.26);
+      glyph(g, type, w * 0.5, h * 0.47, s, 0xffffff);
       c.add(g);
 
       // 광택
