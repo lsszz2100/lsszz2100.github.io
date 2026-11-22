@@ -1070,17 +1070,22 @@
     const stage = STAGES[id - 1];
     const take = thenWin ? stage.sol.length : Math.max(1, Math.min(3, stage.sol.length - 2));
     let k = 0;
-    const scene = function () { return window.ColorGame.scene(); };
+    window.__capLog = [];
     (function step() {
-      if (!run) return;
-      const sc = scene();
-      if (!sc) { setTimeout(step, 120); return; }
-      if (k < take) {
-        sc.attempt(stage.sol[k][0], stage.sol[k][1]);
-        k++;
-        setTimeout(step, 360);
-      } else if (thenWin) {
-        setTimeout(function () { if (run) { run.moves = stage.par; onCleared(); } }, 700);
+      try {
+        if (!run) return;
+        const sc = window.ColorGame.scene();
+        if (!sc || !sc.sys || !sc.sys.isActive()) { setTimeout(step, 150); return; }
+        if (k < take) {
+          sc.attempt(stage.sol[k][0], stage.sol[k][1]);
+          window.__capLog.push([k, stage.sol[k][0], stage.sol[k][1], sc.state.moves]);
+          k++;
+          setTimeout(step, 380);
+        } else if (thenWin) {
+          setTimeout(function () { if (run) { run.moves = stage.par; onCleared(); } }, 700);
+        }
+      } catch (err) {
+        window.__capErr = String(err && err.stack || err);
       }
     }());
   }
