@@ -291,9 +291,29 @@
 
   /* ------------------------------------------------------------ boot */
 
+  function fitCanvas() {
+    if (!game || !game.canvas || !hostEl) return;
+    var c = game.canvas;
+    var bw = hostEl.clientWidth, bh = hostEl.clientHeight;
+    if (!bw || !bh) return;
+    var s = Math.min(bw / W, bh / H);
+    var cw = Math.round(W * s), chh = Math.round(H * s);
+    c.style.width = cw + 'px';
+    c.style.height = chh + 'px';
+    c.style.position = 'absolute';
+    c.style.left = Math.round((bw - cw) / 2) + 'px';
+    c.style.top = Math.round((bh - chh) / 2) + 'px';
+    c.style.display = 'block';
+    if (game.scale) {
+      game.scale.displaySize.setSize ? game.scale.displaySize.setSize(cw, chh, game.scale.parentSize) : null;
+      game.scale.refresh();
+    }
+  }
+
   function create() {
     scene = this;
     buildScrewTextures();
+    fitCanvas();
     if (level) renderLevel();
     scene.input.on('pointerdown', function (pointer) {
       tapAt(pointer.x, pointer.y);
@@ -306,13 +326,17 @@
       hostEl = host;
       handlers = opts || {};
       if (game) { if (level) api.loadLevel(level, skin, stateRef); return; }
+      if (hostEl) hostEl.style.position = 'relative';
       game = new Phaser.Game({
         type: Phaser.AUTO,
         width: W,
         height: H,
         parent: hostEl,
         backgroundColor: '#FFFBF4',
-        scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: W, height: H },
+        // Size is set with fitCanvas(): the CSS stage transform makes Phaser's own
+        // parent measurement wrong, so the canvas is fitted to the untransformed box.
+        scale: { mode: Phaser.Scale.NONE, width: W, height: H },
+        autoFocus: false,
         render: { antialias: true, roundPixels: false, powerPreference: 'low-power' },
         audio: { noAudio: true },
         scene: { create: create }
@@ -322,7 +346,7 @@
       level = lvl;
       skin = skinObj;
       stateRef = st;
-      if (scene) renderLevel();
+      if (scene) { fitCanvas(); renderLevel(); }
     },
     setState: function (st) { stateRef = st; },
     applyState: function (st) {
@@ -347,7 +371,7 @@
     hintPulse: hintPulse,
     boxSpark: boxSpark,
     findScrew: findScrew,
-    resize: function () { if (game && game.scale) game.scale.refresh(); },
+    resize: function () { fitCanvas(); if (game && game.scale) game.scale.refresh(); },
     destroy: function () {
       if (game) { game.destroy(true); game = null; scene = null; }
       screwNodes = {}; plankNodes = []; level = null; stateRef = null;
