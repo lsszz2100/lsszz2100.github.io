@@ -441,6 +441,14 @@
     onTarget: null,
     onDeselect: null,
 
+    /** 씬이 아직 만들어지지 않았을 수 있으므로 매번 확인한다. */
+    sceneOf: function () {
+      if (this.scene && this.scene.sys && this.scene.sys.settings) return this.scene;
+      const s = this.game ? this.game.scene.getScene('board') : null;
+      if (s) this.scene = s;
+      return s;
+    },
+
     init: function (parentId) {
       if (this.game) return this.game;
       this.game = new Phaser.Game({
@@ -458,29 +466,28 @@
 
     start: function (opts) {
       if (!this.game) this.init('board');
+      if (opts.engine && opts.colors) opts.engine.ropeColors = opts.colors;
       this.fit();
-      const scene = this.game.scene.getScene('board');
-      this.scene = scene;
-      if (!scene) return;
-      if (scene.bg) {
+      const scene = this.sceneOf();
+      if (scene && scene.bg) {
         scene.begin(opts);
         this.pending = null;
       } else {
+        // 씬이 아직 만들어지기 전이면 create() 에서 이어받는다
         this.pending = opts;
       }
-      // 로프 색은 앱이 정한다(스킨 팔레트)
-      if (opts.engine && opts.colors) opts.engine.ropeColors = opts.colors;
     },
 
     stop: function () {
-      if (this.scene && this.scene.clearBoard) this.scene.clearBoard();
+      const scene = this.sceneOf();
+      if (scene && scene.clearBoard) scene.clearBoard();
       this.pending = null;
     },
 
-    select: function (sel) { if (this.scene) this.scene.setSelected(sel); },
-    showHint: function (hint) { if (this.scene) this.scene.setHint(hint); },
-    burst: function (x, y, color, n) { if (this.scene) this.scene.burst(x, y, color, n); },
-    ping: function () { if (this.scene) this.scene.flashOk(); },
+    select: function (sel) { const s = this.sceneOf(); if (s) s.setSelected(sel); },
+    showHint: function (hint) { const s = this.sceneOf(); if (s) s.setHint(hint); },
+    burst: function (x, y, color, n) { const s = this.sceneOf(); if (s) s.burst(x, y, color, n); },
+    ping: function () { const s = this.sceneOf(); if (s) s.flashOk(); },
 
     fit: function () {
       const app = document.getElementById('app');
@@ -492,12 +499,14 @@
         const cv = this.game.canvas;
         if (cv) { cv.style.width = w + 'px'; cv.style.height = h + 'px'; }
       }
-      if (this.scene && this.scene.layout) this.scene.layout();
+      const scene = this.sceneOf();
+      if (scene && scene.layout) scene.layout();
     },
 
     resize: function () {
       this.fit();
-      if (this.scene) this.scene.layout();
+      const scene = this.sceneOf();
+      if (scene && scene.layout) scene.layout();
     }
   };
 
