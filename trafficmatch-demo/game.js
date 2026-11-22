@@ -119,11 +119,10 @@
       this.layerFx = this.add.container(0, 0);
       this.ready = true;
       this.scale.on('resize', this.onResize, this);
-      if (this.pendingState) {
-        var s = this.pendingState;
-        this.pendingState = null;
-        this.render(s);
-      }
+      var first = this.pendingState || (root.Game && root.Game.pending) || null;
+      this.pendingState = null;
+      if (root.Game) root.Game.pending = null;
+      if (first) this.render(first);
     }
 
     onResize() { if (this.state) this.render(this.state, true); }
@@ -528,6 +527,7 @@
   var api = {
     game: null,
     scene: null,
+    pending: null,
     init: function (hostId) {
       if (api.game) return;
       api.game = new P.Game({
@@ -542,19 +542,33 @@
         audio: { noAudio: true },
         scene: [BoardScene]
       });
-      api.scene = api.game.scene.getScene('board');
+    },
+    sceneRef: function () {
+      if (!api.game) return null;
+      if (api.scene && api.scene.sys && api.scene.sys.isActive && api.scene.ready) return api.scene;
+      try {
+        var s = api.game.scene.getScene('board');
+        if (s) api.scene = s;
+      } catch (e) { /* 아직 부팅 중 */ }
+      return api.scene;
     },
     render: function (state) {
-      if (!api.scene) return;
-      api.scene.render(state);
+      if (!api.game) return;
+      var sc = api.sceneRef();
+      if (!sc || !sc.ready) {
+        api.pending = state;
+        if (sc) sc.pendingState = state;
+        return;
+      }
+      sc.render(state);
     },
-    ghost: function (v, bay, cb) { if (api.scene) api.scene.ghostToBay(v, bay, cb); },
-    popBay: function (b, c) { if (api.scene) api.scene.popBay(b, c); },
-    pulseBay: function (b) { if (api.scene) api.scene.pulseBay(b); },
-    shake: function (id) { if (api.scene) api.scene.shakeVehicle(id); },
-    hint: function (id) { if (api.scene) api.scene.hintPulse(id); },
-    win: function () { if (api.scene) api.scene.winRain(); },
-    resize: function () { if (api.game) api.game.scale.refresh(); }
+    ghost: function (v, bay, cb) { var s = api.sceneRef(); if (s && s.ready) s.ghostToBay(v, bay, cb); },
+    popBay: function (b, c) { var s = api.sceneRef(); if (s && s.ready) s.popBay(b, c); },
+    pulseBay: function (b) { var s = api.sceneRef(); if (s && s.ready) s.pulseBay(b); },
+    shake: function (id) { var s = api.sceneRef(); if (s && s.ready) s.shakeVehicle(id); },
+    hint: function (id) { var s = api.sceneRef(); if (s && s.ready) s.hintPulse(id); },
+    win: function () { var s = api.sceneRef(); if (s && s.ready) s.winRain(); },
+    resize: function () { if (api.game && api.game.scale) api.game.scale.refresh(); }
   };
 
   root.Game = api;
