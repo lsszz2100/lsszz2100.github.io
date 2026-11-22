@@ -224,9 +224,9 @@ em { font-style: normal; }
 .chapter-head { display: flex; align-items: baseline; justify-content: space-between; margin: 6px 2px 12px; }
 .chapter-head b { font-size: 17px; }
 .chapter-head span { color: var(--soft); font-size: 12.5px; }
-.stage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
-.stage-btn { position: relative; aspect-ratio: 1/1; border-radius: 18px; background: #fff; box-shadow: var(--shadow-sm);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-weight: 900; font-size: 16px; color: var(--ink); }
+.stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.stage-btn { position: relative; aspect-ratio: 1/1; border-radius: 15px; background: #fff; box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-weight: 900; font-size: 14px; color: var(--ink); }
 .stage-btn.locked { color: #B9C6DA; background: #F7FAFF; box-shadow: none; }
 .stage-btn.cleared { background: linear-gradient(180deg, #FFFFFF, #EFFBF6); }
 .stage-btn .st-stars { display: flex; gap: 2px; font-size: 8px; color: var(--sun); line-height: 1; }
@@ -235,7 +235,7 @@ em { font-style: normal; }
 .stage-btn.now { box-shadow: 0 0 0 2px var(--teal), var(--shadow-sm); }
 .stage-btn.boss { background: linear-gradient(180deg, #FFF7E8, #FFEEDC); }
 .stage-btn.boss.now { box-shadow: 0 0 0 2px #F5A22B, var(--shadow-sm); }
-.stage-btn .st-lock { position: absolute; top: 12px; right: 12px; width: 14px; height: 14px; }
+.stage-btn .st-lock { position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; }
 .stage-btn .st-lock svg { width: 100%; height: 100%; }
 
 /* ---------------------------------------------------------------- game */
