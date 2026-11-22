@@ -297,7 +297,7 @@ html, body {
 .hstat b { font-size: 40px; font-weight: 900; color: #C4771F; }
 .hstat span { font-size: 20px; color: #946B37; font-weight: 700; }
 .home-foot {
-  margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
   font-size: 22px; color: var(--ink-soft);
 }
 .dot-ok { width: 18px; height: 18px; border-radius: 50%; background: var(--good); }
