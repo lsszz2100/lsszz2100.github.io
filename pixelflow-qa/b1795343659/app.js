@@ -1332,7 +1332,7 @@
         save.stats = { pops: 2380, runs: 74, bestCombo: 31, coinsEarned: 1260, boostersUsed: 9, locks: 18, perfect: 6, wins: 52 };
         save.streak = { count: 6, last: todayKey() };
         save.daily = { date: todayKey(), done: true, stars: 3, time: 27.4 };
-        save.dailyReward = { date: todayKey(), streak: 6 };
+        save.dailyReward = { date: '2000-01-01', streak: 6 };
         for (var i = 1; i <= 24; i++) save.stages[String(i)] = { stars: i % 6 === 0 ? 2 : 3, time: 20 + i };
         save.skins = { classic: true, candy: true, bolt: true };
         save.themes = { peach: true, mint: true, sky: true };
