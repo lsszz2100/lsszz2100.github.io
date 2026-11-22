@@ -86,7 +86,7 @@
     computeGeom() {
       var v = this.view();
       var st = this.run ? this.run.stage : { cols: 9, rows: 9 };
-      var gap = 16;        // 보드 가장자리 → 벨트 중심
+      var gap = 14;        // 보드 가장자리 → 벨트 중심
       var pad = 8;         // 캔버스 가장자리 여백
       var availW = v.w - pad * 2 - (gap + 12) * 2;
       var availH = v.h - pad * 2 - (gap + 12) * 2 - 8;
@@ -170,10 +170,10 @@
       /* 바탕: 둥근 사각 링 */
       var G = this.geom;
       var r = 20;
-      g.lineStyle(24, num(th.belt), 1);
+      g.lineStyle(21, num(th.belt), 1);
       this.roundRectPath(g, G.beltL, G.beltT, G.beltR - G.beltL, G.beltB - G.beltT, r);
       g.strokePath();
-      g.lineStyle(19, num(th.beltDark), 0.5);
+      g.lineStyle(17, num(th.beltDark), 0.5);
       this.roundRectPath(g, G.beltL, G.beltT, G.beltR - G.beltL, G.beltB - G.beltT, r);
       g.strokePath();
 
