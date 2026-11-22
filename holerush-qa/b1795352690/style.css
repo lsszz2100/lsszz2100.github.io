@@ -207,11 +207,11 @@ em { font-style: normal; }
 .page-top h2 { font-size: 19px; }
 .page-top > span:empty { width: 70px; }
 .section-title { font-size: 15px; color: var(--soft); margin: 22px 2px 10px; }
-.hint { color: var(--soft); font-size: 13px; text-align: center; margin: 14px 0 0; }
+.hint { color: var(--soft); font-size: 12.5px; text-align: center; margin: 10px 0 0; }
 .hint.center { text-align: center; }
 
 /* ---------------------------------------------------------------- stage map */
-.chapter-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 10px; margin-top: 4px; scrollbar-width: none; }
+.chapter-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 8px 0 8px; margin-top: 2px; scrollbar-width: none; }
 .chapter-tabs::-webkit-scrollbar { display: none; }
 .chapter-tab { flex: 0 0 auto; background: #fff; border-radius: 999px; padding: 9px 15px; font-size: 13px; font-weight: 800;
   color: var(--soft); box-shadow: var(--shadow-sm); white-space: nowrap; }
@@ -219,7 +219,7 @@ em { font-style: normal; }
 .chapter-head { display: flex; align-items: baseline; justify-content: space-between; margin: 6px 2px 12px; }
 .chapter-head b { font-size: 17px; }
 .chapter-head span { color: var(--soft); font-size: 12.5px; }
-.stage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.stage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
 .stage-btn { position: relative; aspect-ratio: 1/1; border-radius: 18px; background: #fff; box-shadow: var(--shadow-sm);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-weight: 900; font-size: 16px; color: var(--ink); }
 .stage-btn.locked { color: #B9C6DA; background: #F7FAFF; box-shadow: none; }
@@ -392,7 +392,7 @@ em { font-style: normal; }
 html.cap, html.cap body { overflow: hidden; background: #EAF2FF; }
 html.cap #app { border-radius: 0; box-shadow: none; }
 
-.map-foot { display: flex; align-items: center; gap: 12px; margin: 22px 0 10px; }
+.map-foot { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; }
 .map-stat { flex: 0 0 auto; text-align: center; background: #fff; border-radius: 18px; padding: 10px 16px; box-shadow: var(--shadow-sm); }
 .map-stat b { display: block; font-size: 17px; }
 .map-stat span { font-size: 11px; color: var(--soft); font-weight: 800; }
