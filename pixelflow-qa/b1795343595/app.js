@@ -327,6 +327,13 @@
     $('hstatPops').textContent = save.stats.pops;
     $('hstatStreak').textContent = save.streak.count;
     $('dailyMeta').textContent = (save.daily.date === todayKey() && save.daily.done) ? t('dailyDone') : t('dailyPlay');
+    var ready = dailyRewardReady();
+    var strip = $('btnDailyReward');
+    if (strip) {
+      strip.classList.toggle('done', !ready);
+      $('dailyRewardNote').textContent = ready ? t('streakNote') : t('dailyClaimed');
+      $('dailyRewardGo').textContent = ready ? '+' + dailyRewardAmount() : '✓';
+    }
   }
 
   /* ---------------------------------------------------------------- stages */
@@ -1137,6 +1144,7 @@
 
   function wire() {
     on('btnPlay', startNextStage);
+    on('btnDailyReward', function () { sfxClick(); openDailyReward(); });
     on('tileStages', function () { sfxClick(); chapter = Math.min(8, Math.floor((nextStageId() - 1) / 20) + 1); renderStages(); showScreen('stages'); });
     on('tileDaily', function () { sfxClick(); openStageIntro(0, true); });
     on('tileQuests', function () { sfxClick(); renderQuests(); showScreen('quests'); });
@@ -1291,18 +1299,26 @@
     if (!belt || !cells) return;
     var cols2 = ['#F4707A', '#4C9BF5', '#F7C544', '#48C08D', '#A57BEE'];
     var heart = [
-      [0, 0, 1, 0, 0], [0, 1, 1, 1, 0], [0, 1, 1, 1, 0], [0, 0, 1, 0, 0]
+      [-1, 0, 0, -1, 1, 1, -1],
+      [2, 2, 2, 3, 3, 3, 4],
+      [2, 2, 2, 3, 3, 3, 4],
+      [-1, 0, 0, 4, 4, -1, -1],
+      [-1, -1, 0, 0, -1, -1, -1],
+      [-1, -1, -1, 0, -1, -1, -1]
     ];
+    var cell = 12, gap = 3;
+    var gw = 7 * cell + 6 * gap, gh = 6 * cell + 5 * gap;
+    var ox = (240 - gw) / 2 + 6, oy = (130 - gh) / 2 - 2;
     var out = '';
     for (var r2 = 0; r2 < heart.length; r2++) {
       for (var c2 = 0; c2 < heart[r2].length; c2++) {
-        if (!heart[r2][c2]) continue;
-        out += '<rect x="' + (100 + c2 * 15) + '" y="' + (36 + r2 * 15) + '" width="13" height="13" rx="3" fill="' + cols2[(r2 + c2) % 3] + '"/>';
+        if (heart[r2][c2] < 0) continue;
+        out += '<rect x="' + (ox + c2 * (cell + gap)) + '" y="' + (oy + r2 * (cell + gap)) + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + cols2[heart[r2][c2]] + '"/>';
       }
     }
     cells.innerHTML = out;
-    belt.innerHTML = '<rect x="86" y="24" width="94" height="72" rx="16" fill="none" stroke="#FBE3D4" stroke-width="9"/>';
-    blaster.innerHTML = '<circle cx="86" cy="60" r="9" fill="#fff" stroke="#E7C6B2" stroke-width="2"/><circle cx="86" cy="60" r="5" fill="#F4707A"/>';
+    belt.innerHTML = '<rect x="' + (ox - 13) + '" y="' + (oy - 13) + '" width="' + (gw + 26) + '" height="' + (gh + 26) + '" rx="18" fill="none" stroke="#FBE3D4" stroke-width="8"/>';
+    blaster.innerHTML = '<circle cx="' + (ox - 13) + '" cy="' + (oy + gh - 6) + '" r="8" fill="#fff" stroke="#E7C6B2" stroke-width="2"/><circle cx="' + (ox - 13) + '" cy="' + (oy + gh - 6) + '" r="4.4" fill="#F4707A"/>';
   }
 
   function boot() {
