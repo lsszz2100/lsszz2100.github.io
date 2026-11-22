@@ -594,11 +594,11 @@
 
   function launchAt(index) {
     if (!run || paused || run.status !== 'running' || anyModalOpen()) return;
+    if (!run.queue[index]) return;
     var ev = [];
     var ok = PF.launch(run, index, ev);
     if (!ok) {
-      sfxClick();
-      showJam(t('jamNote'));
+      showJam(t('beltBusy'));
       return;
     }
     sfxLaunch();
