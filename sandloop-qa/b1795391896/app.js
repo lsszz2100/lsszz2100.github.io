@@ -1236,7 +1236,8 @@
   }
 
   function captureWin() {
-    const idx = parseInt(qp('stage', '92'), 10) || 92;
+    const rawIdx = parseInt(qp('stage', '92'), 10);
+    const idx = isNaN(rawIdx) ? 92 : rawIdx;
     const stage = C.stageAt(idx);
     stageIndex = idx;
     engine = new C.Engine(stage);
@@ -1279,7 +1280,9 @@
       showScreen('awards');
       renderAwards();
     } else if (name === 'game') {
-      captureGameState(parseInt(qp('stage', '92'), 10) || 92, parseFloat(qp('play', '9')) || 9);
+      const stg = parseInt(qp('stage', '92'), 10);
+      const pl = parseFloat(qp('play', '9'));
+      captureGameState(isNaN(stg) ? 92 : stg, isNaN(pl) ? 9 : pl);
     } else if (name === 'win') {
       captureWin();
     } else if (name === 'tutorial') {
