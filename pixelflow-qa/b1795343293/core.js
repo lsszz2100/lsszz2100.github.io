@@ -358,7 +358,8 @@
         if (ch2 === '.' || !LETTER.hasOwnProperty(ch2)) continue;
         cells.push({
           c: c, r: r,
-          color: letterColor(ch2, shift, ncolors),
+          /* 두 줄마다 색을 바꿔 한 가지 색 그림도 여러 색 퍼즐이 되게 한다. */
+          color: letterColor(ch2, shift + Math.floor(r / 2), ncolors),
           hp: 1, maxHp: 1,
           lock: false,
           alive: true

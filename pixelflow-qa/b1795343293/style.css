@@ -239,11 +239,11 @@ button { font-family: inherit; border: 0; background: none; color: inherit; curs
 .q-slot.locked { opacity: .38; box-shadow: inset 0 0 0 2px #EFE2D8; }
 .q-slot.empty { opacity: .55; }
 .q-slot.next { box-shadow: inset 0 0 0 2px var(--accent), 0 6px 14px rgba(244, 112, 122, .18); }
-.q-ball { width: 30px; height: 30px; border-radius: 50%; position: relative; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .12); }
+.q-ball { width: 33px; height: 33px; border-radius: 50%; position: relative; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .12); }
 .q-ball::after { content: ''; position: absolute; left: 6px; top: 5px; width: 9px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, .65); }
 .q-ball.rainbow { background: conic-gradient(#F4707A, #F7C544, #48C08D, #4C9BF5, #A57BEE, #F4707A); }
 .q-ammo { display: flex; gap: 2px; }
-.q-ammo i { width: 3.4px; height: 3.4px; border-radius: 50%; background: var(--ink-3); opacity: .55; }
+.q-ammo i { width: 4px; height: 4px; border-radius: 50%; background: var(--ink-3); opacity: .55; }
 .q-slot.cooldown .q-ball { filter: grayscale(.35); opacity: .55; }
 .q-slot:active { transform: scale(.95); }
 
