@@ -125,7 +125,7 @@
       this.geo = {
         size: size,
         ox: v.w / 2 - ((minX + maxX) / 2) * size,
-        oy: v.h / 2 - ((minY + maxY) / 2) * size - 12,
+        oy: v.h / 2 - ((minY + maxY) / 2) * size - 26,
         w: v.w, h: v.h
       };
     }
@@ -197,13 +197,25 @@
       var g = this.bgG, v = this.view();
       g.clear();
       var th = this.theme;
+      /* 부드러운 색 덩어리: 빈 공간이 허전하지 않게 */
+      var blobs = [
+        { x: v.w * 0.16, y: v.h * 0.14, r: v.w * 0.42, c: '#FFD9C9', a: 0.30 },
+        { x: v.w * 0.88, y: v.h * 0.30, r: v.w * 0.34, c: '#FFE7B8', a: 0.24 },
+        { x: v.w * 0.12, y: v.h * 0.78, r: v.w * 0.40, c: '#D6F2E6', a: 0.26 },
+        { x: v.w * 0.86, y: v.h * 0.92, r: v.w * 0.38, c: '#E2DBFF', a: 0.22 }
+      ];
+      for (var b = 0; b < blobs.length; b++) {
+        var bl = blobs[b];
+        g.fillStyle(num(bl.c), bl.a);
+        g.fillCircle(bl.x, bl.y, bl.r);
+      }
       /* 아주 옅은 육각 무늬 */
       var step = 46, r = 15;
       for (var row = 0; row * step * 0.86 < v.h + step; row++) {
         for (var col = 0; col * step * 1.0 < v.w + step; col++) {
           var x = col * step + (row % 2 ? step / 2 : 0) - 10;
           var y = row * step * 0.86 - 10;
-          g.lineStyle(1, num(th.cellEdge), 0.5);
+          g.lineStyle(1, num(th.cellEdge), 0.42);
           hexPath(g, x, y, r);
           g.strokePath();
         }
