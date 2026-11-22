@@ -113,9 +113,15 @@
       }
       var bw = (maxX - minX) + Math.sqrt(3);
       var bh = (maxY - minY) + 2;
-      var padX = 10, padY = 10;
+      var padX = 8, padY = 8;
       var size = Math.min((v.w - padX * 2) / bw, (v.h - padY * 2) / bh, 52);
       size = Math.max(11, size);
+      /* 보드 판(테두리)까지 화면 안에 들어오게 한 번 더 줄인다. */
+      var platePad = 0.42;
+      var totalW = bw * size * (1 + platePad * 2);
+      var totalH = bh * size * (1 + platePad);
+      if (totalW > v.w) size *= v.w / totalW;
+      if (totalH > v.h) size *= v.h / totalH;
       this.geo = {
         size: size,
         ox: v.w / 2 - ((minX + maxX) / 2) * size,
@@ -572,13 +578,16 @@
       if (!this.run || !this.geo) return;
       var sz = this.geo.size;
       if (this.selected >= 0) {
+        var pulse = 0.5 + 0.5 * Math.sin(this.t * 4);
         for (var key in this.valid) {
           if (!this.valid[key]) continue;
           var i = this.cellAt[key];
           if (i == null) continue;
           var p = this.cellXY(i);
-          var pulse = 0.55 + 0.45 * Math.sin(this.t * 5);
-          g.lineStyle(Math.max(1.6, sz * 0.09), 0x2F9E70, 0.45 + 0.5 * pulse);
+          g.fillStyle(0x3FC98B, 0.10 + 0.05 * pulse);
+          hexPath(g, p.x, p.y, sz * 0.9);
+          g.fillPath();
+          g.lineStyle(Math.max(1.2, sz * 0.035), 0x2F9E70, 0.30 + 0.25 * pulse);
           hexPath(g, p.x, p.y, sz * 0.9);
           g.strokePath();
         }
