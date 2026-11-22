@@ -1124,7 +1124,7 @@
           if (!state || state.status !== 'playing') return;
           var hint = RT.hint(state);
           if (hint) onRingTurn(hint.i, hint.d);
-        }, i * 260);
+        }, i * 700);
       }
       if (screen === 'result') {
         var step = function () {
@@ -1137,7 +1137,7 @@
           onRingTurn(m2.i, m2.d);
           setTimeout(step, 320);
         };
-        setTimeout(step, turns * 260 + 320);
+        setTimeout(step, 320);
       }
     }, 500);
   }
