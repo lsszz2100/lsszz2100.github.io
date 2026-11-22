@@ -417,7 +417,7 @@
       const isToday = !claimedToday && d === dayIndex;
       const cell = document.createElement('div');
       cell.className = 'gift-day' + (done ? ' done' : '') + (isToday ? ' today' : '');
-      const short = g.type === 'coins' ? '●' + g.n : '×' + g.n;
+      const short = g.type === 'coins' ? String(g.n) : '×' + g.n;
       cell.innerHTML = '<i>' + (g.type === 'coins' ? '●' : g.type === 'time' ? '⏱' : g.type === 'hammer' ? '🔨' : '💥') + '</i>' +
         '<b>' + (claimedToday && d === p.gift.day ? '✓' : short) + '</b><span>' + t('quests.day', { n: d }) + '</span>';
       track.appendChild(cell);
