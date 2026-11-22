@@ -117,7 +117,7 @@
       var size = Math.min((v.w - padX * 2) / bw, (v.h - padY * 2) / bh, 52);
       size = Math.max(11, size);
       /* 보드 판(테두리)까지 화면 안에 들어오게 한 번 더 줄인다. */
-      var platePad = 0.42;
+      var platePad = 0.02;
       var totalW = (bw + platePad * 2) * size;
       var totalH = (bh + platePad * 2) * size;
       if (totalW > v.w) size *= v.w / totalW;
@@ -215,18 +215,6 @@
       g.clear();
       if (!this.run || !this.geo) return;
       var th = this.theme, sz = this.geo.size;
-      /* 보드 판: 칸들을 감싸는 옅은 판 */
-      var minX = 9e9, maxX = -9e9, minY = 9e9, maxY = -9e9;
-      for (var b = 0; b < this.run.cells.length; b++) {
-        var bp = this.cellXY(b);
-        minX = Math.min(minX, bp.x); maxX = Math.max(maxX, bp.x);
-        minY = Math.min(minY, bp.y); maxY = Math.max(maxY, bp.y);
-      }
-      var plate = sz * 0.42;
-      g.fillStyle(0xFFFFFF, 0.55);
-      g.fillRoundedRect(minX - plate, minY - plate, (maxX - minX) + plate * 2, (maxY - minY) + plate * 2, sz * 0.6);
-      g.lineStyle(Math.max(1.5, sz * 0.05), num(th.boardEdge), 0.55);
-      g.strokeRoundedRect(minX - plate, minY - plate, (maxX - minX) + plate * 2, (maxY - minY) + plate * 2, sz * 0.6);
       for (var i = 0; i < this.run.cells.length; i++) {
         var p = this.cellXY(i);
         var cell = this.disp[i];
