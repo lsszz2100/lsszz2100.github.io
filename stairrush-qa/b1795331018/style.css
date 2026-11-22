@@ -220,7 +220,7 @@ ol, ul { padding-left: 20px; }
   padding: 4px 16px 18px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 12px;
   -webkit-overflow-scrolling: touch;
 }
@@ -355,6 +355,7 @@ ol, ul { padding-left: 20px; }
 .hstat span { font-size: 10px; color: var(--ink-3); font-weight: 700; }
 
 .home-foot {
+  margin-top: auto;
   display: flex;
   align-items: center;
   justify-content: center;
