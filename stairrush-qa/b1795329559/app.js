@@ -975,66 +975,43 @@
 
   function tutArt(step) {
     var a = $('tutArt');
-    clear(a);
+    var fillW = step === 1 ? 96 : (step === 2 ? 250 : 260);
+    var fillColor = step === 1 ? '#FF9C7A' : '#5B8DEF';
+    var h = [];
+    h.push('<svg viewBox="0 0 300 158" aria-hidden="true">');
     /* 게이지 */
-    var gauge = h('div', 'ta-gauge');
-    var fill = h('i');
-    fill.style.width = step === 1 ? '38%' : (step === 2 ? '92%' : '100%');
-    if (step === 1) fill.style.background = 'linear-gradient(90deg,#FFB36B,#FF7A5C)';
-    gauge.appendChild(fill);
-    a.appendChild(gauge);
-
-    /* 계단 4칸 */
-    var positions = [[14, 18], [50, 34], [86, 50], [122, 66]];
-    positions.forEach(function (p) {
-      var s = h('div', 'ta-step');
-      s.style.left = p[0] + 'px';
-      s.style.bottom = p[1] + 'px';
-      a.appendChild(s);
-    });
-
-    var runner = h('div', 'ta-run');
-    runner.style.left = '138px';
-    runner.style.bottom = '78px';
-    runner.style.width = '18px';
-    runner.style.height = '24px';
-
+    h.push('<rect x="20" y="10" width="260" height="10" rx="5" fill="#E6F2FA"/>');
+    h.push('<rect x="20" y="10" width="' + fillW + '" height="10" rx="5" fill="' + fillColor + '"/>');
+    if (step === 1) h.push('<circle cx="272" cy="48" r="13" fill="#FFE3D8"/><text x="272" y="55" font-size="19" font-weight="900" text-anchor="middle" fill="#F0784C">!</text>');
+    /* 계단 */
+    h.push('<g fill="#CFE8F6"><rect x="24" y="112" width="62" height="7" rx="3.5"/><rect x="74" y="92" width="62" height="7" rx="3.5"/><rect x="124" y="72" width="62" height="7" rx="3.5"/><rect x="174" y="52" width="62" height="7" rx="3.5"/></g>');
+    h.push('<g fill="#FFFFFF"><rect x="24" y="106" width="62" height="9" rx="4.5"/><rect x="74" y="86" width="62" height="9" rx="4.5"/><rect x="124" y="66" width="62" height="9" rx="4.5"/><rect x="174" y="46" width="62" height="9" rx="4.5"/></g>');
+    /* 캐릭터 */
+    h.push('<g>');
+    h.push('<rect x="190" y="40" width="5" height="6" rx="2.5" fill="#F07A56"/><rect x="199" y="40" width="5" height="6" rx="2.5" fill="#F07A56"/>');
+    h.push('<rect x="186" y="25" width="22" height="16" rx="7" fill="#FF8B5E"/>');
+    h.push('<circle cx="197" cy="17" r="9" fill="#FFD9C4"/>');
+    h.push('<path d="M188 17a9 9 0 0 1 18 0z" fill="#F07A56"/>');
+    h.push('<rect x="205" y="15" width="9" height="3.6" rx="1.8" fill="#F07A56"/>');
+    h.push('<circle cx="194" cy="19" r="1.6" fill="#2E4A5C"/><circle cx="200" cy="19" r="1.6" fill="#2E4A5C"/>');
+    h.push('</g>');
     if (step === 0) {
-      var ar = h('div', 'ta-arrow');
-      ar.textContent = '›';
-      ar.style.left = '176px';
-      ar.style.bottom = '58px';
-      ar.style.fontSize = '22px';
-      a.appendChild(ar);
-      var ar2 = h('div', 'ta-arrow');
-      ar2.textContent = '‹';
-      ar2.style.left = '8px';
-      ar2.style.bottom = '8px';
-      ar2.style.fontSize = '18px';
-      ar2.style.color = '#5B8DEF';
-      a.appendChild(ar2);
+      h.push('<rect x="20" y="126" width="122" height="26" rx="12" fill="#EFF6FF" stroke="#5B8DEF" stroke-width="2"/>');
+      h.push('<text x="52" y="145" font-size="15" font-weight="900" fill="#5B8DEF">‹</text>');
+      h.push('<text x="72" y="144" font-size="11" font-weight="800" fill="#5B8DEF">LEFT</text>');
+      h.push('<rect x="158" y="126" width="122" height="26" rx="12" fill="#FFF4EE" stroke="#FF8B5E" stroke-width="2"/>');
+      h.push('<text x="188" y="144" font-size="11" font-weight="800" fill="#FF8B5E">RIGHT</text>');
+      h.push('<text x="238" y="145" font-size="15" font-weight="900" fill="#FF8B5E">›</text>');
+      h.push('<text x="248" y="40" font-size="20" font-weight="900" fill="#FF8B5E">›</text>');
     } else if (step === 1) {
-      var warn = h('div', 'ta-arrow');
-      warn.textContent = '!';
-      warn.style.left = '196px';
-      warn.style.top = '6px';
-      warn.style.fontSize = '16px';
-      warn.style.color = '#FF7A5C';
-      a.appendChild(warn);
+      h.push('<text x="40" y="60" font-size="11" font-weight="800" fill="#8FA9B8">keep tapping</text>');
     } else {
-      var st = h('div', 'ta-star');
-      st.textContent = '★';
-      st.style.left = '104px';
-      st.style.top = '44px';
-      a.appendChild(st);
-      var st2 = h('div', 'ta-star');
-      st2.textContent = '★';
-      st2.style.left = '160px';
-      st2.style.top = '30px';
-      st2.style.fontSize = '13px';
-      a.appendChild(st2);
+      h.push('<text x="252" y="56" font-size="26" fill="#FFC93C">★</text>');
+      h.push('<text x="272" y="44" font-size="16" fill="#FFD166">★</text>');
+      h.push('<text x="40" y="62" font-size="11" font-weight="800" fill="#8FA9B8">x2 score</text>');
     }
-    a.appendChild(runner);
+    h.push('</svg>');
+    a.innerHTML = h.join('');
   }
 
   function openTutorial() {
