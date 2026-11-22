@@ -67,7 +67,7 @@
       var w = this.scale.width, h = this.scale.height;
       var level = this.state.level;
       var N = level.N;
-      var Rmax = Math.min(w, h) * 0.425;
+      var Rmax = Math.min(w, h) * 0.445;
       var R0 = N > 1 ? Rmax * 0.40 : Rmax;
       var step = N > 1 ? (Rmax - R0) / (N - 1) : Rmax;
       var radii = [];
@@ -122,27 +122,41 @@
 
     drawFrame() {
       var m = this.m, g = this.add.graphics();
-      // 보드 바닥: 옅은 원 두 겹
-      g.fillStyle(0xffffff, 0.72);
-      g.fillCircle(m.cx, m.cy, m.radii[m.N - 1] + m.step * 0.62);
-      g.fillStyle(0xf1f7ff, 0.9);
-      g.fillCircle(m.cx, m.cy, m.radii[m.N - 1] + m.step * 0.30);
+      var pad = m.k * 5;
+
+      // 보드 카드: 빈 공간이 의도된 여백으로 보이게 한다
+      g.fillStyle(0xffffff, 0.62);
+      roundRect(g, pad, pad, m.w - pad * 2, m.h - pad * 2, m.k * 22);
+      g.fillPath();
+      g.lineStyle(Math.max(1, m.k * 1.2), 0xe6eefa, 1);
+      roundRect(g, pad, pad, m.w - pad * 2, m.h - pad * 2, m.k * 22);
+      g.strokePath();
+
+      // 링 뒤 은은한 원
+      g.fillStyle(0xf2f7ff, 0.85);
+      g.fillCircle(m.cx, m.cy, m.radii[m.N - 1] + m.step * 0.52);
+      g.fillStyle(0xffffff, 0.9);
+      g.fillCircle(m.cx, m.cy, m.radii[m.N - 1] + m.step * 0.26);
+
+      // 구슬이 도는 통로(레벨) 안내선
+      for (var L = 1; L < m.N; L++) {
+        var r = this.beadRadius(L);
+        g.lineStyle(Math.max(1, m.k * 0.9), 0xdbe8f8, 0.75);
+        for (var s = 0; s < m.S; s++) {
+          var a0 = this.angleOf(s) - m.sector * 0.30;
+          var a1 = this.angleOf(s) + m.sector * 0.30;
+          g.beginPath();
+          g.arc(m.cx, m.cy, r, a0, a1, false);
+          g.strokePath();
+        }
+      }
 
       // 가운데 코어
-      g.fillStyle(0xe8f1ff, 1);
-      g.fillCircle(m.cx, m.cy, Math.max(8, m.radii[0] - m.thick * 0.9));
-      g.lineStyle(Math.max(1.5, m.k * 1.6), 0xffffff, 1);
-      g.strokeCircle(m.cx, m.cy, Math.max(8, m.radii[0] - m.thick * 0.9));
+      g.fillStyle(0xe9f2ff, 1);
+      g.fillCircle(m.cx, m.cy, Math.max(8, m.radii[0] - m.thick * 1.05));
+      g.lineStyle(Math.max(1.5, m.k * 1.4), 0xffffff, 1);
+      g.strokeCircle(m.cx, m.cy, Math.max(8, m.radii[0] - m.thick * 1.05));
 
-      // 칸 눈금(아주 옅게)
-      g.lineStyle(Math.max(1, m.k), 0xdbe8f8, 0.55);
-      for (var s = 0; s < m.S; s++) {
-        var a = this.angleOf(s);
-        var r1 = Math.max(6, m.radii[0] - m.thick);
-        var r2 = m.radii[m.N - 1] + m.step * 0.5;
-        g.lineBetween(m.cx + Math.cos(a) * r1, m.cy + Math.sin(a) * r1,
-          m.cx + Math.cos(a) * r2, m.cy + Math.sin(a) * r2);
-      }
       this.layerBg.add(g);
     }
 
