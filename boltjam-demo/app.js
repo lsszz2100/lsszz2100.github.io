@@ -788,6 +788,10 @@
   /* ------------------------------------------------------------ settings */
 
   function renderSettings() {
+    var hst = host();
+    var needsAdPrivacy = false;
+    try { needsAdPrivacy = !!(hst && hst.isPrivacyOptionsRequired && hst.isPrivacyOptionsRequired()); } catch (e) { needsAdPrivacy = false; }
+    $('rowAdPrivacy').hidden = !needsAdPrivacy;
     $('setSound').setAttribute('aria-checked', save.sound ? 'true' : 'false');
     $('setVibrate').setAttribute('aria-checked', save.vibrate ? 'true' : 'false');
     $('setLangEn').classList.toggle('on', save.lang !== 'ko');
@@ -993,6 +997,11 @@
     });
     on('setLangEn', function () { setLang('en'); });
     on('setLangKo', function () { setLang('ko'); });
+    on('btnAdPrivacy', function () {
+      var hst = host();
+      if (hst && hst.showPrivacyOptions) { try { hst.showPrivacyOptions(); return; } catch (e) {} }
+      toast(t('noAd'));
+    });
     on('btnTerms', function () { openExternal('terms'); });
     on('btnPrivacy', function () { openExternal('privacy'); });
 
