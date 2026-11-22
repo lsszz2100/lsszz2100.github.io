@@ -8,7 +8,7 @@
       appName: 'Room Sort', appSub: 'Cozy Tidy Puzzle',
       tagline: 'Tidy every shelf. One cosy room at a time.',
       play: 'Play', tapToStart: 'Tap to start', stage: 'Room', stages: 'Rooms',
-      daily: 'Daily', quests: 'Quests', achievements: 'Awards', shop: 'Rooms', colours: 'Colours',
+      daily: 'Daily', quests: 'Quests', achievements: 'Awards', shop: 'Room colours', colours: 'Colours',
       howTo: 'How to play', howToMeta: '60 seconds',
       offlineNote: 'Plays offline · progress saved on this device',
       step1: 'Pick up an item', step1Note: 'Tap a shelf to lift its top item.',

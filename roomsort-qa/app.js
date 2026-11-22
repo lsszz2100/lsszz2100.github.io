@@ -792,6 +792,9 @@
       var wall = h('span', 'sa-wall'); wall.style.background = th.wall2; art.appendChild(wall);
       var floor = h('span', 'sa-floor'); floor.style.background = th.floor; art.appendChild(floor);
       var shelf = h('span', 'sa-shelf'); shelf.style.background = th.shelf; art.appendChild(shelf);
+      var it1 = h('span', 'sa-item'); it1.style.background = RS.TYPES[0].hex; art.appendChild(it1);
+      var it2 = h('span', 'sa-item two'); it2.style.background = RS.TYPES[1].hex; art.appendChild(it2);
+      var it3 = h('span', 'sa-item three'); it3.style.background = RS.TYPES[2].hex; art.appendChild(it3);
       var rug = h('span', 'sa-rug'); rug.style.background = th.rug; art.appendChild(rug);
       cell.appendChild(art);
       cell.appendChild(h('div', 'skin-name', t(th.nameKey)));

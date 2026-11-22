@@ -506,7 +506,10 @@ html.cap #stage { box-shadow: none; border-radius: 0; }
 .skin-art .sa-wall { inset: 0 0 34% 0; }
 .skin-art .sa-floor { inset: 60% 0 0 0; }
 .skin-art .sa-shelf { left: 12%; right: 12%; bottom: 16%; height: 22%; border-radius: 5px; }
-.skin-art .sa-rug { left: 20%; right: 20%; bottom: 2%; height: 10%; border-radius: 999px; }
+.skin-art .sa-rug { left: 18%; right: 18%; bottom: 3%; height: 12%; border-radius: 999px; }
+.skin-art .sa-item { left: 24%; bottom: 26%; width: 11%; height: 15%; border-radius: 3px; }
+.skin-art .sa-item.two { left: 38%; bottom: 26%; width: 9%; height: 21%; }
+.skin-art .sa-item.three { left: 50%; bottom: 26%; width: 10%; height: 15%; }
 .skin-name { font-size: 12px; font-weight: 800; }
 .skin-meta { font-size: 10px; color: var(--ink-3); }
 .skin-btn {
