@@ -122,14 +122,17 @@
 
     drawFrame() {
       var m = this.m, g = this.add.graphics();
-      var pad = m.k * 5;
+      var half = m.radii[m.N - 1] + m.step * 0.60;
+      var pad = m.k * 6;
+      var x0 = m.cx - half - pad, y0 = m.cy - half - pad;
+      var w0 = (half + pad) * 2, h0 = (half + pad) * 2;
 
-      // 보드 카드: 빈 공간이 의도된 여백으로 보이게 한다
-      g.fillStyle(0xffffff, 0.62);
-      roundRect(g, pad, pad, m.w - pad * 2, m.h - pad * 2, m.k * 22);
+      // 보드 카드: 링 묶음에 딱 맞춰 빈 공간이 의도된 여백으로 보이게 한다
+      g.fillStyle(0xffffff, 0.72);
+      roundRect(g, x0, y0, w0, h0, m.k * 24);
       g.fillPath();
       g.lineStyle(Math.max(1, m.k * 1.2), 0xe6eefa, 1);
-      roundRect(g, pad, pad, m.w - pad * 2, m.h - pad * 2, m.k * 22);
+      roundRect(g, x0, y0, w0, h0, m.k * 24);
       g.strokePath();
 
       // 링 뒤 은은한 원
