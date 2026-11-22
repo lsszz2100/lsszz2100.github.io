@@ -442,11 +442,11 @@
       var x = this.px + sx;
       var y = this.py + sy;
       var rot = this.fall ? this.fall.rot : 0;
-      var scale = 1;
+      var scale = 0.92;
       var bobY = this.fall ? 0 : Math.sin(this.bob * 3.4) * 1.6;
 
       g.save();
-      g.translateCanvas(x, y - 26 + bobY);
+      g.translateCanvas(x, y - 35 + bobY);
       if (rot) g.rotateCanvas(rot);
       g.scaleCanvas(scale, scale);
 
