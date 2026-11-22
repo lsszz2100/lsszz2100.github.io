@@ -1177,7 +1177,19 @@
       fire(cv, 'mousedown', cx, cy);
       await sleep(120);
       const ptr = sc.input.activePointer;
-      const diag = { px: ptr && Math.round(ptr.x), py: ptr && Math.round(ptr.y), wantX: Math.round(cx), wantY: Math.round(cy), over: ptr && ptr.over ? ptr.over.length : null };
+      let hits = null, bounds = null, inputOn = null;
+      try {
+        const list = sc.input.hitTestPointer(ptr) || [];
+        hits = list.length;
+        const c0 = sc.blockMap[0];
+        bounds = c0 ? c0.getBounds() : null;
+        inputOn = c0 && c0.input ? c0.input.enabled : null;
+      } catch (err) { hits = 'err:' + err.message; }
+      const diag = {
+        px: ptr && Math.round(ptr.x), py: ptr && Math.round(ptr.y),
+        wantX: Math.round(cx), wantY: Math.round(cy), hits: hits,
+        bounds: bounds, inputOn: inputOn
+      };
       fire(cv, 'mousemove', cx + d.x * 70, cy + d.y * 70);
       await sleep(120);
       fire(cv, 'mouseup', cx + d.x * 70, cy + d.y * 70);
