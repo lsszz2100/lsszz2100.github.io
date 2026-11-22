@@ -67,6 +67,7 @@
 
       'result.win': 'Packed!',
       'result.lose': 'Board is full',
+      'result.loseEmptyTitle': 'Out of trays',
       'result.loseFull': 'The board filled up before you packed {goal} trays.',
       'result.loseEmpty': 'No trays left in the queue.',
       'result.summary': '{plays} trays placed · best {par}',
@@ -144,6 +145,7 @@
       'toast.queueEmpty': 'No trays left',
       'toast.boardFull': 'The board is full',
       'toast.full': 'No empty slot — use a booster',
+      'toast.emptyBoard': 'Nothing to clear yet',
       'toast.placed': 'Tray placed'
     },
     ko: {
@@ -210,6 +212,7 @@
 
       'result.win': '포장 완료!',
       'result.lose': '보드가 가득 찼습니다',
+      'result.loseEmptyTitle': '트레이가 바닥났습니다',
       'result.loseFull': '트레이 {goal}개를 포장하기 전에 보드가 가득 찼습니다.',
       'result.loseEmpty': '대기열에 남은 트레이가 없습니다.',
       'result.summary': '트레이 {plays}개 배치 · 최고 {par}',
@@ -287,6 +290,7 @@
       'toast.queueEmpty': '남은 트레이가 없습니다',
       'toast.boardFull': '보드가 가득 찼습니다',
       'toast.full': '빈 칸이 없습니다 — 부스터를 쓰세요',
+      'toast.emptyBoard': '비울 트레이가 아직 없습니다',
       'toast.placed': '트레이를 놓았습니다'
     }
   };

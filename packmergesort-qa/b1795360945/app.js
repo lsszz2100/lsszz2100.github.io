@@ -665,8 +665,9 @@
       : '';
     const canNext = result.win && stageIndex + 1 < C.STAGE_COUNT && profile.unlocked >= stageIndex + 2;
 
+    const loseTitle = result.reason === 'empty' ? t('result.loseEmptyTitle') : t('result.lose');
     let html = '<div class="modal">';
-    html += '<h2>' + (result.win ? t('result.win') : t('result.lose')) + '</h2>';
+    html += '<h2>' + (result.win ? t('result.win') : loseTitle) + '</h2>';
     if (result.win) {
       html += '<div class="stars">' + starsHtml(stars) + '</div>';
       html += '<div class="reward-coins">+ ' + applied.coins + ' ●</div>';
@@ -683,7 +684,7 @@
     if (result.win) {
       if (canNext) html += '<button class="btn-primary" data-act="next">' + t('result.next') + '</button>';
       html += '<div class="row"><button class="btn-accent" data-act="double">' + t('result.doubleCoins', { n: applied.coins }) + '</button></div>';
-    } else if (!engine.revived) {
+    } else if (!engine.revived && result.reason !== 'empty') {
       html += '<button class="btn-accent" data-act="revive">' + t('result.revive') + '</button>';
     }
     html += '<div class="row"><button class="btn-soft" data-act="replay">' + t('result.replay') + '</button>' +
@@ -730,6 +731,8 @@
             eventCursor = engine.events.length;
             updateHud();
             toast(t('booster.clearOn'));
+            if (engine.status === 'won') onWin();
+            else if (engine.status === 'lost') onLose();
           });
         }
       };
@@ -769,6 +772,10 @@
 
   function useBooster(kind) {
     if (!engine || engine.status !== 'playing') return;
+    if (!engine.canBoost(kind)) {
+      toast(kind === 'magnet' ? t('booster.noMagnet') : (kind === 'clear' ? t('toast.emptyBoard') : t('toast.noBoost')));
+      return;
+    }
     const have = profile.boosters[kind] || 0;
     if (have > 0) {
       profile.boosters[kind] = have - 1;

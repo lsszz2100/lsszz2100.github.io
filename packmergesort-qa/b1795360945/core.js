@@ -658,6 +658,27 @@
     return { ok: true, packs: res.packs, status: this.status };
   };
 
+  /** 지금 이 부스터를 실제로 쓸 수 있는지(재고를 쓰기 전에 확인). */
+  Engine.prototype.canBoost = function (kind) {
+    if (this.status !== 'playing') return false;
+    if (kind === 'shuffle') return this.stage.queue.length - this.head > 2;
+    if (kind === 'clear') {
+      for (let i = 0; i < this.stage.cells; i += 1) if (this.board[i]) return true;
+      return false;
+    }
+    if (kind === 'magnet') {
+      const per = {};
+      for (let i = 0; i < this.stage.cells; i += 1) {
+        const t = this.board[i];
+        if (!t) continue;
+        for (let k = 0; k < t.length; k += 1) per[t[k]] = (per[t[k]] || 0) + 1;
+      }
+      for (const c in per) if (per[c] >= 3) return true;
+      return false;
+    }
+    return false;
+  };
+
   /** 셔플: 지금 놓을 트레이는 그대로 두고, 그 뒤 대기열의 순서만 바꾼다. */
   Engine.prototype.shuffleQueue = function (rand) {
     if (this.status !== 'playing') return false;
