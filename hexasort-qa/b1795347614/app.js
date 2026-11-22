@@ -1618,7 +1618,9 @@
             clearInterval(timer);
             setTimeout(function () {
               if (sc2.scene) sc2.scene.pause();
+              animating = false;
               renderHud();
+              renderTray();
             }, 110);
           }
         }, 40);
