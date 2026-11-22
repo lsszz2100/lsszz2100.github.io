@@ -352,7 +352,7 @@
       var stepFace = num(th.stepSide);
       var stepFace2 = num(SR.shade(th.stepSide, -0.07));
       var stepEdge = num(th.stepEdge);
-      var HT = 13, HF = 14, R = 7;
+      var HT = 12, HF = 18, R = 7;
 
       /* 1) 계단 사이를 잇는 빛의 사다리(경로가 한눈에 보이게) */
       g.lineStyle(5, num(th.step), 0.5);
@@ -378,9 +378,9 @@
 
         /* 아래(앞)면 */
         g.fillStyle(stepFace, 1);
-        g.fillRoundedRect(x - half, y - 3, half * 2, HF + 4, R);
-        g.fillStyle(stepFace2, 0.55);
-        g.fillRoundedRect(x - half, y + HF * 0.45, half * 2, HF * 0.55 + 1, R);
+        g.fillRoundedRect(x - half, y - 4, half * 2, HF + 6, R);
+        g.fillStyle(stepFace2, 0.7);
+        g.fillRoundedRect(x - half, y + HF * 0.40, half * 2, HF * 0.60 + 1, R);
 
         /* 윗면 */
         g.fillStyle(isNext ? num(th.step2) : stepTop, 1);
@@ -404,7 +404,7 @@
           g.closePath();
           g.fillPath();
         } else {
-          g.lineStyle(1.4, stepEdge, 0.9);
+          g.lineStyle(1.6, stepEdge, 1);
           g.strokeRoundedRect(x - half, y - HT - 3, half * 2, HT + 6, R);
           g.lineStyle(0);
         }
