@@ -114,7 +114,7 @@
       var bw = (maxX - minX) + Math.sqrt(3);
       var bh = (maxY - minY) + 2;
       var padX = 8, padY = 8;
-      var size = Math.min((v.w - padX * 2) / bw, (v.h - padY * 2) / bh, 52);
+      var size = Math.min((v.w - padX * 2) / bw, (v.h - padY * 2) / bh, 56);
       size = Math.max(11, size);
       /* 보드 판(테두리)까지 화면 안에 들어오게 한 번 더 줄인다. */
       var platePad = 0.02;
@@ -125,7 +125,7 @@
       this.geo = {
         size: size,
         ox: v.w / 2 - ((minX + maxX) / 2) * size,
-        oy: v.h / 2 - ((minY + maxY) / 2) * size,
+        oy: v.h / 2 - ((minY + maxY) / 2) * size - 12,
         w: v.w, h: v.h
       };
     }
