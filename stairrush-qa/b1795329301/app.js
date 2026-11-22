@@ -457,7 +457,7 @@
     }
 
     save.runs++;
-    if (opts.mode !== 'endless') bumpQuests('runs', 1);
+    bumpQuests('runs', 1);
     persist();
   }
 
@@ -590,7 +590,6 @@
     var isBest = run.floor > 0 && run.floor >= save.best;
     if (run.floor > save.best) save.best = run.floor;
     bumpQuests('coins', coins);
-    bumpQuests('runs', 0);
     touchStreak(run.floor);
     persist();
     checkAchievements(false);

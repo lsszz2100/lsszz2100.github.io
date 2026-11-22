@@ -121,7 +121,14 @@
 
     update(time, delta) {
       var dt = Math.min(0.05, (delta || 16) / 1000);
-      if (!this.state || !this.ready) return;
+      if (!this.state) {
+        /* setRun 이 씬 준비 전에 호출된 경우를 따라잡는다 */
+        var pending = api.state;
+        if (!pending) return;
+        this.state = pending;
+        this.resetView();
+      }
+      if (!this.ready) return;
 
       if (this.onFrame) this.onFrame(dt);
 
@@ -158,7 +165,7 @@
 
       /* 장식·불꽃 */
       this.feverT = st.fever ? Math.min(1, this.feverT + dt * 3) : Math.max(0, this.feverT - dt * 3);
-      if (st.fever && Math.random() < dt * 7) this.spawnConfetti();
+      if (st.fever && st.status === 'running' && Math.random() < dt * 7) this.spawnConfetti();
       this.stepSparks(dt);
       if (this.shakeT > 0) this.shakeT = Math.max(0, this.shakeT - dt);
       if (this.flash > 0) this.flash = Math.max(0, this.flash - dt * 2.2);
@@ -218,7 +225,7 @@
 
       /* --- 피버 틴트 --- */
       if (this.feverT > 0.01) {
-        this.gFx.fillStyle(num(th.accent2), 0.06 + 0.05 * this.feverT);
+        this.gFx.fillStyle(num(th.accent2), 0.03 + 0.035 * this.feverT);
         this.gFx.fillRect(0, 0, w, h);
       }
       if (this.flash > 0) {
@@ -313,11 +320,11 @@
         g.fillCircle(w * 0.18 + 12, pyy + 6, 6);
       } else {
         /* morning: 해와 먼 산 */
-        var sunY = h * 0.14 - (camY * 0.03) % 80;
-        g.fillStyle(num('#FFE7A3'), 0.28);
-        g.fillCircle(w * 0.17, sunY, 34);
-        g.fillStyle(num('#FFD166'), 0.72);
-        g.fillCircle(w * 0.17, sunY, 20);
+        var sunY = h * 0.12 - (camY * 0.03) % 80;
+        g.fillStyle(num('#FFE7A3'), 0.22);
+        g.fillCircle(w * 0.15, sunY, 24);
+        g.fillStyle(num('#FFD166'), 0.6);
+        g.fillCircle(w * 0.15, sunY, 14);
       }
 
       /* 언덕(아주 느린 시차) — 화면 아래쪽에만 */
@@ -363,26 +370,26 @@
         var isNext = (k === st.floor + 1) && st.status === 'running';
 
         /* 부드러운 그림자 */
-        g.fillStyle(0x2E4A5C, 0.07);
-        g.fillEllipse(x, y + 20, half * 1.85, 8);
+        g.fillStyle(0x2E4A5C, 0.06);
+        g.fillEllipse(x, y + 16, half * 1.8, 7);
 
         /* 아래(앞)면 */
         g.fillStyle(num(th.shadeSide || th.stepSide), 1);
-        g.fillRoundedRect(x - half, y - 2, half * 2, 20, 7);
-        g.fillStyle(num(th.stepEdge), 0.45);
-        g.fillRoundedRect(x - half, y + 10, half * 2, 8, 6);
+        g.fillRoundedRect(x - half, y - 2, half * 2, 15, 7);
+        g.fillStyle(num(th.stepEdge), 0.42);
+        g.fillRoundedRect(x - half, y + 7, half * 2, 6, 5);
 
         /* 윗면 */
         g.fillStyle(isNext ? num(th.step2) : 0xffffff, 1);
-        g.fillRoundedRect(x - half, y - 14, half * 2, 18, 7);
+        g.fillRoundedRect(x - half, y - 13, half * 2, 15, 7);
 
         /* 다음 계단 강조 */
         if (isNext) {
           var pulse = 0.5 + 0.5 * Math.sin(this.bob * 5);
           g.fillStyle(num(th.accent), 0.10 + 0.10 * pulse);
-          g.fillRoundedRect(x - half - 5, y - 19, half * 2 + 10, 28, 10);
+          g.fillRoundedRect(x - half - 5, y - 18, half * 2 + 10, 25, 10);
           g.fillStyle(num(th.accent), 0.95);
-          g.fillRoundedRect(x - half, y - 14, half * 2, 3.2, 1.6);
+          g.fillRoundedRect(x - half, y - 13, half * 2, 3, 1.5);
           var dir = s.dir;
           var axp = x + dir * (half + 14);
           var ayp = y - 4 - pulse * 3;
