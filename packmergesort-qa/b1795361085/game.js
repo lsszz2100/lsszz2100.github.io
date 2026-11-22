@@ -433,9 +433,9 @@
         const lockedNow = !this.cellOpenNow(i);
         const isEmpty = !e.board[i];
         if (isEmpty) {
-          cellsG.fillStyle(0xffffff, 0.5);
+          cellsG.fillStyle(0xffffff, 0.66);
           cellsG.fillRoundedRect(rect.x + pad, rect.y + pad, trayW, trayW, cell * 0.16);
-          cellsG.lineStyle(Math.max(2, cell * 0.014), 0xC9D6E8, lockedNow ? 0.7 : 0.42);
+          cellsG.lineStyle(Math.max(2, cell * 0.016), 0xB9C9E0, lockedNow ? 0.8 : 0.55);
           cellsG.strokeRoundedRect(rect.x + pad, rect.y + pad, trayW, trayW, cell * 0.16);
           if (lockedNow) {
             // 자물쇠
@@ -467,7 +467,9 @@
       const q = e.stage.queue;
       const head = e.head;
       const cards = Math.min(4, Math.max(0, q.length - head));
-      let cursor = QUEUE.x + 24;
+      let totalW = 0;
+      for (let k = 0; k < cards; k += 1) totalW += (k === 0 ? QUEUE.h * 0.60 : QUEUE.h * 0.46) + (k ? 16 : 0);
+      let cursor = QUEUE.x + Math.max(18, (QUEUE.w - totalW) / 2);
       for (let k = 0; k < cards; k += 1) {
         const tray = q[head + k];
         if (!tray) continue;
