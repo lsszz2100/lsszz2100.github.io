@@ -1052,6 +1052,16 @@
     return unlocked;
   }
 
+  /** 플레이 중 실시간으로 오늘/누적 통계를 올린다(퀘스트 진행도가 바로 보이도록). */
+  function bump(p, stat, n) {
+    ensureProfile(p);
+    if (!n || n <= 0) return;
+    if (stat === 'tangles') { p.today.tangles += n; p.stats.tangles += n; }
+    else if (stat === 'cuts') { p.today.scissors += n; p.stats.cuts += n; }
+    else if (stat === 'hints') { p.today.hints += n; p.stats.hints += n; }
+    else if (stat === 'moves') { p.today.moves += n; }
+  }
+
   /**
    * 스테이지 결과 반영. 반환: {stars, coins, newBest, achievements, unlockedNext}
    */
@@ -1079,13 +1089,6 @@
       if (p.unlocked < stageIndex + 2) p.unlocked = Math.min(STAGE_COUNT, stageIndex + 2);
     }
     if (stars >= 3) p.today.threeStars += 1;
-    p.today.tangles += result.tanglesRemoved || 0;
-    p.today.moves += result.movesUsed || 0;
-    p.today.scissors += result.scissors || 0;
-    p.today.hints += result.hints || 0;
-    p.stats.tangles += result.tanglesRemoved || 0;
-    p.stats.cuts += result.scissors || 0;
-    p.stats.hints += result.hints || 0;
     p.stats.threeStars = threeStarCount(p);
     const achievements = checkAchievements(p);
     return { stars: stars, coins: coins, newBest: newBest, achievements: achievements, unlockedNext: p.unlocked };
@@ -1167,6 +1170,7 @@
     stageCoinReward: stageCoinReward,
     checkAchievements: checkAchievements,
     applyStageResult: applyStageResult,
+    bump: bump,
     buyItem: buyItem,
     themeFor: themeFor,
     ropeSkinFor: ropeSkinFor,

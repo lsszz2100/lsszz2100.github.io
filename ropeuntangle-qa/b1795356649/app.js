@@ -637,6 +637,8 @@
       sfx.move();
     }
     vibrate(after < before ? 10 : 6);
+    C.bump(profile, 'moves', 1);
+    if (after < before) C.bump(profile, 'tangles', before - after);
     updateHud();
     if (engine.status === 'won') onWin();
     else if (engine.status === 'lost') onLose();
@@ -674,6 +676,8 @@
     if (!out) return;
     sfx.cut();
     vibrate(14);
+    C.bump(profile, 'cuts', 1);
+    if (engine.crossings < before) C.bump(profile, 'tangles', before - engine.crossings);
     toast(t('booster.scissorsOn'));
     updateHud();
     updateBoosterButtons();
@@ -706,8 +710,7 @@
       window.RopeGame.showHint(null);
       hintTimer = null;
     }, 3200);
-    profile.stats.hints += 1;
-    profile.today.hints += 1;
+    C.bump(profile, 'hints', 1);
     save();
     sfx.hint();
     updateBoosterButtons();
