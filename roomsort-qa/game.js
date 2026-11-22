@@ -328,8 +328,8 @@
       roundRect(g, 3, 2, w - 6, Math.max(3, h * 0.20), r * 0.6);
       g.fillPath();
       // 기호
-      var s = Math.min(h * 0.62, w * 0.30);
-      glyph(g, type, w * 0.5, h * 0.46, s, 0xffffff);
+      var s = Math.min(h * 0.78, w * 0.40);
+      glyph(g, type, w * 0.5, h * 0.42, s, 0xffffff);
       c.add(g);
 
       // 광택

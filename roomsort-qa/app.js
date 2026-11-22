@@ -381,7 +381,7 @@
       var chip = h('div', 'set-chip' + (got >= need ? ' done' : ''));
       var dot = h('span', 'chip-dot');
       dot.style.background = info.hex;
-      dot.textContent = '✓';
+      dot.textContent = got >= need ? '✓' : '';
       chip.appendChild(dot);
       chip.appendChild(h('span', null, t('type_' + info.id)));
       var b = h('b', null, got + '/' + need);
