@@ -29,7 +29,7 @@
       this.onCellTap = null;
 
       this.geom = null;          // board/belt geometry
-      this.cellG = null;         // cell graphics
+      this.cellG = this.add.graphics();   // 보드 픽셀(한 번만 만든다)
       this.rootScale = 2;
       this.rootG = this.add.container(0, 0);
       this.beltG = this.add.graphics();
@@ -37,6 +37,7 @@
       this.fxG = this.add.graphics();
       this.hintG = this.add.graphics();
       this.cellLayer = this.add.container(0, 0);
+      this.cellLayer.add(this.cellG);
       this.rootG.add([this.beltG, this.cellLayer, this.blastG, this.fxG, this.hintG]);
       this.rootG.setScale(this.rootScale);
 
@@ -109,7 +110,6 @@
     buildBoard() {
       this.geom = this.computeGeom();
       this.cellViews = {};
-      this.cellLayer.removeAll(true);
       this.drawBelt();
       this.drawCells(true);
     }
@@ -217,8 +217,8 @@
 
     drawCells(force) {
       if (!this.run) return;
-      if (!this.cellG) { this.cellG = this.add.graphics(); this.cellLayer.add(this.cellG); }
       var g = this.cellG;
+      if (!g) { this.cellG = g = this.add.graphics(); this.cellLayer.add(g); }
       var G = this.geom;
       var cell = this.run.cells;
       g.clear();
