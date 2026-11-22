@@ -220,6 +220,7 @@ ol, ul { padding-left: 20px; }
   padding: 4px 16px 18px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 12px;
   -webkit-overflow-scrolling: touch;
 }
@@ -312,7 +313,7 @@ ol, ul { padding-left: 20px; }
   border-radius: 16px;
   background: #fff;
   box-shadow: var(--shadow);
-  min-height: 82px;
+  min-height: 88px;
 }
 .tile:active { transform: translateY(1px); }
 .tile-ico { width: 26px; height: 26px; border-radius: 9px; position: relative; margin-bottom: 2px; }
