@@ -114,7 +114,7 @@
       var bw = (maxX - minX) + Math.sqrt(3);
       var bh = (maxY - minY) + 2;
       var padX = 10, padY = 10;
-      var size = Math.min((v.w - padX * 2) / bw, (v.h - padY * 2) / bh, 46);
+      var size = Math.min((v.w - padX * 2) / bw, (v.h - padY * 2) / bh, 52);
       size = Math.max(11, size);
       this.geo = {
         size: size,

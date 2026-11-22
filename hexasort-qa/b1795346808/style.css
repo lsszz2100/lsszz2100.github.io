@@ -369,6 +369,7 @@ button { font-family: inherit; border: 0; background: none; color: inherit; curs
 .tut-dots { display: flex; gap: 5px; justify-content: center; margin: 10px 0 2px; }
 .tut-dots i { width: 6px; height: 6px; border-radius: 50%; background: #E8DCD2; }
 .tut-dots i.on { background: var(--accent); width: 16px; border-radius: 3px; }
+.intro-modal .btn-ghost { width: 100%; margin-top: 6px; }
 .intro-modal .intro-kicker { font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-3); }
 .intro-modal h3 { font-size: 30px; margin: 2px 0 2px; }
 .intro-art { height: 96px; margin: 4px 0 6px; }
