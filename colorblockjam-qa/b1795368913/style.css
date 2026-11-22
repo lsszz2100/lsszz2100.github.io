@@ -41,9 +41,8 @@ h1, h2, h3, p { margin: 0; }
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
   background:
-    radial-gradient(120% 60% at 10% 0%, #FFEEDF 0%, rgba(255,238,223,0) 60%),
-    radial-gradient(80% 40% at 100% 100%, rgba(233,251,246,.55) 0%, rgba(233,251,246,0) 60%),
-    var(--paper);
+    radial-gradient(120% 55% at 8% 0%, #FFEEDF 0%, rgba(255,238,223,0) 62%),
+    linear-gradient(180deg, #FFF9F4 0%, #FFF4EA 100%);
 }
 
 .screen {
@@ -178,6 +177,7 @@ h1, h2, h3, p { margin: 0; }
 }
 
 .home-hero {
+  flex: 1 1 auto; min-height: 300px;
   position: relative; margin-top: 8px; padding: 22px 20px 20px;
   border-radius: 30px; background: linear-gradient(160deg, #FFFFFF 0%, #FFF1E7 100%);
   box-shadow: var(--shadow); overflow: hidden;
@@ -190,6 +190,7 @@ h1, h2, h3, p { margin: 0; }
 .hero-deco i:nth-child(4) { width: 26px; height: 26px; background: #FFE6B8; left: 26px; bottom: 18px; transform: rotate(24deg); }
 .hero-deco i:nth-child(5) { width: 12px; height: 12px; background: #CBE8FF; left: 52px; top: 66px; }
 .hero-deco i:nth-child(6) { width: 18px; height: 18px; background: #FFD1DB; right: -4px; top: 92px; transform: rotate(30deg); }
+.home-hero > .hero-chapter { margin-top: 2px; }
 .hero-chapter { font-size: 13px; font-weight: 800; color: var(--coral-deep); background: #FFE7DE; padding: 6px 12px; border-radius: 999px; z-index: 1; }
 .play-orb {
   position: relative; width: 138px; height: 138px; border-radius: 50%;
