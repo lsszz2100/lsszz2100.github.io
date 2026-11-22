@@ -161,13 +161,13 @@
     g.fillRoundedRect(x - rr, y - rr + rr * 0.14, rr * 2, rr * 2, rr * 0.52);
     g.fillStyle(c, al);
     g.fillRoundedRect(x - rr, y - rr, rr * 2, rr * 2, rr * 0.5);
-    g.fillStyle(0xffffff, 0.20 * al);
-    g.fillRoundedRect(x - rr * 0.8, y - rr * 0.82, rr * 1.6, rr * 0.66, rr * 0.26);
+    g.fillStyle(0xffffff, 0.16 * al);
+    g.fillRoundedRect(x - rr * 0.78, y - rr * 0.8, rr * 1.56, rr * 0.5, rr * 0.22);
     if (o.dim) {
       g.fillStyle(0x14243c, 0.30 * al);
       g.fillRoundedRect(x - rr, y - rr, rr * 2, rr * 2, rr * 0.5);
     }
-    drawGlyph(g, type, x, y + rr * 0.08, rr * 0.7, al * (o.dim ? 0.55 : 1));
+    drawGlyph(g, type, x, y + rr * 0.12, rr * 0.56, al * (o.dim ? 0.5 : 1));
     if (o.lock) {
       const s = rr * 0.42;
       g.fillStyle(0x2c3a55, 0.55 * al);
