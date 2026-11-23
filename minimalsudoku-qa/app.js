@@ -473,13 +473,16 @@
         holes = holes.filter(function (idx) { return used.indexOf(idx) < 0; });
         if (window.__QA_SCENE__ === 'play') {
           var cand = S.candidates(game.grid);
-          var noteCells = holes.slice(fill + 2, fill + 4);
+          var noteCells = holes.slice(2, 6);
           noteCells.forEach(function (idx) {
             var list = [];
             for (var n = 1; n <= 9; n++) if (cand[idx] & (1 << (n - 1))) list.push(n);
-            game.notes[idx] = list.slice(0, 4);
+            game.notes[idx] = list.slice(0, 5);
           });
-          selected = holes[fill + 1] || holes[0];
+          selected = holes[2] || holes[0];
+          notesMode = true;
+          var tm = /[?&]time=([0-9]+)/.exec(location.search);
+          if (tm) { game.timeBase = parseInt(tm[1], 10) * 1000; }
           renderAll();
         } else {
           renderAll();
