@@ -1264,6 +1264,10 @@
       return;
     }
     if (name === 'clear') {
+      // Make level 52 a fresh first clear so the capture shows the full reward.
+      delete profile.stars['52'];
+      profile.bestTaps['52'] = 0;
+      saveProfile();
       var game = demoPlay(52);
       setTimeout(function () {
         game.wasted = 0;
