@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#8fd8ff" />
+<title>Super Hopper 3D — 슈퍼 호퍼 3D</title>
+<meta name="description" content="버섯 친구와 떠나는 3D 플랫포머 웹 게임. 초원, 하늘 다리, 용암 성채의 3개 스테이지를 달리고 점프하세요!" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- ===== HUD ===== -->
+  <div id="hud" class="hidden">
+    <div class="hud-left">
+      <div class="pill coin-pill">
+        <span class="icon-coin"></span><span id="hud-coins">0</span>
+      </div>
+      <div class="pill star-pill">
+        <span class="icon-star"></span><span id="hud-stars">0</span>
+      </div>
+    </div>
+
+    <div class="hud-center">
+      <div class="stage-chip" id="hud-stage">STAGE 1</div>
+      <div class="stage-name" id="hud-stage-name">초원 입문 코스</div>
+    </div>
+
+    <div class="hud-right">
+      <div class="hearts" id="hud-hearts" aria-label="목숨"></div>
+      <div class="pill timer-pill"><span id="hud-time">0:00</span></div>
+      <button id="btn-mute" class="icon-btn" title="소리 켜기/끄기" aria-label="소리 켜기/끄기">🔊</button>
+      <button id="btn-pause" class="icon-btn" title="일시정지" aria-label="일시정지">❚❚</button>
+    </div>
+  </div>
+
+  <!-- ===== 모바일 터치 조작 ===== -->
+  <div id="touch-controls" class="hidden">
+    <div id="joystick"><div id="joystick-base"></div><div id="joystick-knob"></div></div>
+    <div class="touch-right">
+      <button id="btn-dash" class="touch-btn dash-btn" aria-label="대시">DASH</button>
+      <button id="btn-jump" class="touch-btn jump-btn" aria-label="점프">JUMP</button>
+    </div>
+    <div class="touch-hint">화면을 드래그하면 카메라가 회전합니다</div>
+  </div>
+
+  <!-- ===== 타이틀 ===== -->
+  <div id="screen-title" class="screen">
+    <div class="title-wrap">
+      <div class="logo">
+        <span class="logo-line1">SUPER</span>
+        <span class="logo-line2">HOPPER<span class="logo-3d">3D</span></span>
+        <span class="logo-mushroom">🍄</span>
+      </div>
+      <p class="tagline">버섯 친구와 떠나는 3단 점프 대모험</p>
+
+      <button id="btn-start" class="btn btn-primary btn-big">▶&nbsp; 게임 시작</button>
+
+      <div class="stage-cards" id="stage-cards"></div>
+
+      <div class="controls-hint">
+        <div class="hint-row">
+          <span class="key">W A S D</span><span class="hint-text">이동</span>
+          <span class="key">Space</span><span class="hint-text">점프 / 2단 점프</span>
+          <span class="key">Shift</span><span class="hint-text">대시</span>
+          <span class="key">마우스 드래그</span><span class="hint-text">카메라</span>
+          <span class="key">R</span><span class="hint-text">재시작</span>
+        </div>
+        <div class="hint-row mobile-only">
+          <span class="hint-text">📱 왼쪽 조이스틱으로 이동, 오른쪽 버튼으로 점프·대시!</span>
+        </div>
+      </div>
+      <div class="credit">Made with Three.js · 모든 그래픽과 사운드는 코드로 직접 만든 오리지널</div>
+    </div>
+  </div>
+
+  <!-- ===== 모달 ===== -->
+  <div id="modal" class="hidden">
+    <div class="modal-card">
+      <div id="modal-emoji" class="modal-emoji">★</div>
+      <h2 id="modal-title">STAGE CLEAR!</h2>
+      <div id="modal-body"></div>
+      <div id="modal-buttons"></div>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="loader-mushroom">🍄</div>
+    <div class="loader-text">세상을 만드는 중…</div>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
