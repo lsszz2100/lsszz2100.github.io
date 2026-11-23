@@ -433,6 +433,9 @@
           } else {
             ctx.fillStyle = tile;
             ctx.fill();
+            ctx.lineWidth = Math.max(1, ts * 0.022);
+            ctx.strokeStyle = rgba(frame, 0.85);
+            ctx.stroke();
           }
 
           // 색 전환 게이트

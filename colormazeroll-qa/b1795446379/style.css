@@ -136,7 +136,8 @@ button { font-family: inherit; color: inherit; border: 0; background: none; padd
   position: relative; margin-top: 14px; padding: 18px 16px 16px; border-radius: 28px;
   background: linear-gradient(165deg, #FFFFFF 0%, #FFF4F8 60%, #FFEAF1 100%);
   box-shadow: var(--shadow); overflow: hidden;
-  display: flex; flex-direction: column; align-items: center;
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .hero-deco i { position: absolute; border-radius: 50%; background: rgba(255,255,255,.7); }
 .hero-deco i:nth-child(1) { width: 120px; height: 120px; right: -40px; top: -46px; background: rgba(255,178,62,.16); }
