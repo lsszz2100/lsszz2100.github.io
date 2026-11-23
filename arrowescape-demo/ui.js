@@ -1259,7 +1259,6 @@
         if (target) {
           window.BoardView.showPath(target.r, target.c);
           dom.tapHint.textContent = T.t('holdHint');
-          banner(T.t('blockedShort') + '!', '');
         }
       }, 320);
       return;
