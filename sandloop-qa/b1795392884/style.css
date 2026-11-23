@@ -190,13 +190,13 @@ em { font-style: normal; }
 .home-hero { position: relative; flex: 1; margin: 10px 0 14px; border-radius: 30px; background: #fff; box-shadow: var(--shadow);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; overflow: hidden; padding: 22px 18px; }
 .hero-deco { position: absolute; inset: auto 0 -60px; height: 200px; pointer-events: none; }
-.hero-deco i { position: absolute; bottom: 0; width: 120px; height: 120px; border-radius: 50%; background: rgba(242,145,58,.10); }
+.hero-deco i { position: absolute; bottom: 0; width: 120px; height: 120px; border-radius: 50%; background: rgba(242,145,58,.06); }
 .hero-deco i:nth-child(1) { left: -30px; width: 180px; height: 180px; }
-.hero-deco i:nth-child(2) { right: -40px; bottom: 20px; width: 160px; height: 160px; background: rgba(79,168,224,.10); }
-.hero-deco i:nth-child(3) { left: 40%; bottom: 60px; width: 90px; height: 90px; background: rgba(70,199,154,.10); }
-.hero-deco i:nth-child(4) { left: 20px; bottom: 90px; width: 40px; height: 40px; background: rgba(240,182,46,.22); }
-.hero-deco i:nth-child(5) { right: 12px; bottom: 120px; width: 26px; height: 26px; background: rgba(239,115,97,.18); }
-.hero-deco i:nth-child(6) { left: 60%; bottom: 10px; width: 60px; height: 60px; background: rgba(138,114,232,.10); }
+.hero-deco i:nth-child(2) { right: -40px; bottom: 20px; width: 160px; height: 160px; background: rgba(79,168,224,.07); }
+.hero-deco i:nth-child(3) { left: 40%; bottom: 60px; width: 90px; height: 90px; background: rgba(70,199,154,.07); }
+.hero-deco i:nth-child(4) { left: 20px; bottom: 90px; width: 40px; height: 40px; background: rgba(240,182,46,.14); }
+.hero-deco i:nth-child(5) { right: 12px; bottom: 120px; width: 26px; height: 26px; background: rgba(239,115,97,.12); }
+.hero-deco i:nth-child(6) { left: 60%; bottom: 10px; width: 60px; height: 60px; background: rgba(138,114,232,.07); }
 .hero-chapter { position: relative; font-size: 12.5px; font-weight: 800; color: var(--soft); background: var(--sand2);
   padding: 6px 12px; border-radius: 999px; }
 .play-orb { position: relative; width: 172px; height: 172px; border-radius: 50%; background: linear-gradient(180deg,#FFD79B,#F2913A);

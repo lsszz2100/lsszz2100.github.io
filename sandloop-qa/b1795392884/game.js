@@ -163,11 +163,12 @@
       g.fillRect(-400, -400, W + 800, H + 800);
 
       // 부드러운 빛 얼룩
-      g.fillStyle(0xffffff, 0.55);
-      g.fillCircle(W * 0.1, H * 0.08, 220);
-      g.fillCircle(W * 0.94, H * 0.42, 240);
-      g.fillStyle(0xffffff, 0.28);
-      g.fillCircle(W * 0.86, H * 0.04, 140);
+      g.fillStyle(0xffffff, 0.34);
+      g.fillCircle(W * 0.06, H * 0.05, 260);
+      g.fillStyle(0xffffff, 0.22);
+      g.fillCircle(W * 0.98, H * 0.46, 280);
+      g.fillStyle(0xffffff, 0.16);
+      g.fillCircle(W * 0.86, H * 0.02, 160);
 
       // 아래쪽은 아주 옅은 모래빛만
       g.fillStyle(col('#FBEEE2'), 0.35);
