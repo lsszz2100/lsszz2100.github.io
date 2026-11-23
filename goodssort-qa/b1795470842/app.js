@@ -643,9 +643,9 @@
     const fill = $('#goalFill');
     if (fill) fill.style.width = Math.max(0, Math.min(100, (snap.matches / stage.tripleCount) * 100)).toFixed(1) + '%';
     const boss = $('#bossBadge');
-    if (boss) boss.style.display = stage.isBoss ? '' : 'none';
+    if (boss) boss.style.display = stage.isBoss ? 'inline-block' : 'none';
     const chal = $('#challengeBadge');
-    if (chal) chal.style.display = stage.isChallenge || challengeMode ? '' : 'none';
+    if (chal) chal.style.display = stage.isChallenge || challengeMode ? 'inline-block' : 'none';
     const combo = $('#comboChip');
     if (combo) {
       const c = engine.combo || 0;
