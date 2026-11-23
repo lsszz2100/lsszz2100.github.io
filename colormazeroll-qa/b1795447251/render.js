@@ -425,17 +425,17 @@
           if (paintIdx >= 0) {
             const col = this.paints[paintIdx % this.paints.length];
             const grad = ctx.createLinearGradient(px, py, px, py + ts);
-            grad.addColorStop(0, css(col, 0.26));
-            grad.addColorStop(0.55, col);
-            grad.addColorStop(1, css(col, -0.06));
+            grad.addColorStop(0, css(col, 0.12));
+            grad.addColorStop(0.62, col);
+            grad.addColorStop(1, css(col, -0.02));
             ctx.fillStyle = grad;
             ctx.fill();
             // 위쪽 모서리 빛
             ctx.save();
             ctx.clip();
             ctx.beginPath();
-            ctx.ellipse(px + ts * 0.5, py + ts * 0.24, ts * 0.3, ts * 0.14, 0, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255,255,255,.34)';
+            ctx.ellipse(px + ts * 0.5, py + ts * 0.22, ts * 0.26, ts * 0.11, 0, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,.20)';
             ctx.fill();
             ctx.restore();
           } else {
