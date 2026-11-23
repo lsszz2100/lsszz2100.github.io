@@ -1214,9 +1214,10 @@
       applyI18n();
       applyCosmetics();
       bindEvents();
-      G.init({ onTap: onTubeTap });
+      window.MARBLE_CAPTURE_SCALE = 2;
       applyCaptureLayout();
-      setTimeout(runCapture, 260);
+      G.init({ onTap: onTubeTap });
+      setTimeout(runCapture, 300);
       return;
     }
     ensureDaily();

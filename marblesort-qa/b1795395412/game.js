@@ -572,14 +572,15 @@
     if (!holder) return;
     var w = Math.max(240, holder.clientWidth || 360);
     var h = Math.max(320, holder.clientHeight || 480);
+    var ratio = root.MARBLE_CAPTURE_SCALE || 1;
     game = new Phaser.Game({
       type: Phaser.AUTO,
       parent: 'board',
-      width: w,
-      height: h,
+      width: Math.round(w * ratio),
+      height: Math.round(h * ratio),
       transparent: true,
       scale: {
-        mode: Phaser.Scale.RESIZE,
+        mode: ratio > 1 ? Phaser.Scale.NONE : Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
       },
       audio: { noAudio: true },
