@@ -1240,7 +1240,8 @@
     const name = qp('screen', 'home');
     if (name === 'map') {
       showScreen('map');
-      renderMap(parseInt(qp('ch', '4'), 10) || 4);
+      const chArg = parseInt(qp('ch', '4'), 10);
+      renderMap(isNaN(chArg) ? 4 : chArg);
     } else if (name === 'shop') {
       showScreen('shop');
       renderShop();
