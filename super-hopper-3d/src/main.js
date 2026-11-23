@@ -455,7 +455,7 @@ class Game {
   initScene() {
     this.scene = new THREE.Scene();
     const initAspect = window.innerWidth / window.innerHeight;
-    this.camera = new THREE.PerspectiveCamera(initAspect < 0.8 ? 64 : 55, initAspect, 0.1, 450);
+    this.camera = new THREE.PerspectiveCamera(initAspect < 0.8 ? 68 : 55, initAspect, 0.1, 450);
     this.camera.position.set(0, 6, -12);
 
     this.hemi = new THREE.HemisphereLight(0xbfe9ff, 0x7dbb63, 1.05);
@@ -487,15 +487,15 @@ class Game {
   onResize() {
     const w = window.innerWidth, h = window.innerHeight;
     this.camera.aspect = w / h;
-    this.camera.fov = w / h < 0.8 ? 64 : 55;
+    this.camera.fov = w / h < 0.8 ? 68 : 55;
     this.camera.updateProjectionMatrix();
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     this.renderer.setSize(w, h, false);
     this.isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || w < 820;
     if (this.state === 'playing') {
       const portrait = w / h < 0.8;
-      this.camDist = portrait ? 8.6 : 10.2;
-      this.camPitch = portrait ? 0.52 : 0.56;
+      this.camDist = portrait ? 10.6 : 10.2;
+      this.camPitch = portrait ? 0.6 : 0.56;
     }
     this.updateTouchVisibility();
   }
@@ -1706,8 +1706,8 @@ class Game {
     this.updateHUD(true);
     const portrait = window.innerWidth / window.innerHeight < 0.8;
     this.camYaw = 0;
-    this.camPitch = portrait ? 0.52 : 0.56;
-    this.camDist = portrait ? 8.6 : 10.2;
+    this.camPitch = portrait ? 0.6 : 0.56;
+    this.camDist = portrait ? 10.6 : 10.2;
     this.camera.position.set(this.stage.spawn.x, this.stage.spawn.y + 5.2, this.stage.spawn.z - 10);
     this.audio.resume();
     this.audio.setMusicVolume(0.16);

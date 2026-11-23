@@ -343,6 +343,10 @@ html, body {
 /* ============ 반응형 ============ */
 @media (max-width: 700px) {
   .hud-center { display: none; }
+  .logo-line1 { -webkit-text-stroke: 3px #7a4a12; }
+  .logo-line2 { -webkit-text-stroke: 4px #6a1d28; }
+  .logo-3d { box-shadow: 0 3px 0 #15754a; }
+  .touch-hint { display: none; }
   .pill { height: 35px; font-size: 15px; padding: 0 12px 0 8px; }
   .icon-coin, .icon-star { width: 19px; height: 19px; }
   .heart { width: 23px; height: 23px; }
