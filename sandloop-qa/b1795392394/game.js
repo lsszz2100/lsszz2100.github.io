@@ -169,12 +169,9 @@
       g.fillStyle(0xffffff, 0.28);
       g.fillCircle(W * 0.86, H * 0.04, 140);
 
-      // 모래 언덕(아래)
-      const sand = col('#F7E6D3');
-      g.fillStyle(sand, 0.55);
-      g.fillEllipse(W * 0.25, H * 0.99, W * 1.1, 420);
-      g.fillStyle(shade('#F7E6D3', 0.12), 0.6);
-      g.fillEllipse(W * 0.82, H * 1.03, W * 0.9, 380);
+      // 아래쪽은 아주 옅은 모래빛만
+      g.fillStyle(col('#FBEEE2'), 0.35);
+      g.fillEllipse(W * 0.5, H * 1.12, W * 1.6, 520);
 
       // 레일 판
       g.fillStyle(col(this.theme.board), 0.94);
@@ -188,11 +185,11 @@
       g.fillStyle(0xffffff, 0.55);
       g.fillRoundedRect(TRACK.x + 8, TRACK.y - TRACK.h / 2 + 7, TRACK.w - 16, 10, 5);
 
-      // 보류 선반 판
-      g.fillStyle(col('#FFFDFB'), 0.92);
-      g.fillRoundedRect(HOLD.x, HOLD.y, HOLD.w, HOLD.h, 34);
-      g.lineStyle(4, 0xffffff, 0.9);
-      g.strokeRoundedRect(HOLD.x, HOLD.y, HOLD.w, HOLD.h, 34);
+      // 보류 선반(얇은 판)
+      g.fillStyle(0xffffff, 0.55);
+      g.fillRoundedRect(HOLD.x, HOLD.y + 22, HOLD.w, HOLD.h - 34, 26);
+      g.lineStyle(3, col('#F0DFCE'), 0.8);
+      g.strokeRoundedRect(HOLD.x, HOLD.y + 22, HOLD.w, HOLD.h - 34, 26);
     },
 
     jarColor: function (index) {
@@ -207,11 +204,13 @@
       const e = this.engine;
       const t = this.time_s;
 
-      // 투입구 받침
-      g.fillStyle(0xffffff, 0.96);
-      g.fillCircle(DISPENSER.x, DISPENSER.y, DISPENSER.r + 12);
-      g.lineStyle(4, shade('#EBD8C6', 0.3), 1);
-      g.strokeCircle(DISPENSER.x, DISPENSER.y, DISPENSER.r + 12);
+      // 투입구(유리 컵)
+      g.fillStyle(0xffffff, 0.92);
+      g.fillRoundedRect(DISPENSER.x - 78, DISPENSER.y - 78, 156, 156, 44);
+      g.lineStyle(4, col('#F0DFCE'), 1);
+      g.strokeRoundedRect(DISPENSER.x - 78, DISPENSER.y - 78, 156, 156, 44);
+      g.fillStyle(0xffffff, 0.6);
+      g.fillRoundedRect(DISPENSER.x - 66, DISPENSER.y - 66, 16, 96, 8);
 
       // 대기열 모래
       const front = e.front();
@@ -255,8 +254,15 @@
       for (let s = 0; s < cap; s += 1) {
         const cx = HOLD.x + 24 + slotW * (s + 0.5);
         const cy = HOLD.y + HOLD.h / 2;
-        g.lineStyle(3, shade('#E3D2C2', 0.25), 0.9);
-        g.strokeCircle(cx, cy, 40);
+        const dash = 12;
+        for (let a = 0; a < 24; a += 2) {
+          g.lineStyle(3, col('#E4D3C2'), 0.85);
+          g.beginPath();
+          g.arc(cx, cy, 38, (a / 24) * Math.PI * 2, ((a + 1) / 24) * Math.PI * 2, false);
+          g.strokePath();
+        }
+        g.lineStyle(1, col('#E4D3C2'), 0.5);
+        g.strokeCircle(cx, cy, 38 + dash * 0);
         if (s < e.holds.length) {
           const color = e.holds[s];
           const lift = this.selectedHold === s ? 6 : 0;
@@ -322,24 +328,32 @@
           if (filled) {
             const frac = clamp01(this.shown[i] - L);
             const fh = layerH * frac;
+            const by = top - (L * layerH) - fh;
             g.fillStyle(col(color), 1);
-            g.fillRect(innerX, top - (L * layerH) - fh, innerW, fh);
-            // 모래 알갱이 느낌
-            g.fillStyle(shade(color, 0.25), 0.35);
-            for (let d = 0; d < 5; d += 1) {
-              const dx = innerX + 8 + ((d * 37 + L * 19 + i * 11) % Math.max(1, innerW - 16));
-              const dy = top - (L * layerH) - fh + 6 + ((d * 23) % Math.max(1, Math.floor(fh) - 8));
-              g.fillCircle(dx, dy, 1.8);
+            g.fillRect(innerX, by, innerW, fh);
+            // 모래 결: 위에서 아래로 살짝 어두워지는 띠와 알갱이
+            g.fillStyle(shade(color, -0.12), 0.28);
+            g.fillRect(innerX, by, innerW, Math.min(6, fh));
+            g.fillStyle(shade(color, 0.3), 0.4);
+            for (let d = 0; d < 7; d += 1) {
+              const dx = innerX + 6 + ((d * 41 + L * 23 + i * 13) % Math.max(1, innerW - 12));
+              const dy = by + 5 + ((d * 29) % Math.max(1, Math.floor(fh) - 8));
+              g.fillCircle(dx, dy, 1.7);
+            }
+            // 윗면은 살짝 둥글게
+            if (L === Math.floor(this.shown[i] - 0.001)) {
+              g.fillStyle(shade(color, 0.22), 0.85);
+              g.fillEllipse(innerX + innerW / 2, by + 3, innerW - 6, 10);
             }
           } else {
-            g.fillStyle(col(color), 0.18);
-            g.fillRect(innerX, ly, innerW, layerH - 4);
-            g.lineStyle(2, col(color), 0.42);
-            g.strokeRect(innerX, ly, innerW, layerH - 4);
+            g.fillStyle(col(color), 0.13);
+            g.fillRect(innerX, ly, innerW, layerH - 5);
+            g.lineStyle(1.5, col(color), 0.30);
+            g.strokeRect(innerX, ly, innerW, layerH - 5);
             if (L === jar.fill) {
               // 다음에 채울 층 표시
-              g.lineStyle(3, col(color), 0.75);
-              g.strokeRect(innerX - 2, ly - 2, innerW + 4, layerH - 2);
+              g.lineStyle(3, col(color), 0.62);
+              g.strokeRect(innerX - 3, ly - 3, innerW + 6, layerH - 3);
             }
           }
         }

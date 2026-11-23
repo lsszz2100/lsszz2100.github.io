@@ -860,7 +860,7 @@
             timerOn = true;
             lastFrame = 0;
             updateHud();
-            toast(t('booster.undoOn'));
+            toast(t('result.reviveOn'));
           });
         }
       };

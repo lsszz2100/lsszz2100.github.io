@@ -79,6 +79,7 @@
       'result.newBest': 'New best!',
       'result.doubleCoins': 'Double +{n} coins (AD)',
       'result.revive': 'Watch ad: undo 3 pours and continue',
+      'result.reviveOn': '3 pours undone — keep going',
 
       'map.title': 'Stages',
       'map.chapterN': 'Chapter {n}',
@@ -224,6 +225,7 @@
       'result.newBest': '최고 기록!',
       'result.doubleCoins': '코인 +{n} 2배 받기 (광고)',
       'result.revive': '광고 보고 3수 되돌려 계속하기',
+      'result.reviveOn': '3수를 되돌렸습니다 — 계속하세요',
 
       'map.title': '스테이지',
       'map.chapterN': '챕터 {n}',
