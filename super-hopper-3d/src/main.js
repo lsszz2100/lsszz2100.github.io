@@ -326,7 +326,7 @@ class Game {
     this.animProps = [];
     this.clock = new THREE.Clock();
     this.camYaw = 0;
-    this.camPitch = 0.46;
+    this.camPitch = 0.5;
     this.camDist = 9.8;
     this.camPos = new THREE.Vector3(0, 6, -12);
     this.camTarget = new THREE.Vector3(0, 1.5, 2);
@@ -473,7 +473,7 @@ class Game {
     if (this.state === 'playing') {
       const portrait = w / h < 0.8;
       this.camDist = portrait ? 8.3 : 9.8;
-      this.camPitch = portrait ? 0.44 : 0.46;
+      this.camPitch = portrait ? 0.47 : 0.5;
     }
     this.updateTouchVisibility();
   }
@@ -926,7 +926,7 @@ class Game {
     }
     if (!opts.preview) {
       this.camYaw = 0;
-      this.camPitch = 0.46;
+      this.camPitch = 0.5;
       this.camDist = 9.8;
       this.camera.position.set(st.spawn.x, st.spawn.y + 5, st.spawn.z - 10);
       this.camTarget.set(st.spawn.x, st.spawn.y + 1.2, st.spawn.z + 1);
@@ -1015,7 +1015,13 @@ class Game {
         m.scale.y = 0.62;
         g.add(m);
       }
-      g.position.set((Math.random() - 0.5) * 180, 13 + Math.random() * 24, -20 + Math.random() * 170);
+      const low = Math.random() < 0.45;
+      if (low) {
+        g.scale.setScalar(0.7 + Math.random() * 0.5);
+        g.position.set((Math.random() - 0.5) * 150, 4.5 + Math.random() * 5, 45 + Math.random() * 100);
+      } else {
+        g.position.set((Math.random() - 0.5) * 180, 14 + Math.random() * 22, -20 + Math.random() * 170);
+      }
       g.userData.speed = 0.35 + Math.random() * 0.8;
       this.scene.add(g);
       this.clouds.push({ group: g, speed: g.userData.speed });
@@ -1643,7 +1649,7 @@ class Game {
     this.updateHUD(true);
     const portrait = window.innerWidth / window.innerHeight < 0.8;
     this.camYaw = 0;
-    this.camPitch = portrait ? 0.44 : 0.46;
+    this.camPitch = portrait ? 0.47 : 0.5;
     this.camDist = portrait ? 8.3 : 9.8;
     this.camera.position.set(this.stage.spawn.x, this.stage.spawn.y + 5.2, this.stage.spawn.z - 10);
     this.audio.resume();
@@ -2199,7 +2205,12 @@ class Game {
     }
 
     const p = this.player;
-    const tgt = new THREE.Vector3(p.pos.x, p.pos.y + 0.9, p.pos.z);
+    const lead = 1.7;
+    const tgt = new THREE.Vector3(
+      p.pos.x + Math.sin(this.camYaw) * lead,
+      p.pos.y + 1.0,
+      p.pos.z + Math.cos(this.camYaw) * lead,
+    );
     this.camTarget.lerp(tgt, 1 - Math.exp(-9 * dt));
 
     const cosP = Math.cos(this.camPitch);
