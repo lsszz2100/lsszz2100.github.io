@@ -267,7 +267,6 @@
         parent: host,
         width: w,
         height: h,
-        resolution: res,
         transparent: true,
         backgroundColor: 'rgba(0,0,0,0)',
         scale: { mode: Phaser.Scale.NONE, width: w, height: h },
@@ -286,7 +285,8 @@
     if (!host || !state.game) return;
     const w = host.clientWidth, h = host.clientHeight;
     if (!w || !h) return;
-    state.game.scale.resize(w, h);
+    const dpr = state.forceDpr || root.__meowDpr || Math.min(2, Math.max(1, root.devicePixelRatio || 1));
+    state.game.scale.resize(Math.round(w * dpr), Math.round(h * dpr));
     const canvas = state.game.canvas;
     if (canvas) {
       canvas.style.width = w + 'px';
