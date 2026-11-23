@@ -1541,6 +1541,7 @@
     (function qaSeed() {
       var q = location.search;
       var m;
+      if (/[?&]reset=1/.test(q)) { profile = St.defaultProfile(); profile.seenTutorial = true; }
       if ((m = /[?&]coins=([0-9]+)/.exec(q))) profile.coins = parseInt(m[1], 10);
       if ((m = /[?&]hints=([0-9]+)/.exec(q))) profile.hints = parseInt(m[1], 10);
       function qaDay(offset) {
@@ -1561,6 +1562,8 @@
         profile.stats.solved = 6;
       }
       if ((m = /[?&]solved=([0-9]+)/.exec(q))) profile.stats.solved = parseInt(m[1], 10);
+      if ((m = /[?&]lang=(en|ko)/.exec(q))) profile.lang = m[1];
+      if ((m = /[?&]themes=([a-z]+)/.exec(q))) { if (profile.themes.owned.indexOf(m[1]) < 0) profile.themes.owned.push(m[1]); profile.themes.active = m[1]; }
       if (/[?&]badges=1/.test(q)) {
         profile.stats.solved = 12;
         profile.stats.perfect = 5;
