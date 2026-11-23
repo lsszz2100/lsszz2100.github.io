@@ -134,6 +134,28 @@ function initSharedTextures() {
     ctx.fillStyle = '#ffffff'; ctx.fillRect(18, 18, w - 36, 16);
   });
 
+  SHARED.grass = canvasTexture(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#5cc42f';
+    ctx.fillRect(0, 0, w, h);
+    const rnd = mulberry32(2025);
+    for (let i = 0; i < 420; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 3 + rnd() * 16;
+      const shades = ['#54b92a', '#68d63d', '#4eae27', '#71de47', '#5cc42f'];
+      ctx.fillStyle = shades[Math.floor(rnd() * shades.length)];
+      ctx.globalAlpha = 0.45 + rnd() * 0.4;
+      ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.7, rnd() * TAU, 0, TAU); ctx.fill();
+    }
+    ctx.globalAlpha = 0.5;
+    ctx.strokeStyle = '#469f22';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 260; i++) {
+      const x = rnd() * w, y = rnd() * h;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (rnd() - 0.5) * 4, y - 3 - rnd() * 5); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  });
+  SHARED.grass.wrapS = SHARED.grass.wrapT = THREE.RepeatWrapping;
+
   SHARED.stone = canvasTexture(256, 256, (ctx, w, h) => {
     ctx.fillStyle = '#6b6478';
     ctx.fillRect(0, 0, w, h);
@@ -472,8 +494,8 @@ class Game {
     this.isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || w < 820;
     if (this.state === 'playing') {
       const portrait = w / h < 0.8;
-      this.camDist = portrait ? 8.3 : 9.8;
-      this.camPitch = portrait ? 0.47 : 0.5;
+      this.camDist = portrait ? 8.6 : 10.2;
+      this.camPitch = portrait ? 0.52 : 0.56;
     }
     this.updateTouchVisibility();
   }
@@ -1172,7 +1194,14 @@ class Game {
     };
     const pal = palettes[kind] || palettes.grass;
     let topMat, sideMat, bottomMat;
-    if (kind === 'stone') {
+    if (kind === 'grass') {
+      const topTex = SHARED.grass.clone();
+      topTex.needsUpdate = true;
+      topTex.repeat.set(Math.max(1, Math.round(p.w / 5)), Math.max(1, Math.round(p.d / 5)));
+      topMat = toon(pal.top, { map: topTex, polygonOffset: true, polygonOffsetFactor: -1 });
+      sideMat = toon(pal.side);
+      bottomMat = toon(pal.bottom);
+    } else if (kind === 'stone') {
       const topTex = SHARED.stone.clone();
       topTex.needsUpdate = true;
       topTex.repeat.set(Math.max(1, Math.round(p.w / 3)), Math.max(1, Math.round(p.d / 3)));
@@ -1199,8 +1228,16 @@ class Game {
 
     // 윗면 잔디/눈 덮개 (돌 발판은 텍스처를 그대로 사용)
     if (kind !== 'stone') {
-      const capColor = kind === 'cloud' ? 0xffffff : 0x63d63a;
-      const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), toon(capColor));
+      let capMat;
+      if (kind === 'cloud') {
+        capMat = toon(0xffffff);
+      } else {
+        const capTex = SHARED.grass.clone();
+        capTex.needsUpdate = true;
+        capTex.repeat.set(Math.max(1, Math.round(p.w / 5)), Math.max(1, Math.round(p.d / 5)));
+        capMat = new THREE.MeshToonMaterial({ color: 0x8ce84f, gradientMap: SHARED.gradient, map: capTex });
+      }
+      const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), capMat);
       cap.position.y = p.h / 2 + 0.07;
       cap.receiveShadow = true;
       mesh.add(cap);
@@ -1254,16 +1291,17 @@ class Game {
 
     // 발판 장식
     const inset = 0.6;
-    const count = Math.floor((p.w * p.d) / 24);
+    const count = Math.floor((p.w * p.d) / 15);
     if (kind === 'grass') {
       for (let i = 0; i < count; i++) {
         const x = p.x + (rng() - 0.5) * (p.w - inset * 2);
         const z = p.z + (rng() - 0.5) * (p.d - inset * 2);
         if (Math.hypot(x - p.x, z - p.z) > Math.min(p.w, p.d) * 0.5) continue;
         const r = rng();
-        if (r < 0.45) this.buildTuft(x, p.top + 0.12, z);
-        else if (r < 0.8) this.buildFlower(x, p.top + 0.12, z, rng);
-        else this.buildMushroom(x, p.top + 0.12, z);
+        if (r < 0.42) this.buildTuft(x, p.top + 0.12, z);
+        else if (r < 0.74) this.buildFlower(x, p.top + 0.12, z, rng);
+        else if (r < 0.9) this.buildMushroom(x, p.top + 0.12, z);
+        else this.buildBush(x, p.top + 0.12, z, rng);
       }
     } else if (kind === 'stone') {
       for (let i = 0; i < Math.max(1, count - 2); i++) {
@@ -1299,6 +1337,21 @@ class Game {
     g.add(head);
     g.position.set(x, y, z);
     g.rotation.y = rng() * TAU;
+    this.world.add(g);
+  }
+
+  buildBush(x, y, z, rng) {
+    const g = new THREE.Group();
+    const mat = toon(0x3fa83a);
+    for (let i = 0; i < 2; i++) {
+      const s = 0.35 + rng() * 0.25;
+      const b = new THREE.Mesh(new THREE.SphereGeometry(s, 9, 7), mat);
+      b.position.set((i - 0.5) * s * 1.3, s * 0.8, (rng() - 0.5) * 0.2);
+      b.scale.y = 0.85;
+      b.castShadow = true;
+      g.add(b);
+    }
+    g.position.set(x, y, z);
     this.world.add(g);
   }
 
@@ -1649,8 +1702,8 @@ class Game {
     this.updateHUD(true);
     const portrait = window.innerWidth / window.innerHeight < 0.8;
     this.camYaw = 0;
-    this.camPitch = portrait ? 0.47 : 0.5;
-    this.camDist = portrait ? 8.3 : 9.8;
+    this.camPitch = portrait ? 0.52 : 0.56;
+    this.camDist = portrait ? 8.6 : 10.2;
     this.camera.position.set(this.stage.spawn.x, this.stage.spawn.y + 5.2, this.stage.spawn.z - 10);
     this.audio.resume();
     this.audio.setMusicVolume(0.16);
@@ -2205,7 +2258,7 @@ class Game {
     }
 
     const p = this.player;
-    const lead = 1.7;
+    const lead = 2.0;
     const tgt = new THREE.Vector3(
       p.pos.x + Math.sin(this.camYaw) * lead,
       p.pos.y + 1.0,
