@@ -37,15 +37,15 @@
 
   /** Pastel region colours, nine of them. Region borders carry the shape too. */
   const REGION_COLORS = [
-    { base: '#FFE0DC', edge: '#F2B7B0', ink: '#8C4A44' },
-    { base: '#DDF0FF', edge: '#A9D4F2', ink: '#2F6589' },
-    { base: '#E2F8E8', edge: '#AEE3C0', ink: '#396B4C' },
-    { base: '#FFF3CE', edge: '#EFD48A', ink: '#7D6420' },
-    { base: '#EFE6FF', edge: '#C6B2F0', ink: '#584089' },
-    { base: '#FFE6F2', edge: '#F0B6D3', ink: '#8A3D62' },
-    { base: '#E6F4EC', edge: '#B4DCC6', ink: '#37624F' },
-    { base: '#FFEEDD', edge: '#F0C79B', ink: '#7E5327' },
-    { base: '#E9EEF7', edge: '#BCC8DD', ink: '#42506B' }
+    { base: '#FFD7D1', edge: '#EBA79E', ink: '#8C4A44' },
+    { base: '#CDE7FF', edge: '#8FC4EC', ink: '#2F6589' },
+    { base: '#CFF0DA', edge: '#8FD3A8', ink: '#396B4C' },
+    { base: '#FFE7A8', edge: '#E8C462', ink: '#7D6420' },
+    { base: '#E1D4FF', edge: '#B49CE8', ink: '#584089' },
+    { base: '#FFD2E6', edge: '#EE9FC5', ink: '#8A3D62' },
+    { base: '#CEEEE0', edge: '#93CFB5', ink: '#37624F' },
+    { base: '#FFDDC0', edge: '#EFB586', ink: '#7E5327' },
+    { base: '#D8E1F1', edge: '#A2B3CE', ink: '#42506B' }
   ];
 
   const CHAPTERS = [
