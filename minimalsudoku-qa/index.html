@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#FBF8F2">
+<title>Minimal Sudoku</title>
+<link rel="stylesheet" href="style.css?v=1795465435">
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+
+    <!-- ============================== SPLASH ============================== -->
+    <section id="splash" class="screen active">
+      <div class="splash-inner">
+        <div class="splash-logo" aria-hidden="true">
+          <div class="splash-grid">
+            <span>5</span><span></span><span>3</span>
+            <span></span><span>7</span><span></span>
+            <span>9</span><span></span><span>1</span>
+          </div>
+        </div>
+        <div class="splash-title">MINIMAL<br>SUDOKU</div>
+        <div class="splash-sub">Only the puzzle.</div>
+      </div>
+      <div class="splash-foot">paper · logic · calm</div>
+    </section>
+
+    <!-- =============================== HOME =============================== -->
+    <section id="home" class="screen">
+      <header class="top-bar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span>5</span><span>3</span><span>7</span><span>1</span>
+          </div>
+          <div class="brand-text">
+            <strong data-i18n="appName">Minimal Sudoku</strong>
+            <span data-i18n="appSub">Only the puzzle.</span>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="pill" id="btnSettingsHome" aria-label="Settings">
+            <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h11M19 7h1M4 12h5M13 12h7M4 17h11M19 17h1"/><circle cx="17" cy="7" r="1.8"/><circle cx="11" cy="12" r="1.8"/><circle cx="17" cy="17" r="1.8"/></svg>
+          </button>
+          <button class="pill lang-pill" id="btnLangHome">EN</button>
+        </div>
+      </header>
+
+      <div class="home-body">
+        <div class="home-main">
+        <div class="hero">
+          <h1 class="hero-title" data-i18n="appName">Minimal Sudoku</h1>
+          <p class="hero-sub" data-i18n="tagline">Clean paper. Real logic. No noise.</p>
+          <div class="hero-rule" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+
+        <button class="continue-card" id="continueCard" hidden>
+          <div class="cc-left">
+            <span class="cc-label" data-i18n="inProgress">In progress</span>
+            <strong class="cc-diff" id="ccDiff">Medium</strong>
+            <span class="cc-meta" id="ccMeta">42% filled · 4:12</span>
+          </div>
+          <div class="cc-right">
+            <span class="cc-play" data-i18n="resume">Resume</span>
+            <span class="cc-arrow" aria-hidden="true">→</span>
+          </div>
+        </button>
+
+        <div class="section-head">
+          <h2 data-i18n="newPuzzle">New puzzle</h2>
+        </div>
+        <div class="diff-grid" id="diffGrid">
+          <button class="diff-card" data-diff="easy">
+            <span class="dc-name" data-i18n="easy">Easy</span>
+            <span class="dc-desc" data-i18n="easyDesc">Gentle start</span>
+            <span class="dc-dots"><i></i><i></i><i></i><i></i></span>
+          </button>
+          <button class="diff-card" data-diff="medium">
+            <span class="dc-name" data-i18n="medium">Medium</span>
+            <span class="dc-desc" data-i18n="mediumDesc">A steady solve</span>
+            <span class="dc-dots"><i></i><i></i><i></i><i></i></span>
+          </button>
+          <button class="diff-card" data-diff="hard">
+            <span class="dc-name" data-i18n="hard">Hard</span>
+            <span class="dc-desc" data-i18n="hardDesc">Deep thinking</span>
+            <span class="dc-dots"><i></i><i></i><i></i><i></i></span>
+          </button>
+          <button class="diff-card" data-diff="master">
+            <span class="dc-name" data-i18n="master">Master</span>
+            <span class="dc-desc" data-i18n="masterDesc">Experts only</span>
+            <span class="dc-dots"><i></i><i></i><i></i><i></i></span>
+          </button>
+        </div>
+
+        <div class="quick-grid">
+          <button class="quick-card daily" id="btnDaily">
+            <span class="qc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <span class="qc-name" data-i18n="dailyPuzzle">Daily puzzle</span>
+            <span class="qc-sub" id="dailySub" data-i18n="todayLeft">Today’s paper awaits</span>
+          </button>
+          <button class="quick-card" id="btnStats">
+            <span class="qc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 19V11M12 19V5M19 19v-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </span>
+            <span class="qc-name" data-i18n="stats">Stats</span>
+            <span class="qc-sub" id="statsSub">0 solved</span>
+          </button>
+          <button class="quick-card" id="btnQuests">
+            <span class="qc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="40" height="40"><path d="M5 12.5l4.2 4.2L19 6.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="qc-name" data-i18n="quests">Quests</span>
+            <span class="qc-sub" id="questsSub">0 / 3 done</span>
+            <span class="badge-dot" id="questBadge" hidden></span>
+          </button>
+        </div>
+
+        <button class="streak-card" id="streakCard">
+          <div class="sc-left">
+            <span class="sc-flame" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="52" height="52"><path d="M12 2.6c.5 3.2-1.6 4.6-2.9 6.2-1.3 1.6-2 3.1-2 5.1 0 3.1 2.2 5.5 5.4 5.5 3.1 0 5.3-2.3 5.3-5.4 0-2.1-.9-3.6-2.1-5-.3 1.1-1 1.8-1.9 1.9.7-2.6.2-5.6-1.8-8.3z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="sc-text">
+              <strong class="sc-num" id="streakNum">0 days in a row</strong>
+              <span class="sc-sub" id="streakReward">Daily paper: +15 coins</span>
+            </span>
+          </div>
+          <div class="sc-week" id="weekStrip"></div>
+        </button>
+
+        <div class="link-row">
+          <button class="link-btn" id="btnThemes" data-i18n="themes">Themes</button>
+          <span class="link-dot">·</span>
+          <button class="link-btn" id="btnAchievements" data-i18n="achievements">Achievements</button>
+          <span class="link-dot">·</span>
+          <button class="link-btn" id="btnTutorial" data-i18n="howToPlay">How to play</button>
+        </div>
+
+        <div class="promise-strip">
+          <div class="promise"><b>✓</b><span data-i18n="promiseOffline">Works offline</span></div>
+          <div class="promise"><b>✓</b><span data-i18n="promiseNoAds">No ads mid-puzzle</span></div>
+          <div class="promise"><b>✓</b><span data-i18n="promiseSave">Saves itself</span></div>
+        </div>
+        </div>
+
+        <div class="home-foot">
+          <button class="foot-link" id="btnPrivacyHome" data-i18n="privacy">Privacy policy</button>
+          <span class="link-dot">·</span>
+          <button class="foot-link" id="btnTermsHome" data-i18n="terms">Terms of use</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= TUTORIAL ============================= -->
+    <section id="tutorial" class="screen">
+      <header class="sub-header">
+        <button class="pill back-btn" id="btnTutorialBack" aria-label="Back">←</button>
+        <span class="sub-title" data-i18n="howToPlay">How to play</span>
+        <button class="pill ghost" id="btnTutorialSkip" data-i18n="skip">Skip</button>
+      </header>
+      <div class="tut-body">
+        <div class="tut-art" id="tutArt" aria-hidden="true"></div>
+        <h2 class="tut-title" id="tutTitle"></h2>
+        <p class="tut-text" id="tutText"></p>
+        <div class="tut-dots" id="tutDots"><i class="on"></i><i></i><i></i><i></i></div>
+        <button class="primary-btn" id="btnTutorialNext" data-i18n="next">Next</button>
+      </div>
+    </section>
+
+    <!-- =============================== GAME =============================== -->
+    <section id="game" class="screen">
+      <header class="game-header">
+        <button class="pill back-btn" id="btnPause" aria-label="Pause">←</button>
+        <div class="gh-center">
+          <span class="gh-diff" id="ghDiff">Medium</span>
+          <span class="gh-num" id="ghNum">Puzzle 1</span>
+        </div>
+        <div class="gh-right">
+          <span class="gh-timer" id="ghTimer">0:00</span>
+          <span class="gh-mistakes" id="ghMistakes">0</span>
+        </div>
+      </header>
+
+      <div class="board-wrap">
+        <div class="board" id="board"></div>
+      </div>
+
+      <div class="tool-row" id="toolRow">
+        <button class="tool" id="btnUndo">
+          <span class="tool-ico" aria-hidden="true">↺</span>
+          <span class="tool-label" data-i18n="undo">Undo</span>
+        </button>
+        <button class="tool" id="btnErase">
+          <span class="tool-ico" aria-hidden="true">⌫</span>
+          <span class="tool-label" data-i18n="erase">Erase</span>
+        </button>
+        <button class="tool" id="btnNotes">
+          <span class="tool-ico notes-ico" aria-hidden="true">✎</span>
+          <span class="tool-label" data-i18n="notes">Notes</span>
+          <span class="tool-state" id="notesState">OFF</span>
+        </button>
+        <button class="tool" id="btnAuto">
+          <span class="tool-ico" aria-hidden="true">✧</span>
+          <span class="tool-label" data-i18n="smartNotes">Auto</span>
+        </button>
+        <button class="tool accent" id="btnHint">
+          <span class="tool-ico" aria-hidden="true">?</span>
+          <span class="tool-label" data-i18n="hint">Hint</span>
+          <span class="tool-count" id="hintCount">3</span>
+        </button>
+      </div>
+
+      <div class="pad" id="pad"></div>
+
+      <div class="game-foot">
+        <span class="gf-coins"><i aria-hidden="true">●</i><span id="coinCount">120</span></span>
+        <span class="gf-saved" id="gfText" data-i18n="saved">Saved on this device</span>
+      </div>
+    </section>
+
+    <!-- ============================= SETTINGS ============================= -->
+    <section id="settings" class="screen">
+      <header class="sub-header">
+        <button class="pill back-btn" id="btnSettingsBack" aria-label="Back">←</button>
+        <span class="sub-title" data-i18n="settingsTitle">Settings</span>
+        <span class="pill ghost holder"></span>
+      </header>
+      <div class="panel-body">
+        <div class="group">
+          <div class="row">
+            <span class="row-label" data-i18n="language">Language</span>
+            <div class="seg" id="segLang">
+              <button data-lang="en">EN</button>
+              <button data-lang="ko">한글</button>
+            </div>
+          </div>
+          <div class="row">
+            <span class="row-label" data-i18n="sound">Sound</span>
+            <button class="switch" id="swSound" aria-pressed="true"><i></i></button>
+          </div>
+          <div class="row">
+            <span class="row-label" data-i18n="vibration">Vibration</span>
+            <button class="switch" id="swVibrate" aria-pressed="true"><i></i></button>
+          </div>
+          <div class="row">
+            <span class="row-label" data-i18n="highlight">Highlight matching numbers</span>
+            <button class="switch" id="swHighlight" aria-pressed="true"><i></i></button>
+          </div>
+          <div class="row">
+            <span class="row-label" data-i18n="autoCheck">Show mistakes as I go</span>
+            <button class="switch" id="swAutoCheck" aria-pressed="true"><i></i></button>
+          </div>
+          <div class="row">
+            <span class="row-label" data-i18n="showTimer">Show timer</span>
+            <button class="switch" id="swTimer" aria-pressed="true"><i></i></button>
+          </div>
+        </div>
+
+        <div class="group">
+          <button class="row link-row-btn" id="btnPrivacy">
+            <span class="row-label" data-i18n="privacy">Privacy policy</span>
+            <span class="chev">›</span>
+          </button>
+          <button class="row link-row-btn" id="btnTerms">
+            <span class="row-label" data-i18n="terms">Terms of use</span>
+            <span class="chev">›</span>
+          </button>
+          <button class="row link-row-btn" id="btnAdConsent">
+            <span class="row-label" data-i18n="adConsent">Ad privacy settings</span>
+            <span class="chev">›</span>
+          </button>
+          <button class="row link-row-btn danger" id="btnReset">
+            <span class="row-label" data-i18n="resetProgress">Reset all progress</span>
+            <span class="chev">›</span>
+          </button>
+        </div>
+
+        <p class="note" data-i18n="dataNote">Your progress lives only on this device. Deleting the app deletes it permanently.</p>
+        <p class="ver" id="verLine">Version 1.0.0</p>
+      </div>
+    </section>
+
+    <!-- ============================== STATS =============================== -->
+    <section id="stats" class="screen">
+      <header class="sub-header">
+        <button class="pill back-btn" id="btnStatsBack" aria-label="Back">←</button>
+        <span class="sub-title" data-i18n="statsTitle">Stats</span>
+        <span class="pill ghost holder"></span>
+      </header>
+      <div class="panel-body">
+        <div class="stat-hero">
+          <span class="sh-value" id="stSolved">0</span>
+          <span class="sh-label" data-i18n="totalSolved">Puzzles solved</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box"><strong id="stStreak">0</strong><span data-i18n="bestStreak">Best streak</span></div>
+          <div class="stat-box"><strong id="stPerfect">0</strong><span data-i18n="perfectRuns">Perfect solves</span></div>
+          <div class="stat-box"><strong id="stHints">0</strong><span data-i18n="hintsUsed">Hints used</span></div>
+        </div>
+        <h3 class="block-title" data-i18n="byDifficulty">By difficulty</h3>
+        <div class="diff-stats" id="diffStats"></div>
+      </div>
+    </section>
+
+    <!-- ============================== QUESTS ============================== -->
+    <section id="quests" class="screen">
+      <header class="sub-header">
+        <button class="pill back-btn" id="btnQuestsBack" aria-label="Back">←</button>
+        <span class="sub-title" data-i18n="questsTitle">Daily quests</span>
+        <span class="pill ghost holder"></span>
+      </header>
+      <div class="panel-body">
+        <p class="sub-note" data-i18n="questsSub">Three small goals, fresh every day.</p>
+        <div id="questList" class="quest-list"></div>
+        <p class="note center" data-i18n="questsReset">Resets at midnight</p>
+      </div>
+    </section>
+
+    <!-- =========================== ACHIEVEMENTS =========================== -->
+    <section id="achievements" class="screen">
+      <header class="sub-header">
+        <button class="pill back-btn" id="btnAchBack" aria-label="Back">←</button>
+        <span class="sub-title" data-i18n="achTitle">Achievements</span>
+        <span class="pill ghost holder"></span>
+      </header>
+      <div class="panel-body">
+        <div id="achList" class="ach-list"></div>
+      </div>
+    </section>
+
+    <!-- ============================== THEMES ============================== -->
+    <section id="themes" class="screen">
+      <header class="sub-header">
+        <button class="pill back-btn" id="btnThemesBack" aria-label="Back">←</button>
+        <span class="sub-title" data-i18n="themesTitle">Themes</span>
+        <span class="pill ghost holder"></span>
+      </header>
+      <div class="panel-body">
+        <div class="coin-line"><i aria-hidden="true">●</i><span id="themeCoins">120</span></div>
+        <div id="themeList" class="theme-list"></div>
+      </div>
+    </section>
+
+    <!-- =============================== LEGAL ============================== -->
+    <section id="legal" class="screen">
+      <header class="sub-header">
+        <button class="pill back-btn" id="btnLegalBack" aria-label="Back">←</button>
+        <span class="sub-title" id="legalTitle">Terms &amp; privacy</span>
+        <span class="pill ghost holder"></span>
+      </header>
+      <div class="panel-body legal-body">
+        <h3 class="legal-h" id="legalH">Privacy policy</h3>
+        <div class="legal-text" id="legalText"></div>
+        <p class="note" id="legalNote" data-i18n="agreeNote">Data stays on this device. Uninstalling the app deletes it permanently.</p>
+      </div>
+    </section>
+
+    <!-- ============================= OVERLAYS ============================= -->
+    <div id="modalRoot" class="modal-root" hidden></div>
+    <div id="toast" class="toast" hidden></div>
+  </div>
+</div>
+<script src="i18n.js?v=1795465435"></script>
+<script src="sudoku.js?v=1795465435"></script>
+<script src="state.js?v=1795465435"></script>
+<script>window.__QA_SOLVE__ = /[?&]solve=1/.test(location.search);</script>
+<script src="app.js?v=1795465435"></script>
+</body>
+</html>
