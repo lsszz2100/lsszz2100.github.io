@@ -330,96 +330,88 @@
     drawCup: function (g, x, y, size, colorHex, opts) {
       const o = opts || {};
       const w = size;
-      const h = size * 1.16;
+      const h = size * 1.2;
       const skin = this.cupSkin;
       const drink = col(colorHex);
-      const body = col(skin.body);
-      const lid = col(skin.lid);
-      const rim = col(skin.rim);
+      const paper = col(skin.body);
       const alpha = o.alpha == null ? 1 : o.alpha;
-
-      g.fillStyle(0x6b4a37, 0.12 * alpha);
-      g.fillEllipse(x + 2, y + h * 0.52, w * 1.02, h * 0.2);
-
-      // 컵 몸통(위가 넓고 아래가 좁은 사다리꼴)
+      const topY = y - h * 0.5;
+      const botY = y + h * 0.5;
       const topW = w * 0.5;
-      const botW = w * 0.38;
-      const topY = y - h * 0.44;
-      const botY = y + h * 0.46;
-      g.fillStyle(body, alpha);
+      const botW = w * 0.41;
+      const rad = botW * 0.32;
+
+      g.fillStyle(0x6b4a37, 0.13 * alpha);
+      g.fillEllipse(x + size * 0.03, botY - h * 0.04, w * 0.92, h * 0.14);
+
+      // 몸통(위가 넓고 아래가 좁은 종이 컵)
+      g.fillStyle(paper, alpha);
       g.beginPath();
       g.moveTo(x - topW, topY);
       g.lineTo(x + topW, topY);
-      g.lineTo(x + botW, botY - h * 0.06);
-      g.arc(x, botY - h * 0.06, botW, 0, Math.PI, false);
+      g.lineTo(x + botW, botY - rad);
+      g.arc(x + botW - rad, botY - rad, rad, 0, Math.PI * 0.5, false);
+      g.lineTo(x - botW + rad, botY);
+      g.arc(x - botW + rad, botY - rad, rad, Math.PI * 0.5, Math.PI, false);
       g.lineTo(x - topW, topY);
       g.closePath();
       g.fillPath();
 
-      // 음료 색 띠(정체성)
-      const bandTop = y - h * 0.12;
-      const bandBot = y + h * 0.32;
-      const bwTop = w * 0.478;
-      const bwBot = w * 0.428;
+      // 종이 몸통의 옅은 세로 음영
+      g.fillStyle(0xffffff, 0.5 * alpha);
+      g.beginPath();
+      g.moveTo(x - topW * 0.86, topY + 2);
+      g.lineTo(x - topW * 0.34, topY + 2);
+      g.lineTo(x - botW * 0.4, botY - 3);
+      g.lineTo(x - botW * 0.78, botY - 3);
+      g.closePath();
+      g.fillPath();
+
+      // 음료 색 슬리브
+      const bt = topY + h * 0.24;
+      const bb = topY + h * 0.78;
+      const kt = (bt - topY) / h;
+      const kb = (bb - topY) / h;
+      const wt = topW + (botW - topW) * kt;
+      const wb = topW + (botW - topW) * kb;
       g.fillStyle(drink, alpha);
       g.beginPath();
-      g.moveTo(x - bwTop, bandTop);
-      g.lineTo(x + bwTop, bandTop);
-      g.lineTo(x + bwBot, bandBot);
-      g.lineTo(x - bwBot, bandBot);
+      g.moveTo(x - wt, bt);
+      g.lineTo(x + wt, bt);
+      g.lineTo(x + wb, bb);
+      g.lineTo(x - wb, bb);
       g.closePath();
       g.fillPath();
+      g.fillStyle(tint(colorHex, 0.4), 0.55 * alpha);
+      g.fillRect(x - wt, bt, wt * 2, Math.max(2, h * 0.035));
+      g.fillStyle(tint(colorHex, -0.28), 0.45 * alpha);
+      g.fillRect(x - wb, bb - Math.max(2, h * 0.03), wb * 2, Math.max(2, h * 0.03));
 
-      // 띠의 윗면 하이라이트 + 종이 테두리
-      g.fillStyle(tint(colorHex, 0.42), 0.5 * alpha);
-      g.fillRect(x - bwTop, bandTop, bwTop * 2, 4);
-      g.fillStyle(0xffffff, 0.18 * alpha);
-      g.beginPath();
-      g.moveTo(x - bwTop * 0.6, bandTop + 4);
-      g.lineTo(x - bwTop * 0.22, bandTop + 4);
-      g.lineTo(x - bwBot * 0.2, bandBot);
-      g.lineTo(x - bwBot * 0.56, bandBot);
-      g.closePath();
-      g.fillPath();
-
-      // 컵 테두리
-      g.lineStyle(Math.max(2, size * 0.045), rim, 0.7 * alpha);
-      g.beginPath();
-      g.moveTo(x - topW, topY);
-      g.lineTo(x - botW, botY - h * 0.06);
-      g.strokePath();
-      g.beginPath();
-      g.moveTo(x + topW, topY);
-      g.lineTo(x + botW, botY - h * 0.06);
-      g.strokePath();
-
-      // 뚜껑
-
-      g.fillStyle(Phaser.Display.Color.Interpolate.ColorWithColor(
-        Phaser.Display.Color.ValueToColor(lid),
-        Phaser.Display.Color.ValueToColor(drink), 100, 28
-      ).color, alpha);
-      g.fillEllipse(x, topY - h * 0.02, w * 1.06, h * 0.2);
-      g.fillStyle(tint(skin.lid, -0.22), 0.5 * alpha);
-      g.fillEllipse(x, topY + h * 0.015, w * 1.0, h * 0.13);
-      g.fillStyle(0xffffff, 0.45 * alpha);
-      g.fillEllipse(x - w * 0.16, topY - h * 0.055, w * 0.34, h * 0.055);
+      // 뚜껑(넓은 타원 + 살짝 어두운 띠)
+      const lidCol = Phaser.Display.Color.Interpolate.ColorWithColor(
+        Phaser.Display.Color.ValueToColor(paper),
+        Phaser.Display.Color.ValueToColor(drink), 100, 34
+      ).color;
+      g.fillStyle(lidCol, alpha);
+      g.fillRoundedRect(x - topW * 1.07, topY - h * 0.1, topW * 2.14, h * 0.15, h * 0.07);
+      g.fillStyle(0xffffff, 0.42 * alpha);
+      g.fillRoundedRect(x - topW * 0.7, topY - h * 0.085, topW * 0.55, h * 0.045, h * 0.02);
 
       if (o.selected) {
         g.lineStyle(6, 0x2C9C86, 0.95);
-        g.strokeCircle(x, y, size * 0.86 + Math.sin(this.time_s * 7) * 3);
+        g.strokeCircle(x, y, size * 0.84 + Math.sin(this.time_s * 7) * 3);
       }
       if (o.legal) {
         g.lineStyle(5, 0x2C9C86, 0.45 + 0.25 * Math.sin(this.time_s * 6));
-        g.strokeRoundedRect(x - size * 0.68, y - size * 0.86, size * 1.36, size * 1.74, 22);
+        g.strokeRoundedRect(x - size * 0.68, y - size * 0.8, size * 1.36, size * 1.6, 22);
       }
       if (o.hint) {
         g.lineStyle(6, 0xF0A22B, 0.95);
-        g.strokeCircle(x, y, size * 0.92 + Math.sin(this.time_s * 6) * 3);
+        g.strokeCircle(x, y, size * 0.9 + Math.sin(this.time_s * 6) * 3);
       }
       if (o.ghost) {
         g.lineStyle(4, 0xffffff, 0.85);
-        g.strokeCircle(x, y, size * 0.9);
+        g.strokeCircle(x, y, size * 0.88);
       }
     },
 
@@ -456,7 +448,7 @@
       // 담긴 컵
       if (box && box.cups > 0) {
         const sp0 = this.slotPos(rect, 0);
-        const size = Math.min(120, Math.min(sp0.cw * 0.8, (sp0.ch * 0.9) / 1.16));
+        const size = Math.min(124, Math.min(sp0.cw * 0.78, (sp0.ch * 0.98) / 1.2));
         for (let i = 0; i < box.cups; i += 1) {
           const p = this.slotPos(rect, i);
           this.drawCup(g, p.x, p.y, size, this.colors[box.color], { alpha: 1 });
