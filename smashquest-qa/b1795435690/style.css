@@ -184,6 +184,11 @@ button:disabled { opacity: .55; }
 .home-gift { position: relative; margin-top: 10px; display: none; align-items: center; justify-content: center; gap: 8px;
   background: #FFF6E2; color: #9B6B12; font-weight: 700; font-size: 13px; border-radius: 999px; padding: 9px 16px; }
 .home-gift.show { display: inline-flex; }
+.hero-kit { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+.kit-pill { display: inline-flex; align-items: center; gap: 6px; background: #fff; border-radius: 14px;
+  padding: 8px 12px; font-size: 12px; font-weight: 800; box-shadow: var(--shadow-sm); color: #4B4363; }
+.kit-pill svg { width: 15px; height: 15px; }
+.kit-pill b { color: var(--ink); }
 .gift-ico { color: #E3A21C; }
 .home-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 4px; padding-bottom: 6px; }
 .nav-card { background: #fff; border-radius: 18px; box-shadow: var(--shadow-sm); padding: 11px 4px 9px;

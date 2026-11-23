@@ -229,6 +229,13 @@
 
     const giftReady = profile.daily.lastClaim !== C.todayKey();
     $('#homeGift').classList.toggle('show', giftReady);
+    const kit = $('#homeKit');
+    if (kit) {
+      kit.innerHTML =
+        '<span class="kit-pill"><svg viewBox="0 0 24 24" fill="none" stroke="#4B4363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-3 3-7-7z"/><path d="M11 8L4 15a2 2 0 0 0 0 3l2 2a2 2 0 0 0 3 0l7-7"/></svg><b>' + (profile.boosters.hammer || 0) + '</b></span>' +
+        '<span class="kit-pill"><svg viewBox="0 0 24 24" fill="none" stroke="#4B4363" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="14" r="7"/><path d="M16 8l2-2M18 6l2 2M20 8c1-2 0-4-2-4"/></svg><b>' + (profile.boosters.bomb || 0) + '</b></span>' +
+        '<span class="kit-pill"><svg viewBox="0 0 24 24" fill="none" stroke="#4B4363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h4l8 12h4"/><path d="M4 18h4l8-12h4"/></svg><b>' + (profile.boosters.shuffle || 0) + '</b></span>';
+    }
 
     const quests = C.refreshQuests(profile, C.todayKey());
     const claimable = quests.some(function (q) {

@@ -327,22 +327,33 @@
     },
 
     drawIce: function (g, x, y, s, fillA) {
-      g.fillStyle(0xCFEBFF, 0.82 * fillA);
+      const a = fillA == null ? 1 : fillA;
+      // 유리처럼 얇게 덮어 보석 색이 비치게 한다.
+      g.fillStyle(0xDCEEFF, 0.4 * a);
       g.fillRoundedRect(x - s / 2, y - s / 2, s, s, s * 0.24);
-      g.lineStyle(Math.max(2, s * 0.05), 0xFFFFFF, 0.95 * fillA);
-      g.strokeRoundedRect(x - s / 2 + s * 0.05, y - s / 2 + s * 0.05, s * 0.9, s * 0.9, s * 0.2);
-      g.lineStyle(Math.max(1, s * 0.03), 0x9FD8FF, 0.9 * fillA);
-      g.beginPath();
-      g.moveTo(x - s * 0.3, y - s * 0.34);
-      g.lineTo(x - s * 0.02, y - s * 0.06);
-      g.lineTo(x - s * 0.18, y + s * 0.16);
-      g.strokePath();
-      g.beginPath();
-      g.moveTo(x + s * 0.3, y + s * 0.34);
-      g.lineTo(x + s * 0.06, y + s * 0.04);
-      g.strokePath();
-      g.fillStyle(0xFFFFFF, 0.85 * fillA);
-      g.fillCircle(x + s * 0.2, y - s * 0.24, s * 0.05);
+      g.fillStyle(0xFFFFFF, 0.3 * a);
+      g.fillRoundedRect(x - s * 0.42, y - s * 0.42, s * 0.84, s * 0.34, s * 0.14);
+      // 얼음 테두리
+      g.lineStyle(Math.max(3, s * 0.07), 0xFFFFFF, 0.95 * a);
+      g.strokeRoundedRect(x - s / 2 + 2, y - s / 2 + 2, s - 4, s - 4, s * 0.23);
+      g.lineStyle(Math.max(1, s * 0.02), 0x8FCCF2, 0.85 * a);
+      g.strokeRoundedRect(x - s / 2 + 5, y - s / 2 + 5, s - 10, s - 10, s * 0.2);
+      // 얼음 결정(대각선 균열)
+      g.lineStyle(Math.max(1, s * 0.035), 0xFFFFFF, 0.9 * a);
+      g.beginPath(); g.moveTo(x - s * 0.32, y - s * 0.34); g.lineTo(x - s * 0.06, y - s * 0.08); g.lineTo(x - s * 0.22, y + s * 0.2); g.strokePath();
+      g.beginPath(); g.moveTo(x + s * 0.34, y + s * 0.32); g.lineTo(x + s * 0.1, y + s * 0.06); g.strokePath();
+      // 작은 눈송이
+      const fx = x + s * 0.26;
+      const fy = y - s * 0.26;
+      const r = s * 0.1;
+      g.lineStyle(Math.max(1, s * 0.022), 0xFFFFFF, 0.95 * a);
+      for (let i = 0; i < 3; i += 1) {
+        const ang = (Math.PI / 3) * i;
+        g.beginPath();
+        g.moveTo(fx - Math.cos(ang) * r, fy - Math.sin(ang) * r);
+        g.lineTo(fx + Math.cos(ang) * r, fy + Math.sin(ang) * r);
+        g.strokePath();
+      }
     },
 
     drawCrate: function (g, x, y, s, fillA) {
