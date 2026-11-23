@@ -137,7 +137,7 @@ button { font-family: inherit; color: inherit; border: 0; background: none; padd
   background: linear-gradient(165deg, #FFFFFF 0%, #FFF4F8 60%, #FFEAF1 100%);
   box-shadow: var(--shadow); overflow: hidden;
   flex: 1; min-height: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;
 }
 .hero-deco i { position: absolute; border-radius: 50%; background: rgba(255,255,255,.7); }
 .hero-deco i:nth-child(1) { width: 120px; height: 120px; right: -40px; top: -46px; background: rgba(255,178,62,.16); }
@@ -178,6 +178,7 @@ button { font-family: inherit; color: inherit; border: 0; background: none; padd
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 .gift-ico { font-size: 13px; }
 .hero-kit { display: flex; gap: 8px; margin-top: 12px; }
+.hero-tip { position: relative; margin: 14px 0 0; font-size: 11.5px; font-weight: 800; color: var(--ink-soft); opacity: .8; }
 .kit-pill { display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 11px; background: #FFF3F7; font-size: 11.5px; font-weight: 900; color: var(--ink-soft); }
 .kit-pill svg { width: 13px; height: 13px; }
 

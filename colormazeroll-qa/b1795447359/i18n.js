@@ -32,6 +32,7 @@
       'home.progress': '{done}/{total} cleared',
       'home.stars': '★ {n} / {total}',
       'home.giftReady': 'Daily gift ready!',
+      'home.tip': 'Swipe to roll · paint every tile',
       'home.chapter': 'Chapter {n} · {name}',
 
       'tutorial.title': 'How to play',
@@ -167,6 +168,7 @@
       'home.progress': '{done}/{total} 클리어',
       'home.stars': '★ {n} / {total}',
       'home.giftReady': '오늘의 선물이 준비됐어요!',
+      'home.tip': '스와이프로 굴리고, 모든 칸을 칠하세요',
       'home.chapter': '챕터 {n} · {name}',
 
       'tutorial.title': '플레이 방법',
