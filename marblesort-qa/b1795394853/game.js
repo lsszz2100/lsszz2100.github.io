@@ -303,16 +303,16 @@
       var cellH = H / rows;
 
       var marbleD = Math.min(cellW * 0.62, cellH * 0.86 / cap);
-      marbleD = Math.max(14, Math.min(marbleD, 46));
-      var railW = marbleD * 1.16 + 12;
-      var railH = cap * (marbleD + 2) + 16;
+      marbleD = Math.max(14, Math.min(marbleD, 42));
+      var railW = marbleD * 1.24 + 14;
+      var railH = cap * (marbleD + 2) + 20;
 
       // The board must fit even when a spare rail was added mid-stage.
       var maxRailH = cellH * 0.94;
       if (railH > maxRailH) {
-        marbleD = (maxRailH - 16) / cap - 2;
-        railW = marbleD * 1.16 + 12;
-        railH = cap * (marbleD + 2) + 16;
+        marbleD = (maxRailH - 20) / cap - 2;
+        railW = marbleD * 1.24 + 14;
+        railH = cap * (marbleD + 2) + 20;
       }
 
       var skin = SKINS[currentSkin] || SKINS.default;
@@ -436,6 +436,7 @@
           var pos = this.marbleXY(rail2, s);
           var img = this.add.image(pos.x, pos.y, key);
           img.setDisplaySize(rail2.marbleD, rail2.marbleD);
+          img.setData('baseScale', rail2.marbleD / img.width);
           rail2.container.add(img);
           rail2.marbles.push(img);
         }
@@ -462,9 +463,10 @@
         if (!img) continue;
         var oldPos = this.marbleXY(fromRail, oldFromLen - anim.amount + k);
         var target = { x: img.x, y: img.y };
+        var baseScale = img.getData('baseScale') || 1;
         img.x = oldPos.x;
         img.y = oldPos.y;
-        img.setScale(1.06);
+        img.setScale(baseScale * 1.06);
         list.push({ img: img, target: target, delay: k * 55 });
         this.tweens.add({
           targets: img,
@@ -474,16 +476,16 @@
           duration: 240,
           ease: 'Cubic.easeInOut',
           onStart: function () { Audio.pick(); },
-          onComplete: function (tw, target2) {
-            tw.targets[0].setScale(1);
+          onComplete: function (tw) {
+            tw.targets[0].setScale(baseScale);
             Audio.drop(1);
           }
         });
         // a subtle arc: hop the rail lip
         this.tweens.add({
           targets: img,
-          scaleX: 1.12,
-          scaleY: 1.12,
+          scaleX: baseScale * 1.14,
+          scaleY: baseScale * 1.14,
           delay: k * 55,
           duration: 120,
           yoyo: true,
