@@ -157,12 +157,12 @@ function initSharedTextures() {
   SHARED.grass.wrapS = SHARED.grass.wrapT = THREE.RepeatWrapping;
 
   SHARED.stone = canvasTexture(256, 256, (ctx, w, h) => {
-    ctx.fillStyle = '#6b6478';
+    ctx.fillStyle = '#7a7385';
     ctx.fillRect(0, 0, w, h);
     const rnd = mulberry32(777);
-    for (let i = 0; i < 300; i++) {
-      const x = rnd() * w, y = rnd() * h, r = 2 + rnd() * 16;
-      ctx.fillStyle = `rgba(${40 + rnd() * 50}, ${36 + rnd() * 44}, ${50 + rnd() * 50}, ${0.18 + rnd() * 0.3})`;
+    for (let i = 0; i < 120; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 2 + rnd() * 12;
+      ctx.fillStyle = `rgba(${40 + rnd() * 50}, ${36 + rnd() * 44}, ${50 + rnd() * 50}, ${0.08 + rnd() * 0.14})`;
       ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.7, rnd() * TAU, 0, TAU); ctx.fill();
     }
     // 석판 줄눈
@@ -212,7 +212,7 @@ function initSharedTextures() {
       ctx.fill();
     }
     // 뜨거운 웅덩이
-    for (let i = 0; i < 46; i++) {
+    for (let i = 0; i < 32; i++) {
       const x = rnd() * w, y = rnd() * h, r = 4 + rnd() * 26;
       const g = ctx.createRadialGradient(x, y, 0, x, y, r);
       g.addColorStop(0, 'rgba(255,190,70,.5)');
@@ -1190,14 +1190,14 @@ class Game {
     const palettes = {
       grass: { top: 0x4fbf28, side: 0xa86a34, bottom: 0x7d5426 },
       cloud: { top: 0xffffff, side: 0xd8edfb, bottom: 0xbfe0f5 },
-      stone: { top: 0x8f8a9e, side: 0x655f72, bottom: 0x494353 },
+      stone: { top: 0xa39aae, side: 0x6f6878, bottom: 0x494353 },
     };
     const pal = palettes[kind] || palettes.grass;
     let topMat, sideMat, bottomMat;
     if (kind === 'cloud') {
-      topMat = toon(0xffffff, { emissive: 0xbcdff2, emissiveIntensity: 0.5, polygonOffset: true, polygonOffsetFactor: -1 });
-      sideMat = toon(0xd8edfb, { emissive: 0x7fa8c4, emissiveIntensity: 0.22 });
-      bottomMat = toon(0xbfe0f5, { emissive: 0x6f9ab6, emissiveIntensity: 0.2 });
+      topMat = toon(0xf4fbff, { emissive: 0x9fc4dd, emissiveIntensity: 0.28, polygonOffset: true, polygonOffsetFactor: -1 });
+      sideMat = toon(0xd8edfb, { emissive: 0x7fa8c4, emissiveIntensity: 0.12 });
+      bottomMat = toon(0xbfe0f5, { emissive: 0x6f9ab6, emissiveIntensity: 0.1 });
     } else if (kind === 'grass') {
       const topTex = SHARED.grass.clone();
       topTex.needsUpdate = true;
@@ -1234,7 +1234,7 @@ class Game {
     if (kind !== 'stone') {
       let capMat;
       if (kind === 'cloud') {
-        capMat = toon(0xffffff, { emissive: 0xbcdff2, emissiveIntensity: 0.5 });
+        capMat = toon(0xf4fbff, { emissive: 0x9fc4dd, emissiveIntensity: 0.28 });
       } else {
         const capTex = SHARED.grass.clone();
         capTex.needsUpdate = true;
@@ -1273,11 +1273,11 @@ class Game {
 
     // 구름 발판 퍼프
     if (kind === 'cloud') {
-      const puffMat = toon(0xffffff, { emissive: 0xbcdff2, emissiveIntensity: 0.5 });
-      const count = Math.max(11, Math.min(18, Math.floor((p.w + p.d) * 1.1)));
+      const puffMat = toon(0xffffff, { emissive: 0x9fc4dd, emissiveIntensity: 0.3 });
+      const count = Math.max(9, Math.min(14, Math.floor((p.w + p.d) * 0.95)));
       for (let i = 0; i < count; i++) {
         const a = (i / count) * TAU;
-        const r = 1.0 + rng() * 1.0;
+        const r = 0.9 + rng() * 0.8;
         const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), puffMat);
         puff.position.set(Math.cos(a) * (p.w / 2) * 0.95, p.h / 2 + 0.06, Math.sin(a) * (p.d / 2) * 0.95);
         puff.scale.y = 0.72;
