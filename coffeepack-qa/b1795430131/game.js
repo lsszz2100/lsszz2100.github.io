@@ -181,19 +181,19 @@
       g.fillCircle(W * 0.86, H * 0.08, 110);
 
       // 카운터(매장 작업대) — 박스들이 놓인 범위에 맞춘다
-      let top = BOX_AREA.top;
-      let bottom = BOX_AREA.bottom;
+      let panelTop = BOX_AREA.top;
+      let panelBottom = BOX_AREA.bottom;
       if (this.rects && this.rects.length) {
-        top = this.rects[0].y - 30;
-        bottom = this.rects[0].y + 30;
-        for (let i = 0; i < this.rects.length; i += 1) {
-          bottom = Math.max(bottom, this.rects[i].y + this.rects[i].h + 34);
+        panelTop = this.rects[0].y - 30;
+        panelBottom = this.rects[0].y + this.rects[0].h + 34;
+        for (let i = 1; i < this.rects.length; i += 1) {
+          panelBottom = Math.max(panelBottom, this.rects[i].y + this.rects[i].h + 34);
         }
       }
       g.fillStyle(col(this.boxSkin.shelf), 0.15);
-      g.fillRoundedRect(20, top, W - 40, bottom - top, 50);
+      g.fillRoundedRect(20, panelTop, W - 40, panelBottom - panelTop, 50);
       g.lineStyle(4, 0xffffff, 0.62);
-      g.strokeRoundedRect(20, top, W - 40, bottom - top, 50);
+      g.strokeRoundedRect(20, panelTop, W - 40, panelBottom - panelTop, 50);
 
       // 트레이 받침
       g.fillStyle(col(this.boxSkin.shelf), 0.18);
