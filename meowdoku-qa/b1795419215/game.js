@@ -50,8 +50,9 @@
       state.scene = this;
     }
 
-    layout() {
-      const w = this.scale.width, h = this.scale.height;
+    layout(fw, fh) {
+      const w = fw || (this.game && this.game.canvas ? this.game.canvas.width : this.scale.width);
+      const h = fh || (this.game && this.game.canvas ? this.game.canvas.height : this.scale.height);
       if (!state.stage) { this.ox = 0; this.oy = 0; this.cell = 40; return; }
       const n = state.stage.n;
       const pad = Math.min(w, h) * 0.012;
@@ -293,7 +294,7 @@
       canvas.style.height = h + 'px';
       canvas.style.display = 'block';
     }
-    if (state.scene) { state.scene.layout(); }
+    if (state.scene) { state.scene.layout(w * dpr, h * dpr); }
   }
 
   function sync() {
