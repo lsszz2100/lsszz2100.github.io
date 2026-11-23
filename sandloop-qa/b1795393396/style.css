@@ -201,7 +201,7 @@ em { font-style: normal; }
 .hj { width: 42px; height: 62px; border-radius: 10px 10px 13px 13px; background: #fff; box-shadow: inset 0 0 0 2px #F3E3D6, 0 6px 14px rgba(150,105,70,.12);
   display: flex; flex-direction: column-reverse; overflow: hidden; }
 .hj.tall { height: 78px; width: 46px; }
-.hj i { display: block; height: 33.3%; }
+.hj i { display: block; height: 25%; }
 .hj i.ghost { opacity: .28; }
 .hero-chapter { position: relative; font-size: 12.5px; font-weight: 800; color: var(--soft); background: var(--sand2);
   padding: 6px 12px; border-radius: 999px; }
@@ -212,7 +212,7 @@ em { font-style: normal; }
 @keyframes orbFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 .orb-jar { width: 54px; height: 68px; border-radius: 14px 14px 18px 18px; background: rgba(255,255,255,.94);
   display: flex; flex-direction: column-reverse; overflow: hidden; box-shadow: inset 0 0 0 2px rgba(255,255,255,.7); }
-.orb-jar i { display: block; height: 25%; }
+.orb-jar i { display: block; height: 20%; }
 .orb-jar i:nth-child(1) { background: #F4795F; }
 .orb-jar i:nth-child(2) { background: #4FA8E0; }
 .orb-jar i:nth-child(3) { background: #46C79A; }
