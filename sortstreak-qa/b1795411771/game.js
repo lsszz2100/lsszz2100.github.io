@@ -89,12 +89,11 @@
       const marginX = n > 10 ? 26 : (n > 8 ? 34 : 44);
       const colW = (W - marginX * 2) / n;
       const d = Math.max(34, Math.min(colW * 0.86, 96));
-      const contentMin = 120 + cap * d + 60 + 170;
-      const avail = (vw > 0 && vh > 0) ? W * (vh / vw) : contentMin;
-      const h = Math.max(contentMin, Math.min(1760, avail));
-      const potTop = h - 168;
-      const slack = Math.max(0, potTop - 120 - cap * d - 40);
-      const top = 120 + slack * 0.4;
+      const contentH = cap * d + 60 + 150;
+      const avail = (vw > 0 && vh > 0) ? W * (vh / vw) : contentH;
+      const h = Math.max(contentH + 40, Math.min(1760, avail));
+      const top = Math.max(70, (h - contentH) / 2 + 40);
+      const potTop = top + cap * d + 46;
       this.g = {
         n: n, cap: cap, colW: colW, marginX: marginX, d: d, r: d / 2,
         top: top, potTop: potTop, h: h,
