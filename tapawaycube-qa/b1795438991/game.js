@@ -160,7 +160,7 @@
       tw = Math.max(24, Math.min(210, tw));
       const sh = tw * SH_RATIO;
       const ox = area.left + (availW - bw * tw) / 2 - minX * tw;
-      const oy = area.top + (availH - bh * tw) / 2 - minY * tw;
+      const oy = area.top + (availH - bh * tw) * 0.34 - minY * tw;
       this.geo = { tw: tw, sh: sh, ox: ox, oy: oy };
     },
 
