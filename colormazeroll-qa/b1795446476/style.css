@@ -248,7 +248,7 @@ button { font-family: inherit; color: inherit; border: 0; background: none; padd
 .stage-btn .st-stars i { font-style: normal; font-size: 8px; color: #E7DCE4; }
 .stage-btn .st-stars i.on { color: var(--amber); }
 .stage-btn .st-lock svg { width: 15px; height: 15px; }
-.map-foot { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-bottom: 6px; }
+.map-foot { display: flex; align-items: center; gap: 10px; margin-top: auto; padding: 14px 0 8px; }
 .map-stat { display: flex; flex-direction: column; align-items: center; min-width: 54px; padding: 6px 8px; border-radius: 14px; background: #fff; box-shadow: var(--shadow-s); }
 .map-stat b { font-size: 15px; font-weight: 900; }
 .map-stat span { font-size: 10px; font-weight: 800; color: var(--ink-soft); }
