@@ -1193,6 +1193,8 @@
     var params = new URLSearchParams(window.location.search);
     state.shots = !!params.get('shot');
     if (state.shots) {
+      // Store captures always use the free Sunrise palette.
+      profile.skin = 'sunrise';
       document.body.classList.add('shot');
       document.documentElement.classList.add('shot');
       // Inline styles beat the stylesheet here: the page must be exactly 1080x1920
@@ -1280,7 +1282,7 @@
       return;
     }
     if (name === 'combo') {
-      var cg = demoPlay(41);
+      var cg = demoPlay(102);
       var plan = C.solveOrder(cg).order.slice(0, 6);
       plan.forEach(function (p, i) {
         setTimeout(function () { onTap(p.r, p.c); }, 300 + i * 230);
