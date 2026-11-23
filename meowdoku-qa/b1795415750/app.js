@@ -1135,6 +1135,11 @@
       showConflicts: true
     });
     window.MeowGame.setOption('forceDpr', 2);
+    window.MeowGame.setHandlers({
+      onCellDown: onCellDown,
+      onCellMove: onCellMove,
+      onCellUp: onCellUp
+    });
     window.MeowGame.resize();
     updateHud();
     updateBoosterButtons();
@@ -1239,6 +1244,18 @@
   window.MeowApp = {
     sfx: sfx,
     startStage: startStage,
+    /* QA only: fill the stage solution so an automated run can reach the result screen. */
+    qaSolve: function () {
+      if (!CAPTURE || !engine) return false;
+      engine.stage.solution.forEach(function (cell) {
+        if (engine.cells[cell] !== C.CAT) engine.setCell(cell, C.CAT);
+      });
+      engine.afterChange();
+      window.MeowGame.sync();
+      updateHud();
+      if (engine.status === 'won') onWin();
+      return engine.status === 'won';
+    },
     getProfile: function () { return profile; },
     getEngine: function () { return engine; },
     remaining: function () { return remainingMs; }
