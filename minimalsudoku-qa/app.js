@@ -459,6 +459,29 @@
     save();
     showScreen('game');
     startTimer();
+    if (window.__QA_SCENE__ === 'play' || window.__QA_SCENE__ === 'hint') {
+      setTimeout(function () {
+        var holes = [], i;
+        for (i = 0; i < 81; i++) if (!game.puzzle[i]) holes.push(i);
+        var fill = window.__QA_SCENE__ === 'hint' ? 8 : 20;
+        for (i = 0; i < Math.min(fill, holes.length); i++) game.grid[holes[i]] = game.solution[holes[i]];
+        if (window.__QA_SCENE__ === 'play') {
+          var cand = S.candidates(game.grid);
+          var noteCells = holes.slice(fill + 2, fill + 4);
+          noteCells.forEach(function (idx) {
+            var list = [];
+            for (var n = 1; n <= 9; n++) if (cand[idx] & (1 << (n - 1))) list.push(n);
+            game.notes[idx] = list.slice(0, 4);
+          });
+          selected = holes[fill + 1] || holes[0];
+          renderAll();
+        } else {
+          renderAll();
+          setTimeout(function () { useHint(); }, 320);
+        }
+        save();
+      }, 600);
+    }
     if (window.__QA_SOLVE__) {
       var m = /[?&]time=([0-9]+)/.exec(location.search);
       var secs = m ? parseInt(m[1], 10) : 0;
