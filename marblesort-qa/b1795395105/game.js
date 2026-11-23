@@ -301,19 +301,16 @@
 
       var cellW = W / cols;
       var cellH = H / rows;
+      var rowGap = Math.max(10, Math.min(26, cellH * 0.12));
 
-      var marbleD = Math.min(cellW * 0.62, cellH * 0.86 / cap);
-      marbleD = Math.max(14, Math.min(marbleD, 42));
+      var marbleD = Math.min(cellW * 0.62, (cellH - rowGap - 10) / cap - 2);
+      marbleD = Math.max(12, Math.min(marbleD, 48));
       var railW = marbleD * 1.24 + 14;
       var railH = cap * (marbleD + 2) + 20;
 
-      // The board must fit even when a spare rail was added mid-stage.
-      var maxRailH = cellH * 0.94;
-      if (railH > maxRailH) {
-        marbleD = (maxRailH - 20) / cap - 2;
-        railW = marbleD * 1.24 + 14;
-        railH = cap * (marbleD + 2) + 20;
-      }
+      // Centre the whole grid as one block so rows do not drift apart.
+      var gridH = rows * railH + (rows - 1) * rowGap;
+      var startY = (H - gridH) / 2 + railH / 2;
 
       var skin = SKINS[currentSkin] || SKINS.default;
 
@@ -321,7 +318,7 @@
         var col = i % cols;
         var row = Math.floor(i / cols);
         var cx = cellW * col + cellW / 2;
-        var cy = cellH * row + cellH / 2;
+        var cy = startY + row * (railH + rowGap);
         var rail = this.makeRail(i, cx, cy, railW, railH, marbleD, skin);
         this.rails.push(rail);
       }

@@ -314,7 +314,7 @@
     var gift = $('homeGift');
     var ready = save.gift && !save.gift.claimed;
     gift.classList.toggle('ready', !!ready);
-    var giftText = t(ready ? 'home.giftReady' : 'home.giftStreak', { n: save.gift ? save.gift.streak : 0 });
+    var giftText = t(ready ? 'home.giftReady' : 'home.giftStreak', { n: Math.max(1, save.gift ? save.gift.streak : 0) });
     $('giftText').textContent = giftText;
   }
 
@@ -459,7 +459,7 @@
     var h = new Date().getHours();
     $('questReset').textContent = t('quests.reset', { h: 24 - h });
 
-    var streak = save.gift ? save.gift.streak : 0;
+    var streak = Math.max(1, save.gift ? save.gift.streak : 0);
     var card = document.createElement('div');
     card.className = 'streak-card';
     card.innerHTML = '<div class="streak-orb">✦</div><div><h4></h4><p></p></div>';
@@ -494,7 +494,7 @@
       var btn = document.createElement('button');
       if (q.claimed) { btn.textContent = t('common.claimed'); btn.disabled = true; }
       else if (questReady(q)) { btn.textContent = t('common.claim'); btn.addEventListener('click', function () { claimQuest(q, def); }); }
-      else { btn.textContent = t('common.ok'); btn.disabled = true; }
+      else { btn.textContent = t('quests.ongoing'); btn.disabled = true; }
       card.querySelector('.quest-foot').appendChild(btn);
       body.appendChild(card);
     });

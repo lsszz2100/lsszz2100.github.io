@@ -65,6 +65,7 @@
     'map.boss': 'Boss',
     'map.challenge': 'Challenge',
     'map.lockHint': 'Clear stage {n} to open',
+    'quests.ongoing': 'In progress',
 
     'game.stage': 'Stage {n}',
     'game.movesLeft': 'Moves left',
@@ -88,6 +89,9 @@
 
     'win.title': 'Stage cleared',
     'win.moves': '{n} moves',
+    'win.movesLabel': 'Moves',
+    'win.parLabel': 'Par',
+    'win.coinsLabel': 'Coins',
     'win.par': 'Par {n}',
     'win.coins': '+{n} coins',
     'win.next': 'Next stage',
@@ -247,7 +251,8 @@
     'map.title': '스테이지',
     'map.boss': '보스',
     'map.challenge': '도전',
-    'map.lockHint': '스테이지 {n}을(를) 클리어하면 열립니다',
+    'map.lockHint': '스테이지 {n} 클리어 후 열립니다',
+    'quests.ongoing': '진행 중',
 
     'game.stage': '스테이지 {n}',
     'game.movesLeft': '남은 이동',
@@ -271,6 +276,9 @@
 
     'win.title': '스테이지 클리어',
     'win.moves': '{n}회 이동',
+    'win.movesLabel': '이동',
+    'win.parLabel': '기준 이동',
+    'win.coinsLabel': '코인',
     'win.par': '기준 {n}회',
     'win.coins': '+{n} 코인',
     'win.next': '다음 스테이지',
