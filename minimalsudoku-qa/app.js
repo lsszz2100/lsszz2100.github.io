@@ -1543,21 +1543,38 @@
       var m;
       if ((m = /[?&]coins=([0-9]+)/.exec(q))) profile.coins = parseInt(m[1], 10);
       if ((m = /[?&]hints=([0-9]+)/.exec(q))) profile.hints = parseInt(m[1], 10);
-      if (/[?&]dailyweek=1/.test(q)) {
-        var base = new Date(Date.now() - 86400000 * 2);
-        for (var i = 0; i < 3; i++) {
-          var d = new Date(base.getTime() - 86400000 * i);
-          profile.daily.history.push(d.toISOString().slice(0, 10));
-        }
-        profile.daily.streak = 3;
-        profile.daily.best = 5;
-        profile.daily.lastDate = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+      function qaDay(offset) {
+        var d = new Date(Date.now() + offset * 86400000);
+        var mm = d.getMonth() + 1, dd = d.getDate();
+        return d.getFullYear() + '-' + (mm < 10 ? '0' + mm : mm) + '-' + (dd < 10 ? '0' + dd : dd);
+      }
+      var wk = /[?&]dailyweek=([0-9]+)/.exec(q);
+      if (wk) {
+        var n = parseInt(wk[1], 10);
+        for (var i = 1; i <= n; i++) profile.daily.history.push(qaDay(-i));
+        profile.daily.streak = n;
+        profile.daily.best = Math.max(n, 5);
+        profile.daily.lastDate = qaDay(-1);
       }
       if ((m = /[?&]diff=([a-z]+)/.exec(q))) {
         profile.stats.byDiff[m[1]] = { solved: 3, bestMs: 372000, totalMs: 1200000 };
         profile.stats.solved = 6;
       }
       if ((m = /[?&]solved=([0-9]+)/.exec(q))) profile.stats.solved = parseInt(m[1], 10);
+      if (/[?&]badges=1/.test(q)) {
+        profile.stats.solved = 12;
+        profile.stats.perfect = 5;
+        profile.stats.hintsUsed = 2;
+        profile.stats.bestStreak = 4;
+        profile.daily.best = 4;
+        profile.stats.byDiff.easy = { solved: 4, bestMs: 385000, totalMs: 1800000 };
+        profile.stats.byDiff.medium = { solved: 5, bestMs: 578000, totalMs: 3200000 };
+        profile.stats.byDiff.hard = { solved: 2, bestMs: 813000, totalMs: 1800000 };
+        profile.stats.byDiff.master = { solved: 1, bestMs: 1240000, totalMs: 1240000 };
+        profile.achievements = { first: true, ten: true, nohint: true, perfect: true, master: true, daily3: true, speed: true, daily7: false, sweep: true };
+        profile.themes.owned = ['paper', 'mint', 'sunrise'];
+        profile.themes.active = 'paper';
+      }
       save();
     })();
     I.setLang(profile.lang || 'en');
