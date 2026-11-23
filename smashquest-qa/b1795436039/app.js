@@ -216,6 +216,13 @@
 
   // ---------------------------------------------------------------- home
 
+  const ICON_INK = {
+    hammer: '<svg viewBox="0 0 24 24"><rect x="10" y="2.4" width="11.5" height="5.6" rx="1.8" transform="rotate(45 15.75 5.2)" fill="#4B4363"></rect><path d="M10.2 11.8L4 18" stroke="#4B4363" stroke-width="2.8" stroke-linecap="round" fill="none"></path></svg>',
+    bomb: '<svg viewBox="0 0 24 24"><circle cx="10.5" cy="14.5" r="6.6" fill="#4B4363"></circle><path d="M15.2 9.6c1.7-1.4 2.3-3.6 1.3-5.4" stroke="#4B4363" stroke-width="2.1" stroke-linecap="round" fill="none"></path><circle cx="18.4" cy="3.6" r="1.8" fill="#4B4363"></circle></svg>',
+    shuffle: '<svg viewBox="0 0 24 24"><path d="M3 6h4.5l9 12H21M3 18h4.5l9-12H21" stroke="#4B4363" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><path d="M17.5 3l3.5 3-3.5 3M17.5 15l3.5 3-3.5 3" stroke="#4B4363" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>'
+  };
+
+
   function renderHome() {
     const nextStage = Math.min(C.STAGE_COUNT, Math.max(1, profile.unlocked));
     $('#homeStage').textContent = t('home.level', { n: nextStage });
@@ -239,9 +246,9 @@
     const kit = $('#homeKit');
     if (kit) {
       kit.innerHTML =
-        '<span class="kit-pill"><svg viewBox="0 0 24 24" fill="none" stroke="#4B4363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-3 3-7-7z"/><path d="M11 8L4 15a2 2 0 0 0 0 3l2 2a2 2 0 0 0 3 0l7-7"/></svg><b>' + (profile.boosters.hammer || 0) + '</b></span>' +
-        '<span class="kit-pill"><svg viewBox="0 0 24 24" fill="none" stroke="#4B4363" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="14" r="7"/><path d="M16 8l2-2M18 6l2 2M20 8c1-2 0-4-2-4"/></svg><b>' + (profile.boosters.bomb || 0) + '</b></span>' +
-        '<span class="kit-pill"><svg viewBox="0 0 24 24" fill="none" stroke="#4B4363" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h4l8 12h4"/><path d="M4 18h4l8-12h4"/></svg><b>' + (profile.boosters.shuffle || 0) + '</b></span>';
+        '<span class="kit-pill">' + ICON_INK.hammer + '<b>' + (profile.boosters.hammer || 0) + '</b></span>' +
+        '<span class="kit-pill">' + ICON_INK.bomb + '<b>' + (profile.boosters.bomb || 0) + '</b></span>' +
+        '<span class="kit-pill">' + ICON_INK.shuffle + '<b>' + (profile.boosters.shuffle || 0) + '</b></span>';
     }
 
     const quests = C.refreshQuests(profile, C.todayKey());
@@ -318,9 +325,9 @@
     const packRow = $('#packRow');
     packRow.innerHTML = '';
     const ICON = {
-      hammer: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-3 3-7-7z"/><path d="M11 8L4 15a2 2 0 0 0 0 3l2 2a2 2 0 0 0 3 0l7-7"/></svg>',
-      bomb: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="14" r="7"/><path d="M16 8l2-2M18 6l2 2M20 8c1-2 0-4-2-4"/></svg>',
-      shuffle: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h4l8 12h4"/><path d="M4 18h4l8-12h4"/><path d="M17 3l3 3-3 3M17 15l3 3-3 3"/></svg>'
+      hammer: '<svg viewBox="0 0 24 24"><rect x="10" y="2.4" width="11.5" height="5.6" rx="1.8" transform="rotate(45 15.75 5.2)" fill="#fff"></rect><path d="M10.2 11.8L4 18" stroke="#fff" stroke-width="2.8" stroke-linecap="round" fill="none"></path></svg>',
+      bomb: '<svg viewBox="0 0 24 24"><circle cx="10.5" cy="14.5" r="6.6" fill="#fff"></circle><path d="M15.2 9.6c1.7-1.4 2.3-3.6 1.3-5.4" stroke="#fff" stroke-width="2.1" stroke-linecap="round" fill="none"></path><circle cx="18.4" cy="3.6" r="1.8" fill="#fff"></circle></svg>',
+      shuffle: '<svg viewBox="0 0 24 24"><path d="M3 6h4.5l9 12H21M3 18h4.5l9-12H21" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><path d="M17.5 3l3.5 3-3.5 3M17.5 15l3.5 3-3.5 3" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>'
     };
     const packs = [
       { kind: 'hammer', label: t('shop.hammerPack'), price: 110, color: 'linear-gradient(180deg,#FFB35C,#F0813C)', ico: ICON.hammer },
