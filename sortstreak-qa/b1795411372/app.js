@@ -1082,6 +1082,7 @@
   }
 
   function captureBegin() {
+    showScreen('game');
     window.SortGame.start({
       engine: engine,
       stage: C.stageAt(stageIndex),
