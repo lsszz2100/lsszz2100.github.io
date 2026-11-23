@@ -1139,6 +1139,7 @@
     applyCaptureLayout();
 
     const name = qp('screen', 'home');
+    const scrollTo = parseFloat(qp('scroll', '0')) || 0;
     if (name === 'map') {
       showScreen('map');
       renderMap(parseInt(qp('ch', '4'), 10) || 4);
@@ -1164,6 +1165,10 @@
     } else {
       showScreen('home');
       renderHome();
+    }
+    if (scrollTo > 0) {
+      const host = document.getElementById(name === 'map' ? 'map' : name);
+      if (host) host.scrollTop = scrollTo;
     }
   }
 
