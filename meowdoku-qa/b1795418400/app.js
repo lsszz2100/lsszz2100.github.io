@@ -210,6 +210,29 @@
     $$('#coinCount, .coin-mirror').forEach(function (el) { el.textContent = String(profile.coins); });
   }
 
+  /** A little cat face for cards and the home board, drawn as SVG so every coat shows. */
+  function catSvg(coat, size) {
+    const w = size || 44;
+    const c = coat || { fur: '#F6A85A', dark: '#DE8535', ear: '#FFD7B0', eye: '#4A3520' };
+    return '<svg viewBox="0 0 64 58" width="' + w + '" height="' + Math.round(w * 0.91) + '" aria-hidden="true">' +
+      '<path d="M11 23 L13 6 L27 15 Z" fill="' + c.fur + '"/>' +
+      '<path d="M53 23 L51 6 L37 15 Z" fill="' + c.fur + '"/>' +
+      '<path d="M15 21 L16 11 L24 17 Z" fill="' + c.ear + '"/>' +
+      '<path d="M49 21 L48 11 L40 17 Z" fill="' + c.ear + '"/>' +
+      '<ellipse cx="32" cy="32" rx="22" ry="20" fill="' + c.fur + '"/>' +
+      '<ellipse cx="32" cy="41" rx="13" ry="8" fill="#FFFFFF" opacity="0.16"/>' +
+      '<circle cx="23.5" cy="29" r="3.4" fill="' + c.eye + '"/>' +
+      '<circle cx="40.5" cy="29" r="3.4" fill="' + c.eye + '"/>' +
+      '<circle cx="24.7" cy="27.8" r="1.1" fill="#FFFFFF"/>' +
+      '<circle cx="41.7" cy="27.8" r="1.1" fill="#FFFFFF"/>' +
+      '<ellipse cx="17" cy="37" rx="3.6" ry="2.4" fill="#F7A8B6" opacity="0.75"/>' +
+      '<ellipse cx="47" cy="37" rx="3.6" ry="2.4" fill="#F7A8B6" opacity="0.75"/>' +
+      '<path d="M29 35 L35 35 L32 38.5 Z" fill="#E97A8C"/>' +
+      '<path d="M32 38.5 q-2.4 3 -6 2.6 M32 38.5 q2.4 3 6 2.6" stroke="#E97A8C" stroke-width="1.5" fill="none" stroke-linecap="round"/>' +
+      '<path d="M8 33 h9 M8 38 h9 M56 33 h-9 M56 38 h-9" stroke="' + c.dark + '" stroke-width="1.4" opacity="0.45" stroke-linecap="round"/>' +
+      '</svg>';
+  }
+
   function starsHtml(n) {
     let out = '';
     for (let i = 0; i < 3; i += 1) out += '<i class="' + (i < n ? 'on' : '') + '">★</i>';
@@ -217,6 +240,27 @@
   }
 
   // ---------------------------------------------------------------- home
+
+  function renderHeroBoard() {
+    const host = $('#heroBoard');
+    if (!host || host.childElementCount) return;
+    const stage = C.stageAt(0);
+    const cats = stage.solution.slice(0, 3);
+    const marks = [];
+    for (let i = 0; i < stage.n * stage.n && marks.length < 6; i += 1) {
+      if (stage.solutionSet.has(i)) continue;
+      if (i % 3 === 0) marks.push(i);
+    }
+    let html = '';
+    for (let i = 0; i < stage.n * stage.n; i += 1) {
+      const col = C.REGION_COLORS[stage.regions[i] % C.REGION_COLORS.length];
+      html += '<span class="hb-cell" style="background:' + col.base + ';box-shadow:inset 0 0 0 1.5px ' + col.edge + '">';
+      if (cats.indexOf(i) >= 0) html += catSvg(C.coatFor(profile), 40);
+      else if (marks.indexOf(i) >= 0) html += '<b class="hb-x">×</b>';
+      html += '</span>';
+    }
+    host.innerHTML = html;
+  }
 
   function renderHome() {
     const nextStage = Math.min(C.STAGE_COUNT, Math.max(1, profile.unlocked));
@@ -228,6 +272,7 @@
     $('#homeStars').textContent = '★ ' + C.totalStars(profile) + ' / ' + (C.STAGE_COUNT * 3);
     $('#homeProgress').textContent = t('home.progress', { done: profile.cleared, total: C.STAGE_COUNT });
     refreshCoins();
+    renderHeroBoard();
     I.apply(document.getElementById('home'));
 
     const giftReady = profile.daily.lastClaim !== C.todayKey();
@@ -337,11 +382,8 @@
       el.className = 'skin-card' + (equipped ? ' on' : '');
       const price = equipped ? t('common.equipped') : (owned ? t('common.equip') : '● ' + s.price);
       const cls = equipped ? 'eq' : (owned ? 'owned' : '');
-      el.innerHTML = '<span class="cat-dot">' +
-        '<b style="background:' + s.fur + ';box-shadow:inset 0 -4px 0 ' + s.dark + '"></b>' +
-        '<i class="l"></i><i class="r"></i></span>' +
+      el.innerHTML = '<span class="cat-dot">' + catSvg(s, 52) + '</span>' +
         '<b>' + pick(s) + '</b><span class="skin-price ' + cls + '">' + price + '</span>';
-      el.querySelector('.cat-dot b').style.borderColor = s.fur;
       el.onclick = function () {
         const res = C.buyItem(profile, 'coat', s.id);
         if (!res.ok) { toast(t('shop.notEnough')); return; }
