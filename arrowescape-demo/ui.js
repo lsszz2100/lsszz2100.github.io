@@ -1385,6 +1385,7 @@
       profile.dailyBest = 5;
       profile.bestCombo = 7;
       profile.bestTaps = { '52': 48, '41': 39, '64': 71 };
+      profile.lastLevel = unlocked;
       saveProfile();
       renderHome();
     },
