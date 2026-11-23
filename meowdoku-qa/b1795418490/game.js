@@ -57,7 +57,7 @@
       const pad = Math.min(w, h) * 0.02;
       this.cell = Math.floor((Math.min(w, h) - pad * 2) / n);
       this.ox = Math.round((w - this.cell * n) / 2);
-      this.oy = Math.round((h - this.cell * n) / 2);
+      this.oy = Math.round((h - this.cell * n) * 0.42);
       this.dirty = true;
     }
 
@@ -179,7 +179,7 @@
         }
 
         if (value === C.EX) {
-          g.lineStyle(Math.max(2, cell * 0.045), hex(colObj.ink), 0.38);
+          g.lineStyle(Math.max(2, cell * 0.04), hex(colObj.ink), 0.3);
           const m = cell * 0.33;
           g.lineBetween(x + m, y + m, x + cell - m, y + cell - m);
           g.lineBetween(x + cell - m, y + m, x + m, y + cell - m);
