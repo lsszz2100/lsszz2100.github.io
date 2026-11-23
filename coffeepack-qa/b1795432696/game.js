@@ -401,12 +401,17 @@
       // 뚜껑(넓은 타원 + 살짝 어두운 띠)
       const lidCol = Phaser.Display.Color.Interpolate.ColorWithColor(
         Phaser.Display.Color.ValueToColor(paper),
-        Phaser.Display.Color.ValueToColor(drink), 100, 16
+        Phaser.Display.Color.ValueToColor(drink), 100, 30
       ).color;
       g.fillStyle(lidCol, alpha);
-      g.fillRoundedRect(x - topW * 1.07, topY - h * 0.1, topW * 2.14, h * 0.15, h * 0.07);
-      g.fillStyle(0xffffff, 0.42 * alpha);
-      g.fillRoundedRect(x - topW * 0.7, topY - h * 0.085, topW * 0.55, h * 0.045, h * 0.02);
+      g.fillRoundedRect(x - topW * 1.01, topY - h * 0.085, topW * 2.02, h * 0.115, h * 0.05);
+      g.fillStyle(0xffffff, 0.5 * alpha);
+      g.fillRoundedRect(x - topW * 0.62, topY - h * 0.07, topW * 0.5, h * 0.035, h * 0.015);
+      g.lineStyle(Math.max(2, size * 0.03), tint(colorHex, -0.35), 0.5 * alpha);
+      g.beginPath();
+      g.moveTo(x - topW * 1.01, topY + h * 0.032);
+      g.lineTo(x + topW * 1.01, topY + h * 0.032);
+      g.strokePath();
 
       if (o.selected) {
         g.lineStyle(6, 0x2C9C86, 0.95);
