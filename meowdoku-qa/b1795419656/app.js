@@ -593,6 +593,9 @@
     lastFrame = 0;
     timerOn = true;
     showScreen('game');
+    const chapter = C.CHAPTERS[stage.chapter];
+    $('#boardCaption').textContent = t('map.chapterN', { n: stage.chapter + 1 }) + ' · ' +
+      pick(chapter) + ' · ' + stage.n + '×' + stage.n;
     requestAnimationFrame(function () {
       window.MeowGame.start({
         engine: engine,
