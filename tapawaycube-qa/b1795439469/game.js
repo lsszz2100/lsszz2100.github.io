@@ -160,7 +160,7 @@
       tw = Math.max(24, Math.min(210, tw));
       const sh = tw * SH_RATIO;
       const ox = area.left + (availW - bw * tw) / 2 - minX * tw;
-      const oy = area.top + (availH - bh * tw) * 0.34 - minY * tw;
+      const oy = area.top + (availH - bh * tw) * 0.5 - minY * tw;
       this.geo = { tw: tw, sh: sh, ox: ox, oy: oy };
     },
 
@@ -251,40 +251,13 @@
       g.fillStyle(0xffffff, 0.28);
       g.fillCircle(wd * 0.92, H * 0.8, 220);
 
-      if (!this.engine || !this.geo) return;
-      // 블록 전체가 들어오는 받침(그림자 판)
-      const gx = this.geo;
-      let minX = 1e9; let maxX = -1e9; let minY = 1e9; let maxY = -1e9;
-      for (let i = 0; i < this.engine.blocks.length; i += 1) {
-        const b = this.engine.blocks[i];
-        if (!b.alive) continue;
-        const c = this.project(b.x, b.y, b.z);
-        minX = Math.min(minX, c.x - gx.tw * 0.5);
-        maxX = Math.max(maxX, c.x + gx.tw * 0.5);
-        minY = Math.min(minY, c.y - gx.tw * 0.25);
-        maxY = Math.max(maxY, c.y + gx.tw * 0.25 + gx.sh);
-      }
-      if (minX > maxX) return;
-      let pad = gx.tw * 0.5;
-      let x0 = minX - pad;
-      let x1 = maxX + pad;
-      let y0 = minY - pad * 0.62;
-      let y1 = maxY + pad * 1.1;
       const a = this.area;
-      if (a) {
-        // 판이 화면 밖으로 나가지 않게 자른다.
-        const room = Math.min(minX - a.left, a.right - maxX);
-        if (room > 6 && pad > room) { pad = Math.max(6, room); }
-        x0 = Math.max(a.left, minX - pad);
-        x1 = Math.min(a.right, maxX + pad);
-        y0 = Math.max(a.top, minY - pad * 0.62);
-        y1 = Math.min(a.bottom, maxY + pad * 1.1);
-      }
-      g.fillStyle(col(this.stage.frame), 0.8);
-      g.fillRoundedRect(x0, y0, x1 - x0, y1 - y0, 44);
-      const ip = Math.min(pad * 0.42, 26);
+      if (!a) return;
+      // 판은 화면의 보드 영역 전체를 채운다(블록은 그 안에 가운데 놓인다).
+      g.fillStyle(col(this.stage.frame), 0.72);
+      g.fillRoundedRect(a.left - 10, a.top - 10, (a.right - a.left) + 20, (a.bottom - a.top) + 20, 46);
       g.fillStyle(col(this.stage.board), 0.96);
-      g.fillRoundedRect(x0 + ip, y0 + ip * 0.7, (x1 - x0) - ip * 2, (y1 - y0) - ip * 1.4, 34);
+      g.fillRoundedRect(a.left + 4, a.top + 4, (a.right - a.left) - 8, (a.bottom - a.top) - 8, 36);
     },
 
     // ------------------------------------------------------------ input
