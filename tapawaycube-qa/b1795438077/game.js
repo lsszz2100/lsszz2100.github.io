@@ -171,14 +171,31 @@
       ];
     },
 
+    /** 탭 지점: 보이는 윗면을 먼저 맞춘다(가까운 블록부터). 그다음 옆면까지. */
     blockAt: function (wx, wy) {
       const e = this.engine;
       if (!e) return -1;
       const order = this.drawOrder();
+      const tw = this.geo.tw;
       for (let k = order.length - 1; k >= 0; k -= 1) {
         const i = order[k];
         const b = e.blocks[i];
         const c = this.project(b.x, b.y, b.z);
+        if (this.offsets[i]) { c.x += this.offsets[i].x; c.y += this.offsets[i].y; }
+        if (this.lift[i]) c.y -= this.lift[i];
+        const top = [
+          [c.x, c.y - tw * 0.25],
+          [c.x + tw * 0.5, c.y],
+          [c.x, c.y + tw * 0.25],
+          [c.x - tw * 0.5, c.y]
+        ];
+        if (pointInPoly(wx, wy, top)) return i;
+      }
+      for (let k = order.length - 1; k >= 0; k -= 1) {
+        const i = order[k];
+        const b = e.blocks[i];
+        const c = this.project(b.x, b.y, b.z);
+        if (this.offsets[i]) { c.x += this.offsets[i].x; c.y += this.offsets[i].y; }
         if (this.lift[i]) c.y -= this.lift[i];
         if (pointInPoly(wx, wy, this.silhouette(c))) return i;
       }
@@ -587,6 +604,17 @@
         for (let i = 1; i < pts.length; i += 1) ov.lineTo(pts[i][0], pts[i][1]);
         ov.closePath();
         ov.strokePath();
+        // 위에서 가리키는 표식
+        const bob = Math.sin(this.t * 5) * this.geo.tw * 0.06;
+        const ay = c.y - this.geo.tw * 0.55 - bob;
+        const aw = this.geo.tw * 0.12;
+        ov.fillStyle(0xFF9E00, 0.95);
+        ov.beginPath();
+        ov.moveTo(c.x, ay + aw * 1.2);
+        ov.lineTo(c.x - aw, ay);
+        ov.lineTo(c.x + aw, ay);
+        ov.closePath();
+        ov.fillPath();
       }
 
       // 파티클
