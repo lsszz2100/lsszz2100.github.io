@@ -335,7 +335,7 @@
       const el = document.createElement('div');
       el.className = 'pack';
       el.innerHTML = '<span class="pk-ico" style="background:' + p.color + '">' + p.ico + '</span>' +
-        '<b>' + p.label + '</b><span>● ' + p.price + '</span>' +
+        '<b>' + p.label + '</b><span><i class="coin-ico">●</i> ' + p.price + '</span>' +
         '<button class="pk-buy">' + t('common.buy') + '</button>';
       el.querySelector('.pk-buy').onclick = function () {
         if (profile.coins < p.price) { toast(t('shop.notEnough')); return; }
@@ -358,11 +358,12 @@
       const el = document.createElement('div');
       el.className = 'skin-card' + (equipped ? ' on' : '');
       const price = equipped ? t('common.equipped') : (owned ? t('common.equip') : '● ' + s.price);
+      const priceHtml = price.replace('●', '<i class="coin-ico">●</i>');
       const cls = equipped ? 'eq' : (owned ? 'owned' : '');
       const pv = s.preview || ['#E8A970', '#C4793C'];
       const fill = 'linear-gradient(160deg,' + pv[0] + ',' + pv[1] + ')';
       el.innerHTML = '<span class="skin-dot" style="background:' + fill + '"></span>' +
-        '<b>' + pick({ en: s.en, ko: s.ko }) + '</b><span class="skin-price ' + cls + '">' + price + '</span>';
+        '<b>' + pick({ en: s.en, ko: s.ko }) + '</b><span class="skin-price ' + cls + '">' + priceHtml + '</span>';
       el.onclick = function () {
         const res = C.buyItem(profile, 'pipe', s.id);
         if (!res.ok) { toast(t('shop.notEnough')); return; }
@@ -385,8 +386,9 @@
         ? 'background:linear-gradient(160deg,' + th.sky[0] + ',' + th.sky[1] + ')'
         : 'background:linear-gradient(160deg,#FFF7EE,#FFE8CF)';
       const price = equipped ? t('common.equipped') : (owned ? t('common.equip') : '● ' + th.price);
+      const priceHtml2 = price.replace('●', '<i class="coin-ico">●</i>');
       el.innerHTML = '<span class="theme-swatch" style="' + swatch + '"></span>' +
-        '<b>' + pick({ en: th.en, ko: th.ko }) + '</b><span>' + price + '</span>';
+        '<b>' + pick({ en: th.en, ko: th.ko }) + '</b><span>' + priceHtml2 + '</span>';
       el.onclick = function () {
         const res = C.buyItem(profile, 'theme', th.id);
         if (!res.ok) { toast(t('shop.notEnough')); return; }
@@ -415,7 +417,7 @@
       el.className = 'quest';
       el.innerHTML = '<div class="quest-top"><b>' + pick({ en: q.en, ko: q.ko }) + '</b>' +
         '<span class="quest-claim' + (q.claimed || !ready ? ' off' : '') + '">' +
-        (q.claimed ? t('common.claimed') : (ready ? t('common.claim') : '● ' + q.coins)) + '</span></div>' +
+        (q.claimed ? t('common.claimed') : (ready ? t('common.claim') : '● ' + q.coins)).replace('●', '<i class="coin-ico">●</i>') + '</span></div>' +
         '<div class="quest-bar"><i style="width:' + Math.round((value / q.target) * 100) + '%"></i></div>' +
         '<div class="quest-bottom"><span>' + value + ' / ' + q.target + '</span></div>';
       if (ready && !q.claimed) {
