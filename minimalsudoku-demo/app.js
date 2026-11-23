@@ -9,7 +9,7 @@
   var I = window.I18N;
 
   var SAVE_KEY = 'minimalsudoku.save.v1';
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var PRIVACY_URL = 'https://lsszz2100.github.io/minimalsudoku-privacy/';
   var HINT_PRICE = 40;
 
@@ -26,6 +26,9 @@
   var modalOpen = false;
   var modalOnClose = null;
   var captureMode = false;
+  var resultState = null;
+  var rewardCoinsAmount = 0;
+  var celebrateTimer = null;
 
   var cellEls = [];
   var padEls = {};
@@ -44,11 +47,25 @@
 
   function t(key, params) { return I.t(key, params); }
 
+  /** Every place the coin/hint balance is shown, in one call. */
+  function refreshWallet() {
+    var coins = String(profile.coins);
+    var coinNode = $('coinCount');
+    if (coinNode) coinNode.textContent = coins;
+    var themeNode = $('themeCoins');
+    if (themeNode) themeNode.textContent = coins;
+    var hintNode = $('hintCount');
+    if (hintNode) hintNode.textContent = String(profile.hints);
+  }
+
   function today() {
     var d = new Date();
     var m = d.getMonth() + 1, day = d.getDate();
     return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
   }
+
+  /** This weekday's daily difficulty (easy … master) — the board and seed stay the same for everyone. */
+  function dailyTier() { return S.dailyTier ? S.dailyTier(today()) : 'medium'; }
 
   function bridge() { return window.AndroidHost || null; }
 
@@ -191,6 +208,7 @@
     $('btnLangHome').setAttribute('aria-label', I.getLang() === 'en' ? 'Switch to Korean' : '영어로 전환');
     $('btnSettingsHome').setAttribute('aria-label', t('settings'));
     $('btnPause').setAttribute('aria-label', t('pause'));
+    $('btnAdConsent').setAttribute('aria-label', t('adConsent'));
     $('legalTitle').textContent = t('legalTitle');
     $('verLine').textContent = t('version', { v: VERSION });
     document.documentElement.lang = I.getLang();
@@ -218,7 +236,9 @@
       card.hidden = true;
     }
 
-    $('dailySub').textContent = profile.daily.done ? t('todayDone') : t('todayLeft');
+    $('dailySub').textContent = profile.daily.done
+      ? t('todayDone')
+      : t('dailyToday', { d: t(dailyTier()) });
     $('statsSub').textContent = t('solvedCount', { n: profile.stats.solved });
     var done = 0, claimable = 0;
     profile.quests.items.forEach(function (q) {
@@ -238,6 +258,28 @@
       var base = t(diff + 'Desc');
       descNode.textContent = best && best.bestMs > 0 ? base + ' · ' + St.formatTime(best.bestMs) : base;
     }
+    renderStreak();
+  }
+
+  /** The daily streak card: chain length, today's reward and the week strip. */
+  function renderStreak() {
+    var card = $('streakCard');
+    if (!card || !profile) return;
+    var streak = St.liveDailyStreak(profile, today());
+    card.classList.toggle('hot', streak > 0);
+    $('streakNum').textContent = streak > 0 ? t('streakDays', { n: streak }) : t('streakNone');
+    $('streakReward').textContent = profile.daily.done
+      ? t('streakTomorrow', { n: St.dailyBonusFor(streak) })
+      : t('streakReward', { n: St.dailyBonusFor(streak + 1) });
+
+    var host = $('weekStrip');
+    host.innerHTML = '';
+    St.dailyWeek(profile, today()).forEach(function (day, i) {
+      var cell = el('div', 'wd' + (day.done ? ' on' : '') + (day.today ? ' today' : ''));
+      cell.appendChild(el('span', 'wd-dot', day.done ? '✓' : ''));
+      cell.appendChild(el('span', 'wd-name', t('wd' + i)));
+      host.appendChild(cell);
+    });
   }
 
   // ---------------------------------------------------------------- board
@@ -523,6 +565,8 @@
           sound('place');
           vibrate(10);
           clearPeerNotes(i, n);
+          flashUnits(i);
+          pulseDigit(n);
         }
       }
     }
@@ -597,6 +641,26 @@
     finishGame();
   }
 
+  function startDaily() {
+    if (profile.daily.done) {
+      openModal({
+        title: t('todayDone'),
+        sub: t('dailyReplay'),
+        actions: [
+          {
+            label: t('nextPuzzle'), primary: true, onClick: function () {
+              closeModal();
+              startGame(dailyTier(), { daily: true, seed: S.dailySeed(today()) });
+            }
+          },
+          { label: t('cancel'), onClick: closeModal }
+        ]
+      });
+      return;
+    }
+    startGame(dailyTier(), { daily: true, seed: S.dailySeed(today()) });
+  }
+
   function finishGame() {
     game.timeBase = currentMs();
     game.running = false;
@@ -605,7 +669,7 @@
     var ms = game.timeBase;
     var diff = game.difficulty;
     var prevBest = profile.stats.byDiff[diff].bestMs;
-    var best = prevBest === 0 || ms < prevBest;
+    var isBest = prevBest === 0 || ms < prevBest;
     var dailyCredit = game.daily && !profile.daily.done;
 
     var result = St.recordSolve(profile, {
@@ -619,21 +683,90 @@
     save();
     sound('clear');
     vibrate(60);
+    celebrateBoard();
     renderChrome();
-    renderHome();
+    refreshWallet();
 
     var showAd = profile.stats.solved % 3 === 0;
-    var dataModal = function () { showResultModal(ms, best, result, dailyCredit); };
+    var dataModal = function () {
+      clearCelebration();
+      showResultModal({
+        ms: ms,
+        isBest: isBest,
+        result: result,
+        dailyCredit: dailyCredit,
+        prevBest: prevBest,
+        adUsed: false
+      });
+    };
 
-    if (showAd && bridge() && bridge().tryShowInterstitial) {
-      pendingModal = dataModal;
-      var started = false;
-      try { started = bridge().tryShowInterstitial(); } catch (e) { started = false; }
-      if (!started) { pendingModal = null; dataModal(); }
-      else { setTimeout(function () { if (pendingModal === dataModal) { pendingModal = null; dataModal(); } }, 12000); }
-    } else {
-      dataModal();
+    // Let the finishing wave play across the board before an ad or the result card covers it.
+    if (celebrateTimer) clearTimeout(celebrateTimer);
+    celebrateTimer = setTimeout(function () {
+      celebrateTimer = null;
+      if (showAd && bridge() && bridge().tryShowInterstitial) {
+        pendingModal = dataModal;
+        var started = false;
+        try { started = bridge().tryShowInterstitial(); } catch (e) { started = false; }
+        if (!started) { pendingModal = null; dataModal(); }
+        else { setTimeout(function () { if (pendingModal === dataModal) { pendingModal = null; dataModal(); } }, 12000); }
+      } else {
+        dataModal();
+      }
+    }, 660);
+  }
+
+  /** A short wave of colour over the finished board. */
+  function celebrateBoard() {
+    for (var i = 0; i < 81; i++) {
+      var cell = cellEls[i].root;
+      var delay = (Math.floor(i / 9) + (i % 9)) * 20;
+      cell.style.animationDelay = delay + 'ms';
+      cell.classList.add('win-cell');
     }
+  }
+
+  function clearCelebration() {
+    for (var i = 0; i < 81; i++) {
+      var cell = cellEls[i].root;
+      cell.classList.remove('win-cell');
+      cell.style.animationDelay = '';
+    }
+  }
+
+  /** Row, column or box just finished: flash it so the win feels local. */
+  function flashUnits(index) {
+    if (!game) return;
+    var r = Math.floor(index / 9), c = index % 9;
+    var row = [], col = [], box = [];
+    for (var k = 0; k < 9; k++) { row.push(r * 9 + k); col.push(k * 9 + c); }
+    var br = Math.floor(r / 3) * 3, bc = Math.floor(c / 3) * 3;
+    for (var a = 0; a < 3; a++) for (var b = 0; b < 3; b++) box.push((br + a) * 9 + bc + b);
+    [row, col, box].forEach(function (cells) {
+      for (var i = 0; i < 9; i++) {
+        if (!game.grid[cells[i]] || game.grid[cells[i]] !== game.solution[cells[i]]) return;
+      }
+      cells.forEach(function (idx, n) {
+        setTimeout(function () {
+          var cell = cellEls[idx].root;
+          cell.classList.add('unit-flash');
+          setTimeout(function () { cell.classList.remove('unit-flash'); }, 470);
+        }, n * 22);
+      });
+    });
+  }
+
+  /** All nine of a number placed: give the key a quiet pulse. */
+  function pulseDigit(value) {
+    if (!game) return;
+    var count = 0;
+    for (var i = 0; i < 81; i++) if (game.grid[i] === value) count++;
+    if (count !== 9) return;
+    var key = padEls[value] && padEls[value].root;
+    if (!key) return;
+    key.classList.add('pulse');
+    setTimeout(function () { key.classList.remove('pulse'); }, 340);
+    vibrate(14);
   }
 
   // ---------------------------------------------------------------- hints
@@ -709,6 +842,8 @@
     clearPeerNotes(hint.index, hint.value);
     save();
     renderAll();
+    flashUnits(hint.index);
+    pulseDigit(hint.value);
     checkComplete();
   }
 
@@ -743,6 +878,7 @@
     St.buyHint(profile, HINT_PRICE);
     save();
     closeModal();
+    refreshWallet();
     renderChrome();
     toast(t('hintAdded'));
   }
@@ -794,34 +930,64 @@
     if (after) after();
   }
 
-  function showResultModal(ms, isBest, result, dailyCredit) {
+  function showResultModal(state) {
+    resultState = state;
+    var ms = state.ms, isBest = state.isBest, result = state.result;
+    var dailyCredit = state.dailyCredit, prevBest = state.prevBest || 0;
     var badges = (result.badges || []).map(function (b) { return t('a_' + b.id + '_name'); });
+    var delta = '';
+    if (!isBest && prevBest > 0) {
+      var gap = Math.abs(ms - prevBest);
+      delta = '<div class="result-delta">' + t('bestWas', { t: St.formatTime(prevBest) }) +
+        (ms > prevBest ? '  +' : '  −') + St.formatTime(gap) + '</div>';
+    }
     var body = '<div class="result-time"><strong>' + St.formatTime(ms) + '</strong></div>' +
       (isBest ? '<div class="result-best">' + t('newBest') + '</div>' : '') +
+      delta +
       '<div class="result-grid">' +
       '<div class="result-box"><strong>' + t(game.difficulty) + '</strong><span>' + t('difficulty') + '</span></div>' +
       '<div class="result-box"><strong>' + game.mistakes + '</strong><span>' + t('mistakes') + '</span></div>' +
       '<div class="result-box"><strong>' + game.hintsUsed + '</strong><span>' + t('hint') + '</span></div>' +
       '</div>' +
       '<div class="coin-gain">' + t('coinsEarned', { n: result.coins }) + '</div>' +
+      (result.dailyBonus > 0 ? '<div class="result-note">' + t('dailyBonusLine', { n: result.dailyBonus }) + '</div>' : '') +
+      (dailyCredit && result.dailyStreak > 0 ? '<div class="result-streak">' + t('dailyStreakResult', { n: result.dailyStreak }) + '</div>' : '') +
       (badges.length ? '<p class="modal-sub">' + t('badgeEarned') + ' ' + badges.join(' · ') + '</p>' : '') +
       (dailyCredit ? '<p class="modal-sub">' + t('todayDone') + '</p>' : '');
+
+    var actions = [
+      {
+        label: t('nextPuzzle'), primary: true, onClick: function () {
+          closeModal();
+          startGame(game.difficulty);
+        }
+      }
+    ];
+    if (!state.adUsed && bridge() && bridge().tryShowRewarded) {
+      actions.push({ label: t('doubleCoins', { n: result.coins }), onClick: watchRewardedCoins });
+    }
+    actions.push({ label: t('home'), onClick: function () { closeModal(); goHome(); } });
+
     openModal({
       title: t('solvedTitle'),
       sub: t('solvedBody'),
       body: body,
       dismissible: false,
-      actions: [
-        {
-          label: t('nextPuzzle'), primary: true, onClick: function () {
-            closeModal();
-            startGame(game.difficulty);
-          }
-        },
-        { label: t('home'), onClick: function () { closeModal(); goHome(); } }
-      ]
+      actions: actions
     });
     renderChrome();
+    refreshWallet();
+  }
+
+  /** Optional rewarded ad on the result card: the same coin reward again. */
+  function watchRewardedCoins() {
+    if (!resultState) return;
+    var b = bridge();
+    if (!b || !b.tryShowRewarded) { toast(t('noAd')); return; }
+    var started = false;
+    try { started = b.tryShowRewarded('coins'); } catch (e) { started = false; }
+    if (!started) { toast(t('noAd')); return; }
+    rewardCoinsAmount = resultState.result.coins;
   }
 
   function openPause() {
@@ -972,6 +1138,7 @@
           sound('hint');
           toast(t('coinsEarned', { n: gained }));
           renderQuests();
+          refreshWallet();
           renderHome();
           renderChrome();
         }
@@ -1005,11 +1172,12 @@
     mint: ['#FFFFFF', '#2C8C6F', '#F3FAF6', '#D5E9DE'],
     sunrise: ['#FFFFFF', '#C9762F', '#FFF8F0', '#EFDDC9'],
     lavender: ['#FFFFFF', '#6A5AA8', '#F8F6FD', '#E3DDF2'],
-    sky: ['#FFFFFF', '#2E72A6', '#F4F9FD', '#D9E6F1']
+    sky: ['#FFFFFF', '#2E72A6', '#F4F9FD', '#D9E6F1'],
+    blush: ['#FFFFFF', '#B65B6E', '#FFF6F7', '#F2D8DE']
   };
 
   function renderThemes() {
-    $('themeCoins').textContent = String(profile.coins);
+    refreshWallet();
     var host = $('themeList');
     host.innerHTML = '';
     St.THEMES.forEach(function (theme) {
@@ -1035,7 +1203,9 @@
         if (!res.ok) { toast(t('coinsShort', { n: theme.price - profile.coins })); return; }
         save();
         applyTheme();
+        refreshWallet();
         renderThemes();
+        if (game) renderChrome();
         sound('tap');
       });
       card.appendChild(btn);
@@ -1174,20 +1344,8 @@
         });
       })(diffCards[i]);
     }
-    $('btnDaily').addEventListener('click', function () {
-      if (profile.daily.done) {
-        openModal({
-          title: t('todayDone'),
-          sub: t('dailyReplay'),
-          actions: [
-            { label: t('nextPuzzle'), primary: true, onClick: function () { closeModal(); startGame('medium', { daily: true, seed: S.dailySeed(today()) }); } },
-            { label: t('cancel'), onClick: closeModal }
-          ]
-        });
-        return;
-      }
-      startGame('medium', { daily: true, seed: S.dailySeed(today()) });
-    });
+    $('btnDaily').addEventListener('click', startDaily);
+    $('streakCard').addEventListener('click', startDaily);
     $('btnStats').addEventListener('click', function () { showScreen('stats'); });
     $('btnQuests').addEventListener('click', function () { showScreen('quests'); });
     $('btnThemes').addEventListener('click', function () { showScreen('themes'); });
@@ -1231,6 +1389,22 @@
     $('swTimer').addEventListener('click', function () { toggleSetting('showTimer'); if (game) renderChrome(); });
     $('btnPrivacy').addEventListener('click', function () { openLegal('privacy'); });
     $('btnTerms').addEventListener('click', function () { openLegal('terms'); });
+    $('btnAdConsent').addEventListener('click', function () {
+      var shown = false;
+      var b = bridge();
+      if (b && b.showPrivacyOptions) {
+        try { shown = b.showPrivacyOptions(); } catch (e) { shown = false; }
+      }
+      if (shown) return;
+      openModal({
+        title: t('adConsent'),
+        sub: t('adConsentNotRequired'),
+        actions: [
+          { label: t('privacy'), primary: true, onClick: function () { closeModal(); openLegal('privacy'); } },
+          { label: t('close'), onClick: closeModal }
+        ]
+      });
+    });
     $('btnReset').addEventListener('click', function () {
       openModal({
         title: t('resetTitle'),
@@ -1313,15 +1487,37 @@
       }
     };
     window.onRewardedEarned = function () {
+      if (rewardCoinsAmount > 0) {
+        var gained = rewardCoinsAmount;
+        rewardCoinsAmount = 0;
+        profile.coins += gained;
+        save();
+        refreshWallet();
+        toast(t('coinsAdded', { n: gained }));
+        if (resultState && modalOpen) {
+          resultState.result = {
+            coins: resultState.result.coins + gained,
+            badges: [],
+            dailyBonus: 0,
+            dailyStreak: 0
+          };
+          resultState.adUsed = true;
+          var state = resultState;
+          closeModal();
+          showResultModal(state);
+        }
+      }
       if (profile.rewardPending) {
         profile.rewardPending = false;
         profile.hints++;
         save();
+        refreshWallet();
         renderChrome();
         toast(t('hintAdded'));
       }
     };
     window.onRewardedFailed = function () {
+      rewardCoinsAmount = 0;
       profile.rewardPending = false;
       save();
       toast(t('noAd'));

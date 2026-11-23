@@ -12,7 +12,8 @@
     { id: 'mint', name: 'Mint', price: 250 },
     { id: 'sunrise', name: 'Sunrise', price: 400 },
     { id: 'lavender', name: 'Lavender', price: 400 },
-    { id: 'sky', name: 'Sky', price: 550 }
+    { id: 'sky', name: 'Sky', price: 550 },
+    { id: 'blush', name: 'Blush', price: 650 }
   ];
 
   var ACHIEVEMENTS = [
@@ -25,7 +26,9 @@
     { id: 'daily3', name: 'Daily Habit', desc: 'Finish 3 daily puzzles', check: function (p) { return p.stats.dailySolved >= 3; } },
     { id: 'streak7', name: 'Seven Days', desc: 'Play 7 days in a row', check: function (p) { return p.stats.bestStreak >= 7; } },
     { id: 'speed', name: 'Quick Draw', desc: 'Finish an Easy puzzle under 5 minutes', check: function (p) { return p.flags.speedClear; } },
-    { id: 'hardNohint', name: 'Pure Logic', desc: 'Finish a Hard or Master puzzle without hints', check: function (p) { return p.flags.hardNoHint; } }
+    { id: 'hardNohint', name: 'Pure Logic', desc: 'Finish a Hard or Master puzzle without hints', check: function (p) { return p.flags.hardNoHint; } },
+    { id: 'daily7', name: 'Weekly Paper', desc: 'Solve the daily puzzle 7 days in a row', check: function (p) { return (p.daily.best || 0) >= 7; } },
+    { id: 'sweep', name: 'Full Sweep', desc: 'Solve a puzzle at every difficulty', check: function (p) { return ['easy', 'medium', 'hard', 'master'].every(function (d) { return p.stats.byDiff[d].solved >= 1; }); } }
   ];
 
   var QUEST_POOL = [
@@ -81,7 +84,7 @@
       achievements: {},
       themes: { owned: ['paper'], active: 'paper' },
       quests: { date: '', items: [] },
-      daily: { date: '', done: false, ms: 0 },
+      daily: { date: '', done: false, ms: 0, streak: 0, best: 0, lastDate: '', history: [] },
       current: null
     };
   }
@@ -173,6 +176,14 @@
       p.daily.date = typeof raw.daily.date === 'string' ? raw.daily.date : '';
       p.daily.done = !!raw.daily.done;
       p.daily.ms = num(raw.daily.ms, 0, 0, 86400000);
+      p.daily.streak = num(raw.daily.streak, 0, 0, 99999);
+      p.daily.best = num(raw.daily.best, 0, 0, 99999);
+      p.daily.lastDate = typeof raw.daily.lastDate === 'string' ? raw.daily.lastDate : '';
+      if (Array.isArray(raw.daily.history)) {
+        p.daily.history = raw.daily.history.filter(function (d) {
+          return typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d);
+        }).slice(-30);
+      }
     }
 
     if (raw.current && typeof raw.current === 'object' && Array.isArray(raw.current.puzzle) && Array.isArray(raw.current.solution) && raw.current.puzzle.length === 81) {
@@ -211,7 +222,10 @@
       profile.quests = { date: dateStr, items: questsFor(dateStr) };
     }
     if (profile.daily.date !== dateStr) {
-      profile.daily = { date: dateStr, done: false, ms: 0 };
+      // A new day starts a fresh daily board; the streak chain and history stay.
+      profile.daily.date = dateStr;
+      profile.daily.done = false;
+      profile.daily.ms = 0;
     }
     return profile;
   }
@@ -261,11 +275,54 @@
   }
 
   /**
+   * Daily streak as it stands today: the chain keeps counting while the last
+   * daily solve is today or yesterday, and drops to 0 once a day is missed.
+   */
+  function liveDailyStreak(profile, today) {
+    var last = profile.daily.lastDate || '';
+    if (!last) return 0;
+    if (last === today || last === prevDay(today)) return profile.daily.streak || 0;
+    return 0;
+  }
+
+  /** Coin bonus that finishing today's daily puzzle pays at this streak. */
+  function dailyBonusFor(streak) {
+    var n = num(streak, 1, 1, 9999);
+    return 10 + Math.min(7, n) * 5;
+  }
+
+  function dayNumber(dateStr) {
+    var parts = String(dateStr).split('-').map(Number);
+    return Math.floor(Date.UTC(parts[0] || 1970, (parts[1] || 1) - 1, parts[2] || 1) / 86400000);
+  }
+
+  function isoDay(number) {
+    return new Date(number * 86400000).toISOString().slice(0, 10);
+  }
+
+  /** Monday-to-Sunday strip for the week that holds `today`. */
+  function dailyWeek(profile, today) {
+    var todayNum = dayNumber(today);
+    var weekday = new Date(todayNum * 86400000).getUTCDay(); // 0 = Sunday
+    var monday = todayNum - ((weekday + 6) % 7);
+    var solved = {};
+    (profile.daily.history || []).forEach(function (d) { solved[d] = true; });
+    if (profile.daily.done) solved[today] = true;
+    var out = [];
+    for (var i = 0; i < 7; i++) {
+      var date = isoDay(monday + i);
+      out.push({ date: date, done: !!solved[date], today: date === today });
+    }
+    return out;
+  }
+
+  /**
    * Records a finished puzzle. Returns the rewards and any newly earned badges.
    * `info` = { diff, ms, mistakes, hintsUsed, daily, today }
    */
   function recordSolve(profile, info) {
     var diff = TIER_LABEL[info.diff] ? info.diff : 'medium';
+    var dailyBonus = 0, dailyStreak = 0;
     var ms = num(info.ms, 0, 0, 86400000);
     var mistakes = num(info.mistakes, 0, 0, 999);
     var hintsUsed = num(info.hintsUsed, 0, 0, 999);
@@ -286,8 +343,23 @@
     if ((diff === 'hard' || diff === 'master') && hintsUsed === 0) profile.flags.hardNoHint = true;
 
     if (info.daily) {
+      var todayStr = info.today || profile.daily.date || '';
+      var last = profile.daily.lastDate || '';
+      var streak;
+      if (last && last === todayStr) streak = Math.max(1, profile.daily.streak || 1);
+      else if (last && last === prevDay(todayStr)) streak = (profile.daily.streak || 0) + 1;
+      else streak = 1;
+      profile.daily.streak = streak;
+      profile.daily.lastDate = todayStr;
+      if (streak > (profile.daily.best || 0)) profile.daily.best = streak;
+      dailyStreak = streak;
+      dailyBonus = dailyBonusFor(streak);
       profile.daily.done = true;
       profile.daily.ms = ms;
+      if (todayStr && profile.daily.history.indexOf(todayStr) < 0) {
+        profile.daily.history.push(todayStr);
+        if (profile.daily.history.length > 30) profile.daily.history = profile.daily.history.slice(-30);
+      }
       profile.stats.dailySolved++;
       addProgress(profile, 'daily');
     }
@@ -305,11 +377,11 @@
 
     var base = 12 + TIER_LABEL[diff] * 3;
     var penalty = Math.min(base - 4, hintsUsed * 1);
-    var coins = Math.max(4, base - penalty) + (mistakes === 0 ? 4 : 0) + (info.daily ? 25 : 0);
+    var coins = Math.max(4, base - penalty) + (mistakes === 0 ? 4 : 0) + (info.daily ? 25 : 0) + dailyBonus;
     profile.coins += coins;
 
     var badges = unlockAchievements(profile);
-    return { coins: coins, badges: badges };
+    return { coins: coins, badges: badges, dailyBonus: dailyBonus, dailyStreak: dailyStreak };
   }
 
   function themeById(id) {
@@ -368,7 +440,11 @@
     buyTheme: buyTheme,
     buyHint: buyHint,
     formatTime: formatTime,
-    streakFor: streakFor
+    streakFor: streakFor,
+    liveDailyStreak: liveDailyStreak,
+    dailyBonusFor: dailyBonusFor,
+    dailyWeek: dailyWeek,
+    prevDay: prevDay
   };
 
   root.SudokuState = API;

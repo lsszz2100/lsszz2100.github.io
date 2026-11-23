@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#FBF8F2">
 <title>Minimal Sudoku</title>
-<link rel="stylesheet" href="style.css?v=1795465190">
+<link rel="stylesheet" href="style.css?v=1795465294">
 </head>
 <body>
 <div id="app">
@@ -117,6 +117,19 @@
             <span class="badge-dot" id="questBadge" hidden></span>
           </button>
         </div>
+
+        <button class="streak-card" id="streakCard">
+          <div class="sc-left">
+            <span class="sc-flame" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="52" height="52"><path d="M12 2.6c.5 3.2-1.6 4.6-2.9 6.2-1.3 1.6-2 3.1-2 5.1 0 3.1 2.2 5.5 5.4 5.5 3.1 0 5.3-2.3 5.3-5.4 0-2.1-.9-3.6-2.1-5-.3 1.1-1 1.8-1.9 1.9.7-2.6.2-5.6-1.8-8.3z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="sc-text">
+              <strong class="sc-num" id="streakNum">0 days in a row</strong>
+              <span class="sc-sub" id="streakReward">Daily paper: +15 coins</span>
+            </span>
+          </div>
+          <div class="sc-week" id="weekStrip"></div>
+        </button>
 
         <div class="link-row">
           <button class="link-btn" id="btnThemes" data-i18n="themes">Themes</button>
@@ -255,6 +268,10 @@
             <span class="row-label" data-i18n="terms">Terms of use</span>
             <span class="chev">›</span>
           </button>
+          <button class="row link-row-btn" id="btnAdConsent">
+            <span class="row-label" data-i18n="adConsent">Ad privacy settings</span>
+            <span class="chev">›</span>
+          </button>
           <button class="row link-row-btn danger" id="btnReset">
             <span class="row-label" data-i18n="resetProgress">Reset all progress</span>
             <span class="chev">›</span>
@@ -346,9 +363,9 @@
     <div id="toast" class="toast" hidden></div>
   </div>
 </div>
-<script src="i18n.js?v=1795465190"></script>
-<script src="sudoku.js?v=1795465190"></script>
-<script src="state.js?v=1795465190"></script>
-<script src="app.js?v=1795465190"></script>
+<script src="i18n.js?v=1795465294"></script>
+<script src="sudoku.js?v=1795465294"></script>
+<script src="state.js?v=1795465294"></script>
+<script src="app.js?v=1795465294"></script>
 </body>
 </html>

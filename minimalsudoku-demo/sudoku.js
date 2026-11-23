@@ -575,6 +575,17 @@
     return h >>> 0;
   }
 
+  // Sunday through Saturday: the daily paper changes pace with the week.
+  var DAILY_WEEK = ['medium', 'easy', 'medium', 'hard', 'medium', 'hard', 'master'];
+
+  /** Difficulty of the daily puzzle for a YYYY-MM-DD date (local weekday). */
+  function dailyTier(dateStr) {
+    var parts = String(dateStr).split('-').map(Number);
+    if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2]) return 'medium';
+    var day = new Date(parts[0], parts[1] - 1, parts[2]).getDay();
+    return DAILY_WEEK[day] || 'medium';
+  }
+
   var API = {
     FULL: FULL,
     TIERS: TIERS,
@@ -597,7 +608,8 @@
     countFilled: countFilled,
     isComplete: isComplete,
     mistakes: mistakes,
-    dailySeed: dailySeed
+    dailySeed: dailySeed,
+    dailyTier: dailyTier
   };
 
   root.Sudoku = API;
