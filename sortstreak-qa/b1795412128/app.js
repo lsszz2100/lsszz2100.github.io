@@ -1049,7 +1049,8 @@
     app.style.left = '0';
     app.style.top = '0';
     app.style.transformOrigin = '0 0';
-    app.style.transform = 'translateY(' + (-off) + 'px) scale(' + scale + ')';
+    app.style.top = (-off) + 'px';
+    app.style.transform = 'scale(' + scale + ')';
   }
 
   function demoProfile() {
