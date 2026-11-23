@@ -1135,6 +1135,7 @@
       skin: C.cubeSkinFor(profile)
     });
     updateHud();
+    updateBoosterButtons();
     const result = {
       win: true,
       movesLeft: Math.max(1, engine.movesLeft),
