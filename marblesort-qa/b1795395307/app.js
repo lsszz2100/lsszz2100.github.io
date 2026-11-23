@@ -416,16 +416,18 @@
         var active = save.shop[sec.key] === item.id;
         var card = document.createElement('div');
         card.className = 'shop-item' + (active ? ' on' : '');
-        var colors = C.PALETTE;
-        var railTint = sec.key === 'rail'
-          ? { default: '#EDF6FF', amber: '#FFF1DC', jade: '#E6FAF1', onyx: '#E7EFFB' }[item.id]
-          : '#EDF6FF';
+        // Preview the item itself: rail tint, marble palette or theme backdrop.
+        var railTint = { default: '#EDF6FF', amber: '#FFF1DC', jade: '#E6FAF1', onyx: '#E7EFFB' };
+        var pal = (sec.key === 'palette' && G.palette[item.id]) ? G.palette[item.id] : C.PALETTE;
+        var tint = sec.key === 'rail' ? railTint[item.id] : (save.shop.rail ? railTint[save.shop.rail] : railTint.default);
+        var themeBg = { default: '#F6FAFF', peach: '#FFF1E9', mint: '#EAFAF3', lilac: '#F3EFFF', night: '#ECF1F9' };
+        var previewBg = sec.key === 'theme' ? themeBg[item.id] : '#F6FAFF';
         card.innerHTML =
-          '<div class="shop-preview">' +
-            '<span class="pv-rail" style="background:' + railTint + ';border:1.5px solid #D7E6F5">' +
-              '<i style="background:' + colors[0] + '"></i><i style="background:' + colors[1] + '"></i></span>' +
-            '<span class="pv-rail" style="background:' + railTint + ';border:1.5px solid #D7E6F5">' +
-              '<i style="background:' + colors[2] + '"></i><i style="background:' + colors[3] + '"></i><i style="background:' + colors[1] + '"></i></span>' +
+          '<div class="shop-preview" style="background:' + previewBg + '">' +
+            '<span class="pv-rail" style="background:' + tint + ';border:1.5px solid #D7E6F5">' +
+              '<i style="background:' + pal[0] + '"></i><i style="background:' + pal[4] + '"></i></span>' +
+            '<span class="pv-rail" style="background:' + tint + ';border:1.5px solid #D7E6F5">' +
+              '<i style="background:' + pal[2] + '"></i><i style="background:' + pal[3] + '"></i><i style="background:' + pal[1] + '"></i></span>' +
           '</div>' +
           '<b></b><div class="price">' + (item.price ? '● ' + item.price : t('common.free')) + '</div>';
         card.querySelector('b').textContent = t(item.name);
@@ -996,6 +998,80 @@
     G.audio.ui();
   }
 
+  // ---------------------------------------------------- store capture mode
+  // Only reachable on the QA page (`?qa=1&shot=...`); the app itself never
+  // loads with a query string.
+  var SHOT = QA && /[?&]shot=/.test(location.search);
+
+  function qp(name, def) {
+    var m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search);
+    return m ? decodeURIComponent(m[1]) : def;
+  }
+
+  function applyCaptureLayout() {
+    var off = parseFloat(qp('offset', '0')) || 0;
+    var scale = parseFloat(qp('scale', '2')) || 2;
+    var app = $('app');
+    app.style.width = '432px';
+    app.style.height = '768px';
+    app.style.maxWidth = 'none';
+    app.style.position = 'absolute';
+    app.style.left = '0';
+    app.style.top = '0';
+    app.style.transformOrigin = '0 0';
+    app.style.transform = 'translateY(' + (-off) + 'px) scale(' + scale + ')';
+    document.body.style.background = '#ffffff';
+  }
+
+  function demoProfile() {
+    save = blankSave();
+    save.seenTutorial = true;
+    save.lang = 'en';
+    save.coins = 1280;
+    save.totalCoins = 2480;
+    for (var i = 1; i <= 64; i++) {
+      save.cleared[i] = (i % 13 === 0) ? 1 : ((i % 9 === 0) ? 2 : 3);
+    }
+    save.stats = { clears: 64, threeStars: 41, bossClears: 2, hints: 7, rails: 3, revives: 2, adsWatched: 9 };
+    save.shop = { rail: 'jade', theme: 'mint', palette: 'candy' };
+    save.owned = { rail: ['default', 'jade'], theme: ['default', 'mint'], palette: ['classic', 'candy'] };
+    save.gift = { date: today(), streak: 5, claimed: false };
+    save.achievements = { first: today(), ten: today(), fifty: today(), stars100: today(), ch1: today(), ch4: today() };
+  }
+
+  function runCapture() {
+    var target = qp('shot', 'home');
+    var stageId = parseInt(qp('stage', '30'), 10) || 30;
+    if (target === 'map') { mapChapter = parseInt(qp('chapter', '2'), 10) || 1; show('map'); return; }
+    if (target === 'shop') { show('shop'); return; }
+    if (target === 'quests') {
+      if (save.quests) {
+        save.quests.q[0].progress = 2;
+        save.quests.q[1].progress = 48;
+        save.quests.q[2].progress = 1;
+      }
+      show('quests');
+      return;
+    }
+    if (target === 'home') { show('home'); return; }
+    if (target === 'play' || target === 'boss' || target === 'win') {
+      startStage(stageId);
+      setTimeout(function () {
+        var eng = playState.engine;
+        if (!eng) return;
+        var sol = C.solve(eng.tubes, eng.capacity, eng.locks, { maxNodes: 400000 });
+        var count = target === 'win' ? sol.moves.length : Math.min(5, Math.max(1, sol.moves.length - 2));
+        for (var k = 0; k < count; k++) {
+          eng.tap(sol.moves[k][0]);
+          eng.tap(sol.moves[k][1]);
+        }
+        G.sync(eng, null);
+        renderPlayHud();
+        if (target === 'win') setTimeout(finishStage, 220);
+      }, 420);
+    }
+  }
+
   // ------------------------------------------------------------------ boot
   function bindEvents() {
     on($('langBtn'), 'click', function () {
@@ -1131,6 +1207,18 @@
 
   function boot() {
     collectScreens();
+    if (SHOT) {
+      demoProfile();
+      I.setLang(save.lang);
+      G.audio.setMuted(true);
+      applyI18n();
+      applyCosmetics();
+      bindEvents();
+      G.init({ onTap: onTubeTap });
+      applyCaptureLayout();
+      setTimeout(runCapture, 260);
+      return;
+    }
     ensureDaily();
     I.setLang(save.lang);
     G.audio.setMuted(!save.sound);

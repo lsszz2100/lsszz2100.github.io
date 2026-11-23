@@ -289,14 +289,14 @@ html, body {
 .stage-cell:active { transform: scale(.96); }
 
 /* ------------------------------------------------------------------- shop */
-.shop-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding-bottom: 24px; }
+.shop-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 4px 2px 24px; }
 .shop-sec h3 { margin: 2px 0 8px; font-size: 13px; letter-spacing: .6px; text-transform: uppercase; color: var(--soft); }
 .shop-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.shop-item { background: #fff; border-radius: var(--r-md); box-shadow: var(--shadow-sm); padding: 12px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+.shop-item { background: #fff; border-radius: var(--r-md); box-shadow: var(--shadow-sm); padding: 10px; display: flex; flex-direction: column; gap: 6px; position: relative; }
 .shop-item.on { box-shadow: 0 0 0 2px #7FC0EE, var(--shadow-sm); }
-.shop-preview { min-height: 62px; border-radius: 12px; display: flex; align-items: flex-end; justify-content: center; gap: 6px; padding: 6px; background: #F6FAFF; }
-.shop-preview .pv-rail { width: 22px; min-height: 46px; border-radius: 8px 8px 11px 11px; display: flex; flex-direction: column-reverse; align-items: center; padding: 2px; gap: 1px; }
-.shop-preview .pv-rail i { width: 15px; height: 15px; border-radius: 50%; }
+.shop-preview { min-height: 58px; border-radius: 12px; display: flex; align-items: flex-end; justify-content: center; gap: 6px; padding: 5px; background: #F6FAFF; }
+.shop-preview .pv-rail { width: 21px; min-height: 44px; border-radius: 8px 8px 11px 11px; display: flex; flex-direction: column-reverse; align-items: center; padding: 2px; gap: 1px; }
+.shop-preview .pv-rail i { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset -2px -2px 3px rgba(0,0,0,.12), inset 2px 2px 3px rgba(255,255,255,.5); }
 .shop-item b { font-size: 13.5px; }
 .shop-item .price { display: flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 800; color: var(--ink-2); }
 .shop-item button { border: 0; border-radius: 11px; padding: 8px; font-weight: 800; font-size: 12.5px; background: #EAF4FF; color: var(--accent); }
