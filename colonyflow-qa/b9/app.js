@@ -1263,6 +1263,7 @@
     // magenta frame marks the exact app bounds for the screenshot compositor
     app.style.outline = '3px solid #FF00FF';
     app.style.outlineOffset = '0px';
+    document.documentElement.style.cursor = 'none';
   }
 
   function demoProfile() {
