@@ -273,7 +273,9 @@
       if (this.engine) this.layout();
     }
 
-    load(engine) {
+    // Phaser.Scene already owns `load` (the asset loader), so the board uses
+    // its own name for binding an engine.
+    setEngine(engine) {
       this.engine = engine;
       this.clearRails();
       this.layout();
@@ -619,8 +621,8 @@
     },
     load: function (engine) {
       var sc = getScene();
-      if (!sc) return false;
-      sc.load(engine);
+      if (!sc || typeof sc.setEngine !== 'function') return false;
+      sc.setEngine(engine);
       return true;
     },
     sync: function (engine, anim) {

@@ -214,10 +214,10 @@ html, body {
 .hero-deco i:nth-child(3) { width: 6px; height: 6px; background: #F7E2A8; bottom: 26%; left: 16%; }
 .hero-deco i:nth-child(4) { width: 10px; height: 10px; background: #E4DBF8; bottom: 16%; right: 18%; }
 .hero-deco i:nth-child(5) { width: 5px; height: 5px; background: #F9D3D0; top: 44%; left: 24%; }
-.hero-rails { display: flex; align-items: flex-end; gap: 14px; height: 160px; margin-bottom: 8px; }
-.hr { width: 46px; height: 118px; border-radius: 15px 15px 22px 22px; background: rgba(255,255,255,.8); border: 2px solid #E0EDFA; display: flex; flex-direction: column-reverse; align-items: center; padding: 4px; gap: 2px; box-shadow: 0 12px 24px rgba(80,130,180,.10); }
-.hr.tall { height: 142px; }
-.hr .mb { width: 36px; height: 36px; }
+.hero-rails { display: flex; align-items: flex-end; gap: 14px; min-height: 160px; margin-bottom: 8px; padding-top: 8px; }
+.hr { width: 46px; min-height: 118px; border-radius: 15px 15px 22px 22px; background: rgba(255,255,255,.8); border: 2px solid #E0EDFA; display: flex; flex-direction: column-reverse; align-items: center; justify-content: flex-start; padding: 4px; gap: 2px; box-shadow: 0 12px 24px rgba(80,130,180,.10); }
+.hr.tall { min-height: 142px; }
+.hr .mb { width: 32px; height: 32px; }
 .hero-chapter { font-size: 12px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--accent); background: #EAF4FF; padding: 5px 12px; border-radius: 999px; }
 
 .play-orb {
@@ -428,9 +428,9 @@ html, body {
 .win-row { display: flex; gap: 8px; margin-top: 10px; }
 
 @media (max-height: 700px) {
-  .hero-rails { height: 132px; }
-  .hr { height: 100px; }
-  .hr.tall { height: 120px; }
+  .hero-rails { min-height: 132px; }
+  .hr { min-height: 100px; }
+  .hr.tall { min-height: 120px; }
   .play-orb { width: 112px; height: 112px; font-size: 17px; }
   .tut-art { height: 170px; }
   .t-rail { min-height: 58px; }
