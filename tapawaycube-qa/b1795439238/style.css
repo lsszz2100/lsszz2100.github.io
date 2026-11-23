@@ -216,20 +216,20 @@ button:disabled { opacity: .55; }
 .page-top { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 10px; gap: 8px; }
 .page-top h2 { font-size: 19px; }
 .section-title { font-size: 14px; color: var(--soft); margin: 16px 2px 9px; font-weight: 800; }
-.hint { color: var(--soft); font-size: 12.5px; text-align: center; margin: 10px 0 0; }
+.hint { color: var(--soft); font-size: 12.5px; text-align: center; margin: 8px 0 0; }
 .hint.center { margin-top: 16px; }
 
 /* map */
-.chapter-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 8px; scrollbar-width: none; }
+.chapter-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 6px; scrollbar-width: none; }
 .chapter-tabs::-webkit-scrollbar { display: none; }
 .chapter-tab { flex: 0 0 auto; background: #fff; color: var(--soft); font-weight: 700; font-size: 12.5px;
   padding: 9px 14px; border-radius: 999px; box-shadow: var(--shadow-sm); }
 .chapter-tab.on { background: linear-gradient(160deg, #8C82FF, var(--violet-d)); color: #fff; }
-.chapter-head { display: flex; align-items: baseline; justify-content: space-between; margin: 4px 2px 10px; }
+.chapter-head { display: flex; align-items: baseline; justify-content: space-between; margin: 2px 2px 8px; }
 .chapter-head b { font-size: 15px; }
 .chapter-head span { font-size: 12.5px; color: var(--gold); font-weight: 700; }
 .stage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.stage-btn { position: relative; aspect-ratio: 1; border-radius: 16px; background: #fff; box-shadow: var(--shadow-sm);
+.stage-btn { position: relative; aspect-ratio: 1 / 0.9; border-radius: 16px; background: #fff; box-shadow: var(--shadow-sm);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   font-weight: 800; font-size: 19px; color: var(--ink); }
 .stage-btn.cleared { background: linear-gradient(160deg, #F1EEFF, #E4DFFF); }
@@ -240,7 +240,7 @@ button:disabled { opacity: .55; }
 .stage-btn .st-stars i.on { color: var(--gold); }
 .stage-btn .st-lock { width: 16px; height: 16px; display: block; }
 .stage-btn .st-lock svg { width: 16px; height: 16px; }
-.map-foot { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+.map-foot { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 .map-stat { display: flex; flex-direction: column; align-items: center; min-width: 52px; }
 .map-stat b { font-size: 17px; }
 .map-stat span { font-size: 10.5px; color: var(--soft); font-weight: 700; }
