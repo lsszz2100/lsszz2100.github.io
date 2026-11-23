@@ -7,7 +7,7 @@
   const H = (CORE && CORE.WORLD.h) || 1520;
 
   const BOX_AREA = { top: 262, bottom: 1150, left: 34, right: 966 };
-  const TRAY = { top: 1250, bottom: 1414, left: 28, right: 972 };
+  const TRAY = { top: 1246, bottom: 1408, left: 28, right: 972 };
   const SLOT_COLS = 3;
   const SLOT_ROWS = 2;
 
@@ -357,10 +357,10 @@
       g.fillPath();
 
       // 음료 색 띠(정체성)
-      const bandTop = y - h * 0.06;
-      const bandBot = y + h * 0.3;
-      const bwTop = w * 0.472;
-      const bwBot = w * 0.432;
+      const bandTop = y - h * 0.12;
+      const bandBot = y + h * 0.32;
+      const bwTop = w * 0.478;
+      const bwBot = w * 0.428;
       g.fillStyle(drink, alpha);
       g.beginPath();
       g.moveTo(x - bwTop, bandTop);
@@ -394,9 +394,13 @@
       g.strokePath();
 
       // 뚜껑
-      g.fillStyle(lid, alpha);
+
+      g.fillStyle(Phaser.Display.Color.Interpolate.ColorWithColor(
+        Phaser.Display.Color.ValueToColor(lid),
+        Phaser.Display.Color.ValueToColor(drink), 100, 28
+      ).color, alpha);
       g.fillEllipse(x, topY - h * 0.02, w * 1.06, h * 0.2);
-      g.fillStyle(tint(skin.lid, -0.16), 0.55 * alpha);
+      g.fillStyle(tint(skin.lid, -0.22), 0.5 * alpha);
       g.fillEllipse(x, topY + h * 0.015, w * 1.0, h * 0.13);
       g.fillStyle(0xffffff, 0.45 * alpha);
       g.fillEllipse(x - w * 0.16, topY - h * 0.055, w * 0.34, h * 0.055);
@@ -452,7 +456,7 @@
       // 담긴 컵
       if (box && box.cups > 0) {
         const sp0 = this.slotPos(rect, 0);
-        const size = Math.min(124, Math.min(sp0.cw, sp0.ch) * 0.94);
+        const size = Math.min(120, Math.min(sp0.cw * 0.8, (sp0.ch * 0.9) / 1.16));
         for (let i = 0; i < box.cups; i += 1) {
           const p = this.slotPos(rect, i);
           this.drawCup(g, p.x, p.y, size, this.colors[box.color], { alpha: 1 });
@@ -507,7 +511,7 @@
       const slots = this.traySlots(e.tray.length);
       for (let i = 0; i < slots.length; i += 1) {
         const color = e.tray[i];
-        this.drawCup(cupsG, slots[i].x, slots[i].y, 118, this.colors[color], {
+        this.drawCup(cupsG, slots[i].x, slots[i].y, 112, this.colors[color], {
           selected: sel === i,
           legal: sel === i,
           hint: !!hint && hint.cup === i
