@@ -183,17 +183,34 @@
       g.lineStyle(6, col(skin.rim), 1);
       g.strokeRoundedRect(geo.x - 20, geo.y - 20, geo.w + 40, geo.h + 40, 40);
 
-      // cells
+      // cells: a soft checker tint keeps the grid readable on light boards
       for (let y = 0; y < geo.rows; y += 1) {
         for (let x = 0; x < geo.cols; x += 1) {
           const cx = geo.x + x * geo.cell;
           const cy = geo.y + y * geo.cell;
-          g.fillStyle(col(skin.tile), (x + y) % 2 ? 0.66 : 1);
-          g.fillRoundedRect(cx + 3, cy + 3, geo.cell - 6, geo.cell - 6, geo.cell * 0.18);
+          g.fillStyle(col(skin.tile), 1);
+          g.fillRect(cx, cy, geo.cell, geo.cell);
+          if ((x + y) % 2 === 0) {
+            g.fillStyle(col(skin.line), 0.55);
+            g.fillRect(cx, cy, geo.cell, geo.cell);
+          }
         }
       }
-      g.lineStyle(3, col(skin.line), 0.9);
-      g.strokeRoundedRect(geo.x, geo.y, geo.w, geo.h, 12);
+      g.lineStyle(2, col(skin.rim), 0.5);
+      for (let x = 1; x < geo.cols; x += 1) {
+        g.beginPath();
+        g.moveTo(geo.x + x * geo.cell, geo.y);
+        g.lineTo(geo.x + x * geo.cell, geo.y + geo.h);
+        g.strokePath();
+      }
+      for (let y = 1; y < geo.rows; y += 1) {
+        g.beginPath();
+        g.moveTo(geo.x, geo.y + y * geo.cell);
+        g.lineTo(geo.x + geo.w, geo.y + y * geo.cell);
+        g.strokePath();
+      }
+      g.lineStyle(3, col(skin.rim), 0.75);
+      g.strokeRect(geo.x, geo.y, geo.w, geo.h);
 
       this.drawGates();
       this.drawBlocks();
@@ -227,9 +244,9 @@
           dir = gate.side === 'left' ? { x: -1, y: 0 } : { x: 1, y: 0 };
         }
         // glow outside the board
-        g.fillStyle(c, locked ? 0.14 : 0.28);
-        const glowR = geo.cell * 0.62;
-        g.fillCircle(cx + dir.x * 16, cy + dir.y * 16, glowR);
+        g.fillStyle(c, locked ? 0.1 : 0.2);
+        const glowR = geo.cell * 0.42;
+        g.fillCircle(cx + dir.x * 22, cy + dir.y * 22, glowR);
         // door bar
         g.fillStyle(c, locked ? 0.55 : 1);
         g.fillRoundedRect(cx - w / 2, cy - h / 2, w, h, Math.min(w, h) / 2);
@@ -426,11 +443,11 @@
         for (let i = 0; i < pts.length; i += 1) g.fillCircle(pts[i].x, pts[i].y, r);
 
         // spines / dots along the back
-        g.fillStyle(light, 0.55 * alpha);
+        g.fillStyle(light, 0.34 * alpha);
         for (let i = 1; i < pts.length; i += 1) {
           const mx = lerp(pts[i - 1].x, pts[i].x, 0.5);
           const my = lerp(pts[i - 1].y, pts[i].y, 0.5);
-          g.fillCircle(mx, my, r * 0.34);
+          g.fillCircle(mx, my, r * 0.2);
         }
         // tail tip
         const last = pts[pts.length - 1];
@@ -493,12 +510,10 @@
           const sel = this.selected && this.selected.gi === gi;
           const headSel = sel && this.selected.end === 'head';
           const tailSel = sel && this.selected.end === 'tail';
-          g.lineStyle(4, 0xFFFFFF, 0.55 + pulse * 0.35);
-          if (headSel) { g.lineStyle(6, 0xFFFFFF, 0.9); }
-          g.strokeCircle(hcx, hcy, r * 1.45);
-          if (tailSel) { g.lineStyle(6, 0xFFFFFF, 0.9); }
-          else { g.lineStyle(3, 0xFFFFFF, 0.42 + pulse * 0.2); }
-          g.strokeCircle(last.x + ux * r * 1.2, last.y + uy * r * 1.2, r * 0.95);
+          g.lineStyle(headSel ? 5 : 2, 0xFFFFFF, headSel ? 0.9 : 0.3 + pulse * 0.16);
+          g.strokeCircle(hcx, hcy, r * 1.32);
+          g.lineStyle(tailSel ? 5 : 2, 0xFFFFFF, tailSel ? 0.9 : 0.26 + pulse * 0.14);
+          g.strokeCircle(last.x + ux * r * 1.2, last.y + uy * r * 1.2, r * 0.8);
         }
       }
 
