@@ -1361,8 +1361,10 @@
 
   function captureBoot() {
     profile = demoProfile();
-    I.setLang('en');
-    document.documentElement.lang = 'en';
+    const capLang = qp('lang', 'en') === 'ko' ? 'ko' : 'en';
+    profile.lang = capLang;
+    I.setLang(capLang);
+    document.documentElement.lang = capLang;
     I.apply();
     wireScene();
     bind();
