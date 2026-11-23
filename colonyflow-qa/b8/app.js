@@ -1260,6 +1260,9 @@
     app.style.top = '0';
     app.style.transformOrigin = '0 0';
     app.style.transform = 'translateY(' + (-off) + 'px) scale(' + scale + ')';
+    // magenta frame marks the exact app bounds for the screenshot compositor
+    app.style.outline = '3px solid #FF00FF';
+    app.style.outlineOffset = '0px';
   }
 
   function demoProfile() {
