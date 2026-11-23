@@ -485,6 +485,8 @@
           if (tm) { game.timeBase = parseInt(tm[1], 10) * 1000; }
           renderAll();
         } else {
+          var tm2 = /[?&]time=([0-9]+)/.exec(location.search);
+          if (tm2) { game.timeBase = parseInt(tm2[1], 10) * 1000; }
           renderAll();
           setTimeout(function () { useHint(); }, 320);
         }
