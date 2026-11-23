@@ -380,9 +380,9 @@
       ctx.strokeStyle = frame;
       ctx.stroke();
 
-      const wallCol = mix(frame, '#3A3152', 0.16);
-      const wallTop = mix(frame, '#FFFFFF', 0.42);
-      const tile = mix(board, '#2E2745', 0.055);
+      const wallCol = mix(frame, '#4B4166', 0.44);
+      const wallTop = mix(wallCol, '#FFFFFF', 0.20);
+      const tile = mix(board, '#2E2745', 0.05);
       const ballR = ts * 0.33;
 
       // 칸
@@ -394,12 +394,15 @@
           const py = g.y0 + y * ts;
           if (k === CORE.WALL) {
             const inset = ts * 0.045;
+            roundRect(ctx, px + inset, py + inset * 1.9, ts - inset * 2, ts - inset * 2, ts * 0.26);
+            ctx.fillStyle = 'rgba(90,56,76,.10)';
+            ctx.fill();
             roundRect(ctx, px + inset, py + inset, ts - inset * 2, ts - inset * 2, ts * 0.26);
             ctx.fillStyle = wallCol;
             ctx.fill();
-            roundRect(ctx, px + inset, py + inset, ts - inset * 2, (ts - inset * 2) * 0.52, ts * 0.26);
+            roundRect(ctx, px + inset, py + inset, ts - inset * 2, (ts - inset * 2) * 0.44, ts * 0.26);
             ctx.fillStyle = wallTop;
-            ctx.globalAlpha = 0.34;
+            ctx.globalAlpha = 0.55;
             ctx.fill();
             ctx.globalAlpha = 1;
             continue;
