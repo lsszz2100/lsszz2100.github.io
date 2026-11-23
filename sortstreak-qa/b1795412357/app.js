@@ -1051,7 +1051,14 @@
     app.style.transformOrigin = '0 0';
     app.style.top = '0';
     app.style.transform = 'scale(' + scale + ')';
-    setTimeout(function () { window.scrollTo(0, off); }, 60);
+    if (off > 0) {
+      let tries = 0;
+      const timer = setInterval(function () {
+        window.scrollTo(0, off);
+        tries += 1;
+        if (tries > 10) clearInterval(timer);
+      }, 150);
+    }
   }
 
   function demoProfile() {
