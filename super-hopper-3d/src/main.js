@@ -594,7 +594,7 @@ class Game {
     p.grounded = false; p.groundSolid = null; p.facing = Math.PI;
     p.coyote = 0; p.jumpBuffer = 0; p.airJumps = 1;
     p.dashTimer = 0; p.dashCooldown = 0; p.dashAirUsed = false;
-    p.invuln = 1.0; p.squash = 0; p.spin = 0;
+    p.invuln = 0; p.squash = 0; p.spin = 0;
     this.playerMesh.position.copy(p.pos);
     this.playerMesh.rotation.set(0, p.facing, 0);
   }
@@ -949,7 +949,7 @@ class Game {
     const cfg = {
       meadow: { top: 0x2f9ff0, bottom: 0xdff6ff, fog: 0xcfeaff, hemiSky: 0xcdeeff, hemiGround: 0x7dbb63, sun: 0xfff4d6, sunI: 1.05, amb: 0.14 },
       sky: { top: 0x2687de, bottom: 0xcdecff, fog: 0xcbe9fb, hemiSky: 0xd6f0ff, hemiGround: 0x9ec9e8, sun: 0xffffff, sunI: 1.15, amb: 0.16 },
-      castle: { top: 0x1d0c2c, bottom: 0x7a3148, fog: 0x4a2135, hemiSky: 0x9a6fb8, hemiGround: 0x2a100c, sun: 0xffa068, sunI: 1.0, amb: 0.24 },
+      castle: { top: 0x1d0c2c, bottom: 0x7a3148, fog: 0x4a2135, hemiSky: 0x9a6fb8, hemiGround: 0x3a1a12, sun: 0xffa068, sunI: 1.15, amb: 0.32 },
     }[theme];
 
     this.scene.fog = new THREE.Fog(cfg.fog, 50, 210);
@@ -1191,12 +1191,14 @@ class Game {
     mesh.position.set(p.x, baseY, p.z);
     this.world.add(mesh);
 
-    // 윗면 잔디/눈 덮개
-    const capColor = kind === 'cloud' ? 0xffffff : (kind === 'stone' ? 0xa8a0b6 : 0x63d63a);
-    const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), toon(capColor));
-    cap.position.y = p.h / 2 + 0.07;
-    cap.receiveShadow = true;
-    mesh.add(cap);
+    // 윗면 잔디/눈 덮개 (돌 발판은 텍스처를 그대로 사용)
+    if (kind !== 'stone') {
+      const capColor = kind === 'cloud' ? 0xffffff : 0x63d63a;
+      const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), toon(capColor));
+      cap.position.y = p.h / 2 + 0.07;
+      cap.receiveShadow = true;
+      mesh.add(cap);
+    }
 
     // 떠 있는 섬 아래쪽 뾰족한 바위
     if (kind !== 'stone') {
@@ -1353,9 +1355,6 @@ class Game {
     m.rotation.x = Math.PI / 2;
     m.castShadow = true;
     g.add(m);
-    const inner = new THREE.Mesh(SHARED.coinInnerGeo, SHARED.coinInnerMat);
-    inner.rotation.x = Math.PI / 2;
-    g.add(inner);
     g.position.set(c.x, c.y, c.z);
     this.world.add(g);
     this.coinList.push({
