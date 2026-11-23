@@ -194,6 +194,15 @@
     toastTimer = setTimeout(function () { el.className = 'toast'; }, 1900);
   }
 
+  var confirmAction = null;
+
+  function openConfirm(title, body, onYes) {
+    confirmAction = onYes;
+    $('confirmTitle').textContent = title;
+    $('confirmBody').textContent = body;
+    openModal('confirmModal');
+  }
+
   function openModal(id) {
     var el = $(id);
     if (el) el.classList.add('open');
@@ -321,8 +330,12 @@
   // ----------------------------------------------------------------- map
   var mapChapter = 1;
 
+  function openMap() {
+    mapChapter = C.stageParams(firstUncleared()).chapter;
+    show('map');
+  }
+
   function renderMap() {
-    if (!save.cleared[firstUncleared()]) mapChapter = C.stageParams(firstUncleared()).chapter;
     var tabs = $('chapterTabs');
     tabs.innerHTML = '';
     C.CHAPTERS.forEach(function (ch) {
@@ -866,7 +879,7 @@
 
   function useUndo() {
     var eng = playState.engine;
-    if (!eng || !eng.undoStack.length) { toast(t('game.stuck'), 'warn'); return; }
+    if (!eng || !eng.undoStack.length) { toast(t('game.nothingToUndo'), 'warn'); return; }
     spendOrAd('undo', BOOSTER_COST.undo, function () {
       eng.undo();
       G.sync(eng, null);
@@ -999,7 +1012,9 @@
       btn.addEventListener('click', function () {
         G.audio.unlock();
         G.audio.ui();
-        show(btn.getAttribute('data-go'));
+        var target = btn.getAttribute('data-go');
+        if (target === 'map') openMap();
+        else show(target);
       });
     });
     all('[data-back]').forEach(function (btn) {
@@ -1071,21 +1086,23 @@
     });
     on($('termsBtn'), 'click', function () { openExternal(PRIVACY_URL); });
     on($('resetBtn'), 'click', function () {
-      $('confirmTitle').textContent = t('set.reset');
-      $('confirmBody').textContent = t('set.resetConfirm');
-      openModal('confirmModal');
+      openConfirm(t('set.reset'), t('set.resetConfirm'), function () {
+        localStorage.removeItem(SAVE_KEY);
+        save = blankSave();
+        save.lang = I.getLang();
+        persist();
+        applyCosmetics();
+        renderHome();
+        renderSettings();
+        toast(t('set.resetDone'));
+      });
     });
-    on($('confirmNo'), 'click', function () { closeModal('confirmModal'); });
+    on($('confirmNo'), 'click', function () { confirmAction = null; closeModal('confirmModal'); });
     on($('confirmYes'), 'click', function () {
+      var action = confirmAction;
+      confirmAction = null;
       closeModal('confirmModal');
-      localStorage.removeItem(SAVE_KEY);
-      save = blankSave();
-      save.lang = I.getLang();
-      persist();
-      applyCosmetics();
-      renderHome();
-      renderSettings();
-      toast(t('set.resetDone'));
+      if (action) action();
     });
 
     document.addEventListener('pointerdown', function once() {
@@ -1100,16 +1117,11 @@
     if (anyModalOpen()) { closeTopModal(); return true; }
     if (currentScreen === 'play') { openModal('pauseModal'); return true; }
     if (currentScreen === 'home') {
-      $('confirmTitle').textContent = t('common.home');
-      $('confirmBody').textContent = t('set.disclaimer');
-      openModal('confirmModal');
-      var yes = $('confirmYes');
-      yes.onclick = function () {
-        closeModal('confirmModal');
+      openConfirm(t('common.home'), t('set.disclaimer'), function () {
         var h = host();
         if (h && h.exitApp) h.exitApp();
         else if (h && h.moveToBack) h.moveToBack();
-      };
+      });
       return true;
     }
     if (currentScreen === 'tutorial') { show('home'); return true; }

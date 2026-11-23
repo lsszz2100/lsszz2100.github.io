@@ -86,6 +86,7 @@
     'game.secret': 'Face-down marble — it flips when it reaches the top',
     'game.movesWarning': 'Only {n} moves left',
     'game.pause': 'Paused',
+    'game.nothingToUndo': 'Nothing to undo yet',
 
     'win.title': 'Stage cleared',
     'win.moves': '{n} moves',
@@ -273,6 +274,7 @@
     'game.secret': '뒤집힌 구슬 — 맨 위로 올라오면 공개됩니다',
     'game.movesWarning': '이동 {n}회 남음',
     'game.pause': '일시정지',
+    'game.nothingToUndo': '되돌릴 이동이 없습니다',
 
     'win.title': '스테이지 클리어',
     'win.moves': '{n}회 이동',
