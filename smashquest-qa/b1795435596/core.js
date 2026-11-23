@@ -907,12 +907,12 @@
 
   // 보석 스킨: 테두리·광택·모양 손잡이를 바꾼다.
   const GEM_SKINS = [
-    { id: 'classic', en: 'Classic Cut', ko: '클래식 컷', price: 0, shape: 'square', gloss: 0.34, rim: 0.22 },
-    { id: 'crystal', en: 'Crystal Cut', ko: '크리스탈 컷', price: 420, shape: 'diamond', gloss: 0.46, rim: 0.3 },
-    { id: 'candy', en: 'Candy Pop', ko: '캔디 팝', price: 560, shape: 'round', gloss: 0.5, rim: 0.18 },
-    { id: 'star', en: 'Star Cut', ko: '스타 컷', price: 760, shape: 'star', gloss: 0.4, rim: 0.26 },
-    { id: 'noir', en: 'Midnight Cut', ko: '미드나잇 컷', price: 1040, shape: 'square', gloss: 0.2, rim: 0.4, dark: true },
-    { id: 'royal', en: 'Royal Cut', ko: '로열 컷', price: 1520, shape: 'diamond', gloss: 0.55, rim: 0.34, gold: true }
+    { id: 'classic', en: 'Classic Cut', ko: '클래식 컷', price: 0, shape: 'square', gloss: 0.34, rim: 0.22, preview: ['#A9B6F4', '#5B6FD4'] },
+    { id: 'crystal', en: 'Crystal Cut', ko: '크리스탈 컷', price: 420, shape: 'diamond', gloss: 0.46, rim: 0.3, preview: ['#A6D8F6', '#4EA8DE'] },
+    { id: 'candy', en: 'Candy Pop', ko: '캔디 팝', price: 560, shape: 'round', gloss: 0.5, rim: 0.18, preview: ['#FFC2DC', '#EE7FB2'] },
+    { id: 'star', en: 'Star Cut', ko: '스타 컷', price: 760, shape: 'star', gloss: 0.4, rim: 0.26, preview: ['#F7E39A', '#E3BE43'] },
+    { id: 'noir', en: 'Midnight Cut', ko: '미드나잇 컷', price: 1040, shape: 'square', gloss: 0.2, rim: 0.4, dark: true, preview: ['#6E6684', '#2B2340'] },
+    { id: 'royal', en: 'Royal Cut', ko: '로열 컷', price: 1520, shape: 'diamond', gloss: 0.55, rim: 0.34, gold: true, preview: ['#FFE7A0', '#E3BE43'] }
   ];
 
   const THEMES = [

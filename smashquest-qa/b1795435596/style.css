@@ -276,7 +276,7 @@ button:disabled { opacity: .55; }
   display: flex; flex-direction: column; align-items: center; gap: 2px; position: relative; }
 .booster:active { transform: scale(.97); }
 .booster.on { box-shadow: 0 0 0 3px var(--violet), var(--shadow); }
-.b-ico { font-size: 21px; line-height: 1; }
+.b-ico { width: 24px; height: 24px; display: grid; place-items: center; color: #4B4363; }
 .booster em { font-size: 10.5px; font-weight: 700; color: var(--soft); }
 .b-count { position: absolute; right: 7px; top: 6px; min-width: 18px; height: 18px; border-radius: 999px;
   background: var(--violet); color: #fff; font-size: 10.5px; font-weight: 800; display: grid; place-items: center; padding: 0 4px; }
@@ -285,8 +285,8 @@ button:disabled { opacity: .55; }
 /* shop */
 .pack-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
 .pack { background: #fff; border-radius: 18px; box-shadow: var(--shadow-sm); padding: 12px 8px 10px; text-align: center; }
-.pk-ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; margin: 0 auto 8px;
-  color: #fff; font-size: 22px; }
+.pk-ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; margin: 0 auto 8px; }
+.pk-ico svg { width: 23px; height: 23px; }
 .pack b { display: block; font-size: 12.5px; margin-bottom: 3px; }
 .pack span { display: block; font-size: 11.5px; color: var(--soft); margin-bottom: 8px; }
 .pk-buy { background: linear-gradient(180deg, #8377FF, var(--violet)); color: #fff; font-weight: 800; font-size: 12px;

@@ -303,10 +303,15 @@
   function renderShop() {
     const packRow = $('#packRow');
     packRow.innerHTML = '';
+    const ICON = {
+      hammer: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-3 3-7-7z"/><path d="M11 8L4 15a2 2 0 0 0 0 3l2 2a2 2 0 0 0 3 0l7-7"/></svg>',
+      bomb: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="14" r="7"/><path d="M16 8l2-2M18 6l2 2M20 8c1-2 0-4-2-4"/></svg>',
+      shuffle: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h4l8 12h4"/><path d="M4 18h4l8-12h4"/><path d="M17 3l3 3-3 3M17 15l3 3-3 3"/></svg>'
+    };
     const packs = [
-      { kind: 'hammer', label: t('shop.hammerPack'), price: 110, color: 'linear-gradient(180deg,#FFB35C,#F0813C)', ico: '⚒' },
-      { kind: 'bomb', label: t('shop.bombPack'), price: 150, color: 'linear-gradient(180deg,#8E85FF,#5B51E8)', ico: '✹' },
-      { kind: 'shuffle', label: t('shop.shufflePack'), price: 120, color: 'linear-gradient(180deg,#6FD3C1,#2FBFA9)', ico: '⇄' }
+      { kind: 'hammer', label: t('shop.hammerPack'), price: 110, color: 'linear-gradient(180deg,#FFB35C,#F0813C)', ico: ICON.hammer },
+      { kind: 'bomb', label: t('shop.bombPack'), price: 150, color: 'linear-gradient(180deg,#8E85FF,#5B51E8)', ico: ICON.bomb },
+      { kind: 'shuffle', label: t('shop.shufflePack'), price: 120, color: 'linear-gradient(180deg,#6FD3C1,#2FBFA9)', ico: ICON.shuffle }
     ];
     packs.forEach(function (p) {
       const el = document.createElement('div');
@@ -336,8 +341,9 @@
       el.className = 'skin-card' + (equipped ? ' on' : '');
       const price = equipped ? t('common.equipped') : (owned ? t('common.equip') : '● ' + s.price);
       const cls = equipped ? 'eq' : (owned ? 'owned' : '');
-      const fill = s.dark ? 'linear-gradient(160deg,#5B5470,#2B2340)' : (s.gold ? 'linear-gradient(160deg,#FFE7A0,#E3BE43)' : 'linear-gradient(160deg,#B9C6FF,#6C63FF)');
-      const radius = s.shape === 'round' ? '50%' : (s.shape === 'diamond' ? '8px' : '14px');
+      const pv = s.preview || ['#B9C6FF', '#6C63FF'];
+      const fill = 'linear-gradient(160deg,' + pv[0] + ',' + pv[1] + ')';
+      const radius = s.shape === 'round' ? '50%' : (s.shape === 'diamond' ? '10px' : '14px');
       el.innerHTML = '<span class="skin-dot" style="background:' + fill + ';border-radius:' + radius + '"></span>' +
         '<b>' + pick({ en: s.en, ko: s.ko }) + '</b><span class="skin-price ' + cls + '">' + price + '</span>';
       el.onclick = function () {
@@ -722,6 +728,7 @@
 
   function onWin() {
     if (resultShown) return;
+    if (!engine || engine.status !== 'won') return;
     resultShown = true;
     sfx.win();
     vibrate(35);
@@ -741,6 +748,7 @@
 
   function onLose() {
     if (resultShown) return;
+    if (!engine || engine.status !== 'lost') return;
     resultShown = true;
     sfx.lose();
     vibrate(70);
