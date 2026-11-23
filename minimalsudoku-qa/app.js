@@ -1633,6 +1633,10 @@
         startGame('medium');
         return;
       }
+      if (window.__QA_SCENE__ === 'dailyresult') {
+        startDaily();
+        return;
+      }
       if (!profile.seenTutorial) {
         tutPage = 0;
         showScreen('tutorial');
