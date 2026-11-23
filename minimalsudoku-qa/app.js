@@ -463,8 +463,14 @@
       setTimeout(function () {
         var holes = [], i;
         for (i = 0; i < 81; i++) if (!game.puzzle[i]) holes.push(i);
-        var fill = window.__QA_SCENE__ === 'hint' ? 8 : 20;
-        for (i = 0; i < Math.min(fill, holes.length); i++) game.grid[holes[i]] = game.solution[holes[i]];
+        var fill = window.__QA_SCENE__ === 'hint' ? 10 : 22;
+        var step = Math.max(1, Math.floor(holes.length / fill));
+        var used = [];
+        for (i = 0; i < holes.length && used.length < fill; i += step) {
+          game.grid[holes[i]] = game.solution[holes[i]];
+          used.push(holes[i]);
+        }
+        holes = holes.filter(function (idx) { return used.indexOf(idx) < 0; });
         if (window.__QA_SCENE__ === 'play') {
           var cand = S.candidates(game.grid);
           var noteCells = holes.slice(fill + 2, fill + 4);
