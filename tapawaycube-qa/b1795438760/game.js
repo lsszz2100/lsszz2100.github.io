@@ -265,11 +265,26 @@
         maxY = Math.max(maxY, c.y + gx.tw * 0.25 + gx.sh);
       }
       if (minX > maxX) return;
-      const pad = gx.tw * 0.62;
+      let pad = gx.tw * 0.5;
+      let x0 = minX - pad;
+      let x1 = maxX + pad;
+      let y0 = minY - pad * 0.62;
+      let y1 = maxY + pad * 1.1;
+      const a = this.area;
+      if (a) {
+        // 판이 화면 밖으로 나가지 않게 자른다.
+        const room = Math.min(minX - a.left, a.right - maxX);
+        if (room > 6 && pad > room) { pad = Math.max(6, room); }
+        x0 = Math.max(a.left, minX - pad);
+        x1 = Math.min(a.right, maxX + pad);
+        y0 = Math.max(a.top, minY - pad * 0.62);
+        y1 = Math.min(a.bottom, maxY + pad * 1.1);
+      }
       g.fillStyle(col(this.stage.frame), 0.8);
-      g.fillRoundedRect(minX - pad, minY - pad * 0.7, (maxX - minX) + pad * 2, (maxY - minY) + pad * 1.5, 44);
+      g.fillRoundedRect(x0, y0, x1 - x0, y1 - y0, 44);
+      const ip = Math.min(pad * 0.42, 26);
       g.fillStyle(col(this.stage.board), 0.96);
-      g.fillRoundedRect(minX - pad * 0.72, minY - pad * 0.5, (maxX - minX) + pad * 1.44, (maxY - minY) + pad * 1.1, 34);
+      g.fillRoundedRect(x0 + ip, y0 + ip * 0.7, (x1 - x0) - ip * 2, (y1 - y0) - ip * 1.4, 34);
     },
 
     // ------------------------------------------------------------ input
