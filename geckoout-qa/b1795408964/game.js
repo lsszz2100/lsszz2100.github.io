@@ -394,7 +394,7 @@
           const k = clamp01((t - at) / 0.5);
           if (k >= 1) continue;
           const gateDir = root.GeckoCore.gateEntryDir(this.stage.gates[gk.gate]);
-          const d = root.GeckoCore.DIRS[gateDir];
+          const d = dirVec(gateDir);
           offX = d.x * cs * easeOut(k) * 2.2;
           offY = d.y * cs * easeOut(k) * 2.2;
           alpha = 1 - k * k;
