@@ -93,7 +93,7 @@
         right: wd - BOARD.left
       };
       this.drawBackground();
-      if (this.engine) this.computeGeo();
+      if (this.engine) { this.computeGeo(); this.draw(); }
     },
 
     toWorld: function (px, py) {
