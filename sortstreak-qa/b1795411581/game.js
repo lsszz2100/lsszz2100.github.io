@@ -120,9 +120,7 @@
       this.hint = null;
       this.potFlash = {};
       this.ready = true;
-      this.geom();
-      this.drawBackground();
-      this.drawPots();
+      this.layout();
       this.snapDisp();
     },
 
