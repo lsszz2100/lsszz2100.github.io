@@ -212,8 +212,8 @@ html, body {
 .home-hero {
   position: relative; margin-top: 12px; flex: 1; min-height: 0;
   background: linear-gradient(175deg, #FFFFFF 0%, #F0FFF7 60%, #E3F8EC 100%);
-  border-radius: 30px; padding: 16px; box-shadow: var(--shadow);
-  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  border-radius: 30px; padding: 18px 16px; box-shadow: var(--shadow);
+  display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;
   overflow: hidden;
 }
 .hero-deco i { position: absolute; border-radius: 50%; background: #E4F9EE; }
@@ -232,11 +232,13 @@ html, body {
   background-image: linear-gradient(#EDF7F0 1px, transparent 1px), linear-gradient(90deg, #EDF7F0 1px, transparent 1px);
   background-size: 26px 26px;
 }
-.hb-gecko { position: absolute; display: flex; }
-.hb-gecko i { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(180deg, #FFB6A3, #F4795F); margin-right: -3px; }
+.hb-gecko { position: absolute; display: flex; align-items: center; }
+.hb-gecko i { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(180deg, #FFB6A3, #F4795F); margin-right: -4px; }
+.hb-gecko b { width: 27px; height: 27px; border-radius: 50%; margin-left: -3px; background: linear-gradient(180deg, #FFC4B4, #F4795F); box-shadow: inset -3px -2px 0 rgba(0,0,0,.08); }
 .hb-gecko.a { left: 34px; top: 76px; }
 .hb-gecko.b { left: 118px; top: 26px; }
 .hb-gecko.b i { background: linear-gradient(180deg, #9CD3F5, #4FA8E0); }
+.hb-gecko.b b { background: linear-gradient(180deg, #AEDCFA, #4FA8E0); }
 .hb-gate { position: absolute; border-radius: 7px; }
 .hb-gate.ga { right: 8px; top: 64px; width: 10px; height: 46px; }
 .hb-gate.gb { left: 108px; top: 8px; width: 46px; height: 10px; }
@@ -249,15 +251,17 @@ html, body {
   font-family: inherit; color: #fff;
 }
 .play-orb:active { transform: translateY(5px); box-shadow: 0 5px 0 #1F855F; }
-.orb-gecko { position: relative; width: 40px; height: 22px; }
-.og-body { position: absolute; left: 0; top: 6px; width: 26px; height: 14px; border-radius: 8px; background: #E9FFF5; }
-.og-head { position: absolute; right: 0; top: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: inset -3px -3px 0 #CFF3E3; }
+.orb-tri {
+  width: 0; height: 0; margin: 2px 0 1px 5px;
+  border-left: 19px solid #fff; border-top: 12px solid transparent; border-bottom: 12px solid transparent;
+}
 .orb-label { font-size: 13px; font-weight: 900; letter-spacing: .4px; }
 .hero-meta { display: flex; align-items: baseline; gap: 8px; font-size: 13px; }
 .hero-meta strong { font-size: 16px; }
 .hero-meta span { color: var(--ink-soft); }
 .hero-stars { font-size: 13px; color: var(--honey); font-weight: 800; }
 .home-gift {
+  position: absolute; top: 12px; right: 12px;
   display: none; align-items: center; gap: 6px; font-size: 12px; font-weight: 800;
   color: #8A5A00; background: #FFF2CF; border-radius: 12px; padding: 6px 12px;
 }
