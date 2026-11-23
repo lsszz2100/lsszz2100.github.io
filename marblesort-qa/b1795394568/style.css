@@ -1,3 +1,7 @@
+@font-face { font-family: 'NotoKR'; src: url('fonts/NotoSansKR-Regular.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'NotoKR'; src: url('fonts/NotoSansKR-Bold.ttf') format('truetype'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'NotoKR'; src: url('fonts/NotoSansKR-Black.ttf') format('truetype'); font-weight: 900; font-display: swap; }
+
 /* Marble Sort — light, airy puzzle UI. */
 :root {
   --ink: #22314D;
@@ -29,7 +33,7 @@ html, body {
   overflow: hidden;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
+  font-family: 'NotoKR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
   -webkit-font-smoothing: antialiased;
   user-select: none;
 }
@@ -147,22 +151,23 @@ html, body {
 
 .tut-art { position: relative; height: 210px; display: flex; align-items: flex-end; justify-content: center; gap: 18px; }
 .t-rail {
-  width: 58px; height: 128px; border-radius: 18px 18px 26px 26px; padding: 5px;
+  width: 58px; min-height: 58px; border-radius: 18px 18px 26px 26px; padding: 5px;
   background: rgba(255,255,255,.85); border: 2px solid #DCEBFA;
   box-shadow: inset 0 -8px 14px rgba(120,170,220,.09), 0 12px 22px rgba(80,130,180,.10);
   display: flex; flex-direction: column-reverse; align-items: center; gap: 2px;
 }
-.t-rail .mb { width: 38px; height: 38px; }
+.t-rail .mb { width: 34px; height: 34px; }
 .t-rail.sel { transform: translateY(-14px); border-color: #A9D3F5; box-shadow: 0 0 0 4px rgba(74,159,224,.14), 0 16px 26px rgba(80,130,180,.16); }
-.t-rail.target { border-style: dashed; border-color: #B9DCCB; }
-.t-rail .ring { width: 34px; height: 34px; border-radius: 50%; border: 2px dashed #C9E6D8; }
+.t-rail.target { border-style: dashed; border-color: #B9DCCB; min-height: 128px; }
+.t-rail .ring { width: 30px; height: 30px; border-radius: 50%; border: 2px dashed #C9E6D8; }
+.tut-art.art-pick .t-rail:not(.sel) { min-height: 128px; }
 .t-rail.done { border-color: #B7E3CE; background: #F2FCF7; position: relative; }
 .t-rail .tick { position: absolute; top: -12px; right: -10px; width: 28px; height: 28px; border-radius: 50%; background: #43C08F; color: #fff; font-style: normal; font-size: 15px; font-weight: 900; display: grid; place-items: center; box-shadow: 0 6px 12px rgba(67,192,143,.35); }
-.t-hand { position: absolute; bottom: 6px; left: 50%; transform: translateX(-64px); font-size: 26px; animation: tapHand 1.6s ease-in-out infinite; }
+.t-hand { position: absolute; bottom: 2px; left: 50%; transform: translateX(-64px); font-size: 24px; opacity: .8; animation: tapHand 1.6s ease-in-out infinite; }
 @keyframes tapHand { 0%,100% { transform: translate(-64px, 0); } 50% { transform: translate(-64px, -10px); } }
 .t-fly { position: absolute; top: 26px; left: 50%; transform: translateX(-6px); animation: fly 1.8s ease-in-out infinite; }
 @keyframes fly { 0% { opacity: 0; transform: translate(-52px, 40px) scale(.7); } 30% { opacity: 1; } 70% { opacity: 1; transform: translate(28px, 4px) scale(1); } 100% { opacity: 0; transform: translate(30px, 6px) scale(.8); } }
-.art-clear { align-items: center; flex-direction: column; gap: 26px; }
+.art-clear { align-items: center; flex-direction: column; justify-content: center; gap: 26px; }
 .star-row { display: flex; gap: 8px; font-size: 26px; color: #F0B429; }
 .star-row i { font-style: normal; filter: drop-shadow(0 4px 8px rgba(240,180,41,.28)); }
 .art-budget { align-items: center; gap: 12px; }
@@ -175,8 +180,8 @@ html, body {
 .tut-demo { margin-top: 6px; background: rgba(255,255,255,.7); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px; }
 .tut-demo-text { margin: 0 0 8px; font-size: 12.5px; color: var(--soft); text-align: center; }
 .tut-demo-board { height: 118px; display: flex; align-items: flex-end; justify-content: center; gap: 12px; }
-.tut-demo-board .t-rail { height: 92px; width: 46px; }
-.tut-demo-board .t-rail .mb { width: 30px; height: 30px; }
+.tut-demo-board .t-rail { min-height: 46px; width: 46px; }
+.tut-demo-board .t-rail .mb { width: 28px; height: 28px; }
 .tut-demo-board .t-rail.sel { transform: translateY(-8px); }
 .tut-demo-board .t-rail.hint-target { animation: hintPulse .9s ease-in-out 2; }
 @keyframes hintPulse { 0%,100% { box-shadow: none; } 50% { box-shadow: 0 0 0 5px rgba(240,180,41,.25); } }
@@ -428,7 +433,7 @@ html, body {
   .hr.tall { height: 120px; }
   .play-orb { width: 112px; height: 112px; font-size: 17px; }
   .tut-art { height: 170px; }
-  .t-rail { height: 108px; }
+  .t-rail { min-height: 58px; }
   .t-rail .mb { width: 32px; height: 32px; }
   .tut-demo-board { height: 100px; }
 }

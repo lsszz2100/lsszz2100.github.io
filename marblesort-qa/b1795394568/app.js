@@ -165,6 +165,10 @@
   var screens = {};
   var currentScreen = 'splash';
 
+  function collectScreens() {
+    all('section.screen').forEach(function (el) { screens[el.id] = el; });
+  }
+
   function show(id) {
     if (!screens[id]) screens[id] = $(id);
     Object.keys(screens).forEach(function (k) {
@@ -911,7 +915,7 @@
     });
     all('.tut-dots i').forEach(function (el, idx) { el.classList.toggle('on', idx === tutStep); });
     $('tutNext').textContent = tutStep >= 3 ? t('common.play') : t('common.next');
-    $('tutDemo').style.display = tutStep >= 2 ? 'block' : 'block';
+    $('tutDemo').style.display = tutStep === 0 ? 'block' : 'none';
     renderTutDemo();
   }
 
@@ -1114,6 +1118,7 @@
   };
 
   function boot() {
+    collectScreens();
     ensureDaily();
     I.setLang(save.lang);
     G.audio.setMuted(!save.sound);
