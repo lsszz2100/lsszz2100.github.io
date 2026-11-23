@@ -524,17 +524,17 @@ body.shot, body.shot * { cursor: none !important; }
 /* ------------------------------------------------------ glyph-safe icons
    Noto Sans KR 서브셋에 없는 기호는 글자 대신 CSS로 그린다. */
 .ico-gear {
-  display: inline-block; width: 32px; height: 32px; border-radius: 50%;
-  border: 8px solid currentColor; box-sizing: border-box; position: relative; vertical-align: middle;
+  display: inline-block; width: 30px; height: 30px; border-radius: 50%;
+  border: 9px solid currentColor; box-sizing: border-box; position: relative; vertical-align: middle;
 }
 .ico-gear::before, .ico-gear::after {
-  content: ''; position: absolute; left: 50%; top: 50%; width: 46px; height: 10px;
+  content: ''; position: absolute; left: 50%; top: 50%; width: 38px; height: 9px;
   background: currentColor; border-radius: 4px; transform: translate(-50%, -50%);
 }
 .ico-gear::after { transform: translate(-50%, -50%) rotate(90deg); }
 .pill .ico-gear { color: var(--ink-soft); }
 .nav-btn .ico-gear { color: var(--sky); width: 34px; height: 34px; }
-.nav-btn .ico-gear::before, .nav-btn .ico-gear::after { width: 48px; height: 11px; }
+.nav-btn .ico-gear::before, .nav-btn .ico-gear::after { width: 44px; height: 10px; }
 .ico-swatch {
   display: inline-block; width: 36px; height: 36px; border-radius: 12px; vertical-align: middle;
   background: conic-gradient(from 210deg, #FFB03A, #FF7A59, #FF5C77, #B983FF, #6FB7FF, #2ED3B7, #FFB03A);

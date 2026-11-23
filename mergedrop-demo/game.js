@@ -556,7 +556,7 @@
     };
     draw();
     var timer = scene.time.addEvent({ delay: 60, loop: true, callback: draw });
-    scene.time.delayedCall(2600, function () {
+    scene.time.delayedCall(4200, function () {
       if (timer) timer.remove();
       if (layers.hint) layers.hint.clear();
     });
