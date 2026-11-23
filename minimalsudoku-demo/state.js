@@ -300,18 +300,22 @@
     return new Date(number * 86400000).toISOString().slice(0, 10);
   }
 
-  /** Monday-to-Sunday strip for the week that holds `today`. */
+  /** The last seven days ending today — a streak you can see at a glance. */
   function dailyWeek(profile, today) {
     var todayNum = dayNumber(today);
-    var weekday = new Date(todayNum * 86400000).getUTCDay(); // 0 = Sunday
-    var monday = todayNum - ((weekday + 6) % 7);
     var solved = {};
     (profile.daily.history || []).forEach(function (d) { solved[d] = true; });
     if (profile.daily.done) solved[today] = true;
     var out = [];
-    for (var i = 0; i < 7; i++) {
-      var date = isoDay(monday + i);
-      out.push({ date: date, done: !!solved[date], today: date === today });
+    for (var i = 6; i >= 0; i--) {
+      var date = isoDay(todayNum - i);
+      var weekday = new Date((todayNum - i) * 86400000).getUTCDay(); // 0 = Sunday
+      out.push({
+        date: date,
+        done: !!solved[date],
+        today: i === 0,
+        index: (weekday + 6) % 7 // 0 = Monday, to match the wd0..wd6 labels
+      });
     }
     return out;
   }
