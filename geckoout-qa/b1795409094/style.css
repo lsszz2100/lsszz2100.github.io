@@ -352,7 +352,7 @@ html, body {
 #board canvas { display: block; }
 
 .pad {
-  position: absolute; right: 14px; bottom: 108px; width: 132px; height: 132px;
+  position: absolute; right: 8px; bottom: 6px; width: 132px; height: 132px;
   display: none; z-index: 5;
 }
 .pad.show { display: block; }

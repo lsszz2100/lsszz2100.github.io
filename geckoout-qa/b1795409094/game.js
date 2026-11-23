@@ -217,7 +217,6 @@
       g.lineStyle(3, col(skin.rim), 0.75);
       g.strokeRect(geo.x, geo.y, geo.w, geo.h);
 
-      this.drawGates();
       this.drawBlocks();
     },
 
@@ -290,6 +289,8 @@
       const geo = this.g;
       const skin = this.boardSkin;
       const cs = geo.cell;
+
+      this.drawGates();
 
       // arrows
       for (let i = 0; i < stage.arrows.length; i += 1) {
