@@ -383,8 +383,8 @@
       ctx.strokeStyle = frame;
       ctx.stroke();
 
-      const wallCol = mix(frame, '#4B4166', 0.44);
-      const wallTop = mix(wallCol, '#FFFFFF', 0.20);
+      const wallCol = mix(frame, '#4B4166', 0.38);
+      const wallTop = mix(wallCol, '#FFFFFF', 0.24);
       const tile = mix(board, '#2E2745', 0.05);
       const ballR = ts * 0.33;
 
@@ -424,12 +424,20 @@
           }
           if (paintIdx >= 0) {
             const col = this.paints[paintIdx % this.paints.length];
-            ctx.fillStyle = col;
+            const grad = ctx.createLinearGradient(px, py, px, py + ts);
+            grad.addColorStop(0, css(col, 0.26));
+            grad.addColorStop(0.55, col);
+            grad.addColorStop(1, css(col, -0.06));
+            ctx.fillStyle = grad;
             ctx.fill();
-            // 광택
-            roundRect(ctx, px + inset, py + inset, ts - inset * 2, (ts - inset * 2) * 0.42, ts * 0.22);
-            ctx.fillStyle = 'rgba(255,255,255,.30)';
+            // 위쪽 모서리 빛
+            ctx.save();
+            ctx.clip();
+            ctx.beginPath();
+            ctx.ellipse(px + ts * 0.5, py + ts * 0.24, ts * 0.3, ts * 0.14, 0, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,.34)';
             ctx.fill();
+            ctx.restore();
           } else {
             ctx.fillStyle = tile;
             ctx.fill();
@@ -438,22 +446,24 @@
             ctx.stroke();
           }
 
-          // 색 전환 게이트
+          // 색 전환 게이트: 또렷한 고리 + 가운데 점
           if (st.kind[bi] === CORE.GATE) {
             const gi = st.gate[bi];
             const gcol = this.paints[(gi >= 0 ? gi : 1) % this.paints.length];
             const cx = px + ts / 2;
             const cy = py + ts / 2;
-            ctx.lineWidth = Math.max(1.6, ts * 0.085);
+            ctx.beginPath();
+            ctx.arc(cx, cy, ts * 0.27, 0, Math.PI * 2);
+            ctx.lineWidth = Math.max(2, ts * 0.1);
             ctx.strokeStyle = gcol;
-            ctx.beginPath();
-            ctx.arc(cx, cy, ts * 0.265, -Math.PI * 0.78, Math.PI * 0.78);
             ctx.stroke();
             ctx.beginPath();
-            ctx.arc(cx, cy, ts * 0.265, Math.PI * 0.22, Math.PI * 1.78);
+            ctx.arc(cx, cy, ts * 0.27, 0, Math.PI * 2);
+            ctx.lineWidth = Math.max(1, ts * 0.03);
+            ctx.strokeStyle = 'rgba(255,255,255,.75)';
             ctx.stroke();
             ctx.beginPath();
-            ctx.arc(cx, cy, ts * 0.085, 0, Math.PI * 2);
+            ctx.arc(cx, cy, ts * 0.1, 0, Math.PI * 2);
             ctx.fillStyle = gcol;
             ctx.fill();
           }
