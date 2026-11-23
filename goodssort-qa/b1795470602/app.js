@@ -1315,6 +1315,33 @@
     updateBoosterButtons();
   }
 
+  function captureDailyWin() {
+    const st = C.dailyChallenge(C.todayKey());
+    challengeMode = true;
+    dailyStage = st;
+    stageIndex = st.index;
+    engine = new C.Engine(st);
+    for (let k = 0; k < st.solution.length; k += 1) {
+      if (engine.status !== 'playing') break;
+      engine.tap(st.solution[k]);
+    }
+    elapsedMs = st.parTime * 0.7 * 1000;
+    timerOn = false;
+    showScreen('game');
+    window.GoodsGame.start({
+      engine: engine,
+      stage: st,
+      theme: C.themeFor(profile, st),
+      colors: colors(),
+      tray: C.traySkinFor(profile)
+    });
+    updateHud();
+    updateBoosterButtons();
+    const result = { win: true, seconds: elapsedMs / 1000, matches: engine.matches, maxCombo: engine.maxCombo };
+    const applied = C.applyChallengeResult(profile, result, C.todayKey());
+    setTimeout(function () { showChallengeModal(result, applied); }, 300);
+  }
+
   function captureWin() {
     const idx = parseInt(qp('stage', '92'), 10) || 92;
     const stage = C.stageAt(idx);
@@ -1360,6 +1387,8 @@
       renderCollection();
     } else if (name === 'daily') {
       captureDaily(parseFloat(qp('play', '9')) || 9);
+    } else if (name === 'dailywin') {
+      captureDailyWin();
     } else if (name === 'game') {
       captureGameState(parseInt(qp('stage', '92'), 10) || 92, parseFloat(qp('play', '6')) || 6);
     } else if (name === 'win') {

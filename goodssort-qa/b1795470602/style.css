@@ -406,7 +406,7 @@ em { font-style: normal; }
 .goods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0 26px; }
 .goods-card { background: #fff; border-radius: 18px; box-shadow: var(--shadow-sm); padding: 12px 8px 10px;
   display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.goods-card.miss { background: #F7FAFF; box-shadow: none; }
+.goods-card.miss { background: #EDF3FC; box-shadow: inset 0 0 0 1px #E1EAF7; }
 .gc-tile { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center;
   box-shadow: inset 0 -4px 8px rgba(0, 0, 0, .10); }
 .gc-tile svg { width: 34px; height: 34px; }

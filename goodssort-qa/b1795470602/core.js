@@ -394,6 +394,8 @@
     this.matches = 0;
     this.combo = 0;
     this.maxCombo = 0;
+    // 마지막 판매 이후 집은 굿즈 수. 6개 이내에 다음 세트를 팔면 콤보가 이어진다.
+    this.sinceMatch = 0;
     this.score = 0;
     this.status = 'playing';
     this.events = [];
@@ -447,7 +449,8 @@
       this.tray = kept;
       matched = 1;
       this.matches += 1;
-      this.combo += 1;
+      this.combo = this.sinceMatch <= 5 ? this.combo + 1 : 1;
+      this.sinceMatch = 0;
       if (this.combo > this.maxCombo) this.maxCombo = this.combo;
       this.score += 100 + (this.combo - 1) * 40;
       // 이번 매치로 사라진 기록 표시
@@ -458,7 +461,7 @@
       }
       this.events.push({ type: 'match', type: type, combo: this.combo });
     } else {
-      this.combo = 0;
+      this.sinceMatch += 1;
     }
     this.events.push({ type: 'take', slot: slot, type: type, matched: matched });
 
@@ -479,6 +482,7 @@
       this.history.splice(i, 1);
       this.taps = Math.max(0, this.taps - 1);
       this.combo = 0;
+      this.sinceMatch = 0;
       if (this.status === 'lost') this.status = 'playing';
       this.events.push({ type: 'undo', slot: h.slot, type: h.type });
       return { ok: true, slot: h.slot, type: h.type };
