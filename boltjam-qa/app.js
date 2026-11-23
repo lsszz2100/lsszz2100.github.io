@@ -719,7 +719,12 @@
     var bestNode = $('resBest');
     if (bestNode) {
       var prevBest = game.daily ? (save.daily.best || 0) : (progressOf(game.id) ? progressOf(game.id).best : 0);
-      bestNode.textContent = game.daily ? t('dailyBestStreak', { n: save.daily.best || 0 }) : t('bestScore', { n: prevBest });
+      if (game.daily) {
+        // the streak is already in the note; only add the record when it is worth showing
+        bestNode.textContent = prevBest > 1 ? t('dailyBestStreak', { n: prevBest }) : '';
+      } else {
+        bestNode.textContent = t('bestScore', { n: prevBest });
+      }
     }
     var noteNode = $('resNote');
     if (noteNode) {
