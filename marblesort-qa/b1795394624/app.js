@@ -907,7 +907,7 @@
 
   // -------------------------------------------------------------- tutorial
   var tutStep = 0;
-  var tutDemo = { rails: [[2, 0, 1, 1], [], []], picked: -1, done: false };
+  var tutDemo = { rails: [[0, 2, 1, 1], [], []], picked: -1, done: false };
 
   function renderTutorialStep() {
     all('.tut-slide').forEach(function (el) {

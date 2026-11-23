@@ -179,8 +179,8 @@ html, body {
 
 .tut-demo { margin-top: 6px; background: rgba(255,255,255,.7); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px; }
 .tut-demo-text { margin: 0 0 8px; font-size: 12.5px; color: var(--soft); text-align: center; }
-.tut-demo-board { height: 118px; display: flex; align-items: flex-end; justify-content: center; gap: 12px; }
-.tut-demo-board .t-rail { min-height: 46px; width: 46px; }
+.tut-demo-board { min-height: 118px; display: flex; align-items: flex-end; justify-content: center; gap: 12px; padding-bottom: 4px; }
+.tut-demo-board .t-rail { min-height: 96px; width: 46px; justify-content: flex-end; }
 .tut-demo-board .t-rail .mb { width: 28px; height: 28px; }
 .tut-demo-board .t-rail.sel { transform: translateY(-8px); }
 .tut-demo-board .t-rail.hint-target { animation: hintPulse .9s ease-in-out 2; }
