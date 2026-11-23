@@ -277,7 +277,7 @@
     St.dailyWeek(profile, today()).forEach(function (day, i) {
       var cell = el('div', 'wd' + (day.done ? ' on' : '') + (day.today ? ' today' : ''));
       cell.appendChild(el('span', 'wd-dot', day.done ? '✓' : ''));
-      cell.appendChild(el('span', 'wd-name', t('wd' + i)));
+      cell.appendChild(el('span', 'wd-name', t('wd' + day.index)));
       host.appendChild(cell);
     });
   }
