@@ -296,13 +296,13 @@
       for (let i = 0; i < stage.arrows.length; i += 1) {
         const a = stage.arrows[i];
         const p = this.cellCenter(a.x, a.y);
-        g.fillStyle(col('#FFFFFF'), 0.55);
-        g.fillRoundedRect(p.x - cs * 0.34, p.y - cs * 0.34, cs * 0.68, cs * 0.68, cs * 0.2);
-        g.lineStyle(3, col('#B9D8C6'), 0.7);
-        g.strokeRoundedRect(p.x - cs * 0.34, p.y - cs * 0.34, cs * 0.68, cs * 0.68, cs * 0.2);
+        g.fillStyle(col('#E8F8EF'), 1);
+        g.fillRoundedRect(p.x - cs * 0.36, p.y - cs * 0.36, cs * 0.72, cs * 0.72, cs * 0.22);
+        g.lineStyle(3, col('#A9D8C2'), 0.9);
+        g.strokeRoundedRect(p.x - cs * 0.36, p.y - cs * 0.36, cs * 0.72, cs * 0.72, cs * 0.22);
         const d = root.GeckoCore.DIRS[a.dir];
-        const r = cs * 0.17;
-        g.fillStyle(col('#3E7F66'), 0.72);
+        const r = cs * 0.20;
+        g.fillStyle(col('#2F7A5E'), 0.95);
         g.beginPath();
         if (d.x === 0) {
           g.moveTo(p.x - r * 1.15, p.y - d.y * r * 0.2);

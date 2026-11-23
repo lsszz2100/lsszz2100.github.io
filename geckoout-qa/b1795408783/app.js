@@ -1176,9 +1176,9 @@
     p.coins = 1480;
     p.unlocked = 92;
     p.cleared = 91;
-    p.skinSet = 'pastel';
+    p.skinSet = 'meadow';
     p.skinSets = ['meadow', 'pastel'];
-    p.boardSkin = 'leaf';
+    p.boardSkin = 'paper';
     p.boardSkins = ['paper', 'leaf'];
     for (let i = 0; i < 91; i += 1) p.stars[i] = (i % 9 === 0) ? 2 : ((i % 13 === 0) ? 1 : 3);
     const y = new Date();
