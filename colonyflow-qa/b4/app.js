@@ -1441,6 +1441,12 @@
       if (engine && engine.status === 'won') onWin();
       return !!engine && engine.status === 'won';
     },
+    /* QA only: open the dead-end sheet without having to strand a real board. */
+    qaStuck: function () {
+      if (!engine) return false;
+      onStuck();
+      return true;
+    },
     getProfile: function () { return profile; },
     getEngine: function () { return engine; },
     remaining: function () { return remainingMs; },
