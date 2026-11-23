@@ -283,13 +283,7 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
-      // sky
-      const sky = this.theme.sky || ['#FFF7EE', '#FFE8CF'];
-      const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, css(sky[0], 0));
-      grad.addColorStop(1, css(sky[1], 0));
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
+      // 배경은 화면(.game)의 색을 그대로 쓰고, 판(plate)만 그린다.
 
       if (!st || !e) return;
 
