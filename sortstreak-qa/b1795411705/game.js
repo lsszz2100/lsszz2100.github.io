@@ -77,7 +77,6 @@
       this.view = { scale: scale, ox: (vw - W * scale) / 2, oy: (vh - H * scale) / 2 };
       this.rootC.setScale(scale);
       this.rootC.setPosition(this.view.ox, this.view.oy);
-      this.geom();
       this.drawBackground();
       this.drawPots();
       this.snapDisp();
