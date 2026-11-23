@@ -662,7 +662,7 @@
         any = true;
         const b = document.createElement('button');
         b.className = 'ant-chip' + (sel === color && k === 0 ? ' on' : '');
-        b.setAttribute('aria-label', colorName(color) + ' ant');
+        b.setAttribute('aria-label', colorName(color) + (lang() === 'ko' ? ' 개미' : ' ant'));
         b.innerHTML = antSvg(color);
         b.onclick = function () {
           if (sel === color) { setSel(-1); sfx.tap(); return; }
