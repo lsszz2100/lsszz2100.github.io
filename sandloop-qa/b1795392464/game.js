@@ -8,8 +8,8 @@
   const RAIL = { x: 36, y: 190, w: 928, h: 200 };
   const DISPENSER = { x: 176, y: 300, r: 66 };
   const TRACK = { x: 286, y: 300, w: 646, h: 46 };
-  const JAR_BOTTOM = 1152;
-  const HOLD = { x: 336, y: 1200, w: 328, h: 134 };
+  const JAR_BOTTOM = 1272;
+  const HOLD = { x: 336, y: 1332, w: 328, h: 132 };
 
   function col(hex) { return Phaser.Display.Color.HexStringToColor(hex).color; }
 
@@ -141,8 +141,8 @@
       if (!this.stage || !this.grid) return;
       for (let i = 0; i < this.stage.jars.length; i += 1) {
         const g = this.grid.jars[i];
-        const label = this.add.text(g.cx, g.y - 26, '', {
-          fontFamily: 'sans-serif', fontSize: '26px', fontStyle: 'bold', color: '#9A8574'
+        const label = this.add.text(g.cx, g.y + g.h / 2 + 34, '', {
+          fontFamily: 'sans-serif', fontSize: '22px', fontStyle: 'bold', color: '#8E7A68'
         }).setOrigin(0.5);
         label.setResolution(2);
         label.visible = false;
