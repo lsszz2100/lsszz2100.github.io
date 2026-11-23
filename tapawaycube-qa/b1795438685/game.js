@@ -6,7 +6,7 @@
   const W = (CORE && CORE.WORLD.w) || 1000;
   const H = (CORE && CORE.WORLD.h) || 1520;
 
-  const BOARD = { top: 322, bottom: 1172, left: 42, right: 958 };
+  const BOARD = { top: 322, bottom: 1172, left: 26, right: 974 };
   const SH_RATIO = 0.62; // 세로 모서리 / 타일 폭
 
   function col(hex) { return Phaser.Display.Color.HexStringToColor(hex).color; }
@@ -74,10 +74,24 @@
     layout: function () {
       const vw = this.scale.width;
       const vh = this.scale.height;
-      const scale = Math.min(vw / W, vh / H);
-      this.view = { scale: scale, ox: (vw - W * scale) / 2, oy: (vh - H * scale) / 2 };
+      if (!vw || !vh) return;
+      // 높이를 꽉 채우고 폭은 화면 비율에 맞춰 늘린다(세로가 긴 폰에서 위아래 여백이 생기지 않게).
+      const scale = vh / H;
+      const wd = vw / scale;
+      this.view = { scale: scale, ox: 0, oy: 0, w: wd };
       this.root.setScale(scale);
-      this.root.setPosition(this.view.ox, this.view.oy);
+      this.root.setPosition(0, 0);
+      // HUD와 부스터 바가 차지하는 실제 높이를 재서 그 사이를 판으로 쓴다.
+      const hud = document.querySelector('.hud');
+      const bar = document.querySelector('.booster-bar');
+      const hudH = hud ? hud.offsetHeight : 120;
+      const barH = bar ? bar.offsetHeight : 96;
+      this.area = {
+        top: Math.max(150, hudH / scale + 8),
+        bottom: H - Math.max(80, barH / scale + 8),
+        left: BOARD.left,
+        right: wd - BOARD.left
+      };
       this.drawBackground();
       if (this.engine) this.computeGeo();
     },
@@ -139,13 +153,14 @@
       }
       const bw = Math.max(0.001, maxX - minX);
       const bh = Math.max(0.001, maxY - minY);
-      const availW = BOARD.right - BOARD.left;
-      const availH = BOARD.bottom - BOARD.top;
-      let tw = Math.min(availW / (bw + 0.9), availH / (bh + 0.5));
-      tw = Math.max(28, Math.min(190, tw));
+      const area = this.area || { top: BOARD.top, bottom: BOARD.bottom, left: BOARD.left, right: BOARD.right };
+      const availW = area.right - area.left;
+      const availH = area.bottom - area.top;
+      let tw = Math.min(availW / (bw + 0.7), availH / (bh + 0.4));
+      tw = Math.max(24, Math.min(210, tw));
       const sh = tw * SH_RATIO;
-      const ox = BOARD.left + (availW - bw * tw) / 2 - minX * tw;
-      const oy = BOARD.top + (availH - bh * tw) / 2 - minY * tw;
+      const ox = area.left + (availW - bw * tw) / 2 - minX * tw;
+      const oy = area.top + (availH - bh * tw) / 2 - minY * tw;
       this.geo = { tw: tw, sh: sh, ox: ox, oy: oy };
     },
 
@@ -227,13 +242,14 @@
       const top = col(this.theme.sky[0]);
       const bottom = col(this.theme.sky[1]);
       g.fillGradientStyle(top, top, bottom, bottom, 1);
-      g.fillRect(-600, -600, W + 1200, H + 1200);
+      const wd = (this.view && this.view.w) || W;
+      g.fillRect(-600, -600, wd + 1200, H + 1200);
 
       g.fillStyle(0xffffff, 0.42);
-      g.fillCircle(W * 0.06, H * 0.08, 190);
-      g.fillCircle(W * 0.98, H * 0.17, 150);
+      g.fillCircle(wd * 0.06, H * 0.08, 190);
+      g.fillCircle(wd * 0.98, H * 0.17, 150);
       g.fillStyle(0xffffff, 0.28);
-      g.fillCircle(W * 0.92, H * 0.8, 220);
+      g.fillCircle(wd * 0.92, H * 0.8, 220);
 
       if (!this.engine || !this.geo) return;
       // 블록 전체가 들어오는 받침(그림자 판)
