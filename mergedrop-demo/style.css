@@ -511,7 +511,7 @@ body.shot, body.shot * { cursor: none !important; }
 }
 .col-cell .cname { font-size: 19px; font-weight: 800; color: var(--ink-soft); }
 .col-cell.locked { opacity: .62; }
-.col-cell.locked .ctile { background: #E5EDF8 !important; color: #B9C8DB; box-shadow: none; }
+.col-cell.locked .ctile { background: #E5EDF8 !important; color: #A6B8CE; box-shadow: none; }
 .col-cell.legendary { box-shadow: 0 0 0 3px rgba(255, 176, 58, .5) inset; }
 .col-cell.legendary .cname { color: var(--gold); }
 .col-count { font-size: 24px; font-weight: 900; color: var(--ink-soft); text-align: center; }
@@ -524,17 +524,20 @@ body.shot, body.shot * { cursor: none !important; }
 /* ------------------------------------------------------ glyph-safe icons
    Noto Sans KR 서브셋에 없는 기호는 글자 대신 CSS로 그린다. */
 .ico-gear {
-  display: inline-block; width: 30px; height: 30px; border-radius: 50%;
-  border: 9px solid currentColor; box-sizing: border-box; position: relative; vertical-align: middle;
+  display: inline-block; width: 26px; height: 26px; border-radius: 50%; position: relative;
+  background: currentColor; vertical-align: middle;
+  box-shadow:
+    0 -14px 0 -9px currentColor, 0 14px 0 -9px currentColor,
+    -14px 0 0 -9px currentColor, 14px 0 0 -9px currentColor,
+    -10px -10px 0 -9px currentColor, 10px -10px 0 -9px currentColor,
+    -10px 10px 0 -9px currentColor, 10px 10px 0 -9px currentColor;
 }
-.ico-gear::before, .ico-gear::after {
-  content: ''; position: absolute; left: 50%; top: 50%; width: 38px; height: 9px;
-  background: currentColor; border-radius: 4px; transform: translate(-50%, -50%);
+.ico-gear::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 9px; height: 9px;
+  border-radius: 50%; background: #fff; transform: translate(-50%, -50%);
 }
-.ico-gear::after { transform: translate(-50%, -50%) rotate(90deg); }
 .pill .ico-gear { color: var(--ink-soft); }
-.nav-btn .ico-gear { color: var(--sky); width: 34px; height: 34px; }
-.nav-btn .ico-gear::before, .nav-btn .ico-gear::after { width: 44px; height: 10px; }
+.nav-btn .ico-gear { color: var(--sky); width: 28px; height: 28px; }
 .ico-swatch {
   display: inline-block; width: 36px; height: 36px; border-radius: 12px; vertical-align: middle;
   background: conic-gradient(from 210deg, #FFB03A, #FF7A59, #FF5C77, #B983FF, #6FB7FF, #2ED3B7, #FFB03A);
