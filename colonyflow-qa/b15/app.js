@@ -1353,7 +1353,7 @@
       const mv = { color: stage.planColors[k], lane: stage.plan[k] };
       if (engine.canPlay(mv.color, mv.lane)) engine.play(mv.color, mv.lane);
     }
-    remainingMs = stage.timeLimit * 1000 * 0.45;
+    remainingMs = stage.timeLimit * 1000 * 0.6;
     timerOn = false;
     showScreen('game');
     setBoardCaption(stage);
@@ -1364,7 +1364,7 @@
     placeCaption();
     updateHud();
     renderHand();
-    const result = { win: true, seconds: stage.timeLimit * 0.55, clean: true };
+    const result = { win: true, seconds: stage.timeLimit * 0.4, clean: true };
     const res = C.applyStageResult(profile, idx, result, C.todayKey());
     setTimeout(function () { showResultModal(result, stage, res, 'win'); }, 500);
   }
