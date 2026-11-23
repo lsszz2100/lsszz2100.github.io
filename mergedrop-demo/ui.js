@@ -1399,6 +1399,18 @@
 
   var bannerTimer = null;
 
+  // 챌린지 스크린샷은 목표(64) 이하 타일만 있는 중반 판으로 보여 준다.
+  var CHAL_ROWS = [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 4, 0, 0],
+    [0, 2, 8, 0, 0],
+    [4, 8, 16, 2, 4],
+    [8, 16, 32, 4, 8],
+    [16, 32, 8, 16, 2]
+  ];
+
   var SHOT_ROWS = [
     [16, 4, 32, 4, 16],
     [2, 64, 8, 16, 8],
@@ -1414,9 +1426,10 @@
     opts = opts || {};
     startGame(opts.mode);
     var s = state.game;
+    var rows = opts.mode === 'challenge' ? CHAL_ROWS : SHOT_ROWS;
     for (var r = 0; r < C.ROWS; r++) {
       for (var c = 0; c < C.COLS; c++) {
-        var v = SHOT_ROWS[r][c];
+        var v = rows[r][c];
         s.board[r][c] = v ? { id: s.idSeq++, v: v } : null;
       }
     }
