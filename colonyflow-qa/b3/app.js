@@ -661,7 +661,7 @@
       for (let k = 0; k < n; k += 1) {
         any = true;
         const b = document.createElement('button');
-        b.className = 'ant-chip' + (sel === color ? ' on' : '');
+        b.className = 'ant-chip' + (sel === color && k === 0 ? ' on' : '');
         b.setAttribute('aria-label', colorName(color) + ' ant');
         b.innerHTML = antSvg(color);
         b.onclick = function () {
@@ -809,10 +809,8 @@
     const n = engine.stage.n;
     const side = C.laneSide(laneId, n);
     const idx = C.laneIndex(laneId, n) + 1;
-    const words = lang() === 'ko'
-      ? { L: '왼쪽', R: '오른쪽', T: '위', B: '아래' }
-      : { L: 'from the left', R: 'from the right', T: 'from the top', B: 'from the bottom' };
-    return t('map.chapterN', { n: idx }) + ' ' + words[side];
+    const key = side === 'L' ? 'game.rowL' : side === 'R' ? 'game.rowR' : side === 'T' ? 'game.colT' : 'game.colB';
+    return t(key, { n: idx });
   }
 
   function nextHintMove() {

@@ -59,6 +59,10 @@
       'game.hand': 'Your hand',
       'game.selHint': '{name} ant ready — tap a trail',
       'game.noSel': 'Tap an ant first',
+      'game.rowL': 'row {n} from the left',
+      'game.rowR': 'row {n} from the right',
+      'game.colT': 'column {n} from the top',
+      'game.colB': 'column {n} from the bottom',
 
       'booster.undo': 'Undo',
       'booster.hint': 'Hint',
@@ -209,6 +213,10 @@
       'game.hand': '내 개미',
       'game.selHint': '{name} 개미 선택 — 길을 탭하세요',
       'game.noSel': '먼저 개미를 탭하세요',
+      'game.rowL': '{n}번째 행 왼쪽에서',
+      'game.rowR': '{n}번째 행 오른쪽에서',
+      'game.colT': '{n}번째 열 위에서',
+      'game.colB': '{n}번째 열 아래에서',
 
       'booster.undo': '되돌리기',
       'booster.hint': '힌트',
