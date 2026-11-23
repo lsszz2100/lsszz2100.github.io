@@ -1643,7 +1643,7 @@
       } else {
         showScreen('home');
       }
-    }, 1900);
+    }, window.__QA_SCENE__ ? 80 : 1900);
   }
 
   if (document.readyState === 'loading') {
