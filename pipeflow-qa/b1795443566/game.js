@@ -483,7 +483,8 @@
       const w = (parent && parent.clientWidth) || window.innerWidth;
       const h = (parent && parent.clientHeight) || Math.round(window.innerHeight * 0.72);
       this.game = new Phaser.Game({
-        type: Phaser.AUTO,
+        // 캔버스 렌더러: 가벼운 2D 그래픽만 쓰고, WebGL 컨텍스트를 잃는 기기에서도 그대로 동작한다.
+        type: Phaser.CANVAS,
         parent: parentId,
         backgroundColor: '#FFF7EE',
         scale: { mode: Phaser.Scale.RESIZE, width: w, height: h },
