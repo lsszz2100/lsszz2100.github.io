@@ -236,28 +236,24 @@
       g.fillCircle(W * 0.92, H * 0.8, 220);
 
       if (!this.engine || !this.geo) return;
-      // 바닥 그림자/받침
+      // 블록 전체가 들어오는 받침(그림자 판)
       const gx = this.geo;
-      const e = this.engine;
-      const c0 = this.project(0, 0, 0);
-      const c1 = this.project(e.nx - 1, 0, 0);
-      const c2 = this.project(0, 0, e.nz - 1);
-      const c3 = this.project(e.nx - 1, 0, e.nz - 1);
-      const pts = [];
-      pts.push([c0.x, c0.y + gx.sh]);
-      pts.push([c1.x, c1.y + gx.sh]);
-      pts.push([c3.x, c3.y + gx.sh]);
-      pts.push([c2.x, c2.y + gx.sh]);
       let minX = 1e9; let maxX = -1e9; let minY = 1e9; let maxY = -1e9;
-      for (let i = 0; i < pts.length; i += 1) {
-        minX = Math.min(minX, pts[i][0]); maxX = Math.max(maxX, pts[i][0]);
-        minY = Math.min(minY, pts[i][1]); maxY = Math.max(maxY, pts[i][1]);
+      for (let i = 0; i < this.engine.blocks.length; i += 1) {
+        const b = this.engine.blocks[i];
+        if (!b.alive) continue;
+        const c = this.project(b.x, b.y, b.z);
+        minX = Math.min(minX, c.x - gx.tw * 0.5);
+        maxX = Math.max(maxX, c.x + gx.tw * 0.5);
+        minY = Math.min(minY, c.y - gx.tw * 0.25);
+        maxY = Math.max(maxY, c.y + gx.tw * 0.25 + gx.sh);
       }
-      const pad = gx.tw * 0.55;
-      g.fillStyle(col(this.stage.frame), 0.85);
-      g.fillRoundedRect(minX - pad, minY - pad * 0.7, (maxX - minX) + pad * 2, (maxY - minY) + pad * 1.6, 40);
-      g.fillStyle(col(this.stage.board), 0.95);
-      g.fillRoundedRect(minX - pad * 0.75, minY - pad * 0.5, (maxX - minX) + pad * 1.5, (maxY - minY) + pad * 1.2, 32);
+      if (minX > maxX) return;
+      const pad = gx.tw * 0.62;
+      g.fillStyle(col(this.stage.frame), 0.8);
+      g.fillRoundedRect(minX - pad, minY - pad * 0.7, (maxX - minX) + pad * 2, (maxY - minY) + pad * 1.5, 44);
+      g.fillStyle(col(this.stage.board), 0.96);
+      g.fillRoundedRect(minX - pad * 0.72, minY - pad * 0.5, (maxX - minX) + pad * 1.44, (maxY - minY) + pad * 1.1, 34);
     },
 
     // ------------------------------------------------------------ input
@@ -446,9 +442,9 @@
       else if (this.skin.gold) base = shade(hex, 0.18);
       if (tough) base = shade('#' + base.toString(16).padStart(6, '0'), -0.18);
 
-      const topLight = shade('#' + base.toString(16).padStart(6, '0'), 0.3);
-      const leftCol = shade('#' + base.toString(16).padStart(6, '0'), -0.06);
-      const rightCol = shade('#' + base.toString(16).padStart(6, '0'), -0.22);
+      const topLight = shade('#' + base.toString(16).padStart(6, '0'), 0.38);
+      const leftCol = shade('#' + base.toString(16).padStart(6, '0'), -0.02);
+      const rightCol = shade('#' + base.toString(16).padStart(6, '0'), -0.16);
       const edgeCol = shade('#' + base.toString(16).padStart(6, '0'), -(this.skin.edge || 0.34) - 0.12);
 
       const N = [c.x, c.y - tw * 0.25];
@@ -543,17 +539,17 @@
         g.fillCircle(c.x + tw * 0.16, c.y + tw * 0.08, tw * 0.028);
       }
       if (hits > 0) {
-        // 한 번 두드려 금이 간 상태
-        g.lineStyle(Math.max(2, tw * 0.03), 0x2B2340, 0.55 * alpha);
+        // 한 번 두드려 금이 간 상태: 오른쪽 면에 금을 긋는다.
+        g.lineStyle(Math.max(2, tw * 0.028), 0x2B2340, 0.5 * alpha);
         g.beginPath();
-        g.moveTo(c.x - tw * 0.2, c.y - tw * 0.06);
-        g.lineTo(c.x - tw * 0.04, c.y + tw * 0.02);
-        g.lineTo(c.x + tw * 0.02, c.y - tw * 0.08);
-        g.lineTo(c.x + tw * 0.18, c.y + tw * 0.04);
+        g.moveTo(c.x + tw * 0.06, c.y + tw * 0.3);
+        g.lineTo(c.x + tw * 0.16, c.y + tw * 0.4);
+        g.lineTo(c.x + tw * 0.1, c.y + tw * 0.48);
+        g.lineTo(c.x + tw * 0.22, c.y + tw * 0.58);
         g.strokePath();
         g.beginPath();
-        g.moveTo(c.x + tw * 0.02, c.y - tw * 0.08);
-        g.lineTo(c.x + tw * 0.06, c.y + tw * 0.16);
+        g.moveTo(c.x + tw * 0.34, c.y + tw * 0.36);
+        g.lineTo(c.x + tw * 0.26, c.y + tw * 0.46);
         g.strokePath();
       }
     },
