@@ -1533,6 +1533,20 @@
     startChallenge: function () { startGame('challenge'); },
     collection: function () { openCollection(); },
     hint: function () { useBooster('hint'); },
+    /* QA/스크린샷용: 챌린지 판을 마지막 한 수 직전으로 세팅한다. */
+    stageWin: function (target) {
+      if (!state.game || state.mode !== 'challenge') return false;
+      var s = state.game;
+      for (var r = 0; r < C.ROWS; r++) for (var c = 0; c < C.COLS; c++) s.board[r][c] = null;
+      s.board[0][0] = { id: s.idSeq++, v: (target || 64) / 2 };
+      s.queue = [(target || 64) / 2, 2, 4];
+      s.drops = 20;
+      s.score = 1240;
+      s.maxTile = (target || 64) / 2;
+      window.BoardView.setBoard(C.snapshot(s.board));
+      updateHud(); updateGoal();
+      return true;
+    },
     useBooster: useBooster,
     finishChallenge: function (ok) { finishChallenge(ok); },
     drop: function (col) { onDrop(col); },
