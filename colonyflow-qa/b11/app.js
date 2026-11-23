@@ -636,11 +636,14 @@
   }
 
   /** Puts the chapter caption just under the board instead of at the bottom of the canvas. */
-  function placeCaption() {
+  function placeCaption(tries) {
     const el = $('#boardCaption');
     if (!el || !window.ColonyGame) return;
     const b = window.ColonyGame.box();
-    if (!b) return;
+    if (!b) {
+      if ((tries || 0) < 12) setTimeout(function () { placeCaption((tries || 0) + 1); }, 120);
+      return;
+    }
     const dpr = b.dpr || 1;
     el.style.bottom = 'auto';
     el.style.top = Math.round((b.oy + b.cell * b.n) / dpr + 12) + 'px';
