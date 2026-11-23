@@ -656,7 +656,8 @@
     el.className = 'banner ' + (cls || '');
     el.textContent = text;
     fxRoot.appendChild(el);
-    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1500);
+    // In screenshot mode the banner stays long enough for the capture.
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, state.shots ? 9000 : 1500);
   }
 
   /* ---------------------------------------------------------------- pause */
