@@ -1198,7 +1198,7 @@ class Game {
       const topTex = SHARED.grass.clone();
       topTex.needsUpdate = true;
       topTex.repeat.set(Math.max(1, Math.round(p.w / 5)), Math.max(1, Math.round(p.d / 5)));
-      topMat = toon(pal.top, { map: topTex, polygonOffset: true, polygonOffsetFactor: -1 });
+      topMat = toon(0xffffff, { map: topTex, polygonOffset: true, polygonOffsetFactor: -1 });
       sideMat = toon(pal.side);
       bottomMat = toon(pal.bottom);
     } else if (kind === 'stone') {
@@ -1208,8 +1208,8 @@ class Game {
       const sideTex = SHARED.stone.clone();
       sideTex.needsUpdate = true;
       sideTex.repeat.set(Math.max(1, Math.round(p.w / 3)), Math.max(1, Math.round(p.h / 3)));
-      topMat = toon(pal.top, { map: topTex, polygonOffset: true, polygonOffsetFactor: -1 });
-      sideMat = toon(pal.side, { map: sideTex });
+      topMat = toon(0xffffff, { map: topTex, polygonOffset: true, polygonOffsetFactor: -1 });
+      sideMat = toon(0xffffff, { map: sideTex });
       bottomMat = toon(pal.bottom);
     } else {
       topMat = toon(pal.top, { polygonOffset: true, polygonOffsetFactor: -1 });
@@ -1235,7 +1235,7 @@ class Game {
         const capTex = SHARED.grass.clone();
         capTex.needsUpdate = true;
         capTex.repeat.set(Math.max(1, Math.round(p.w / 5)), Math.max(1, Math.round(p.d / 5)));
-        capMat = new THREE.MeshToonMaterial({ color: 0x8ce84f, gradientMap: SHARED.gradient, map: capTex });
+        capMat = new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: SHARED.gradient, map: capTex });
       }
       const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), capMat);
       cap.position.y = p.h / 2 + 0.07;
