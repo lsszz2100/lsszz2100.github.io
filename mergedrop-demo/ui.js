@@ -625,7 +625,18 @@
     var b = bridge();
     var ok = false;
     try { ok = !!(b && b.showPrivacyOptions && b.showPrivacyOptions()); } catch (e) { ok = false; }
-    if (!ok) toast(T.t('adConsentNone'));
+    if (ok) return;
+    // 동의 선택이 필요 없는 지역(또는 웹 미리보기): 안내 모달로 대신한다.
+    var html = '' +
+      '<h2>' + T.t('adConsent') + '</h2>' +
+      '<p>' + T.t('adConsentNoneBody') + '</p>' +
+      '<div class="modal-actions col">' +
+      '<button class="btn gold" data-act="privacy">' + T.t('privacy') + '</button>' +
+      '<button class="btn ghost" data-act="close">' + T.t('close') + '</button>' +
+      '</div>';
+    var modal = openModal(html);
+    modal.querySelector('[data-act="privacy"]').addEventListener('click', function () { closeModal(modal); openDoc('privacyBody', 'privacy-'); });
+    modal.querySelector('[data-act="close"]').addEventListener('click', function () { closeModal(modal); });
   }
 
   function showRewarded(kind) {
@@ -885,10 +896,8 @@
       '<button class="btn small ghost" data-act="terms" style="flex:0 0 220px">▶</button></div>' +
       '<div class="setting-row"><span>' + T.t('privacy') + '</span>' +
       '<button class="btn small ghost" data-act="privacy" style="flex:0 0 220px">▶</button></div>' +
-      (consentRequired()
-        ? '<div class="setting-row"><span>' + T.t('adConsent') + '</span>' +
-          '<button class="btn small ghost" data-act="consent" style="flex:0 0 220px">▶</button></div>'
-        : '') +
+      '<div class="setting-row"><span>' + T.t('adConsent') + '</span>' +
+      '<button class="btn small ghost" data-act="consent" style="flex:0 0 220px">▶</button></div>' +
       '<div class="modal-actions col">' +
       '<button class="btn ghost" data-act="reset" style="color:#E84A64;border-color:#FFD5DC">' + T.t('resetData') + '</button>' +
       '<button class="btn" data-act="close">' + T.t('close') + '</button>' +
@@ -1338,10 +1347,10 @@
       return;
     }
     if (name === 'challenge') {
-      profile.chalStreak = 4;
-      profile.chalBestStreak = 9;
+      profile.chalStreak = 6;
+      profile.chalBestStreak = 12;
       profile.chalLastDate = C.todayKey();
-      C.ensureChallenge(profile).stars = 1;
+      C.ensureChallenge(profile).stars = 0;
       renderHome();
       setTimeout(openChallenge, 220);
       return;
