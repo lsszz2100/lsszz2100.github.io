@@ -435,4 +435,4 @@ html, body {
 /* ---------------------------------------------------------------- capture mode
    Store screenshots are stitched from two fixed-height halves, so the board
    must not depend on whatever height the layout happens to settle on. */
-html.cap #game #board { flex: 0 0 600px !important; height: 600px !important; min-height: 0 !important; }
+html.cap #game #board { flex: 0 0 432px !important; height: 432px !important; min-height: 0 !important; }
