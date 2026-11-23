@@ -1616,6 +1616,14 @@
     showScreen('splash');
     setTimeout(function () {
       if (screen !== 'splash') return;
+      if (['themes', 'achievements', 'stats', 'quests', 'settings'].indexOf(window.__QA_SCENE__) >= 0) {
+        showScreen(window.__QA_SCENE__);
+        return;
+      }
+      if (window.__QA_SCENE__ === 'play' || window.__QA_SCENE__ === 'hint' || window.__QA_SCENE__ === 'result') {
+        startGame('medium');
+        return;
+      }
       if (!profile.seenTutorial) {
         tutPage = 0;
         showScreen('tutorial');
