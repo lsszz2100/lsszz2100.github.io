@@ -8,13 +8,17 @@
   const TOP = 176;        // where the ropes are tied
   const POT_TOP = H - 168;
 
-  function col(hex) { return Phaser.Display.Color.HexStringToColor(hex).color; }
+  /** Accepts either '#RRGGBB' or an already-packed 0xRRGGBB number. */
+  function col(hex) {
+    if (typeof hex === 'number') return hex;
+    return Phaser.Display.Color.HexStringToColor(hex).color;
+  }
 
   function shade(hex, k) {
-    const c = Phaser.Display.Color.HexStringToColor(hex);
-    const r = Math.round(k > 0 ? c.red + (255 - c.red) * k : c.red * (1 + k));
-    const g = Math.round(k > 0 ? c.green + (255 - c.green) * k : c.green * (1 + k));
-    const b = Math.round(k > 0 ? c.blue + (255 - c.blue) * k : c.blue * (1 + k));
+    const parsed = typeof hex === 'number' ? Phaser.Display.Color.IntegerToColor(hex) : Phaser.Display.Color.HexStringToColor(hex);
+    const r = Math.round(k > 0 ? parsed.red + (255 - parsed.red) * k : parsed.red * (1 + k));
+    const g = Math.round(k > 0 ? parsed.green + (255 - parsed.green) * k : parsed.green * (1 + k));
+    const b = Math.round(k > 0 ? parsed.blue + (255 - parsed.blue) * k : parsed.blue * (1 + k));
     return Phaser.Display.Color.GetColor(
       Math.max(0, Math.min(255, r)), Math.max(0, Math.min(255, g)), Math.max(0, Math.min(255, b))
     );
