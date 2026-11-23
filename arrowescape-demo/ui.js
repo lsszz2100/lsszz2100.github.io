@@ -1273,6 +1273,9 @@
         game.taps = game.total + 2;
         game.bestCombo = 7;
         game.combo = 7;
+        var cleared = game.grid.map(function (row) { return row.map(function () { return null; }); });
+        game.grid = cleared;
+        if (window.BoardView) window.BoardView.syncGrid(cleared);
         var result = C.recordClear(profile, 52, 3, { escapes: game.total, taps: game.taps, bestCombo: 7 });
         saveProfile();
         updateHud();
