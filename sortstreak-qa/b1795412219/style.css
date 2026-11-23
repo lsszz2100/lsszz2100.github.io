@@ -431,3 +431,9 @@ html, body {
   text-align: center;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------------------------------------------------------------- capture mode
+   Store screenshots are stitched from two fixed-height halves, so the board
+   must not depend on whatever height the layout happens to settle on. */
+html.cap #game #board { flex: 0 0 600px; height: 600px; min-height: 0; }
+html.cap body { overflow: hidden; }
