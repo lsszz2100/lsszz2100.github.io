@@ -350,7 +350,7 @@
     const packRow = $('#packRow');
     packRow.innerHTML = '';
     const packs = [
-      { kind: 'undo', label: t('shop.undoPack'), price: 120, color: 'linear-gradient(180deg,#A98BFF,#7452E8)', ico: '↺' },
+      { kind: 'undo', label: t('shop.undoPack'), price: 120, color: 'linear-gradient(180deg,#A98BFF,#7452E8)', ico: '<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9.5 5.5L4.5 10l5 4.5\"/><path d=\"M4.8 10h9.4a4.7 4.7 0 0 1 0 9.4H9.6\"/></svg>' },
       { kind: 'hint', label: t('shop.hintPack'), price: 100, color: 'linear-gradient(180deg,#FFC44D,#F5941A)', ico: '?' },
       { kind: 'slot', label: t('shop.slotPack'), price: 150, color: 'linear-gradient(180deg,#35D9B6,#17B79C)', ico: '＋' }
     ];

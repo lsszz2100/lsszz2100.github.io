@@ -149,6 +149,7 @@ em { font-style: normal; }
 .art-clear .star-row i { font-style: normal; animation: popUp 1.6s ease-in-out infinite; }
 .art-boost { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .chip { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; font-weight: 900; color: #fff; font-size: 22px; }
+.chip svg, .b-ico svg, .pk-ico svg { width: 58%; height: 58%; }
 .chip-undo { background: linear-gradient(180deg, #A98BFF, #7452E8); }
 .chip-hint { background: linear-gradient(180deg, #FFC44D, #F5941A); }
 .chip-slot { background: linear-gradient(180deg, #35D9B6, #17B79C); }
@@ -205,7 +206,8 @@ em { font-style: normal; }
   background: linear-gradient(120deg, #FFF3D6, #FFE9F1); color: #A05A00; font-weight: 800; font-size: 13.5px;
   padding: 10px 16px; border-radius: 999px; box-shadow: var(--shadow-sm); }
 .home-gift.show { display: inline-flex; }
-.gift-ico { color: #F5941A; }
+.gift-ico { color: #F5941A; display: inline-flex; }
+.gift-ico svg { width: 15px; height: 15px; }
 
 /* 오늘의 챌린지 */
 .daily-card { display: flex; align-items: center; gap: 10px; margin: 6px 0 10px;
