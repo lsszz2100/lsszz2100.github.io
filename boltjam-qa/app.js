@@ -728,8 +728,11 @@
     }
     var noteNode = $('resNote');
     if (noteNode) {
-      noteNode.textContent = (flawless ? t('flawlessTag') + ' · ' : '') + notices.join(' · ');
-      noteNode.hidden = !flawless && !notices.length;
+      var parts = [];
+      if (flawless) parts.push(t('flawlessTag'));
+      parts = parts.concat(notices);
+      noteNode.textContent = parts.join(' · ');
+      noteNode.hidden = parts.length === 0;
     }
     $('resDouble').disabled = false;
     $('resDouble').style.display = '';
