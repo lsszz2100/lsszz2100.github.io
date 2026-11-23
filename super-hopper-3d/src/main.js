@@ -1189,12 +1189,16 @@ class Game {
     const kind = p.kind || 'grass';
     const palettes = {
       grass: { top: 0x4fbf28, side: 0xa86a34, bottom: 0x7d5426 },
-      cloud: { top: 0xf4fbff, side: 0xb8dbf2, bottom: 0x94c3e4 },
+      cloud: { top: 0xffffff, side: 0xd8edfb, bottom: 0xbfe0f5 },
       stone: { top: 0x8f8a9e, side: 0x655f72, bottom: 0x494353 },
     };
     const pal = palettes[kind] || palettes.grass;
     let topMat, sideMat, bottomMat;
-    if (kind === 'grass') {
+    if (kind === 'cloud') {
+      topMat = toon(0xffffff, { emissive: 0xbcdff2, emissiveIntensity: 0.5, polygonOffset: true, polygonOffsetFactor: -1 });
+      sideMat = toon(0xd8edfb, { emissive: 0x7fa8c4, emissiveIntensity: 0.22 });
+      bottomMat = toon(0xbfe0f5, { emissive: 0x6f9ab6, emissiveIntensity: 0.2 });
+    } else if (kind === 'grass') {
       const topTex = SHARED.grass.clone();
       topTex.needsUpdate = true;
       topTex.repeat.set(Math.max(1, Math.round(p.w / 3)), Math.max(1, Math.round(p.d / 3)));
@@ -1230,7 +1234,7 @@ class Game {
     if (kind !== 'stone') {
       let capMat;
       if (kind === 'cloud') {
-        capMat = toon(0xffffff);
+        capMat = toon(0xffffff, { emissive: 0xbcdff2, emissiveIntensity: 0.5 });
       } else {
         const capTex = SHARED.grass.clone();
         capTex.needsUpdate = true;
@@ -1269,11 +1273,11 @@ class Game {
 
     // 구름 발판 퍼프
     if (kind === 'cloud') {
-      const puffMat = toon(0xffffff, { emissive: 0x3a6b8a, emissiveIntensity: 0.08 });
-      const count = Math.max(9, Math.min(16, Math.floor((p.w + p.d) * 1.0)));
+      const puffMat = toon(0xffffff, { emissive: 0xbcdff2, emissiveIntensity: 0.5 });
+      const count = Math.max(11, Math.min(18, Math.floor((p.w + p.d) * 1.1)));
       for (let i = 0; i < count; i++) {
         const a = (i / count) * TAU;
-        const r = 0.8 + rng() * 0.8;
+        const r = 1.0 + rng() * 1.0;
         const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), puffMat);
         puff.position.set(Math.cos(a) * (p.w / 2) * 0.95, p.h / 2 + 0.06, Math.sin(a) * (p.d / 2) * 0.95);
         puff.scale.y = 0.72;
