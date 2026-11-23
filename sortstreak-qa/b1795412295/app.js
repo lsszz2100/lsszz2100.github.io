@@ -1049,8 +1049,9 @@
     app.style.left = '0';
     app.style.top = '0';
     app.style.transformOrigin = '0 0';
-    app.style.top = (-off) + 'px';
+    app.style.top = '0';
     app.style.transform = 'scale(' + scale + ')';
+    setTimeout(function () { window.scrollTo(0, off); }, 60);
   }
 
   function demoProfile() {
