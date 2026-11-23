@@ -484,18 +484,6 @@
           g.fillStyle(0x2E2A28, alpha);
           g.fillCircle(px + hx * r * 0.1, py + hy * r * 0.1, r * 0.17);
         }
-        // tongue
-        const flick = Math.sin(t * 2.4 + gi * 1.7);
-        if (flick > 0.86 && !gk.escaped) {
-          const f = (flick - 0.86) / 0.14;
-          const tx = hcx + hx * (r * 1.3 + f * r * 0.8);
-          const ty = hcy + hy * (r * 1.3 + f * r * 0.8);
-          g.lineStyle(3, col('#F2748D'), alpha);
-          g.beginPath();
-          g.moveTo(hcx + hx * r * 1.1, hcy + hy * r * 1.1);
-          g.lineTo(tx, ty);
-          g.strokePath();
-        }
 
         // grab handles on head and tail
         if (!gk.escaped && !this.engine.geckos[gi].escaped) {

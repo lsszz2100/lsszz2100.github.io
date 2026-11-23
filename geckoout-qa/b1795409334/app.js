@@ -1292,6 +1292,10 @@
       showScreen('home');
       renderHome();
     }
+    setTimeout(function () {
+      $$('.subpage').forEach(function (el) { el.scrollTop = 0; });
+      window.scrollTo(0, 0);
+    }, 30);
   }
 
   function boot() {

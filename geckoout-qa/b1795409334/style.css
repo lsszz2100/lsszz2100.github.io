@@ -284,7 +284,9 @@ html, body {
 
 /* ------------------------------------------------------------ sub pages */
 
-.subpage { padding: calc(env(safe-area-inset-top) + 8px) 0 calc(env(safe-area-inset-bottom) + 8px); overflow-y: auto; }
+.subpage { padding: calc(env(safe-area-inset-top) + 8px) 0 calc(env(safe-area-inset-bottom) + 8px); overflow-y: auto; scrollbar-width: none; }
+.subpage::-webkit-scrollbar, .tut-slide::-webkit-scrollbar, .doc-body::-webkit-scrollbar { display: none; }
+.doc-body { scrollbar-width: none; }
 .page-top { display: flex; align-items: center; justify-content: space-between; padding: 6px 14px 8px; }
 .page-top h2 { font-size: 17px; margin: 0; }
 
