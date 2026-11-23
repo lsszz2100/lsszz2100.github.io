@@ -257,18 +257,11 @@
         const ay = cy + dir.y * 4;
         const s = Math.min(w, h) * 0.34;
         g.fillStyle(0xffffff, locked ? 0.55 : 0.95);
-        g.beginPath();
         if (dir.x === 0) {
-          g.moveTo(ax - s, ay);
-          g.lineTo(ax + s, ay);
-          g.lineTo(ax, ay + dir.y * s * 1.2);
+          g.fillTriangle(ax - s, ay, ax + s, ay, ax, ay + dir.y * s * 1.2);
         } else {
-          g.moveTo(ax, ay - s);
-          g.lineTo(ax, ay + s);
-          g.lineTo(ax + dir.x * s * 1.2, ay);
+          g.fillTriangle(ax, ay - s, ax, ay + s, ax + dir.x * s * 1.2, ay);
         }
-        g.closePath();
-        g.fillPath();
 
         if (locked) {
           const lx = cx;
@@ -303,18 +296,11 @@
         const d = root.GeckoCore.DIRS[a.dir];
         const r = cs * 0.20;
         g.fillStyle(col('#2F7A5E'), 0.95);
-        g.beginPath();
         if (d.x === 0) {
-          g.moveTo(p.x - r * 1.15, p.y - d.y * r * 0.2);
-          g.lineTo(p.x + r * 1.15, p.y - d.y * r * 0.2);
-          g.lineTo(p.x, p.y + d.y * r * 1.3);
+          g.fillTriangle(p.x - r * 1.15, p.y - d.y * r * 0.2, p.x + r * 1.15, p.y - d.y * r * 0.2, p.x, p.y + d.y * r * 1.3);
         } else {
-          g.moveTo(p.x - d.x * r * 0.2, p.y - r * 1.15);
-          g.lineTo(p.x - d.x * r * 0.2, p.y + r * 1.15);
-          g.lineTo(p.x + d.x * r * 1.3, p.y);
+          g.fillTriangle(p.x - d.x * r * 0.2, p.y - r * 1.15, p.x - d.x * r * 0.2, p.y + r * 1.15, p.x + d.x * r * 1.3, p.y);
         }
-        g.closePath();
-        g.fillPath();
       }
 
       // rocks
@@ -533,18 +519,11 @@
           const ey = p.y + d.y * cs * 0.62;
           const s = cs * 0.2;
           g.fillStyle(col('#F5A623'), 0.95);
-          g.beginPath();
           if (d.x === 0) {
-            g.moveTo(ex - s, ey - d.y * s * 0.2);
-            g.lineTo(ex + s, ey - d.y * s * 0.2);
-            g.lineTo(ex, ey + d.y * s * 1.4);
+            g.fillTriangle(ex - s, ey - d.y * s * 0.2, ex + s, ey - d.y * s * 0.2, ex, ey + d.y * s * 1.4);
           } else {
-            g.moveTo(ex - d.x * s * 0.2, ey - s);
-            g.lineTo(ex - d.x * s * 0.2, ey + s);
-            g.lineTo(ex + d.x * s * 1.4, ey);
+            g.fillTriangle(ex - d.x * s * 0.2, ey - s, ex - d.x * s * 0.2, ey + s, ex + d.x * s * 1.4, ey);
           }
-          g.closePath();
-          g.fillPath();
         }
       }
     },
