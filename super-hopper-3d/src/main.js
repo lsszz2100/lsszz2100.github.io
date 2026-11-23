@@ -1037,13 +1037,7 @@ class Game {
         m.scale.y = 0.62;
         g.add(m);
       }
-      const low = Math.random() < 0.45;
-      if (low) {
-        g.scale.setScalar(0.7 + Math.random() * 0.5);
-        g.position.set((Math.random() - 0.5) * 150, 4.5 + Math.random() * 5, 45 + Math.random() * 100);
-      } else {
-        g.position.set((Math.random() - 0.5) * 180, 14 + Math.random() * 22, -20 + Math.random() * 170);
-      }
+      g.position.set((Math.random() - 0.5) * 180, 14 + Math.random() * 22, -20 + Math.random() * 170);
       g.userData.speed = 0.35 + Math.random() * 0.8;
       this.scene.add(g);
       this.clouds.push({ group: g, speed: g.userData.speed });
@@ -1614,20 +1608,20 @@ class Game {
   buildCheckpoint(c) {
     const g = new THREE.Group();
     const ringMat = new THREE.MeshStandardMaterial({
-      color: 0x9fb3c8, emissive: 0x2c3d52, emissiveIntensity: 0.5, metalness: 0.4, roughness: 0.5,
+      color: 0x7fd8ff, emissive: 0x1f7fa8, emissiveIntensity: 0.8, metalness: 0.3, roughness: 0.4,
     });
     const ring = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.1, 8, 28), ringMat);
     ring.rotation.x = -Math.PI / 2;
     ring.position.y = 0.08;
     g.add(ring);
     const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.26, 0), new THREE.MeshStandardMaterial({
-      color: 0xa8b7c8, emissive: 0x445566, emissiveIntensity: 0.7, roughness: 0.3,
+      color: 0xbdf0ff, emissive: 0x2aa8d8, emissiveIntensity: 1.0, roughness: 0.25,
     }));
     gem.position.y = 0.85;
     gem.castShadow = true;
     g.add(gem);
     const glow = new THREE.Sprite(new THREE.SpriteMaterial({
-      map: SHARED.glow, color: 0xffffff, transparent: true, opacity: 0.25,
+      map: SHARED.glow, color: 0x9fe8ff, transparent: true, opacity: 0.4,
       blending: THREE.AdditiveBlending, depthWrite: false,
     }));
     glow.scale.set(1.7, 1.7, 1);
