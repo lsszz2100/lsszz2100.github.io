@@ -197,6 +197,12 @@ em { font-style: normal; }
 .hero-deco i:nth-child(4) { left: 20px; bottom: 90px; width: 40px; height: 40px; background: rgba(240,182,46,.14); }
 .hero-deco i:nth-child(5) { right: 12px; bottom: 120px; width: 26px; height: 26px; background: rgba(239,115,97,.12); }
 .hero-deco i:nth-child(6) { left: 60%; bottom: 10px; width: 60px; height: 60px; background: rgba(138,114,232,.07); }
+.hero-jars { position: relative; display: flex; gap: 10px; align-items: flex-end; margin-bottom: 4px; }
+.hj { width: 42px; height: 62px; border-radius: 10px 10px 13px 13px; background: #fff; box-shadow: inset 0 0 0 2px #F3E3D6, 0 6px 14px rgba(150,105,70,.12);
+  display: flex; flex-direction: column-reverse; overflow: hidden; }
+.hj.tall { height: 78px; width: 46px; }
+.hj i { display: block; height: 33.3%; }
+.hj i.ghost { opacity: .28; }
 .hero-chapter { position: relative; font-size: 12.5px; font-weight: 800; color: var(--soft); background: var(--sand2);
   padding: 6px 12px; border-radius: 999px; }
 .play-orb { position: relative; width: 172px; height: 172px; border-radius: 50%; background: linear-gradient(180deg,#FFD79B,#F2913A);
