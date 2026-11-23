@@ -5,10 +5,10 @@
   const W = 1000;
   const H = 1780;
 
-  const RAIL = { x: 36, y: 190, w: 928, h: 200 };
-  const DISPENSER = { x: 176, y: 300, r: 66 };
-  const TRACK = { x: 286, y: 300, w: 646, h: 46 };
-  const JAR_BOTTOM = 1162;
+  const RAIL = { x: 36, y: 232, w: 928, h: 214 };
+  const DISPENSER = { x: 176, y: 346, r: 66 };
+  const TRACK = { x: 286, y: 346, w: 646, h: 46 };
+  const JAR_BOTTOM = 1150;
   const HOLD = { x: 336, y: 1222, w: 328, h: 132 };
 
   function col(hex) { return Phaser.Display.Color.HexStringToColor(hex).color; }
@@ -242,10 +242,10 @@
       // 깔때기
       g.fillStyle(0xffffff, 0.9);
       g.beginPath();
-      g.moveTo(DISPENSER.x - 30, DISPENSER.y + 70);
-      g.lineTo(DISPENSER.x + 30, DISPENSER.y + 70);
-      g.lineTo(DISPENSER.x + 12, DISPENSER.y + 104);
-      g.lineTo(DISPENSER.x - 12, DISPENSER.y + 104);
+      g.moveTo(DISPENSER.x - 30, DISPENSER.y + 62);
+      g.lineTo(DISPENSER.x + 30, DISPENSER.y + 62);
+      g.lineTo(DISPENSER.x + 12, DISPENSER.y + 92);
+      g.lineTo(DISPENSER.x - 12, DISPENSER.y + 92);
       g.closePath();
       g.fillPath();
 
