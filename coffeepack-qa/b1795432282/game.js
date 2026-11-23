@@ -28,10 +28,10 @@
   function boxRects(count) {
     const rows = Math.max(1, Math.ceil(count / 2));
     const bw = 414;
-    const bh = 272;
-    const rowH = 296;
     const areaH = BOX_AREA.bottom - BOX_AREA.top;
-    const top = BOX_AREA.top + Math.max(0, (areaH - rows * rowH) / 2);
+    const rowH = areaH / rows;
+    const bh = Math.min(344, rowH - 26);
+    const top = BOX_AREA.top;
     const out = [];
     for (let i = 0; i < count; i += 1) {
       const r = Math.floor(i / 2);
@@ -146,13 +146,13 @@
     },
 
     slotPos: function (rect, index) {
-      const cw = (rect.w - 46) / SLOT_COLS;
-      const ch = (rect.h - 54) / SLOT_ROWS;
+      const cw = (rect.w - 40) / SLOT_COLS;
+      const ch = (rect.h - 48) / SLOT_ROWS;
       const c = index % SLOT_COLS;
       const r = Math.floor(index / SLOT_COLS);
       return {
-        x: rect.x + 23 + cw * (c + 0.5),
-        y: rect.y + 48 + ch * (r + 0.5),
+        x: rect.x + 20 + cw * (c + 0.5),
+        y: rect.y + 44 + ch * (r + 0.5),
         cw: cw,
         ch: ch
       };
@@ -368,8 +368,8 @@
       g.fillPath();
 
       // 음료 색 슬리브
-      const bt = topY + h * 0.24;
-      const bb = topY + h * 0.78;
+      const bt = topY + h * 0.3;
+      const bb = topY + h * 0.76;
       const kt = (bt - topY) / h;
       const kb = (bb - topY) / h;
       const wt = topW + (botW - topW) * kt;
@@ -390,7 +390,7 @@
       // 뚜껑(넓은 타원 + 살짝 어두운 띠)
       const lidCol = Phaser.Display.Color.Interpolate.ColorWithColor(
         Phaser.Display.Color.ValueToColor(paper),
-        Phaser.Display.Color.ValueToColor(drink), 100, 34
+        Phaser.Display.Color.ValueToColor(drink), 100, 16
       ).color;
       g.fillStyle(lidCol, alpha);
       g.fillRoundedRect(x - topW * 1.07, topY - h * 0.1, topW * 2.14, h * 0.15, h * 0.07);
@@ -435,8 +435,8 @@
       // 6칸 홈
       for (let i = 0; i < 6; i += 1) {
         const p = this.slotPos(rect, i);
-        const cw = p.cw * 0.9;
-        const chh = p.ch * 0.86;
+        const cw = p.cw * 0.84;
+        const chh = p.ch * 0.94;
         g.fillStyle(0x6b4a37, 0.08);
         g.fillRoundedRect(p.x - cw / 2, p.y - chh / 2 + 3, cw, chh, 20);
         g.fillStyle(col(skin.inner), 0.94);
@@ -450,7 +450,7 @@
       // 담긴 컵
       if (box && box.cups > 0) {
         const sp0 = this.slotPos(rect, 0);
-        const size = Math.min(124, Math.min(sp0.cw * 0.78, (sp0.ch * 0.98) / 1.2));
+        const size = Math.min(130, Math.min(sp0.cw * 0.82, (sp0.ch * 0.96) / 1.2));
         for (let i = 0; i < box.cups; i += 1) {
           const p = this.slotPos(rect, i);
           this.drawCup(g, p.x, p.y, size, this.colors[box.color], { alpha: 1 });

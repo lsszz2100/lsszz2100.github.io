@@ -193,7 +193,7 @@ em { font-style: normal; }
 .hero-deco i:nth-child(1) { left: 12%; top: 13%; transform: rotate(-12deg); }
 .hero-deco i:nth-child(2) { right: 13%; top: 9%; transform: rotate(16deg) scale(.86);
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #43BFA0 42%, #43BFA0 73%, #FFFDF8 74%); }
-.hero-deco i:nth-child(3) { right: 8%; top: 56%; transform: rotate(22deg) scale(.8);
+.hero-deco i:nth-child(3) { right: 11%; top: 30%; transform: rotate(22deg) scale(.8);
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #C4557C 42%, #C4557C 73%, #FFFDF8 74%); }
 .hero-deco i:nth-child(4) { left: 9%; top: 60%; transform: rotate(-18deg) scale(.9);
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #7BA843 42%, #7BA843 73%, #FFFDF8 74%); }
@@ -214,7 +214,7 @@ em { font-style: normal; }
 .orb-ring { position: absolute; inset: 26px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.45); animation: spin 18s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .orb-cup { position: relative; width: 44px; height: 56px; border-radius: 7px 7px 14px 14px;
-  background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 38%, #FFE1B0 39%, #FFE1B0 74%, #FFFDF8 75%);
+  background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 36%, #8A5A2A 37%, #8A5A2A 74%, #FFFDF8 75%);
   box-shadow: 0 8px 16px rgba(80, 50, 20, .22); margin-bottom: 2px; }
 .orb-cup::before { content: ''; position: absolute; left: -4px; right: -4px; top: -7px; height: 11px;
   border-radius: 50%; background: #FFF3E0; }
