@@ -283,7 +283,7 @@ html, body {
 .stage-cell.done { background: #F2FCF7; box-shadow: inset 0 0 0 1.5px #CBEBDC; }
 .stage-cell.current { background: linear-gradient(140deg, #EAF6FF, #F6FCFF); box-shadow: 0 0 0 2px #7FC0EE, var(--shadow-sm); color: var(--accent); }
 .stage-cell.locked { background: #F1F5FA; color: #B4C2D4; box-shadow: none; }
-.stage-cell .badge { position: absolute; top: 5px; right: 6px; font-size: 8.5px; font-weight: 900; letter-spacing: .3px; padding: 2px 5px; border-radius: 6px; color: #fff; background: #EF6A5B; }
+.stage-cell .badge { position: absolute; top: 4px; right: 4px; font-size: 7.5px; font-weight: 900; letter-spacing: .2px; padding: 2px 4px; border-radius: 5px; color: #fff; background: #EF6A5B; }
 .stage-cell .badge.chal { background: #9678DE; }
 .stage-cell .lock { font-size: 15px; color: #B4C2D4; }
 .stage-cell:active { transform: scale(.96); }

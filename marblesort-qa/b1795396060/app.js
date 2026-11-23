@@ -337,6 +337,7 @@
   }
 
   function renderMap() {
+    all('.coin-mirror').forEach(function (el) { el.textContent = save.coins; });
     var tabs = $('chapterTabs');
     tabs.innerHTML = '';
     C.CHAPTERS.forEach(function (ch) {
