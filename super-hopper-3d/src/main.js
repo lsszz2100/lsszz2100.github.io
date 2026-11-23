@@ -151,35 +151,47 @@ function initSharedTextures() {
   });
 
   SHARED.lava = canvasTexture(512, 512, (ctx, w, h) => {
-    ctx.fillStyle = '#260905';
-    ctx.fillRect(0, 0, w, h);
     const rnd = mulberry32(4242);
-    for (let i = 0; i < 260; i++) {
-      const x = rnd() * w, y = rnd() * h, r = 4 + rnd() * 26;
-      const shades = ['#33120a', '#1d0805', '#3d160b', '#2a0d07'];
+    ctx.fillStyle = '#170604';
+    ctx.fillRect(0, 0, w, h);
+    for (let i = 0; i < 300; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 5 + rnd() * 30;
+      const shades = ['#241009', '#120504', '#2c120a', '#1c0a06'];
       ctx.fillStyle = shades[Math.floor(rnd() * shades.length)];
       ctx.beginPath();
-      ctx.ellipse(x, y, r, r * (0.4 + rnd() * 0.7), rnd() * TAU, 0, TAU);
+      ctx.ellipse(x, y, r, r * (0.5 + rnd() * 0.8), rnd() * TAU, 0, TAU);
       ctx.fill();
     }
     ctx.lineCap = 'round';
-    for (let i = 0; i < 34; i++) {
+    for (let i = 0; i < 26; i++) {
       let x = rnd() * w, y = rnd() * h;
       ctx.beginPath();
       ctx.moveTo(x, y);
-      for (let k = 0; k < 6; k++) {
-        x += (rnd() - 0.5) * 110; y += (rnd() - 0.5) * 110;
-        ctx.lineTo(x, y);
+      for (let k = 0; k < 4; k++) {
+        const cx = x + (rnd() - 0.5) * 90, cy = y + (rnd() - 0.5) * 90;
+        ctx.quadraticCurveTo(cx, cy, x + (rnd() - 0.5) * 120, y + (rnd() - 0.5) * 120);
+        x += (rnd() - 0.5) * 70; y += (rnd() - 0.5) * 70;
       }
-      ctx.strokeStyle = `rgba(255, ${90 + Math.floor(rnd() * 90)}, 0, ${0.35 + rnd() * 0.55})`;
-      ctx.lineWidth = 1 + rnd() * 3.5;
-      ctx.shadowColor = '#ff6a00'; ctx.shadowBlur = 14;
+      const hot = 0.35 + rnd() * 0.4;
+      ctx.strokeStyle = `rgba(255, ${70 + Math.floor(rnd() * 100)}, 0, ${hot})`;
+      ctx.lineWidth = 2 + rnd() * 5;
+      ctx.shadowColor = '#ff5a00'; ctx.shadowBlur = 18;
       ctx.stroke();
+    }
+    // 뜨거운 웅덩이
+    for (let i = 0; i < 16; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 6 + rnd() * 22;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, 'rgba(255,170,40,.55)');
+      g.addColorStop(0.6, 'rgba(255,90,0,.25)');
+      g.addColorStop(1, 'rgba(255,60,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
     }
     ctx.shadowBlur = 0;
   });
   SHARED.lava.wrapS = SHARED.lava.wrapT = THREE.RepeatWrapping;
-  SHARED.lava.repeat.set(5, 6);
+  SHARED.lava.repeat.set(2.5, 5);
 
   SHARED.glow = canvasTexture(128, 128, (ctx, w, h) => {
     const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
@@ -905,7 +917,7 @@ class Game {
     const cfg = {
       meadow: { top: 0x2f9ff0, bottom: 0xdff6ff, fog: 0xcfeaff, hemiSky: 0xcdeeff, hemiGround: 0x7dbb63, sun: 0xfff4d6, sunI: 1.05, amb: 0.14 },
       sky: { top: 0x2687de, bottom: 0xcdecff, fog: 0xcbe9fb, hemiSky: 0xd6f0ff, hemiGround: 0x9ec9e8, sun: 0xffffff, sunI: 1.15, amb: 0.16 },
-      castle: { top: 0x241035, bottom: 0xb85a58, fog: 0x552539, hemiSky: 0x9a6fb8, hemiGround: 0x2a100c, sun: 0xffa068, sunI: 1.0, amb: 0.24 },
+      castle: { top: 0x1d0c2c, bottom: 0x7a3148, fog: 0x4a2135, hemiSky: 0x9a6fb8, hemiGround: 0x2a100c, sun: 0xffa068, sunI: 1.0, amb: 0.24 },
     }[theme];
 
     this.scene.fog = new THREE.Fog(cfg.fog, 50, 210);
@@ -1014,67 +1026,73 @@ class Game {
     }
 
     if (theme === 'castle') {
-      // 용암 바다 (검은 암반 + 균열 발광 텍스처)
+      // 검은 암반 지대
+      const groundMat = toon(0x22141c, { fog: true });
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(360, 360), groundMat);
+      ground.rotation.x = -Math.PI / 2;
+      ground.position.set(0, -3.7, 50);
+      g.add(ground);
+
+      // 용암 강
       const lavaMat = new THREE.MeshStandardMaterial({
-        color: 0xffffff, map: SHARED.lava, emissive: 0xff5500, emissiveMap: SHARED.lava,
-        emissiveIntensity: 1.0, roughness: 1.0, metalness: 0.0,
+        color: 0xffffff, map: SHARED.lava, emissive: 0xff4a00, emissiveMap: SHARED.lava,
+        emissiveIntensity: 0.75, roughness: 1.0, metalness: 0.0,
       });
-      const lava = new THREE.Mesh(new THREE.PlaneGeometry(230, 300), lavaMat);
+      const lava = new THREE.Mesh(new THREE.PlaneGeometry(58, 200), lavaMat);
       lava.rotation.x = -Math.PI / 2;
-      lava.position.set(0, -3.2, 40);
+      lava.position.set(0, -3.3, 45);
       g.add(lava);
 
-      // 용암 주변 검은 바위섬
-      for (let i = 0; i < 14; i++) {
-        const r = 2 + rng() * 5;
-        const h = 3 + rng() * 7;
-        const rock = new THREE.Mesh(new THREE.ConeGeometry(r, h, 7), toon(0x2b1a22, { fog: true }));
-        rock.position.set((rng() - 0.5) * 80, -3.4 + h / 2 - rng() * 1.5, 10 + rng() * 130);
+      // 강 가장자리 검은 바위
+      for (let i = 0; i < 18; i++) {
+        const side = i % 2 === 0 ? -1 : 1;
+        const r = 1.6 + rng() * 3.4;
+        const h = 2 + rng() * 5;
+        const rock = new THREE.Mesh(new THREE.ConeGeometry(r, h, 6), toon(0x2b1a22, { fog: true }));
+        rock.position.set(side * (24 + rng() * 10), -3.6 + h / 2, -5 + rng() * 125);
         rock.rotation.y = rng() * TAU;
         g.add(rock);
-        if (rng() > 0.55) {
-          const tip = new THREE.Mesh(new THREE.SphereGeometry(0.16, 6, 5),
-            new THREE.MeshBasicMaterial({ color: 0xffb347 }));
-          tip.position.copy(rock.position);
-          tip.position.y += h / 2 + 0.1;
-          g.add(tip);
-        }
       }
+      // 멀리 솟은 바위 첨탑
+      for (let i = 0; i < 6; i++) {
+        const h = 10 + rng() * 18;
+        const rock = new THREE.Mesh(new THREE.ConeGeometry(3 + rng() * 4, h, 7), toon(0x2a1722, { fog: true }));
+        rock.position.set((rng() - 0.5) * 130, -3.7 + h / 2, 70 + rng() * 70);
+        g.add(rock);
+      }
+
+      // 성문 (골인 뒤 배경)
+      const darkStone = toon(0x2c1f38, { fog: true });
+      const gate = new THREE.Group();
+      const wall = new THREE.Mesh(new THREE.BoxGeometry(30, 26, 5), darkStone);
+      wall.position.y = 9;
+      gate.add(wall);
+      for (const sx of [-1, 1]) {
+        const tower = new THREE.Mesh(new THREE.BoxGeometry(7, 36, 7), darkStone);
+        tower.position.set(sx * 14, 14, 0);
+        gate.add(tower);
+        const roof = new THREE.Mesh(new THREE.ConeGeometry(5.2, 9, 4), toon(0x1d1226, { fog: true }));
+        roof.position.set(sx * 14, 36, 0);
+        roof.rotation.y = Math.PI / 4;
+        gate.add(roof);
+      }
+      const arch = new THREE.Mesh(new THREE.PlaneGeometry(9, 15),
+        new THREE.MeshBasicMaterial({ color: 0x08050a }));
+      arch.position.set(0, 4, 2.6);
+      gate.add(arch);
+      gate.position.set(0, -3.4, 122);
+      g.add(gate);
 
       // 용암 거품
       this.lavaBubbles = [];
       const bubMat = new THREE.MeshBasicMaterial({ color: 0xffb347, transparent: true, opacity: 0.85 });
       for (let i = 0; i < 14; i++) {
         const b = new THREE.Mesh(new THREE.SphereGeometry(0.25 + rng() * 0.45, 8, 6), bubMat.clone());
-        b.position.set((rng() - 0.5) * 60, -3.1, (rng() - 0.5) * 100 + 45);
+        b.position.set((rng() - 0.5) * 40, -3.2, (rng() - 0.5) * 120 + 45);
         g.add(b);
         this.lavaBubbles.push({ mesh: b, base: b.position.y, phase: rng() * TAU, speed: 0.6 + rng() });
       }
 
-      // 멀리 성
-      const stoneDark = toon(0x3b2c4d, { fog: true });
-      const stoneMid = toon(0x4a3559, { fog: true });
-      for (let i = 0; i < 8; i++) {
-        const w = 5 + rng() * 7;
-        const h = 16 + rng() * 26;
-        const z = 108 + rng() * 45;
-        const x = (rng() - 0.5) * 90;
-        const tower = new THREE.Mesh(new THREE.BoxGeometry(w, h, w), i % 2 ? stoneDark : stoneMid);
-        tower.position.set(x, h / 2 - 6, z);
-        g.add(tower);
-        const roof = new THREE.Mesh(new THREE.ConeGeometry(w * 0.8, w * 1.3, 4), stoneDark);
-        roof.position.set(x, h - 6 + w * 0.6, z);
-        roof.rotation.y = Math.PI / 4;
-        g.add(roof);
-        // 창문 불빛
-        for (let k = 0; k < 3; k++) {
-          const win = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 1.1),
-            new THREE.MeshBasicMaterial({ color: 0xffb347 }));
-          win.position.set(x + (rng() - 0.5) * w * 0.5, 2 + k * 4 + rng() * 3, z - w / 2 - 0.02);
-          win.rotation.y = Math.PI;
-          g.add(win);
-        }
-      }
       // 횃불 (발판 가장자리)
       const torchSpots = [
         { x: 2.6, y: 0, z: 20 }, { x: -2.6, y: 3.0, z: 57 },
@@ -1111,7 +1129,7 @@ class Game {
     const kind = p.kind || 'grass';
     const palettes = {
       grass: { top: 0x4fbf28, side: 0xa86a34, bottom: 0x7d5426 },
-      cloud: { top: 0xeaf8ff, side: 0xc4e2f6, bottom: 0xa4cbe9 },
+      cloud: { top: 0xf4fbff, side: 0xb8dbf2, bottom: 0x94c3e4 },
       stone: { top: 0x9b93aa, side: 0x5f596e, bottom: 0x494353 },
     };
     const pal = palettes[kind] || palettes.grass;
@@ -1129,7 +1147,7 @@ class Game {
     this.world.add(mesh);
 
     // 윗면 잔디/눈 덮개
-    const capColor = kind === 'cloud' ? 0xf4fbff : (kind === 'stone' ? 0xa8a0b6 : 0x63d63a);
+    const capColor = kind === 'cloud' ? 0xffffff : (kind === 'stone' ? 0xa8a0b6 : 0x63d63a);
     const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), toon(capColor));
     cap.position.y = p.h / 2 + 0.07;
     cap.receiveShadow = true;
@@ -1162,12 +1180,12 @@ class Game {
     // 구름 발판 퍼프
     if (kind === 'cloud') {
       const puffMat = toon(0xffffff, { emissive: 0x3a6b8a, emissiveIntensity: 0.08 });
-      const count = Math.max(6, Math.min(10, Math.floor((p.w + p.d) * 0.7)));
+      const count = Math.max(9, Math.min(16, Math.floor((p.w + p.d) * 1.0)));
       for (let i = 0; i < count; i++) {
         const a = (i / count) * TAU;
-        const r = 0.55 + rng() * 0.6;
+        const r = 0.8 + rng() * 0.8;
         const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), puffMat);
-        puff.position.set(Math.cos(a) * (p.w / 2) * 0.92, p.h / 2 - 0.02, Math.sin(a) * (p.d / 2) * 0.92);
+        puff.position.set(Math.cos(a) * (p.w / 2) * 0.95, p.h / 2 + 0.06, Math.sin(a) * (p.d / 2) * 0.95);
         puff.scale.y = 0.72;
         puff.castShadow = true;
         mesh.add(puff);
@@ -1278,11 +1296,11 @@ class Game {
   /* ---------- 코인 / 별 ---------- */
   buildCoin(c, rng) {
     if (!SHARED.coinGeo) {
-      SHARED.coinGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.09, 22);
+      SHARED.coinGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.14, 22);
       SHARED.coinMat = new THREE.MeshStandardMaterial({
         color: 0xffd23b, metalness: 0.55, roughness: 0.3, emissive: 0xa86a00, emissiveIntensity: 0.95,
       });
-      SHARED.coinInnerGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.115, 18);
+      SHARED.coinInnerGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.16, 18);
       SHARED.coinInnerMat = new THREE.MeshStandardMaterial({ color: 0xfff0a8, metalness: 0.4, roughness: 0.35 });
     }
     const g = new THREE.Group();
