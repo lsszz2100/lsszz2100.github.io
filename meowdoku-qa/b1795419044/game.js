@@ -54,10 +54,10 @@
       const w = this.scale.width, h = this.scale.height;
       if (!state.stage) { this.ox = 0; this.oy = 0; this.cell = 40; return; }
       const n = state.stage.n;
-      const pad = Math.min(w, h) * 0.02;
+      const pad = Math.min(w, h) * 0.012;
       this.cell = Math.floor((Math.min(w, h) - pad * 2) / n);
       this.ox = Math.round((w - this.cell * n) / 2);
-      this.oy = Math.round((h - this.cell * n) * 0.42);
+      this.oy = Math.round((h - this.cell * n) * 0.46);
       this.dirty = true;
     }
 

@@ -318,7 +318,7 @@ html, body {
 .hud-score b { display: block; font-size: 19px; color: var(--ink); font-variant-numeric: tabular-nums; }
 .hud-score b.crit { color: var(--coral); }
 
-#board { position: relative; flex: 1; min-height: 0; margin: 2px 6px 0; }
+#board { position: relative; flex: 1; min-height: 0; margin: 2px 3px 0; }
 #board canvas { display: block; }
 .board-tip {
   position: absolute; left: 50%; bottom: 10%;
