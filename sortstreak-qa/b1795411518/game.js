@@ -71,7 +71,7 @@
     layout: function () {
       const vw = this.scale.width;
       const vh = this.scale.height;
-      this.geom();
+      this.geom(vw, vh);
       const H = this.g.h;
       const scale = Math.min(vw / W, vh / H);
       this.view = { scale: scale, ox: (vw - W * scale) / 2, oy: (vh - H * scale) / 2 };
@@ -83,17 +83,22 @@
       this.snapDisp();
     },
 
-    geom: function () {
+    /** Lay the scene out in scene units so it fills the canvas it is given. */
+    geom: function (vw, vh) {
       const n = this.stage ? this.stage.ropes.length : 8;
       const cap = this.stage ? this.stage.cap : 4;
       const marginX = n > 10 ? 26 : (n > 8 ? 34 : 44);
       const colW = (W - marginX * 2) / n;
       const d = Math.max(34, Math.min(colW * 0.86, 96));
-      const potTop = TOP + cap * d + 52;
-      const h = potTop + 150;
+      const contentMin = 120 + cap * d + 60 + 170;
+      const avail = (vw > 0 && vh > 0) ? W * (vh / vw) : contentMin;
+      const h = Math.max(contentMin, Math.min(1760, avail));
+      const potTop = h - 168;
+      const slack = Math.max(0, potTop - 120 - cap * d - 40);
+      const top = 120 + slack * 0.4;
       this.g = {
         n: n, cap: cap, colW: colW, marginX: marginX, d: d, r: d / 2,
-        top: TOP, potTop: potTop, h: h,
+        top: top, potTop: potTop, h: h,
         x: function (i) { return marginX + (i + 0.5) * colW; }
       };
     },
@@ -163,9 +168,9 @@
       g.fillStyle(0xffffff, 0.3);
       g.fillCircle(W * 0.94, geo.h * 0.4, 210);
       g.fillStyle(col(this.theme.board), 0.6);
-      g.fillRoundedRect(10, TOP - 30, W - 20, geo.potTop - TOP + 30, 44);
+      g.fillRoundedRect(10, geo.top - 30, W - 20, geo.potTop - geo.top + 24, 44);
       g.lineStyle(5, col(this.skin.rim), 0.9);
-      g.strokeRoundedRect(10, TOP - 30, W - 20, geo.potTop - TOP + 30, 44);
+      g.strokeRoundedRect(10, geo.top - 30, W - 20, geo.potTop - geo.top + 24, 44);
       // the shelf the pots stand on
       g.fillStyle(0xffffff, 0.45);
       g.fillRoundedRect(0, geo.potTop - 12, W, 24, 12);
