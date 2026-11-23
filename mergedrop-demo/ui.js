@@ -1535,7 +1535,9 @@
       if (o.coins != null) profile.coins = o.coins;
       if (o.bestTile != null) profile.bestTile = o.bestTile;
       if (o.streak != null) { profile.chalStreak = o.streak; profile.chalLastDate = C.todayKey(); }
-      if (o.stars != null) C.ensureChallenge(profile).stars = o.stars;
+      if (o.stars != null) {
+        profile.challenge = { date: C.todayKey(), done: !!o.done, stars: Math.max(0, Math.min(3, o.stars)), attempts: 3 };
+      }
       saveProfile(); renderHome(); updateHud();
     },
     challenge: function () { openChallenge(); },
