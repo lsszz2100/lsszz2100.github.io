@@ -359,6 +359,9 @@ html, body {
   .title-wrap { gap: 13px; padding-top: 18px; }
   .logo-mushroom { right: 2px; }
 }
+@media (max-height: 720px) {
+  .touch-hint { display: none; }
+}
 @media (max-width: 380px) {
   .hud-right { gap: 5px; }
   .heart { width: 20px; height: 20px; }

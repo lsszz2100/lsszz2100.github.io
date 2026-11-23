@@ -134,6 +134,32 @@ function initSharedTextures() {
     ctx.fillStyle = '#ffffff'; ctx.fillRect(18, 18, w - 36, 16);
   });
 
+  SHARED.stone = canvasTexture(256, 256, (ctx, w, h) => {
+    ctx.fillStyle = '#6b6478';
+    ctx.fillRect(0, 0, w, h);
+    const rnd = mulberry32(777);
+    for (let i = 0; i < 300; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 2 + rnd() * 16;
+      ctx.fillStyle = `rgba(${40 + rnd() * 50}, ${36 + rnd() * 44}, ${50 + rnd() * 50}, ${0.18 + rnd() * 0.3})`;
+      ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.7, rnd() * TAU, 0, TAU); ctx.fill();
+    }
+    // 석판 줄눈
+    ctx.strokeStyle = 'rgba(28,22,34,.8)';
+    ctx.lineWidth = 5;
+    ctx.strokeRect(2, 2, w - 4, h - 4);
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h);
+    ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2);
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.12)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(4, h / 2 + 4); ctx.lineTo(w - 4, h / 2 + 4);
+    ctx.moveTo(w / 2 + 4, 4); ctx.lineTo(w / 2 + 4, h - 4);
+    ctx.stroke();
+  });
+  SHARED.stone.wrapS = SHARED.stone.wrapT = THREE.RepeatWrapping;
+
   SHARED.flag = canvasTexture(256, 160, (ctx, w, h) => {
     const g = ctx.createLinearGradient(0, 0, w, h);
     g.addColorStop(0, '#7ef0ab'); g.addColorStop(1, '#26b46a');
@@ -152,46 +178,47 @@ function initSharedTextures() {
 
   SHARED.lava = canvasTexture(512, 512, (ctx, w, h) => {
     const rnd = mulberry32(4242);
-    ctx.fillStyle = '#170604';
+    ctx.fillStyle = '#130504';
     ctx.fillRect(0, 0, w, h);
-    for (let i = 0; i < 300; i++) {
-      const x = rnd() * w, y = rnd() * h, r = 5 + rnd() * 30;
-      const shades = ['#241009', '#120504', '#2c120a', '#1c0a06'];
+    // 식은 암반 판
+    for (let i = 0; i < 420; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 6 + rnd() * 34;
+      const shades = ['#241009', '#1a0a06', '#2c120a', '#0f0403', '#33150b'];
       ctx.fillStyle = shades[Math.floor(rnd() * shades.length)];
       ctx.beginPath();
-      ctx.ellipse(x, y, r, r * (0.5 + rnd() * 0.8), rnd() * TAU, 0, TAU);
+      ctx.ellipse(x, y, r, r * (0.45 + rnd() * 0.75), rnd() * TAU, 0, TAU);
       ctx.fill();
     }
-    ctx.lineCap = 'round';
-    for (let i = 0; i < 26; i++) {
-      let x = rnd() * w, y = rnd() * h;
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      for (let k = 0; k < 4; k++) {
-        const cx = x + (rnd() - 0.5) * 90, cy = y + (rnd() - 0.5) * 90;
-        ctx.quadraticCurveTo(cx, cy, x + (rnd() - 0.5) * 120, y + (rnd() - 0.5) * 120);
-        x += (rnd() - 0.5) * 70; y += (rnd() - 0.5) * 70;
-      }
-      const hot = 0.35 + rnd() * 0.4;
-      ctx.strokeStyle = `rgba(255, ${70 + Math.floor(rnd() * 100)}, 0, ${hot})`;
-      ctx.lineWidth = 2 + rnd() * 5;
-      ctx.shadowColor = '#ff5a00'; ctx.shadowBlur = 18;
-      ctx.stroke();
-    }
     // 뜨거운 웅덩이
-    for (let i = 0; i < 16; i++) {
-      const x = rnd() * w, y = rnd() * h, r = 6 + rnd() * 22;
+    for (let i = 0; i < 46; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 4 + rnd() * 26;
       const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      g.addColorStop(0, 'rgba(255,170,40,.55)');
-      g.addColorStop(0.6, 'rgba(255,90,0,.25)');
+      g.addColorStop(0, 'rgba(255,190,70,.5)');
+      g.addColorStop(0.45, 'rgba(255,110,10,.22)');
       g.addColorStop(1, 'rgba(255,60,0,0)');
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
     }
+    // 짧은 균열
+    ctx.lineCap = 'round';
+    for (let i = 0; i < 60; i++) {
+      let x = rnd() * w, y = rnd() * h;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      const seg = 1 + Math.floor(rnd() * 3);
+      for (let k = 0; k < seg; k++) {
+        x += (rnd() - 0.5) * 34; y += (rnd() - 0.5) * 34;
+        ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(255, ${80 + Math.floor(rnd() * 80)}, 0, ${0.22 + rnd() * 0.3})`;
+      ctx.lineWidth = 0.8 + rnd() * 1.8;
+      ctx.shadowColor = '#ff5a00'; ctx.shadowBlur = 9;
+      ctx.stroke();
+    }
     ctx.shadowBlur = 0;
   });
   SHARED.lava.wrapS = SHARED.lava.wrapT = THREE.RepeatWrapping;
-  SHARED.lava.repeat.set(2.5, 5);
+  SHARED.lava.repeat.set(3, 6);
 
   SHARED.glow = canvasTexture(128, 128, (ctx, w, h) => {
     const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
@@ -443,6 +470,11 @@ class Game {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     this.renderer.setSize(w, h, false);
     this.isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || w < 820;
+    if (this.state === 'playing') {
+      const portrait = w / h < 0.8;
+      this.camDist = portrait ? 8.3 : 9.8;
+      this.camPitch = portrait ? 0.44 : 0.46;
+    }
     this.updateTouchVisibility();
   }
 
@@ -1036,7 +1068,7 @@ class Game {
       // 용암 강
       const lavaMat = new THREE.MeshStandardMaterial({
         color: 0xffffff, map: SHARED.lava, emissive: 0xff4a00, emissiveMap: SHARED.lava,
-        emissiveIntensity: 0.75, roughness: 1.0, metalness: 0.0,
+        emissiveIntensity: 0.55, roughness: 1.0, metalness: 0.0,
       });
       const lava = new THREE.Mesh(new THREE.PlaneGeometry(58, 200), lavaMat);
       lava.rotation.x = -Math.PI / 2;
@@ -1130,12 +1162,25 @@ class Game {
     const palettes = {
       grass: { top: 0x4fbf28, side: 0xa86a34, bottom: 0x7d5426 },
       cloud: { top: 0xf4fbff, side: 0xb8dbf2, bottom: 0x94c3e4 },
-      stone: { top: 0x9b93aa, side: 0x5f596e, bottom: 0x494353 },
+      stone: { top: 0x8f8a9e, side: 0x655f72, bottom: 0x494353 },
     };
     const pal = palettes[kind] || palettes.grass;
-    const topMat = toon(pal.top, { polygonOffset: true, polygonOffsetFactor: -1 });
-    const sideMat = toon(pal.side);
-    const bottomMat = toon(pal.bottom);
+    let topMat, sideMat, bottomMat;
+    if (kind === 'stone') {
+      const topTex = SHARED.stone.clone();
+      topTex.needsUpdate = true;
+      topTex.repeat.set(Math.max(1, Math.round(p.w / 3)), Math.max(1, Math.round(p.d / 3)));
+      const sideTex = SHARED.stone.clone();
+      sideTex.needsUpdate = true;
+      sideTex.repeat.set(Math.max(1, Math.round(p.w / 3)), Math.max(1, Math.round(p.h / 3)));
+      topMat = toon(pal.top, { map: topTex, polygonOffset: true, polygonOffsetFactor: -1 });
+      sideMat = toon(pal.side, { map: sideTex });
+      bottomMat = toon(pal.bottom);
+    } else {
+      topMat = toon(pal.top, { polygonOffset: true, polygonOffsetFactor: -1 });
+      sideMat = toon(pal.side);
+      bottomMat = toon(pal.bottom);
+    }
     const mats = [sideMat, sideMat, topMat, bottomMat, sideMat, sideMat];
 
     const geo = new THREE.BoxGeometry(p.w, p.h, p.d);
@@ -1597,7 +1642,10 @@ class Game {
     this.updateTouchVisibility();
     this.updateHearts();
     this.updateHUD(true);
-    this.camYaw = 0; this.camPitch = 0.46; this.camDist = 9.8;
+    const portrait = window.innerWidth / window.innerHeight < 0.8;
+    this.camYaw = 0;
+    this.camPitch = portrait ? 0.44 : 0.46;
+    this.camDist = portrait ? 8.3 : 9.8;
     this.camera.position.set(this.stage.spawn.x, this.stage.spawn.y + 5.2, this.stage.spawn.z - 10);
     this.audio.resume();
     this.audio.setMusicVolume(0.16);
@@ -1657,10 +1705,11 @@ class Game {
       p.prev.copy(p.mesh.position);
     }
 
-    // 코인
+    // 코인 (카메라를 향해 살짝 흔들리며 회전)
     for (const c of this.coinList) {
       if (c.collected) continue;
-      c.mesh.rotation.y += dt * 2.8;
+      const toCam = Math.atan2(this.camera.position.x - c.mesh.position.x, this.camera.position.z - c.mesh.position.z);
+      c.mesh.rotation.y = toCam + Math.sin(this.time * 2.6 + c.phase) * 0.42;
       c.mesh.position.y = c.base.y + Math.sin(this.time * 2.2 + c.phase) * 0.12;
     }
     // 별
