@@ -1131,6 +1131,7 @@
   function applyCaptureLayout() {
     const off = parseFloat(qp('offset', '0')) || 0;
     const scale = parseFloat(qp('scale', '2')) || 2;
+    window.__meowDpr = 2;
     document.documentElement.classList.add('cap');
     const app = document.getElementById('app');
     app.style.width = '432px';

@@ -261,14 +261,16 @@
       const host = document.getElementById('board');
       const w = host.clientWidth || 360;
       const h = host.clientHeight || 480;
+      const res = state.forceDpr || (root.__meowDpr) || Math.min(2, Math.max(1, root.devicePixelRatio || 1));
       state.game = new Phaser.Game({
         type: Phaser.CANVAS,
         parent: host,
         width: w,
         height: h,
+        resolution: res,
         transparent: true,
         backgroundColor: 'rgba(0,0,0,0)',
-        scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: w, height: h },
+        scale: { mode: Phaser.Scale.NONE, width: w, height: h },
         scene: [BoardScene],
         audio: { noAudio: true },
         banner: false
@@ -284,16 +286,14 @@
     if (!host || !state.game) return;
     const w = host.clientWidth, h = host.clientHeight;
     if (!w || !h) return;
-    const dpr = state.forceDpr || Math.min(2, Math.max(1, root.devicePixelRatio || 1));
-    state.game.scale.resize(Math.round(w * dpr), Math.round(h * dpr));
-    // keep the canvas at its CSS size even though the backing store is dpr times larger
+    state.game.scale.resize(w, h);
     const canvas = state.game.canvas;
     if (canvas) {
       canvas.style.width = w + 'px';
       canvas.style.height = h + 'px';
       canvas.style.display = 'block';
     }
-    if (state.scene) { state.scene.dpr = dpr; state.scene.layout(); }
+    if (state.scene) { state.scene.layout(); }
   }
 
   function sync() {
