@@ -4,9 +4,7 @@
   'use strict';
 
   const W = 1000;
-  const H = 1240;
-  const TOP = 176;        // where the ropes are tied
-  const POT_TOP = H - 168;
+  const TOP = 150;        // where the ropes are tied
 
   /** Accepts either '#RRGGBB' or an already-packed 0xRRGGBB number. */
   function col(hex) {
@@ -73,6 +71,8 @@
     layout: function () {
       const vw = this.scale.width;
       const vh = this.scale.height;
+      this.geom();
+      const H = this.g.h;
       const scale = Math.min(vw / W, vh / H);
       this.view = { scale: scale, ox: (vw - W * scale) / 2, oy: (vh - H * scale) / 2 };
       this.rootC.setScale(scale);
@@ -88,11 +88,12 @@
       const cap = this.stage ? this.stage.cap : 4;
       const marginX = n > 10 ? 26 : (n > 8 ? 34 : 44);
       const colW = (W - marginX * 2) / n;
-      const room = POT_TOP - TOP - 26;
-      const d = Math.max(30, Math.min(colW * 0.86, room / cap, 104));
+      const d = Math.max(34, Math.min(colW * 0.86, 96));
+      const potTop = TOP + cap * d + 52;
+      const h = potTop + 150;
       this.g = {
         n: n, cap: cap, colW: colW, marginX: marginX, d: d, r: d / 2,
-        top: TOP,
+        top: TOP, potTop: potTop, h: h,
         x: function (i) { return marginX + (i + 0.5) * colW; }
       };
     },
@@ -154,19 +155,20 @@
       if (!this.theme) return;
       const top = col(this.theme.sky[0]);
       const bottom = col(this.theme.sky[1]);
+      const geo = this.g;
       g.fillGradientStyle(top, top, bottom, bottom, 1);
-      g.fillRect(-500, -500, W + 1000, H + 1000);
-      g.fillStyle(0xffffff, 0.5);
-      g.fillCircle(W * 0.12, H * 0.06, 250);
-      g.fillStyle(0xffffff, 0.34);
-      g.fillCircle(W * 0.94, H * 0.36, 240);
-      g.fillStyle(col(this.theme.board), 0.55);
-      g.fillRoundedRect(10, TOP - 26, W - 20, POT_TOP - TOP + 40, 46);
+      g.fillRect(-500, -500, W + 1000, geo.h + 1000);
+      g.fillStyle(0xffffff, 0.45);
+      g.fillCircle(W * 0.12, geo.h * 0.06, 240);
+      g.fillStyle(0xffffff, 0.3);
+      g.fillCircle(W * 0.94, geo.h * 0.4, 210);
+      g.fillStyle(col(this.theme.board), 0.6);
+      g.fillRoundedRect(10, TOP - 30, W - 20, geo.potTop - TOP + 30, 44);
       g.lineStyle(5, col(this.skin.rim), 0.9);
-      g.strokeRoundedRect(10, TOP - 26, W - 20, POT_TOP - TOP + 40, 46);
+      g.strokeRoundedRect(10, TOP - 30, W - 20, geo.potTop - TOP + 30, 44);
       // the shelf the pots stand on
-      g.fillStyle(0xffffff, 0.42);
-      g.fillRoundedRect(0, POT_TOP - 14, W, 26, 13);
+      g.fillStyle(0xffffff, 0.45);
+      g.fillRoundedRect(0, geo.potTop - 12, W, 24, 12);
     },
 
     drawPots: function () {
@@ -180,7 +182,7 @@
       const t = this.time_s;
       for (let c = 0; c < n; c += 1) {
         const x = gap + (width + gap) * c;
-        const y = POT_TOP + 16;
+        const y = this.g.potTop + 14;
         const h = 78;
         const done = this.engine && (this.engine.harvested[c] || 0) > 0;
         const color = this.colors[c] || '#3FA96A';
@@ -382,10 +384,10 @@
         g.fillCircle(px - r * 0.16, py - r * 0.18, r * 0.2);
       }
       // centre
-      g.fillStyle(col(hidden ? '#C3D3DE' : shade(base, 0.62)), 1);
-      g.fillCircle(x, y, r * 0.4);
-      g.fillStyle(col(hidden ? '#A9BCC9' : shade(base, 0.22)), 0.9);
-      g.fillCircle(x, y, r * 0.22);
+      g.fillStyle(col(hidden ? '#C3D3DE' : shade(base, 0.42)), 1);
+      g.fillCircle(x, y, r * 0.33);
+      g.fillStyle(col(hidden ? '#A9BCC9' : shade(base, -0.22)), 0.92);
+      g.fillCircle(x, y, r * 0.15);
 
       if (hidden) {
         g.lineStyle(Math.max(3, r * 0.16), col('#8AA3B4'), 1);
@@ -436,7 +438,7 @@
     ropeAt: function (wx, wy) {
       if (!this.engine) return -1;
       const g = this.g;
-      if (wy < g.top - 60 || wy > POT_TOP + 10) return -1;
+      if (wy < g.top - 60 || wy > g.potTop + 10) return -1;
       for (let i = 0; i < this.engine.ropes.length; i += 1) {
         if (Math.abs(wx - g.x(i)) < g.colW * 0.5) return i;
       }
