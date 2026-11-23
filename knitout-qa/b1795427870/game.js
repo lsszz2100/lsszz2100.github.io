@@ -132,13 +132,16 @@
 
     // ------------------------------------------------------------ input
 
+    /** 탭 지점의 보빈. 실이 감겨 다시 쓸 수 없는 보빈(dead)은 조작 대상이 아니므로 건너뛴다. */
     pinAt: function (wx, wy) {
       if (!this.stage) return -1;
       const pins = this.stage.pins;
+      const dead = (this.engine && this.engine.dead) || {};
       let best = -1;
       let bestD = Infinity;
-      const reach = Math.max(44, this.stage.pinRadius * 2.2);
+      const reach = Math.max(48, this.stage.pinRadius * 2.3);
       for (let i = 0; i < pins.length; i += 1) {
+        if (dead[i]) continue;
         const d = Math.hypot(pins[i].x - wx, pins[i].y - wy);
         if (d < reach && d < bestD) { bestD = d; best = i; }
       }
@@ -150,7 +153,7 @@
       const e = this.engine;
       let best = -1;
       let bestD = Infinity;
-      const reach = Math.max(30, this.stage.pinRadius * 1.05);
+      const reach = Math.max(44, this.stage.pinRadius * 1.45);
       for (let i = 0; i < e.ends.length; i += 1) {
         if (e.wound[i]) continue;
         const a = this.stage.pins[e.ends[i][0]];
@@ -242,7 +245,7 @@
 
     spoolPos: function (i) {
       const n = this.stage ? this.stage.strands.length : 1;
-      const step = Math.min(84, (W - 220) / Math.max(1, n - 1 || 1));
+      const step = Math.min(90, (W - 200) / Math.max(1, n - 1 || 1));
       const x0 = W / 2 - (step * (n - 1)) / 2;
       return { x: x0 + step * i, y: RAIL_Y };
     },
@@ -440,7 +443,7 @@
       const n = stage.strands.length;
       for (let i = 0; i < n; i += 1) {
         const pos = this.spoolPos(i);
-        this.drawSpool(railG, pos.x, pos.y, stage.strands[i].color, !!e.wound[i], e.perStrand[i] === 0 && !e.wound[i], n > 7 ? 0.86 : 1);
+        this.drawSpool(railG, pos.x, pos.y, stage.strands[i].color, !!e.wound[i], e.perStrand[i] === 0 && !e.wound[i], n > 7 ? 1.15 : 1.45);
       }
 
       // 보빈
