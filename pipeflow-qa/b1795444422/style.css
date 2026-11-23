@@ -161,7 +161,7 @@ button:disabled { opacity: .55; }
   padding: 7px 13px; font-weight: 800; font-size: 14px; box-shadow: var(--shadow-sm); }
 .coin-chip.small { padding: 6px 11px; font-size: 13px; }
 .coin-ico { color: var(--gold); font-size: 13px; }
-.home-hero { position: relative; margin: 8px 0 12px; border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; flex: 1 1 auto; max-height: 570px; min-height: 380px;
+.home-hero { position: relative; margin: 8px 0 12px; border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; flex: 1 1 auto; max-height: 470px; min-height: 340px;
   background: radial-gradient(120% 100% at 50% 0%, #FFFFFF 0%, #FFF6EC 52%, #FFEBD6 100%);
   box-shadow: var(--shadow); padding: 18px 18px 16px; text-align: center; }
 .hero-deco i { position: absolute; border-radius: 10px; opacity: .45; }
