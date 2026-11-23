@@ -328,6 +328,7 @@ html, body {
 .goal-bar i { display: block; height: 100%; width: 0; border-radius: 5px; background: linear-gradient(90deg, #FFD08A, #F09B32); transition: width .25s ease; }
 .hud-line { display: flex; align-items: center; gap: 6px; margin-top: 5px; flex-wrap: nowrap; }
 .hud-chip { display: inline-flex; align-items: baseline; gap: 3px; font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+.hud-chip em { font-style: normal; font-weight: 700; }
 .hud-chip b { font-size: 14px; color: var(--ink); }
 .hud-chip.stage em { font-style: normal; font-size: 12px; font-weight: 800; color: var(--ink); }
 .hud-boss {
