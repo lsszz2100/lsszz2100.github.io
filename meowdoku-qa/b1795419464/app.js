@@ -848,7 +848,7 @@
         moves: engine ? engine.moves : 0,
         left: countMarks()
       }) + '</p>';
-      html += '<p>' + t('result.stars3', { n: Math.round(stage.timeLimit * 0.5) }) + '</p>';
+      if (stars < 3) html += '<p>' + t('result.stars3', { n: Math.round(stage.timeLimit * 0.5) }) + '</p>';
       if (applied.newBest) html += '<div><span class="badge-new">' + t('result.newBest') + '</span></div>';
     } else {
       html += '<p>' + t('result.loseTimeBody', { left: engine ? Math.max(0, engine.remaining()) : 0 }) + '</p>';
