@@ -338,8 +338,9 @@
       const topY = y - h * 0.5;
       const botY = y + h * 0.5;
       const topW = w * 0.5;
-      const botW = w * 0.41;
-      const rad = botW * 0.32;
+      const botW = w * 0.365;
+      const rad = botW * 0.34;
+      const rim = col(skin.rim);
 
       g.fillStyle(0x6b4a37, 0.13 * alpha);
       g.fillEllipse(x + size * 0.03, botY - h * 0.04, w * 0.92, h * 0.14);
@@ -366,6 +367,16 @@
       g.lineTo(x - botW * 0.78, botY - 3);
       g.closePath();
       g.fillPath();
+
+      g.lineStyle(Math.max(2, size * 0.035), rim, 0.75 * alpha);
+      g.beginPath();
+      g.moveTo(x - topW, topY);
+      g.lineTo(x - botW, botY - rad);
+      g.strokePath();
+      g.beginPath();
+      g.moveTo(x + topW, topY);
+      g.lineTo(x + botW, botY - rad);
+      g.strokePath();
 
       // 음료 색 슬리브
       const bt = topY + h * 0.3;
@@ -450,7 +461,7 @@
       // 담긴 컵
       if (box && box.cups > 0) {
         const sp0 = this.slotPos(rect, 0);
-        const size = Math.min(130, Math.min(sp0.cw * 0.82, (sp0.ch * 0.96) / 1.2));
+        const size = Math.min(120, Math.min(sp0.cw * 0.72, (sp0.ch * 0.94) / 1.2));
         for (let i = 0; i < box.cups; i += 1) {
           const p = this.slotPos(rect, i);
           this.drawCup(g, p.x, p.y, size, this.colors[box.color], { alpha: 1 });
