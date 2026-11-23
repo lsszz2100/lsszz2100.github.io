@@ -8,8 +8,8 @@
   const RAIL = { x: 36, y: 190, w: 928, h: 200 };
   const DISPENSER = { x: 176, y: 300, r: 66 };
   const TRACK = { x: 286, y: 300, w: 646, h: 46 };
-  const JAR_BOTTOM = 1272;
-  const HOLD = { x: 336, y: 1332, w: 328, h: 132 };
+  const JAR_BOTTOM = 1162;
+  const HOLD = { x: 336, y: 1222, w: 328, h: 132 };
 
   function col(hex) { return Phaser.Display.Color.HexStringToColor(hex).color; }
 
