@@ -637,7 +637,18 @@
     hint: function (from, to) { var sc = getScene(); if (sc) sc.pulseHint(from, to); },
     celebrate: function (i) { var sc = getScene(); if (sc) sc.celebrate(i); },
     shake: function (i) { var sc = getScene(); if (sc) sc.shake(i); },
-    resize: function () { var sc = getScene(); if (sc) sc.onResize(); },
+    resize: function () {
+      var sc = getScene();
+      if (!sc) return;
+      var ratio = root.MARBLE_CAPTURE_SCALE || 1;
+      if (ratio > 1 && game) {
+        var holder = document.getElementById('board');
+        if (holder && holder.clientWidth && holder.clientHeight) {
+          game.scale.resize(Math.round(holder.clientWidth * ratio), Math.round(holder.clientHeight * ratio));
+        }
+      }
+      sc.onResize();
+    },
     audio: Audio,
     setTapHandler: function (fn) { api.onTap = fn; var sc = getScene(); if (sc) sc.onTap = fn; }
   };
