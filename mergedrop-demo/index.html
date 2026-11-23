@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#F4FAFF">
 <title>Merge Drop 2048: Combo Puzzle</title>
-<link rel="stylesheet" href="style.css?v=1795274367">
+<link rel="stylesheet" href="style.css?v=1795461676">
+<script>
+/* Runtime error recorder — used by QA to prove the page stays error-free. */
+window.__errs = [];
+window.addEventListener('error', function (e) { window.__errs.push('error: ' + (e.message || e.type)); });
+window.addEventListener('unhandledrejection', function (e) { window.__errs.push('promise: ' + String(e.reason)); });
+</script>
 </head>
 <body>
 <div id="app">
@@ -31,7 +37,7 @@
         </div>
         <div class="home-top-actions">
           <button class="pill" id="btnHelp" aria-label="How to play">?</button>
-          <button class="pill" id="btnSettingsHome" aria-label="Settings">⚙</button>
+          <button class="pill" id="btnSettingsHome" aria-label="Settings"><i class="ico-gear"></i></button>
           <button class="pill lang-pill" id="btnLangHome">EN</button>
         </div>
       </header>
@@ -45,7 +51,7 @@
         <h1 class="hero-title" data-i18n="heroTitle">Drop. Merge. Combo!</h1>
         <p class="hero-sub" data-i18n="heroSub">Drop numbered tiles, connect matching ones and chase big chain combos.</p>
         <div class="hero-steps">
-          <div class="hs-item"><span class="hs-ico">▾</span><b data-i18n="stepDrop">Tap to drop</b></div>
+          <div class="hs-item"><span class="hs-ico">↓</span><b data-i18n="stepDrop">Tap to drop</b></div>
           <div class="hs-item"><span class="hs-ico">=</span><b data-i18n="stepMerge">Match to merge</b></div>
           <div class="hs-item"><span class="hs-ico">×3</span><b data-i18n="stepCombo">Chain combos</b></div>
         </div>
@@ -71,11 +77,28 @@
         <small id="homeGoal">Next goal: 64</small>
       </button>
 
+      <button class="chal-card" id="btnChallenge">
+        <div class="cc-head">
+          <span class="cc-tag" data-i18n="chalTitle">Today's Challenge</span>
+          <span class="cc-streak" id="chalStreak">0</span>
+        </div>
+        <div class="cc-body">
+          <div class="cc-goal">
+            <b id="chalGoal">256</b>
+            <small id="chalLimit">in 320 drops</small>
+          </div>
+          <div class="cc-stars" id="chalStars"><i>★</i><i>★</i><i>★</i></div>
+          <span class="cc-go">›</span>
+        </div>
+        <div class="cc-foot"><span id="chalState">Everyone plays the same tile order today.</span></div>
+      </button>
+
       <nav class="home-nav">
         <button class="nav-btn" id="btnQuests"><span class="nav-ico">✓</span><span data-i18n="quests">Quests</span><i class="dot" id="questDot"></i></button>
-        <button class="nav-btn" id="btnSkins"><span class="nav-ico">◈</span><span data-i18n="skins">Skins</span></button>
+        <button class="nav-btn" id="btnSkins"><span class="nav-ico"><i class="ico-swatch"></i></span><span data-i18n="skins">Skins</span></button>
+        <button class="nav-btn" id="btnTiles"><span class="nav-ico">▦</span><span data-i18n="tiles">Tiles</span></button>
         <button class="nav-btn" id="btnBadges"><span class="nav-ico">★</span><span data-i18n="badges">Badges</span></button>
-        <button class="nav-btn" id="btnSettings"><span class="nav-ico">⚙</span><span data-i18n="settings">Settings</span></button>
+        <button class="nav-btn" id="btnSettings"><span class="nav-ico"><i class="ico-gear"></i></span><span data-i18n="settings">Settings</span></button>
       </nav>
 
       <button class="quest-teaser" id="btnQuestTeaser">
@@ -93,7 +116,7 @@
     <!-- =============================== PLAY =============================== -->
     <section id="play" class="screen">
       <header class="hud">
-        <button class="hud-icon" id="btnPause" aria-label="Pause">❚❚</button>
+        <button class="hud-icon" id="btnPause" aria-label="Pause"><span class="pause-bars"><i></i><i></i></span></button>
         <div class="hud-score">
           <span class="hud-label" data-i18n="score">SCORE</span>
           <span class="hud-value" id="playScore">0</span>
@@ -137,7 +160,7 @@
           <span class="b-cost" id="costSwap">25</span>
         </button>
         <button class="booster" id="btnHammer">
-          <span class="b-ico">✕</span>
+          <span class="b-ico">×</span>
           <span class="b-name" data-i18n="hammerName">Hammer</span>
           <span class="b-cost" id="costHammer">35</span>
         </button>
@@ -146,6 +169,11 @@
           <span class="b-name" data-i18n="sweepName">Sweep</span>
           <span class="b-cost" id="costSweep">60</span>
         </button>
+        <button class="booster" id="btnHint">
+          <span class="b-ico">?</span>
+          <span class="b-name" data-i18n="hintName">Hint</span>
+          <span class="b-cost" id="costHint">20</span>
+        </button>
       </div>
     </section>
 
@@ -153,10 +181,10 @@
   </div>
 </div>
 
-<script src="vendor/phaser.min.js?v=1795274367"></script>
-<script src="i18n.js?v=1795274367"></script>
-<script src="core.js?v=1795274367"></script>
-<script src="game.js?v=1795274367"></script>
-<script src="ui.js?v=1795274367"></script>
+<script src="vendor/phaser.min.js?v=1795461676"></script>
+<script src="i18n.js?v=1795461676"></script>
+<script src="core.js?v=1795461676"></script>
+<script src="game.js?v=1795461676"></script>
+<script src="ui.js?v=1795461676"></script>
 </body>
 </html>

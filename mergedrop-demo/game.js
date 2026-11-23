@@ -536,6 +536,36 @@
     scene.tweens.add({ targets: g, alpha: { from: 0.35, to: 1 }, duration: 520, yoyo: true, repeat: -1 });
   }
 
+  /* Gold pulse down one column for a couple of seconds (Hint booster). */
+  function showHint(col) {
+    if (!scene || col === null || col === undefined) return;
+    if (!layers.hint) layers.hint = scene.add.graphics().setDepth(7);
+    var g = layers.hint;
+    var x = cellX(col);
+    var draw = function () {
+      if (!scene) return;
+      var phase = (scene.time.now % 640) / 640;
+      var a = 0.35 + 0.5 * Math.abs(0.5 - phase) * 2;
+      g.clear();
+      g.fillStyle(0xffc93c, a * 0.22);
+      g.fillRoundedRect(x - CELL_W / 2 - 4, PAD_Y - 6, CELL_W + 8, BOARD_H - PAD_Y * 2 + 12, 22);
+      g.lineStyle(8, 0xffc93c, a);
+      g.strokeRoundedRect(x - CELL_W / 2 - 4, PAD_Y - 6, CELL_W + 8, BOARD_H - PAD_Y * 2 + 12, 22);
+      g.fillStyle(0xffc93c, 0.95);
+      g.fillTriangle(x - 28, 8, x + 28, 8, x, 56);
+    };
+    draw();
+    var timer = scene.time.addEvent({ delay: 60, loop: true, callback: draw });
+    scene.time.delayedCall(2600, function () {
+      if (timer) timer.remove();
+      if (layers.hint) layers.hint.clear();
+    });
+  }
+
+  function clearHint() {
+    if (layers.hint) layers.hint.clear();
+  }
+
   function celebrate() {
     if (!scene) return;
     var cx = BOARD_W / 2, cy = BOARD_H / 2;
@@ -572,6 +602,8 @@
     clearPreview: clearPreview,
     setHammer: setHammer,
     setFever: setFever,
+    showHint: showHint,
+    clearHint: clearHint,
     celebrate: celebrate,
     isBusy: isBusy,
     destroy: destroy,

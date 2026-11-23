@@ -457,3 +457,88 @@ body.shot #stage { left: 0; top: 0; transform: none; }
 }
 .hs-item b { font-size: 24px; font-weight: 800; color: var(--ink); }
 body.shot, body.shot * { cursor: none !important; }
+
+/* ------------------------------------------------- 1.1.0 daily challenge */
+.chal-card {
+  width: 100%; border: none; border-radius: 32px; margin-top: 22px; padding: 22px 26px 18px;
+  background: linear-gradient(150deg, #26335A 0%, #3A4D86 52%, #5A4A9E 100%);
+  box-shadow: 0 16px 34px rgba(31, 42, 68, .28); color: #fff; font-family: inherit;
+  text-align: left; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 2;
+}
+.chal-card:active { transform: translateY(3px); }
+.cc-head { display: flex; align-items: center; justify-content: space-between; }
+.cc-tag { font-size: 25px; font-weight: 900; letter-spacing: .6px; color: #FFE1A8; }
+.cc-streak {
+  font-size: 22px; font-weight: 900; color: #FFD166; background: rgba(255, 209, 102, .16);
+  border-radius: 16px; padding: 6px 16px; min-width: 58px; text-align: center;
+}
+.cc-streak::before { content: '★'; margin-right: 8px; font-size: 18px; }
+.cc-streak.off { color: rgba(255, 255, 255, .45); background: rgba(255, 255, 255, .1); }
+.cc-body { display: flex; align-items: center; gap: 16px; }
+.cc-goal { display: flex; align-items: baseline; gap: 14px; flex: 1; }
+.cc-goal b { font-size: 62px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+.cc-goal small { font-size: 24px; font-weight: 800; color: #C6D3F2; }
+.cc-stars { display: flex; gap: 8px; }
+.cc-stars i { font-size: 34px; font-style: normal; color: rgba(255, 255, 255, .22); }
+.cc-stars i.on { color: #FFC93C; }
+.cc-go { font-size: 46px; font-weight: 900; color: rgba(255, 255, 255, .5); margin-left: 6px; }
+.cc-foot { font-size: 20px; font-weight: 700; color: rgba(255, 255, 255, .62); }
+.home-nav .nav-btn { padding: 0 4px; font-size: 21px; }
+.home-nav .nav-btn .nav-ico { font-size: 36px; }
+
+.goal-bar.challenge { background: linear-gradient(180deg, #FFF6F1, #FFE8DF); box-shadow: 0 0 0 3px rgba(255, 122, 89, .35), var(--shadow-soft); }
+.goal-bar.challenge .goal-label { color: var(--coral-dark); }
+.goal-bar.challenge .goal-fill { background: linear-gradient(90deg, #FFB03A, #FF6B4E); }
+
+.star-row { display: flex; justify-content: center; gap: 18px; margin: 4px 0 6px; }
+.star-row i { font-size: 96px; font-style: normal; color: #E4EDF8; line-height: 1; }
+.star-row i.on { color: var(--gold); text-shadow: 0 8px 0 rgba(208, 138, 23, .25); }
+.chal-note { font-size: 22px; font-weight: 700; color: var(--ink-soft); text-align: center; }
+.chal-reward {
+  align-self: center; background: linear-gradient(90deg, #FFD989, #FFB03A); color: #fff;
+  font-size: 30px; font-weight: 900; padding: 12px 32px; border-radius: 20px; letter-spacing: .5px;
+}
+
+/* ----------------------------------------------------- tile collection */
+.col-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.col-cell {
+  background: #F7FAFF; border-radius: 24px; padding: 14px 6px 16px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.col-cell .ctile {
+  width: 118px; height: 74px; border-radius: 20px; display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 900; color: #fff; box-shadow: 0 6px 0 rgba(31, 63, 120, .12);
+}
+.col-cell .cname { font-size: 19px; font-weight: 800; color: var(--ink-soft); }
+.col-cell.locked { opacity: .62; }
+.col-cell.locked .ctile { background: #E5EDF8 !important; color: #B9C8DB; box-shadow: none; }
+.col-cell.legendary { box-shadow: 0 0 0 3px rgba(255, 176, 58, .5) inset; }
+.col-cell.legendary .cname { color: var(--gold); }
+.col-count { font-size: 24px; font-weight: 900; color: var(--ink-soft); text-align: center; }
+.col-sub { font-size: 21px; font-weight: 700; color: var(--ink-soft); text-align: center; }
+
+/* ------------------------------------------------------------- hint fx */
+.hint-pulse { animation: hintPulse 620ms ease-in-out 4; }
+@keyframes hintPulse { 0%, 100% { transform: none; } 50% { transform: translateY(-3px); } }
+
+/* ------------------------------------------------------ glyph-safe icons
+   Noto Sans KR 서브셋에 없는 기호는 글자 대신 CSS로 그린다. */
+.ico-gear {
+  display: inline-block; width: 32px; height: 32px; border-radius: 50%;
+  border: 8px solid currentColor; box-sizing: border-box; position: relative; vertical-align: middle;
+}
+.ico-gear::before, .ico-gear::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 46px; height: 10px;
+  background: currentColor; border-radius: 4px; transform: translate(-50%, -50%);
+}
+.ico-gear::after { transform: translate(-50%, -50%) rotate(90deg); }
+.pill .ico-gear { color: var(--ink-soft); }
+.nav-btn .ico-gear { color: var(--sky); width: 34px; height: 34px; }
+.nav-btn .ico-gear::before, .nav-btn .ico-gear::after { width: 48px; height: 11px; }
+.ico-swatch {
+  display: inline-block; width: 36px; height: 36px; border-radius: 12px; vertical-align: middle;
+  background: conic-gradient(from 210deg, #FFB03A, #FF7A59, #FF5C77, #B983FF, #6FB7FF, #2ED3B7, #FFB03A);
+  box-shadow: 0 3px 0 rgba(31, 63, 120, .14);
+}
+.pause-bars { display: flex; gap: 9px; align-items: center; justify-content: center; }
+.pause-bars i { display: block; width: 11px; height: 36px; border-radius: 5px; background: currentColor; }

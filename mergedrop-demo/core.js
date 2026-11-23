@@ -16,7 +16,7 @@
   var ROWS = 8;
   var GOAL_TILES = [64, 128, 256, 512, 1024, 2048];
   var GOAL_COINS = { 64: 30, 128: 40, 256: 60, 512: 90, 1024: 140, 2048: 250 };
-  var BOOSTER_COST = { swap: 25, hammer: 35, sweep: 60 };
+  var BOOSTER_COST = { swap: 25, hammer: 35, sweep: 60, hint: 20 };
   var SKINS = [
     { id: 'sunrise', cost: 0 },
     { id: 'candy', cost: 600 },
@@ -25,7 +25,13 @@
   var FEVER_PER_DROP = 25;
   var FEVER_DROPS = 4;
   var SAVE_KEY = 'mergemania.save.v1';
-  var SAVE_VERSION = 1;
+  var SAVE_VERSION = 2;
+
+  // Tile collection (도감): every tile value a run can build, rarest last.
+  var COLLECTION = [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096];
+  // Daily challenge targets rotate by date; limits are tuned in tests/calibration.
+  var CHALLENGE_TARGETS = [64, 128, 128, 256];
+  var CHALLENGE_LIMITS = { 64: 80, 128: 160, 256: 320 };
 
   /* ---------------------------------------------------------------- RNG */
 
@@ -429,6 +435,152 @@
 
   function coinsForScore(score) { return Math.max(0, Math.floor(score / 120)); }
 
+  /* ---------------------------------------------------------- daily challenge */
+
+  function shiftDateKey(key, delta) {
+    var parts = String(key).split('-');
+    if (parts.length !== 3) return key;
+    var d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    d.setDate(d.getDate() + (delta || 0));
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + dd;
+  }
+
+  /* Everyone gets the same target and the same tile order on a given day. */
+  function challengeDef(dateKey) {
+    var key = dateKey || todayKey();
+    var h = hashString('challenge:' + key);
+    var target = CHALLENGE_TARGETS[h % CHALLENGE_TARGETS.length];
+    var limit = CHALLENGE_LIMITS[target] || 160;
+    return { date: key, target: target, limit: limit, seed: 'challenge:' + key };
+  }
+
+  function ensureChallenge(profile, dateKey) {
+    var key = dateKey || todayKey();
+    if (!profile.challenge || profile.challenge.date !== key) {
+      profile.challenge = { date: key, done: false, stars: 0, attempts: 0 };
+    }
+    return profile.challenge;
+  }
+
+  /* Stars: 3 for finishing well inside the limit, 2 for a comfortable finish. */
+  function challengeStars(def, dropsUsed) {
+    if (!def) return 0;
+    if (dropsUsed <= Math.ceil(def.limit * 0.62)) return 3;
+    if (dropsUsed <= Math.ceil(def.limit * 0.85)) return 2;
+    return 1;
+  }
+
+  /* Streak counts only while the chain is alive (today or yesterday). */
+  function challengeStreak(profile, dateKey) {
+    var key = dateKey || todayKey();
+    var n = Number(profile.chalStreak) || 0;
+    if (!profile.chalLastDate) return 0;
+    if (profile.chalLastDate === key || profile.chalLastDate === shiftDateKey(key, -1)) return n;
+    return 0;
+  }
+
+  /* Award a completed challenge. Only the first completion of the day pays coins. */
+  function completeChallenge(profile, stars, dateKey) {
+    var key = dateKey || todayKey();
+    var day = ensureChallenge(profile, key);
+    var first = !day.done;
+    var awarded = 0;
+    if (first) {
+      day.done = true;
+      day.stars = Math.max(1, Math.min(3, stars || 1));
+      var streak = (profile.chalLastDate === shiftDateKey(key, -1))
+        ? (Number(profile.chalStreak) || 0) + 1
+        : 1;
+      profile.chalStreak = streak;
+      profile.chalLastDate = key;
+      if (streak > (Number(profile.chalBestStreak) || 0)) profile.chalBestStreak = streak;
+      awarded = 60 + Math.min(7, streak) * 15;
+      profile.coins += awarded;
+    } else if ((stars || 0) > day.stars) {
+      day.stars = Math.min(3, stars || 0);
+    }
+    return {
+      first: first,
+      coins: awarded,
+      streak: Number(profile.chalStreak) || 0,
+      bestStreak: Number(profile.chalBestStreak) || 0,
+      stars: day.stars
+    };
+  }
+
+  /* A challenge run: same seed for the date, played with the normal rules. */
+  function newChallengeRun(def) {
+    var s = newGame({ seed: def.seed });
+    s.challenge = { target: def.target, limit: def.limit };
+    return s;
+  }
+
+  /* --------------------------------------------------------------- hint */
+
+  /* Copy just enough state to try a drop without touching the real board. */
+  function simCopy(s) {
+    var board = [];
+    for (var r = 0; r < ROWS; r++) board.push(s.board[r].slice());
+    return {
+      cols: COLS,
+      rows: ROWS,
+      board: board,
+      rngState: s.rngState >>> 0,
+      idSeq: 900000 + s.idSeq,
+      queue: s.queue.slice(),
+      fourStreak: s.fourStreak,
+      score: s.score,
+      drops: s.drops,
+      merges: s.merges,
+      maxTile: s.maxTile,
+      maxChain: s.maxChain,
+      streak: s.streak,
+      bestStreak: s.bestStreak,
+      goalIndex: s.goalIndex,
+      goalsReached: s.goalsReached.slice(),
+      fever: { charge: s.fever.charge, active: s.fever.active, dropsLeft: s.fever.dropsLeft },
+      revives: s.revives,
+      usedBoosters: s.usedBoosters,
+      over: false,
+      overReason: null
+    };
+  }
+
+  /* The column that does the most for the player right now. */
+  function hintColumn(s) {
+    if (!s || s.over) return null;
+    var best = null;
+    for (var c = 0; c < COLS; c++) {
+      if (landingRow(s, c) < 0) continue;
+      var copy = simCopy(s);
+      var res = drop(copy, c);
+      if (!res.ok) continue;
+      var room = ROWS - columnHeight(copy, c);
+      var score = res.gained * 3 + res.chain * 5 + room * 0.8 + (res.feverStarted ? 10 : 0);
+      if (!res.chain) score -= 2; // a quiet drop only when nothing merges
+      if (!best || score > best.score) {
+        best = { col: c, score: score, chain: res.chain, gained: res.gained, mergesWith: res.chain > 0 };
+      }
+    }
+    return best;
+  }
+
+  /* Tiles the player has built so far, derived from the best tile reached. */
+  function collectionState(profile) {
+    var top = Math.max(0, Number(profile.bestTile) || 0);
+    var items = [];
+    var owned = 0;
+    for (var i = 0; i < COLLECTION.length; i++) {
+      var v = COLLECTION[i];
+      var got = top >= v;
+      if (got) owned++;
+      items.push({ value: v, got: got, legendary: v >= 2048 });
+    }
+    return { items: items, owned: owned, total: COLLECTION.length, top: top };
+  }
+
   /* ------------------------------------------------------------- quests */
 
   var QUEST_POOL = [
@@ -508,8 +660,10 @@
     { id: 'tile128', coins: 30 },
     { id: 'tile512', coins: 50 },
     { id: 'tile2048', coins: 100 },
+    { id: 'tile4096', coins: 200 },
     { id: 'chain5', coins: 40 },
-    { id: 'games25', coins: 60 }
+    { id: 'games25', coins: 60 },
+    { id: 'challenge7', coins: 80 }
   ];
 
   function defaultProfile() {
@@ -531,6 +685,10 @@
       skins: ['sunrise'],
       skin: 'sunrise',
       quests: null,
+      challenge: null,
+      chalStreak: 0,
+      chalBestStreak: 0,
+      chalLastDate: null,
       interstitialCounter: 0,
       lastPlayed: null
     };
@@ -546,6 +704,15 @@
     p.best = Math.max(0, Number(p.best) || 0);
     p.coins = Math.max(0, Math.round(Number(p.coins) || 0));
     p.games = Math.max(0, Number(p.games) || 0);
+    p.bestTile = Math.max(0, Number(p.bestTile) || 0);
+    p.chalStreak = Math.max(0, Number(p.chalStreak) || 0);
+    p.chalBestStreak = Math.max(p.chalStreak, Number(p.chalBestStreak) || 0);
+    if (p.challenge && typeof p.challenge !== 'object') p.challenge = null;
+    if (p.challenge) {
+      p.challenge.stars = Math.max(0, Math.min(3, Number(p.challenge.stars) || 0));
+      p.challenge.attempts = Math.max(0, Number(p.challenge.attempts) || 0);
+      p.challenge.done = !!p.challenge.done;
+    }
     return p;
   }
 
@@ -585,8 +752,10 @@
     if (run.maxTile >= 128) give('tile128');
     if (run.maxTile >= 512) give('tile512');
     if (run.maxTile >= 2048) give('tile2048');
+    if (run.maxTile >= 4096) give('tile4096');
     if (run.maxChain >= 5) give('chain5');
     if (profile.games >= 25) give('games25');
+    if ((Number(profile.chalStreak) || 0) >= 7) give('challenge7');
     return earned;
   }
 
@@ -657,6 +826,17 @@
     SKINS: SKINS,
     BADGES: BADGES,
     QUEST_POOL: QUEST_POOL,
+    COLLECTION: COLLECTION,
+    CHALLENGE_TARGETS: CHALLENGE_TARGETS,
+    challengeDef: challengeDef,
+    ensureChallenge: ensureChallenge,
+    challengeStars: challengeStars,
+    challengeStreak: challengeStreak,
+    completeChallenge: completeChallenge,
+    newChallengeRun: newChallengeRun,
+    shiftDateKey: shiftDateKey,
+    hintColumn: hintColumn,
+    collectionState: collectionState,
     FEVER_DROPS: FEVER_DROPS,
     SAVE_KEY: SAVE_KEY,
     newGame: newGame,

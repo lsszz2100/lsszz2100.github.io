@@ -23,7 +23,10 @@
     modals: [],
     tutStep: 0,
     shots: false,
-    lastRun: null
+    lastRun: null,
+    mode: 'classic',
+    chal: null,
+    hintArmed: false
   };
 
   var dom = {};
@@ -157,9 +160,38 @@
     var dot = document.getElementById('questDot');
     if (dot) dot.classList.toggle('on', questReady());
     renderQuestTeaser();
+    renderChallengeCard();
     dom.langHome.textContent = T.t('langButton');
     dom.langPlay.textContent = T.t('langButton');
     T.apply(document);
+    renderChallengeCard();
+  }
+
+  /* ------------------------------------------------ daily challenge card */
+
+  function challengeInfo() {
+    var def = C.challengeDef();
+    var day = C.ensureChallenge(profile);
+    return {
+      def: def,
+      day: day,
+      streak: C.challengeStreak(profile),
+      bestStreak: Number(profile.chalBestStreak) || 0
+    };
+  }
+
+  function renderChallengeCard() {
+    var info = challengeInfo();
+    if (!dom.chalGoal) return;
+    dom.chalGoal.textContent = String(info.def.target);
+    dom.chalLimit.textContent = T.t('chalLimitText', { limit: info.def.limit });
+    var stars = dom.chalStars.querySelectorAll('i');
+    for (var i = 0; i < stars.length; i++) stars[i].classList.toggle('on', i < info.day.stars);
+    dom.chalStreak.textContent = String(info.streak);
+    dom.chalStreak.classList.toggle('off', info.streak === 0);
+    dom.chalState.textContent = info.day.done
+      ? T.t('chalDone') + ' · ' + T.t('chalStars', { n: info.day.stars })
+      : T.t('chalTip');
   }
 
   function renderQuestTeaser() {
@@ -241,7 +273,7 @@
   }
 
   function updateBoosterAffordability() {
-    [['swap', dom.btnSwap], ['hammer', dom.btnHammer], ['sweep', dom.btnSweep]].forEach(function (pair) {
+    [['swap', dom.btnSwap], ['hammer', dom.btnHammer], ['sweep', dom.btnSweep], ['hint', dom.btnHint]].forEach(function (pair) {
       var el = pair[1];
       if (!el) return;
       el.classList.toggle('danger', pair[0] === 'sweep' && state.game && C.dangerLevel(state.game) > 0);
@@ -251,14 +283,29 @@
   function updateGoal() {
     var s = state.game;
     if (!s || !dom.goalTarget) return;
-    var goal = C.GOAL_TILES[s.goalIndex];
-    if (goal === undefined) {
-      dom.goalTarget.textContent = '2048 ✔';
-      dom.goalFill.style.width = '100%';
+    var isChal = state.mode === 'challenge' && state.chal;
+    var bar = document.querySelector('.goal-bar');
+    if (bar) bar.classList.toggle('challenge', !!isChal);
+    if (isChal) {
+      var target = state.chal.target;
+      dom.goalTarget.textContent = String(target);
+      var cp = Math.log(Math.max(2, s.maxTile)) / Math.log(target);
+      dom.goalFill.style.width = Math.max(0, Math.min(1, cp)) * 100 + '%';
+      if (dom.goalLabel) {
+        dom.goalLabel.textContent = T.t('chalLabel') + ' · ' +
+          T.t('chalDropsLeft', { n: Math.max(0, state.chal.limit - s.drops) });
+      }
     } else {
-      dom.goalTarget.textContent = String(goal);
-      var progress = Math.log(Math.max(2, s.maxTile)) / Math.log(goal);
-      dom.goalFill.style.width = Math.max(0, Math.min(1, progress)) * 100 + '%';
+      if (dom.goalLabel) dom.goalLabel.textContent = T.t('goalLabel');
+      var goal = C.GOAL_TILES[s.goalIndex];
+      if (goal === undefined) {
+        dom.goalTarget.textContent = '2048 ✓';
+        dom.goalFill.style.width = '100%';
+      } else {
+        dom.goalTarget.textContent = String(goal);
+        var progress = Math.log(Math.max(2, s.maxTile)) / Math.log(goal);
+        dom.goalFill.style.width = Math.max(0, Math.min(1, progress)) * 100 + '%';
+      }
     }
     var fever = dom.feverWrap;
     if (fever) {
@@ -271,16 +318,116 @@
 
   /* ------------------------------------------------------------- gameplay */
 
-  function startGame() {
+  function startGame(mode) {
+    state.mode = mode === 'challenge' ? 'challenge' : 'classic';
     state.hammer = false;
-    if (window.BoardView) window.BoardView.setHammer(false);
-    state.game = C.newGame({ seed: Date.now() });
+    if (window.BoardView) { window.BoardView.setHammer(false); window.BoardView.clearHint(); }
+    if (state.mode === 'challenge') {
+      var info = challengeInfo();
+      state.chal = info.def;
+      profile.challenge = info.day;
+      info.day.attempts = (Number(info.day.attempts) || 0) + 1;
+      saveProfile();
+      state.game = C.newChallengeRun(info.def);
+    } else {
+      state.chal = null;
+      state.game = C.newGame({ seed: Date.now() });
+    }
     state.busy = false;
     if (window.BoardView) window.BoardView.setBoard(state.game.board);
     showScreen('play');
     updateHud();
     updateGoal();
     setTimeout(layoutBoard, 30);
+  }
+
+  /* --------------------------------------------------------- challenge run */
+
+  function openChallenge() {
+    var info = challengeInfo();
+    var stars = [0, 1, 2].map(function (i) {
+      return '<i class="' + (i < info.day.stars ? 'on' : '') + '">★</i>';
+    }).join('');
+    var html = '' +
+      '<h2>' + T.t('chalTitle') + '</h2>' +
+      '<div class="star-row">' + stars + '</div>' +
+      '<p>' + T.t('chalGoal', { goal: info.def.target, limit: info.def.limit }) + '</p>' +
+      '<div class="score-panel">' +
+      '<div class="score-box"><span>' + T.t('streakLabel') + '</span><b>' + info.streak + '</b></div>' +
+      '<div class="score-box"><span>' + T.t('bestStreakLabel') + '</span><b>' + info.bestStreak + '</b></div>' +
+      '</div>' +
+      '<p class="chal-note">' + T.t('chalTip') + '</p>' +
+      '<div class="modal-actions col">' +
+      '<button class="btn gold" data-act="go">' + (info.day.done ? T.t('chalPractice') : T.t('chalStart')) + '</button>' +
+      '<button class="btn ghost" data-act="close">' + T.t('close') + '</button>' +
+      '</div>';
+    var modal = openModal(html);
+    modal.querySelector('[data-act="go"]').addEventListener('click', function () {
+      closeAllModals();
+      ensureAudio();
+      startGame('challenge');
+    });
+    modal.querySelector('[data-act="close"]').addEventListener('click', function () { closeModal(modal); });
+  }
+
+  function checkChallenge() {
+    var s = state.game, chal = state.chal;
+    if (!s || !chal) return false;
+    if (s.maxTile >= chal.target) { finishChallenge(true); return true; }
+    if (s.over || s.drops >= chal.limit) { finishChallenge(false); return true; }
+    return false;
+  }
+
+  function finishChallenge(success) {
+    var s = state.game;
+    var def = state.chal;
+    if (!s || !def) return;
+    var drops = s.drops;
+    var stars = success ? C.challengeStars(def, drops) : 0;
+    var res = C.finishRun(profile, s);
+    var chalRes = success ? C.completeChallenge(profile, stars, def.date) : null;
+    saveProfile();
+    updateHud();
+    renderChallengeCard();
+    var starRow = [0, 1, 2].map(function (i) {
+      return '<i class="' + (i < stars ? 'on' : '') + '">★</i>';
+    }).join('');
+    var body = success
+      ? T.t('chalWinBody', { goal: def.target, n: Math.max(0, def.limit - drops) })
+      : T.t('chalLoseBody', { tile: s.maxTile || 2, goal: def.target, limit: def.limit });
+    var reward = '';
+    if (success && chalRes && chalRes.first && chalRes.coins > 0) {
+      reward = '<span class="chal-reward">' + T.t('chalReward', { n: fmt(chalRes.coins) }) + '</span>';
+      if (chalRes.streak > 1) reward += '<p class="chal-note">' + T.t('chalStreakToast', { n: chalRes.streak }) + '</p>';
+    } else if (success) {
+      reward = '<p class="chal-note">' + T.t('chalAgainToday') + '</p>';
+    } else {
+      reward = '<p class="chal-note">' + T.t('chalTomorrow') + '</p>';
+    }
+    var html = '' +
+      '<h2>' + (success ? T.t('chalWin') : T.t('chalLose')) + '</h2>' +
+      '<div class="star-row">' + starRow + '</div>' +
+      '<p>' + body + '</p>' +
+      '<div class="score-panel">' +
+      '<div class="score-box"><span>' + T.t('finalScore') + '</span><b>' + fmt(s.score) + '</b></div>' +
+      '<div class="score-box"><span>' + T.t('coins') + '</span><b>+' + fmt(res.total) + '</b></div>' +
+      '</div>' +
+      reward +
+      '<div class="modal-actions col">' +
+      '<button class="btn" data-act="again">' + T.t('chalPractice') + '</button>' +
+      '<button class="btn ghost" data-act="home">' + T.t('home') + '</button>' +
+      '</div>';
+    var modal = openModal(html);
+    modal.querySelector('[data-act="again"]').addEventListener('click', function () {
+      closeAllModals();
+      maybeInterstitial();
+      startGame('challenge');
+    });
+    modal.querySelector('[data-act="home"]').addEventListener('click', function () {
+      closeAllModals();
+      maybeInterstitial();
+      goHome();
+    });
   }
 
   function onDrop(col) {
@@ -310,6 +457,9 @@
       if (res.feverStarted) { showFever(); sfxFever(); }
       if (res.goals.length) onGoals(res.goals);
       saveProfile();
+      if (state.mode === 'challenge' && state.chal) {
+        if (checkChallenge()) return;
+      }
       if (res.over) endGame();
     });
   }
@@ -366,6 +516,14 @@
   function useBooster(kind) {
     var s = state.game;
     if (!s || s.over) return;
+    if (kind === 'hammer' && state.hammer) {
+      // Second tap disarms the hammer without spending anything.
+      state.hammer = false;
+      window.BoardView.setHammer(false);
+      dom.btnHammer.classList.remove('armed');
+      toast(T.t('hammerCancel'));
+      return;
+    }
     var cost = C.BOOSTER_COST[kind];
     if (kind === 'hammer' && !state.hammer) {
       if (profile.coins < cost) { offerAdBooster('hammer'); return; }
@@ -382,9 +540,16 @@
   function applyBooster(kind, free) {
     var s = state.game;
     if (!s || s.over) return;
+    var hint = kind === 'hint' ? C.hintColumn(s) : null;
+    if (kind === 'hint' && !hint) { toast(T.t('hintNone')); return; }
     var cost = C.BOOSTER_COST[kind];
     if (!free && !spendCoins(cost)) { offerAdBooster(kind); return; }
-    if (kind === 'swap') {
+    if (kind === 'hint') {
+      window.BoardView.showHint(hint.col);
+      toast(T.t('hintToast', { n: hint.col + 1 }));
+      sfxTap();
+      vibrate(14);
+    } else if (kind === 'swap') {
       var r = C.useSwap(s);
       toast(T.t('swapToast', { v: r.value }));
       sfxTap();
@@ -450,6 +615,19 @@
 
   function bridge() { return window.AndroidHost || null; }
 
+  /* UMP: only show the consent row where Google requires a choice. */
+  function consentRequired() {
+    var b = bridge();
+    try { return !!(b && b.isPrivacyOptionsRequired && b.isPrivacyOptionsRequired()); } catch (e) { return false; }
+  }
+
+  function openConsent() {
+    var b = bridge();
+    var ok = false;
+    try { ok = !!(b && b.showPrivacyOptions && b.showPrivacyOptions()); } catch (e) { ok = false; }
+    if (!ok) toast(T.t('adConsentNone'));
+  }
+
   function showRewarded(kind) {
     var b = bridge();
     if (!b || !b.tryShowRewarded) { toast(T.t('noAd')); return false; }
@@ -495,10 +673,11 @@
   function endGame() {
     var s = state.game;
     state.lastRun = s;
+    var prevBest = profile.best;
     var res = C.finishRun(profile, s);
     saveProfile();
     updateHud();
-    var isBest = s.score >= profile.best && s.score > 0;
+    var isBest = s.score > prevBest && s.score > 0;
     var nextGoal = C.GOAL_TILES[s.goalIndex];
     var html = '' +
       '<h2>' + T.t('gameOver') + '</h2>' +
@@ -549,7 +728,10 @@
   }
 
   function badgeName(id) {
-    var map = { first_merge: 'bFirst', tile128: 'b128', tile512: 'b512', tile2048: 'b2048', chain5: 'bChain', games25: 'bGames' };
+    var map = {
+      first_merge: 'bFirst', tile128: 'b128', tile512: 'b512', tile2048: 'b2048',
+      tile4096: 'b4096', chain5: 'bChain', games25: 'bGames', challenge7: 'bChal7'
+    };
     return T.t(map[id] || id);
   }
 
@@ -561,7 +743,9 @@
   function goHome() {
     state.game = null;
     state.hammer = false;
-    if (window.BoardView) { window.BoardView.setHammer(false); window.BoardView.setFever(false); }
+    state.mode = 'classic';
+    state.chal = null;
+    if (window.BoardView) { window.BoardView.setHammer(false); window.BoardView.setFever(false); window.BoardView.clearHint(); }
     showScreen('home');
   }
 
@@ -608,7 +792,8 @@
     var modal = openModal(html);
     modal.querySelector('[data-act="resume"]').addEventListener('click', function () { closeModal(modal); });
     modal.querySelector('[data-act="restart"]').addEventListener('click', function () {
-      closeModal(modal); closeAllModals(); startGame();
+      var mode = state.mode;
+      closeModal(modal); closeAllModals(); startGame(mode);
     });
     modal.querySelector('[data-act="home"]').addEventListener('click', function () {
       closeModal(modal); closeAllModals(); goHome();
@@ -643,7 +828,7 @@
     var step = state.tutStep;
     var visuals = [
       '<div class="tut-visual"><div class="tv-tile" style="background:#6FB7FF">2</div>' +
-        '<div class="tv-tile" style="background:#E2EDFA;color:#9AAAC0">▾</div>' +
+        '<div class="tv-tile" style="background:#E2EDFA;color:#9AAAC0">↓</div>' +
         '<div class="tv-tile" style="background:#6FB7FF">2</div></div>',
       '<div class="tut-visual"><div class="tv-tile" style="background:#6FB7FF">2</div>' +
         '<div style="font-size:44px;font-weight:900;color:#FF7A59">+</div>' +
@@ -700,6 +885,10 @@
       '<button class="btn small ghost" data-act="terms" style="flex:0 0 220px">▶</button></div>' +
       '<div class="setting-row"><span>' + T.t('privacy') + '</span>' +
       '<button class="btn small ghost" data-act="privacy" style="flex:0 0 220px">▶</button></div>' +
+      (consentRequired()
+        ? '<div class="setting-row"><span>' + T.t('adConsent') + '</span>' +
+          '<button class="btn small ghost" data-act="consent" style="flex:0 0 220px">▶</button></div>'
+        : '') +
       '<div class="modal-actions col">' +
       '<button class="btn ghost" data-act="reset" style="color:#E84A64;border-color:#FFD5DC">' + T.t('resetData') + '</button>' +
       '<button class="btn" data-act="close">' + T.t('close') + '</button>' +
@@ -726,6 +915,8 @@
     modal.querySelector('[data-act="tutorial"]').addEventListener('click', function () { openTutorial(0); });
     modal.querySelector('[data-act="terms"]').addEventListener('click', function () { openDoc('termsBody', 'terms-'); });
     modal.querySelector('[data-act="privacy"]').addEventListener('click', function () { openDoc('privacyBody', 'privacy-'); });
+    var consentBtn = modal.querySelector('[data-act="consent"]');
+    if (consentBtn) consentBtn.addEventListener('click', function () { openConsent(); });
     modal.querySelector('[data-act="reset"]').addEventListener('click', function () { openResetConfirm(); });
     modal.querySelector('[data-act="close"]').addEventListener('click', function () { closeModal(modal); });
   }
@@ -813,6 +1004,31 @@
     modal.querySelector('[data-act="close"]').addEventListener('click', function () { closeModal(modal); });
   }
 
+  /* ------------------------------------------------------------ collection */
+
+  function openCollection() {
+    var col = C.collectionState(profile);
+    var cells = col.items.map(function (it) {
+      var color = window.BoardView ? window.BoardView.colorOf(it.value) : '#6FB7FF';
+      var style = it.got
+        ? 'background:linear-gradient(180deg,' + color + ',' + shade(color, -30) + ');color:' + textOn(color)
+        : '';
+      var tag = it.legendary ? T.t('legendaryTag') : (it.got ? T.t('collected') : T.t('notYet'));
+      return '<div class="col-cell ' + (it.got ? '' : 'locked') + (it.legendary ? ' legendary' : '') + '">' +
+        '<div class="ctile" style="' + style + '">' + it.value + '</div>' +
+        '<span class="cname">' + tag + '</span>' +
+        '</div>';
+    }).join('');
+    var html = '' +
+      '<h2>' + T.t('collectionTitle') + '</h2>' +
+      '<p class="col-count">' + T.t('collectionCount', { n: col.owned, total: col.total }) + '</p>' +
+      '<div class="col-grid">' + cells + '</div>' +
+      '<p class="col-sub">' + T.t('collectionSub') + '</p>' +
+      '<div class="modal-actions"><button class="btn ghost" data-act="close">' + T.t('close') + '</button></div>';
+    var modal = openModal(html, { wide: true });
+    modal.querySelector('[data-act="close"]').addEventListener('click', function () { closeModal(modal); });
+  }
+
   /* ---------------------------------------------------------------- skins */
 
   var SKIN_LABELS = {
@@ -875,6 +1091,7 @@
   /* --------------------------------------------------------------- badges */
 
   function openBadges() {
+    var got = C.BADGES.filter(function (b) { return profile.badges.indexOf(b.id) >= 0; }).length;
     var cells = C.BADGES.map(function (b) {
       var got = profile.badges.indexOf(b.id) >= 0;
       return '<div class="badge-cell ' + (got ? 'on' : '') + '">' +
@@ -885,7 +1102,7 @@
     }).join('');
     var html = '' +
       '<h2>' + T.t('badgeTitle') + '</h2>' +
-      '<p style="font-size:24px">' + T.t('badgeSub') + '</p>' +
+      '<p style="font-size:24px">' + T.t('badgeCount', { n: got, total: C.BADGES.length }) + '</p>' +
       '<div class="badge-grid">' + cells + '</div>' +
       '<div class="modal-actions"><button class="btn ghost" data-act="close">' + T.t('close') + '</button></div>';
     var modal = openModal(html, { wide: true });
@@ -936,13 +1153,24 @@
     dom.btnSwap = document.getElementById('btnSwap');
     dom.btnHammer = document.getElementById('btnHammer');
     dom.btnSweep = document.getElementById('btnSweep');
+    dom.btnHint = document.getElementById('btnHint');
+    dom.goalLabel = document.getElementById('goalLabel');
+    dom.chalGoal = document.getElementById('chalGoal');
+    dom.chalLimit = document.getElementById('chalLimit');
+    dom.chalStars = document.getElementById('chalStars');
+    dom.chalStreak = document.getElementById('chalStreak');
+    dom.chalState = document.getElementById('chalState');
   }
 
   function bindButtons() {
     document.getElementById('btnPlay').addEventListener('click', function () {
       ensureAudio(); sfxTap();
       maybeInterstitial();
-      startGame();
+      startGame('classic');
+    });
+    document.getElementById('btnChallenge').addEventListener('click', function () {
+      ensureAudio(); sfxTap();
+      openChallenge();
     });
     document.getElementById('btnLangHome').addEventListener('click', toggleLanguage);
     document.getElementById('btnLangPlay').addEventListener('click', toggleLanguage);
@@ -952,11 +1180,13 @@
     document.getElementById('btnQuests').addEventListener('click', openQuests);
     document.getElementById('btnQuestTeaser').addEventListener('click', openQuests);
     document.getElementById('btnSkins').addEventListener('click', openSkins);
+    document.getElementById('btnTiles').addEventListener('click', openCollection);
     document.getElementById('btnBadges').addEventListener('click', openBadges);
     document.getElementById('btnPause').addEventListener('click', openPause);
     document.getElementById('btnSwap').addEventListener('click', function () { useBooster('swap'); });
     document.getElementById('btnHammer').addEventListener('click', function () { useBooster('hammer'); });
     document.getElementById('btnSweep').addEventListener('click', function () { useBooster('sweep'); });
+    document.getElementById('btnHint').addEventListener('click', function () { useBooster('hint'); });
   }
 
   function bootBoard() {
@@ -1107,6 +1337,36 @@
       setTimeout(function () { window.__demo.over(64380); }, 220);
       return;
     }
+    if (name === 'challenge') {
+      profile.chalStreak = 4;
+      profile.chalBestStreak = 9;
+      profile.chalLastDate = C.todayKey();
+      C.ensureChallenge(profile).stars = 1;
+      renderHome();
+      setTimeout(openChallenge, 220);
+      return;
+    }
+    if (name === 'chalplay') {
+      demoBoard({ mode: 'challenge', score: 12840, fever: 55 });
+      state.game.drops = 34;
+      updateGoal();
+      return;
+    }
+    if (name === 'chalwin') {
+      demoBoard({ mode: 'challenge', score: 26400, fever: 90 });
+      state.game.drops = 38;
+      state.game.maxTile = state.chal.target;
+      state.game.goalsReached = [64, 128, 256].filter(function (v) { return v <= state.chal.target; });
+      updateGoal();
+      setTimeout(function () { finishChallenge(true); }, 240);
+      return;
+    }
+    if (name === 'collection') { setTimeout(openCollection, 220); return; }
+    if (name === 'hint') {
+      demoBoard({ score: 12840, fever: 55 });
+      setTimeout(function () { useBooster('hint'); }, 280);
+      return;
+    }
     if (name === 'tutorial') { setTimeout(function () { openTutorial(1); }, 200); return; }
     if (name === 'skins') { setTimeout(openSkins, 200); return; }
     if (name === 'settings') { setTimeout(openSettings, 200); return; }
@@ -1143,7 +1403,7 @@
 
   function demoBoard(opts) {
     opts = opts || {};
-    startGame();
+    startGame(opts.mode);
     var s = state.game;
     for (var r = 0; r < C.ROWS; r++) {
       for (var c = 0; c < C.COLS; c++) {
@@ -1259,7 +1519,32 @@
     pause: function () { openPause(); },
     toast: toast,
     addCoins: function (n) { profile.coins += n; saveProfile(); updateHud(); renderHome(); },
-    setLang: function (l) { profile.lang = l; saveProfile(); applyLanguage(); }
+    setLang: function (l) { profile.lang = l; saveProfile(); applyLanguage(); },
+    seedHome: function (o) {
+      o = o || {};
+      if (o.best != null) profile.best = o.best;
+      if (o.coins != null) profile.coins = o.coins;
+      if (o.bestTile != null) profile.bestTile = o.bestTile;
+      if (o.streak != null) { profile.chalStreak = o.streak; profile.chalLastDate = C.todayKey(); }
+      if (o.stars != null) C.ensureChallenge(profile).stars = o.stars;
+      saveProfile(); renderHome(); updateHud();
+    },
+    challenge: function () { openChallenge(); },
+    startChallenge: function () { startGame('challenge'); },
+    collection: function () { openCollection(); },
+    hint: function () { useBooster('hint'); },
+    useBooster: useBooster,
+    finishChallenge: function (ok) { finishChallenge(ok); },
+    drop: function (col) { onDrop(col); },
+    state: function () {
+      return {
+        screen: state.screen, mode: state.mode, busy: state.busy, modals: state.modals.length,
+        drops: state.game ? state.game.drops : null, score: state.game ? state.game.score : null,
+        maxTile: state.game ? state.game.maxTile : null, over: state.game ? state.game.over : null,
+        coins: profile.coins, best: profile.best, challenge: profile.challenge,
+        chalStreak: profile.chalStreak, badges: profile.badges.length, story: !!state.chal
+      };
+    }
   };
 
   start();
