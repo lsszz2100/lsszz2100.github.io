@@ -7,7 +7,7 @@
   const H = (CORE && CORE.WORLD.h) || 1520;
 
   const BOX_AREA = { top: 262, bottom: 1150, left: 34, right: 966 };
-  const TRAY = { top: 1246, bottom: 1408, left: 28, right: 972 };
+  const TRAY = { top: 1242, bottom: 1404, left: 28, right: 972 };
   const SLOT_COLS = 3;
   const SLOT_ROWS = 2;
 
@@ -27,7 +27,7 @@
 
   function boxRects(count) {
     const rows = Math.max(1, Math.ceil(count / 2));
-    const bw = 452;
+    const bw = 414;
     const bh = 272;
     const rowH = 296;
     const areaH = BOX_AREA.bottom - BOX_AREA.top;
@@ -37,7 +37,7 @@
       const r = Math.floor(i / 2);
       const c = i % 2;
       const single = count % 2 === 1 && i === count - 1;
-      const cx = single ? 500 : 261 + c * 478;
+      const cx = single ? 500 : 272 + c * 456;
       const cy = top + rowH * (r + 0.5);
       out.push({ i: i, cx: cx, cy: cy, x: cx - bw / 2, y: cy - bh / 2, w: bw, h: bh });
     }
@@ -138,7 +138,7 @@
 
     traySlots: function (n) {
       const out = [];
-      const step = n <= 1 ? 0 : Math.min(134, 880 / (n - 1));
+      const step = n <= 1 ? 0 : Math.min(138, 886 / (n - 1));
       const startX = W / 2 - (step * (n - 1)) / 2;
       const cy = (TRAY.top + TRAY.bottom) / 2 + 2;
       for (let i = 0; i < n; i += 1) out.push({ x: startX + step * i, y: cy });
@@ -146,13 +146,13 @@
     },
 
     slotPos: function (rect, index) {
-      const cw = (rect.w - 54) / SLOT_COLS;
-      const ch = (rect.h - 76) / SLOT_ROWS;
+      const cw = (rect.w - 46) / SLOT_COLS;
+      const ch = (rect.h - 54) / SLOT_ROWS;
       const c = index % SLOT_COLS;
       const r = Math.floor(index / SLOT_COLS);
       return {
-        x: rect.x + 27 + cw * (c + 0.5),
-        y: rect.y + 58 + ch * (r + 0.5),
+        x: rect.x + 23 + cw * (c + 0.5),
+        y: rect.y + 48 + ch * (r + 0.5),
         cw: cw,
         ch: ch
       };
@@ -441,6 +441,8 @@
         g.fillRoundedRect(p.x - cw / 2, p.y - chh / 2 + 3, cw, chh, 20);
         g.fillStyle(col(skin.inner), 0.94);
         g.fillRoundedRect(p.x - cw / 2, p.y - chh / 2, cw, chh, 20);
+        g.fillStyle(0x6b4a37, 0.05);
+        g.fillRoundedRect(p.x - cw / 2, p.y - chh / 2, cw, chh * 0.28, 16);
         g.lineStyle(3, col(skin.edge), 0.35);
         g.strokeRoundedRect(p.x - cw / 2, p.y - chh / 2, cw, chh, 20);
       }
@@ -503,7 +505,7 @@
       const slots = this.traySlots(e.tray.length);
       for (let i = 0; i < slots.length; i += 1) {
         const color = e.tray[i];
-        this.drawCup(cupsG, slots[i].x, slots[i].y, 112, this.colors[color], {
+        this.drawCup(cupsG, slots[i].x, slots[i].y, 126, this.colors[color], {
           selected: sel === i,
           legal: sel === i,
           hint: !!hint && hint.cup === i
