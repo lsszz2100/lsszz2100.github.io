@@ -243,6 +243,8 @@
         '<b>' + pick(g) + '</b><span>' + (has ? t('collection.found', { n: n }) : t('collection.missing')) + '</span>';
       grid.appendChild(el);
     });
+    const fill = $('#colFill');
+    if (fill) fill.style.width = Math.round((found / C.GOODS.length) * 100) + '%';
     $('#colSummary').textContent = found >= C.GOODS.length
       ? t('collection.allDone')
       : t('collection.summary', { n: found, total: C.GOODS.length });

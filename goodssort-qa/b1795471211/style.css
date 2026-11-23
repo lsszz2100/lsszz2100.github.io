@@ -403,6 +403,9 @@ em { font-style: normal; }
 .doc-body p { margin: 0; }
 
 /* ---------------------------------------------------------------- goods catalogue */
+.col-progress { height: 10px; border-radius: 999px; background: #E4EDF8; overflow: hidden; margin: 6px 2px 4px; }
+.col-progress i { display: block; height: 100%; width: 0%; border-radius: 999px;
+  background: linear-gradient(90deg, #8CE7D6, #17B79C); transition: width .3s ease; }
 .goods-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0 26px; }
 .goods-card { background: #fff; border-radius: 18px; box-shadow: var(--shadow-sm); padding: 12px 8px 10px;
   display: flex; flex-direction: column; align-items: center; gap: 6px; }
