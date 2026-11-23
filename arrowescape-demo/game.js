@@ -511,8 +511,12 @@
     host.style.width = rect.width + 'px';
     host.style.height = rect.height + 'px';
     if (game && game.scale) {
-      game.scale.parentSize.set(rect.width, rect.height);
-      game.scale.refresh();
+      // Phaser 3.90 exposes setParentSize(); the old parentSize.set() call threw
+      // on every layout and left the board in its previous size.
+      try {
+        if (typeof game.scale.setParentSize === 'function') game.scale.setParentSize(rect.width, rect.height);
+        if (typeof game.scale.refresh === 'function') game.scale.refresh();
+      } catch (e) { /* keep the current size rather than break the screen */ }
     }
   }
 
