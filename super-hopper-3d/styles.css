@@ -101,10 +101,9 @@ html, body {
 .screen {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   background:
-    radial-gradient(ellipse at 50% -10%, rgba(255,255,255,.66), rgba(255,255,255,.12) 55%, transparent 80%),
-    radial-gradient(ellipse at 15% 110%, rgba(90,220,140,.28), transparent 55%),
-    linear-gradient(180deg, rgba(89,190,246,.5) 0%, rgba(150,220,255,.48) 45%, rgba(217,246,255,.62) 100%);
-  backdrop-filter: blur(1.5px);
+    radial-gradient(ellipse at 50% -10%, rgba(255,255,255,.55), rgba(255,255,255,.06) 58%, transparent 82%),
+    radial-gradient(ellipse at 15% 110%, rgba(90,220,140,.2), transparent 55%),
+    linear-gradient(180deg, rgba(70,178,242,.3) 0%, rgba(160,225,255,.3) 45%, rgba(217,246,255,.42) 100%);
   transition: opacity .35s ease;
   overflow-y: auto; overflow-x: hidden;
 }

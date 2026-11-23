@@ -301,6 +301,17 @@ class Game {
       }),
       teleport: (x, y, z) => { this.player.pos.set(x, y, z); this.player.vel.set(0, 0, 0); },
       hold: (action, on) => { if (on) this.keys.add(action); else this.keys.delete(action); },
+      jump: () => { this.input.jumpQueued = true; this.input.jumpHeld = true; setTimeout(() => { this.input.jumpHeld = false; }, 240); },
+      dash: () => { this.input.dashQueued = true; },
+      objects: () => ({
+        coins: this.coinList.filter((c) => !c.collected).map((c) => [c.base.x, c.base.y, c.base.z]),
+        stars: this.starList.filter((c) => !c.collected).map((s) => [s.base.x, s.base.y, s.base.z]),
+        blocks: this.blockList.map((b) => ({ pos: [b.mesh.position.x, b.baseY, b.mesh.position.z], used: b.used })),
+        enemies: this.enemyList.map((e) => ({ alive: e.alive, pos: [e.base.x, e.base.y, e.base.z], radius: e.range, axis: e.axis })),
+        goal: this.goal ? this.goal.pos.toArray() : null,
+        checkpoints: this.checkpointList.map((c) => ({ active: c.active, pos: c.pos.toArray() })),
+        checkpoint: this.checkpoint,
+      }),
       setHearts: (n) => { this.hearts = n; this.updateHearts(); },
       hurt: () => this.hurtPlayer(null),
       win: () => this.clearStage(),
@@ -343,8 +354,7 @@ class Game {
     this.renderer.setSize(window.innerWidth, window.innerHeight, false);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.06;
+    this.renderer.toneMapping = THREE.NoToneMapping;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
   }
 
@@ -856,9 +866,9 @@ class Game {
   /* ---------- 하늘 / 배경 ---------- */
   buildSky(theme) {
     const cfg = {
-      meadow: { top: 0x3fa9f5, bottom: 0xdff6ff, fog: 0xcfeaff, hemiSky: 0xcdeeff, hemiGround: 0x7dbb63, sun: 0xfff4d6, sunI: 2.4, amb: 0.3 },
-      sky: { top: 0x2f8fe8, bottom: 0xeafaff, fog: 0xdcf2ff, hemiSky: 0xd6f0ff, hemiGround: 0x9ec9e8, sun: 0xffffff, sunI: 2.5, amb: 0.32 },
-      castle: { top: 0x2a1240, bottom: 0xff9a5c, fog: 0x6b3652, hemiSky: 0x9a6fb8, hemiGround: 0x3a1a12, sun: 0xffb072, sunI: 2.0, amb: 0.34 },
+      meadow: { top: 0x3fa9f5, bottom: 0xdff6ff, fog: 0xcfeaff, hemiSky: 0xcdeeff, hemiGround: 0x7dbb63, sun: 0xfff4d6, sunI: 1.05, amb: 0.14 },
+      sky: { top: 0x2f8fe8, bottom: 0xeafaff, fog: 0xdcf2ff, hemiSky: 0xd6f0ff, hemiGround: 0x9ec9e8, sun: 0xffffff, sunI: 1.15, amb: 0.16 },
+      castle: { top: 0x2a1240, bottom: 0xff9a5c, fog: 0x6b3652, hemiSky: 0x9a6fb8, hemiGround: 0x3a1a12, sun: 0xffb072, sunI: 0.95, amb: 0.2 },
     }[theme];
 
     this.scene.fog = new THREE.Fog(cfg.fog, 55, 240);
@@ -866,7 +876,7 @@ class Game {
 
     this.hemi.color.setHex(cfg.hemiSky);
     this.hemi.groundColor.setHex(cfg.hemiGround);
-    this.hemi.intensity = 1.0;
+    this.hemi.intensity = 0.72;
     this.sun.color.setHex(cfg.sun);
     this.sun.intensity = cfg.sunI;
     this.ambient.intensity = cfg.amb;
@@ -924,7 +934,7 @@ class Game {
         m.scale.y = 0.62;
         g.add(m);
       }
-      g.position.set((Math.random() - 0.5) * 170, 22 + Math.random() * 26, -20 + Math.random() * 170);
+      g.position.set((Math.random() - 0.5) * 180, 13 + Math.random() * 24, -20 + Math.random() * 170);
       g.userData.speed = 0.35 + Math.random() * 0.8;
       this.scene.add(g);
       this.clouds.push({ group: g, speed: g.userData.speed });
@@ -951,7 +961,7 @@ class Game {
       const isleMatTop = toon(theme === 'meadow' ? 0x8bdd6e : 0xeaf8ff, { fog: true });
       const isleMatSide = toon(theme === 'meadow' ? 0xa9743f : 0xa9cde8, { fog: true });
       for (let i = 0; i < 7; i++) {
-        const s = 3 + rng() * 4;
+        const s = 2.2 + rng() * 3.2;
         const grp = new THREE.Group();
         const top = new THREE.Mesh(new THREE.CylinderGeometry(s, s * 0.8, 1, 7), isleMatTop);
         grp.add(top);
@@ -959,7 +969,7 @@ class Game {
         rock.rotation.x = Math.PI;
         rock.position.y = -s * 0.7;
         grp.add(rock);
-        grp.position.set((rng() - 0.5) * 130, 4 + rng() * 22, 20 + rng() * 130);
+        grp.position.set((rng() - 0.5) * 210, 8 + rng() * 24, 55 + rng() * 120);
         g.add(grp);
         this.animProps.push({ obj: grp, baseY: grp.position.y, amp: 0.4 + rng() * 0.6, speed: 0.3 + rng() * 0.4, phase: rng() * TAU });
       }
@@ -1030,7 +1040,7 @@ class Game {
   buildPlatform(p, rng) {
     const kind = p.kind || 'grass';
     const palettes = {
-      grass: { top: 0x5ecb35, side: 0xb5793f, bottom: 0x8a5a2b },
+      grass: { top: 0x4fbf28, side: 0xa86a34, bottom: 0x7d5426 },
       cloud: { top: 0xf8fdff, side: 0xbfe0f5, bottom: 0x9cc8e8 },
       stone: { top: 0x9b93aa, side: 0x5f596e, bottom: 0x494353 },
     };
@@ -1049,7 +1059,7 @@ class Game {
     this.world.add(mesh);
 
     // 윗면 잔디/눈 덮개
-    const capColor = kind === 'cloud' ? 0xffffff : (kind === 'stone' ? 0xa8a0b6 : 0x76e848);
+    const capColor = kind === 'cloud' ? 0xffffff : (kind === 'stone' ? 0xa8a0b6 : 0x63d63a);
     const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), toon(capColor));
     cap.position.y = p.h / 2 + 0.07;
     cap.receiveShadow = true;
@@ -1537,7 +1547,7 @@ class Game {
       else p.mesh.position.z += off;
 
       p.solid.min.set(p.mesh.position.x - p.data.w / 2, p.mesh.position.y - p.data.h / 2, p.mesh.position.z - p.data.d / 2);
-      p.solid.max.set(p.mesh.position.x + p.data.w / 2, p.mesh.position.y + p.data.h / 2 + 0.15, p.mesh.position.z + p.data.d / 2);
+      p.solid.max.set(p.mesh.position.x + p.data.w / 2, p.mesh.position.y + p.data.h / 2, p.mesh.position.z + p.data.d / 2);
       p.solid.delta.copy(p.mesh.position).sub(p.prev);
 
       // 발판 위에 서 있으면 같이 이동
@@ -2023,12 +2033,12 @@ class Game {
   updateCamera(dt) {
     if (this.state === 'title') {
       this.camOrbit += dt * 0.16;
-      const r = 10.5;
-      const target = new THREE.Vector3(0, 1.8, 0);
+      const r = 16.5;
+      const target = new THREE.Vector3(0, 2.6, 5);
       const pos = new THREE.Vector3(
-        Math.sin(this.camOrbit) * r + 1.5,
-        5.4 + Math.sin(this.camOrbit * 1.7) * 1.1,
-        Math.cos(this.camOrbit) * r - 1,
+        Math.sin(this.camOrbit) * r,
+        9.4 + Math.sin(this.camOrbit * 1.7) * 1.0,
+        5 - Math.cos(this.camOrbit) * r,
       );
       this.camera.position.lerp(pos, 1 - Math.exp(-3 * dt));
       this.camTarget.lerp(target, 1 - Math.exp(-3 * dt));
