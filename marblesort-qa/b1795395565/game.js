@@ -303,8 +303,8 @@
       var cellH = H / rows;
       var rowGap = Math.max(10, Math.min(26, cellH * 0.12));
 
-      var marbleD = Math.min(cellW * 0.62, (cellH - rowGap - 10) / cap - 2);
-      marbleD = Math.max(12, Math.min(marbleD, 48));
+      var marbleD = Math.min(cellW * 0.66, (cellH - rowGap - 10) / cap - 2, (cellW - 16) / 1.24);
+      marbleD = Math.max(12, Math.min(marbleD, 72));
       var railW = marbleD * 1.24 + 14;
       var railH = cap * (marbleD + 2) + 20;
 
