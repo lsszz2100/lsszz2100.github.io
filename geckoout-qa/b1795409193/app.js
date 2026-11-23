@@ -1229,9 +1229,8 @@
     timerOn = false;
     selected = null;
     captureBegin();
-    const last = stage.solution[Math.min(take, stage.solution.length - 1)];
-    if (last) selected = { gi: last.gecko, end: last.end };
-    if (selected) showPad();
+    selected = null;
+    hidePad();
   }
 
   function captureWin() {

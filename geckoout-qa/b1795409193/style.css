@@ -352,7 +352,7 @@ html, body {
 #board canvas { display: block; }
 
 .pad {
-  position: absolute; right: 8px; bottom: 6px; width: 132px; height: 132px;
+  position: absolute; right: 8px; bottom: 2px; width: 120px; height: 120px;
   display: none; z-index: 5;
 }
 .pad.show { display: block; }
@@ -362,15 +362,15 @@ html, body {
   background: rgba(255,255,255,0.92); border-radius: 9px; padding: 3px 8px; margin-bottom: 4px;
 }
 .pad-btn {
-  position: absolute; width: 44px; height: 44px; border-radius: 14px; border: none;
+  position: absolute; width: 40px; height: 40px; border-radius: 14px; border: none;
   background: rgba(255,255,255,0.94); color: var(--mint-dark); font-size: 17px; font-weight: 900;
   box-shadow: 0 3px 0 rgba(31,133,95,0.35); cursor: pointer; font-family: inherit;
 }
 .pad-btn:active { transform: translateY(3px); box-shadow: none; }
-.pad-btn.up { left: 44px; top: 0; }
-.pad-btn.down { left: 44px; top: 88px; }
-.pad-btn.left { left: 0; top: 44px; }
-.pad-btn.right { left: 88px; top: 44px; }
+.pad-btn.up { left: 40px; top: 0; }
+.pad-btn.down { left: 40px; top: 80px; }
+.pad-btn.left { left: 0; top: 40px; }
+.pad-btn.right { left: 80px; top: 40px; }
 
 .booster-bar { display: flex; gap: 10px; padding: 8px 14px 10px; }
 .booster {
