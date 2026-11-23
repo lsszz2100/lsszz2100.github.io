@@ -593,9 +593,7 @@
     lastFrame = 0;
     timerOn = true;
     showScreen('game');
-    const chapter = C.CHAPTERS[stage.chapter];
-    $('#boardCaption').textContent = t('map.chapterN', { n: stage.chapter + 1 }) + ' · ' +
-      pick(chapter) + ' · ' + stage.n + '×' + stage.n;
+    setBoardCaption(stage);
     requestAnimationFrame(function () {
       window.MeowGame.start({
         engine: engine,
@@ -614,6 +612,13 @@
       updateHud();
       updateBoosterButtons();
     });
+  }
+
+  function setBoardCaption(stage) {
+    const chapter = C.CHAPTERS[stage.chapter];
+    const el = $('#boardCaption');
+    if (el) el.textContent = t('map.chapterN', { n: stage.chapter + 1 }) + ' · ' +
+      pick(chapter) + ' · ' + stage.n + '×' + stage.n;
   }
 
   function updateHud() {
@@ -1176,6 +1181,7 @@
 
   function captureBegin() {
     showScreen('game');
+    setBoardCaption(C.stageAt(stageIndex));
     window.MeowGame.start({
       engine: engine,
       stage: C.stageAt(stageIndex),
