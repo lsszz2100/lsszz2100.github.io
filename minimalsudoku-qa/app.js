@@ -1597,6 +1597,14 @@
       }
       if ((m = /[?&]solved=([0-9]+)/.exec(q))) profile.stats.solved = parseInt(m[1], 10);
       if ((m = /[?&]lang=(en|ko)/.exec(q))) profile.lang = m[1];
+      if (/[?&]questdone=1/.test(q)) {
+        St.ensureDay(profile, today());
+        profile.quests.items.forEach(function (item) {
+          var def = St.questDef(item.id);
+          if (def) item.progress = def.target;
+        });
+        if (profile.quests.items[0]) profile.quests.items[0].claimed = true;
+      }
       if ((m = /[?&]themes=([a-z]+)/.exec(q))) { if (profile.themes.owned.indexOf(m[1]) < 0) profile.themes.owned.push(m[1]); profile.themes.active = m[1]; }
       if (/[?&]badges=1/.test(q)) {
         profile.stats.solved = 12;
