@@ -416,13 +416,15 @@
         }
       }
 
-      // 힌트
+      // 힌트: 눈에 확 띄도록 반투명 채움 + 굵은 테두리
       if (hinted && hinted.length) {
-        const pulse = 0.45 + 0.35 * Math.sin(this.t * 6);
+        const pulse = 0.5 + 0.3 * Math.sin(this.t * 6);
         for (let k = 0; k < hinted.length; k += 1) {
           const p = this.cellCenter(hinted[k]);
-          ov.lineStyle(Math.max(4, cell * 0.07), 0xFFB020, pulse);
-          ov.strokeRoundedRect(p.x - inner / 2 - 4, p.y - inner / 2 - 4, inner + 8, inner + 8, cell * 0.24);
+          ov.fillStyle(0xFFB020, 0.16 * pulse + 0.1);
+          ov.fillRoundedRect(p.x - inner / 2 - 2, p.y - inner / 2 - 2, inner + 4, inner + 4, cell * 0.24);
+          ov.lineStyle(Math.max(5, cell * 0.075), 0xFF9E00, pulse);
+          ov.strokeRoundedRect(p.x - inner / 2 - 5, p.y - inner / 2 - 5, inner + 10, inner + 10, cell * 0.26);
         }
       }
 

@@ -155,9 +155,9 @@ button:disabled { opacity: .55; }
   padding: 7px 13px; font-weight: 800; font-size: 14px; box-shadow: var(--shadow-sm); }
 .coin-chip.small { padding: 6px 11px; font-size: 13px; }
 .coin-ico { color: var(--gold); font-size: 13px; }
-.home-hero { position: relative; margin: 8px 0 10px; border-radius: 30px; overflow: hidden;
+.home-hero { position: relative; margin: 8px 0 12px; border-radius: 30px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; flex: 1 1 auto;
   background: radial-gradient(120% 100% at 50% 0%, #FFFFFF 0%, #EFF7FF 52%, #E7EEFF 100%);
-  box-shadow: var(--shadow); padding: 18px 18px 16px; text-align: center; flex: 0 0 auto; }
+  box-shadow: var(--shadow); padding: 18px 18px 16px; text-align: center; }
 .hero-deco i { position: absolute; border-radius: 10px; opacity: .5; }
 .hero-deco i:nth-child(1) { width: 34px; height: 34px; left: 16px; top: 14px; background: #FFC2DC; transform: rotate(-12deg); }
 .hero-deco i:nth-child(2) { width: 24px; height: 24px; left: 40px; top: 60px; background: #BCE8AE; transform: rotate(14deg); }
