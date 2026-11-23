@@ -49,7 +49,7 @@
       'map.playNext': 'Play stage {n}',
 
       'hud.left': 'Cats left',
-      'hud.mistakes': 'Clashes',
+      'hud.mistakes': 'Misses',
       'hud.time': 'Time',
       'hud.stage': 'Stage {n}',
       'hud.boss': 'BOSS',
@@ -191,7 +191,7 @@
       'map.playNext': '스테이지 {n} 시작',
 
       'hud.left': '남은 고양이',
-      'hud.mistakes': '충돌',
+      'hud.mistakes': '실수',
       'hud.time': '시간',
       'hud.stage': '스테이지 {n}',
       'hud.boss': '보스',

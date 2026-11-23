@@ -27,6 +27,7 @@
   let revived = false;
   let wrongAtStart = 0;
   let totalWrong = 0;
+  let conflictShown = 0;
 
   function load() {
     try {
@@ -545,6 +546,7 @@
     const stage = C.stageAt(index);
     engine = new C.Engine(stage);
     wrongAtStart = 0;
+    conflictShown = 0;
     remainingMs = stage.timeLimit * 1000;
     lastFrame = 0;
     timerOn = true;
@@ -679,7 +681,9 @@
       sfx.bad();
       vibrate(18);
     }
-    if (engine.conflicts().size > 0 && wrong <= totalWrong) boardTip(t('toast.conflict'));
+    const clashes = engine.conflicts().size;
+    if (clashes > conflictShown) boardTip(t('toast.conflict'));
+    conflictShown = clashes;
     updateHud();
     save();
     if (engine.status === 'won') onWin();

@@ -54,7 +54,7 @@
       const w = this.scale.width, h = this.scale.height;
       if (!state.stage) { this.ox = 0; this.oy = 0; this.cell = 40; return; }
       const n = state.stage.n;
-      const pad = Math.min(w, h) * 0.045;
+      const pad = Math.min(w, h) * 0.02;
       this.cell = Math.floor((Math.min(w, h) - pad * 2) / n);
       this.ox = Math.round((w - this.cell * n) / 2);
       this.oy = Math.round((h - this.cell * n) / 2);
@@ -179,8 +179,8 @@
         }
 
         if (value === C.EX) {
-          g.lineStyle(Math.max(2.5, cell * 0.055), hex(colObj.ink), 0.55);
-          const m = cell * 0.3;
+          g.lineStyle(Math.max(2, cell * 0.045), hex(colObj.ink), 0.38);
+          const m = cell * 0.33;
           g.lineBetween(x + m, y + m, x + cell - m, y + cell - m);
           g.lineBetween(x + cell - m, y + m, x + m, y + cell - m);
         } else if (value === C.CAT) {
@@ -215,8 +215,8 @@
       const coat = state.coat || { fur: '#F6A85A', dark: '#DE8535', ear: '#FFD7B0', eye: '#4A3520' };
       // ears
       g.fillStyle(hex(coat.fur), alpha);
-      g.fillTriangle(cx - r * 0.82, cy - r * 0.42, cx - r * 0.46, cy - r * 1.16, cx - r * 0.12, cy - r * 0.5);
-      g.fillTriangle(cx + r * 0.82, cy - r * 0.42, cx + r * 0.46, cy - r * 1.16, cx + r * 0.12, cy - r * 0.5);
+      g.fillTriangle(cx - r * 0.92, cy - r * 0.3, cx - r * 0.5, cy - r * 1.3, cx - r * 0.06, cy - r * 0.46);
+      g.fillTriangle(cx + r * 0.92, cy - r * 0.3, cx + r * 0.5, cy - r * 1.3, cx + r * 0.06, cy - r * 0.46);
       // inner ears
       g.fillStyle(hex(coat.ear), alpha * 0.95);
       g.fillTriangle(cx - r * 0.7, cy - r * 0.46, cx - r * 0.47, cy - r * 0.95, cx - r * 0.28, cy - r * 0.5);
@@ -234,9 +234,12 @@
       g.fillCircle(cx - r * 0.3, cy - r * 0.12, r * 0.07);
       g.fillCircle(cx + r * 0.42, cy - r * 0.12, r * 0.07);
       // nose + whiskers
+      g.fillStyle(0xF7A8B6, alpha * 0.8);
+      g.fillCircle(cx - r * 0.56, cy + r * 0.26, r * 0.13);
+      g.fillCircle(cx + r * 0.56, cy + r * 0.26, r * 0.13);
       g.fillStyle(0xE97A8C, alpha);
       g.fillTriangle(cx - r * 0.09, cy + r * 0.2, cx + r * 0.09, cy + r * 0.2, cx, cy + r * 0.32);
-      g.lineStyle(Math.max(1, r * 0.05), hex(coat.dark), alpha * 0.4);
+      g.lineStyle(Math.max(1, r * 0.055), hex(coat.dark), alpha * 0.45);
       g.lineBetween(cx - r * 0.25, cy + r * 0.34, cx - r * 0.78, cy + r * 0.28);
       g.lineBetween(cx - r * 0.25, cy + r * 0.46, cx - r * 0.76, cy + r * 0.5);
       g.lineBetween(cx + r * 0.25, cy + r * 0.34, cx + r * 0.78, cy + r * 0.28);
