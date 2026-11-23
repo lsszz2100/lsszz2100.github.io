@@ -646,7 +646,7 @@
     }
     const dpr = b.dpr || 1;
     el.style.bottom = 'auto';
-    el.style.top = Math.round((b.oy + b.cell * b.n) / dpr + 12) + 'px';
+    el.style.top = Math.round((b.oy + b.cell * b.n + (b.margin || 0) * 0.8) / dpr + 6) + 'px';
   }
 
   function pickDefaultAnt() {

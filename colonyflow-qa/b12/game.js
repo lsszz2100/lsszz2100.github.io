@@ -484,7 +484,7 @@
   function box() {
     const sc = state.scene;
     if (!sc || !state.stage) return null;
-    return { ox: sc.ox, oy: sc.oy, cell: sc.cell, n: state.stage.n, dpr: sc.dpr || 1, w: sc.w, h: sc.h };
+    return { ox: sc.ox, oy: sc.oy, cell: sc.cell, n: state.stage.n, dpr: sc.dpr || 1, w: sc.w, h: sc.h, margin: sc.margin || 0 };
   }
 
   root.ColonyGame = {
