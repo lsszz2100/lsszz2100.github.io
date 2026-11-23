@@ -179,7 +179,7 @@ html, body {
 .hero-deco i:nth-child(3) { width: 60px; height: 60px; top: 32%; left: 12px; background: rgba(239, 110, 155, .1); }
 .hero-deco i:nth-child(4) { width: 34px; height: 34px; top: 12%; left: 46%; background: rgba(242, 178, 44, .14); }
 .hero-deco i:nth-child(5) { width: 90px; height: 90px; bottom: 12%; right: -26px; background: rgba(155, 123, 226, .1); }
-.hero-board { position: relative; flex: 1; width: 100%; min-height: 120px; display: flex; align-items: flex-start; justify-content: center; gap: 10px; padding-top: 10px; }
+.hero-board { position: relative; flex: 1; width: 100%; min-height: 120px; max-height: 320px; display: flex; align-items: flex-start; justify-content: center; gap: 10px; padding-top: 10px; }
 .hb-rope { position: relative; width: 40px; display: flex; flex-direction: column; align-items: center; padding-top: 18px; animation: sway 4.2s ease-in-out infinite; }
 .hb-rope::before { content: ""; position: absolute; top: 0; bottom: 6px; left: 50%; width: 4px; transform: translateX(-50%); border-radius: 3px; background: linear-gradient(180deg, #C9A87C, #A8875C); }
 .hb-rope .f { position: relative; z-index: 1; width: 34px; height: 34px; border-radius: 50%; margin: 2px 0; box-shadow: 0 2px 5px rgba(60,90,70,.16), inset 0 -2px 0 rgba(0,0,0,.12); }

@@ -828,6 +828,7 @@
         toast(t('booster.shuffleFail'));
         return;
       }
+      engine.history.push(snap); // undo takes back just this shuffle
       window.SortGame.sync();
       sfx.shuffle();
       toast(t('booster.shuffleOn'));

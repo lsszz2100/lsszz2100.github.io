@@ -190,7 +190,7 @@
           g.fillRoundedRect(x - 10, y - 16, width + 20, h + 26, 26);
         }
         // body
-        g.fillStyle(col(done ? color : '#F0EBE1'), done ? 0.95 : 1);
+        g.fillStyle(col(done ? color : '#F3EADC'), done ? 0.95 : 1);
         g.beginPath();
         g.moveTo(x + 4, y);
         g.lineTo(x + width - 4, y);
@@ -215,8 +215,8 @@
           g.lineTo(x + width / 2 + 7, y + 34);
           g.strokePath();
         } else {
-          g.fillStyle(col(color), 0.55);
-          g.fillCircle(x + width / 2, y + 40, 10);
+          g.fillStyle(col(color), 0.8);
+          g.fillCircle(x + width / 2, y + 38, 13);
         }
       }
     },
@@ -334,7 +334,7 @@
           pos.x = lerp(pos.x, target.x, 0.32);
           pos.y = lerp(pos.y, target.y, 0.32);
           const lift = selectedHere && k >= first ? -geo.d * 0.34 : 0;
-          const hidden = this.stage.hidden && k < first;
+          const hidden = this.stage.hidden && k < fl.length - 3;
           const chained = flower.until > harvests;
           this.petal(g, pos.x, pos.y + lift, geo.r, this.colors[flower.c] || '#3FA96A',
             hidden, chained, k, i, t);
@@ -388,10 +388,12 @@
       g.fillCircle(x, y, r * 0.22);
 
       if (hidden) {
-        g.fillStyle(col('#7D96A8'), 1);
-        g.fillCircle(x - r * 0.1, y - r * 0.1, r * 0.13);
-        g.fillCircle(x + r * 0.16, y - r * 0.1, r * 0.13);
-        g.fillCircle(x + r * 0.03, y + r * 0.15, r * 0.13);
+        g.lineStyle(Math.max(3, r * 0.16), col('#8AA3B4'), 1);
+        g.beginPath();
+        g.arc(x, y - r * 0.12, r * 0.26, Math.PI * 1.15, Math.PI * 0.35, false);
+        g.strokePath();
+        g.fillStyle(col('#8AA3B4'), 1);
+        g.fillCircle(x, y + r * 0.26, r * 0.12);
       }
       if (chained) {
         g.lineStyle(Math.max(2.5, r * 0.11), col('#8C6BC8'), 0.95);
