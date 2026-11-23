@@ -334,7 +334,7 @@ class Game {
       }),
       teleport: (x, y, z) => { this.player.pos.set(x, y, z); this.player.vel.set(0, 0, 0); },
       hold: (action, on) => { if (on) this.keys.add(action); else this.keys.delete(action); },
-      jump: () => { this.input.jumpQueued = true; this.input.jumpHeld = true; setTimeout(() => { this.input.jumpHeld = false; }, 240); },
+      jump: (hold = 900) => { this.input.jumpQueued = true; this.input.jumpHeld = true; setTimeout(() => { this.input.jumpHeld = false; }, hold); },
       dash: () => { this.input.dashQueued = true; },
       objects: () => ({
         coins: this.coinList.filter((c) => !c.collected).map((c) => [c.base.x, c.base.y, c.base.z]),
@@ -383,7 +383,7 @@ class Game {
     this.renderer = new THREE.WebGLRenderer({
       canvas: dom.canvas, antialias: true, powerPreference: 'high-performance', alpha: false,
     });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     this.renderer.setSize(window.innerWidth, window.innerHeight, false);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -394,7 +394,7 @@ class Game {
   initScene() {
     this.scene = new THREE.Scene();
     const initAspect = window.innerWidth / window.innerHeight;
-    this.camera = new THREE.PerspectiveCamera(initAspect < 0.8 ? 64 : 55, initAspect, 0.1, 600);
+    this.camera = new THREE.PerspectiveCamera(initAspect < 0.8 ? 64 : 55, initAspect, 0.1, 450);
     this.camera.position.set(0, 6, -12);
 
     this.hemi = new THREE.HemisphereLight(0xbfe9ff, 0x7dbb63, 1.05);
@@ -403,13 +403,13 @@ class Game {
     this.sun = new THREE.DirectionalLight(0xfff2d0, 2.35);
     this.sun.position.set(18, 30, 14);
     this.sun.castShadow = true;
-    this.sun.shadow.mapSize.set(2048, 2048);
-    this.sun.shadow.camera.left = -26;
-    this.sun.shadow.camera.right = 26;
-    this.sun.shadow.camera.top = 26;
-    this.sun.shadow.camera.bottom = -26;
+    this.sun.shadow.mapSize.set(1024, 1024);
+    this.sun.shadow.camera.left = -22;
+    this.sun.shadow.camera.right = 22;
+    this.sun.shadow.camera.top = 22;
+    this.sun.shadow.camera.bottom = -22;
     this.sun.shadow.camera.near = 1;
-    this.sun.shadow.camera.far = 90;
+    this.sun.shadow.camera.far = 80;
     this.sun.shadow.bias = -0.0006;
     this.sun.shadow.normalBias = 0.02;
     this.sunTarget = new THREE.Object3D();
@@ -428,7 +428,7 @@ class Game {
     this.camera.aspect = w / h;
     this.camera.fov = w / h < 0.8 ? 64 : 55;
     this.camera.updateProjectionMatrix();
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     this.renderer.setSize(w, h, false);
     this.isMobile = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || w < 820;
     this.updateTouchVisibility();
@@ -875,6 +875,10 @@ class Game {
 
     if (opts.preview) {
       this.player.invuln = 0;
+      this.player.pos.set(0, 0.66, 2.5);
+      this.player.facing = Math.PI;
+      this.playerMesh.position.copy(this.player.pos);
+      this.playerMesh.rotation.y = Math.PI;
     }
     if (!opts.preview) {
       this.camYaw = 0;
@@ -904,7 +908,7 @@ class Game {
       castle: { top: 0x241035, bottom: 0xb85a58, fog: 0x552539, hemiSky: 0x9a6fb8, hemiGround: 0x2a100c, sun: 0xffa068, sunI: 1.0, amb: 0.24 },
     }[theme];
 
-    this.scene.fog = new THREE.Fog(cfg.fog, 55, 240);
+    this.scene.fog = new THREE.Fog(cfg.fog, 50, 210);
     this.scene.background = new THREE.Color(cfg.fog);
 
     this.hemi.color.setHex(cfg.hemiSky);
@@ -939,7 +943,7 @@ class Game {
         }`,
       side: THREE.BackSide, depthWrite: false, fog: false,
     });
-    this.skyDome = new THREE.Mesh(new THREE.SphereGeometry(420, 32, 20), mat);
+    this.skyDome = new THREE.Mesh(new THREE.SphereGeometry(380, 28, 18), mat);
     this.skyDome.renderOrder = -10;
     this.scene.add(this.skyDome);
 
@@ -985,8 +989,8 @@ class Game {
       const isleMatTop = toon(theme === 'meadow' ? 0x63cf57 : 0xeaf8ff, { fog: true });
       const isleMatSide = toon(theme === 'meadow' ? 0x9a6437 : 0xa9cde8, { fog: true });
       const isleTreeMat = toon(theme === 'meadow' ? 0x3fae45 : 0x7fc9a8, { fog: true });
-      for (let i = 0; i < 8; i++) {
-        const sz = 3 + rng() * 4.5;
+      for (let i = 0; i < 5; i++) {
+        const sz = 2.6 + rng() * 3.4;
         const grp = new THREE.Group();
         const top = new THREE.Mesh(new THREE.CylinderGeometry(sz, sz * 0.82, 1.1, 8), isleMatTop);
         grp.add(top);
@@ -1002,8 +1006,8 @@ class Game {
           crown.position.y = sz * 0.68;
           grp.add(crown);
         }
-        grp.position.set((rng() - 0.5) * 220, 3 + rng() * 20, 60 + rng() * 110);
-        grp.scale.setScalar(0.8 + rng() * 0.6);
+        grp.position.set((rng() - 0.5) * 150, -1 + rng() * 7, 105 + rng() * 70);
+        grp.scale.setScalar(0.7 + rng() * 0.5);
         g.add(grp);
         this.animProps.push({ obj: grp, baseY: grp.position.y, amp: 0.4 + rng() * 0.6, speed: 0.3 + rng() * 0.4, phase: rng() * TAU });
       }
@@ -1158,7 +1162,7 @@ class Game {
     // 구름 발판 퍼프
     if (kind === 'cloud') {
       const puffMat = toon(0xffffff, { emissive: 0x3a6b8a, emissiveIntensity: 0.08 });
-      const count = Math.max(8, Math.floor((p.w + p.d) * 1.1));
+      const count = Math.max(6, Math.min(10, Math.floor((p.w + p.d) * 0.7)));
       for (let i = 0; i < count; i++) {
         const a = (i / count) * TAU;
         const r = 0.55 + rng() * 0.6;
@@ -1168,7 +1172,7 @@ class Game {
         puff.castShadow = true;
         mesh.add(puff);
       }
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 3; i++) {
         const r = 0.7 + rng() * 0.9;
         const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), puffMat);
         puff.position.set((rng() - 0.5) * p.w * 0.6, -p.h / 2 - r * 0.4, (rng() - 0.5) * p.d * 0.6);
@@ -1179,7 +1183,7 @@ class Game {
 
     // 발판 장식
     const inset = 0.6;
-    const count = Math.floor((p.w * p.d) / 9);
+    const count = Math.floor((p.w * p.d) / 24);
     if (kind === 'grass') {
       for (let i = 0; i < count; i++) {
         const x = p.x + (rng() - 0.5) * (p.w - inset * 2);
@@ -1204,16 +1208,11 @@ class Game {
   }
 
   buildTuft(x, y, z) {
-    const g = new THREE.Group();
     const mat = toon(0x57b83a);
-    for (let i = 0; i < 3; i++) {
-      const blade = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.36, 4), mat);
-      blade.position.set((i - 1) * 0.09, 0.18, (i % 2) * 0.06);
-      blade.rotation.z = (i - 1) * 0.25;
-      g.add(blade);
-    }
-    g.position.set(x, y, z);
-    this.world.add(g);
+    const blade = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.4, 4), mat);
+    blade.position.set(x, y + 0.18, z);
+    blade.rotation.z = 0.15;
+    this.world.add(blade);
   }
 
   buildFlower(x, y, z, rng) {
@@ -1223,16 +1222,10 @@ class Game {
     g.add(stem);
     const colors = [0xff6b8b, 0xffd93d, 0xffffff, 0xa77bff, 0xff9c42];
     const c = colors[Math.floor(rng() * colors.length)];
-    for (let i = 0; i < 5; i++) {
-      const petal = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), toon(c));
-      const a = (i / 5) * TAU;
-      petal.position.set(Math.cos(a) * 0.1, 0.44, Math.sin(a) * 0.1);
-      petal.scale.set(1, 0.6, 1);
-      g.add(petal);
-    }
-    const center = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), toon(0xfff0a0));
-    center.position.y = 0.46;
-    g.add(center);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 8, 6), toon(c));
+    head.position.y = 0.45;
+    head.scale.set(1, 0.55, 1);
+    g.add(head);
     g.position.set(x, y, z);
     g.rotation.y = rng() * TAU;
     this.world.add(g);
@@ -2126,12 +2119,12 @@ class Game {
   updateCamera(dt) {
     if (this.state === 'title') {
       this.camOrbit += dt * 0.16;
-      const r = 13.5;
-      const target = new THREE.Vector3(0, 2.3, 4);
+      const r = 12.5;
+      const target = new THREE.Vector3(0, 2.0, 3.5);
       const pos = new THREE.Vector3(
-        Math.sin(this.camOrbit) * r + 1.0,
-        7.6 + Math.sin(this.camOrbit * 1.7) * 0.9,
-        4 - Math.cos(this.camOrbit) * r,
+        Math.sin(this.camOrbit) * r + 0.5,
+        6.6 + Math.sin(this.camOrbit * 1.7) * 0.8,
+        3.5 - Math.cos(this.camOrbit) * r,
       );
       this.camera.position.lerp(pos, 1 - Math.exp(-3 * dt));
       this.camTarget.lerp(target, 1 - Math.exp(-3 * dt));
