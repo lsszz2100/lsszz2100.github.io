@@ -371,33 +371,44 @@
       const len = Math.sqrt(vx * vx + vy * vy);
       const ux = vx / len;
       const uy = vy / len;
-      const half = tw * 0.3;
-      const tail = tw * 0.05;
-      const shaft = tw * 0.075;
-      const headL = tw * 0.2;
-      const headW = tw * 0.19;
-      const bx = cx - ux * half;
-      const by = cy - uy * half;
-      const tx = cx + ux * half;
-      const ty = cy + uy * half;
-      g.lineStyle(shaft, ink, 0.92);
+      const tail = tw * 0.13;
+      const tip = tw * 0.24;
+      const shaft = Math.max(2, tw * 0.042);
+      const headL = tw * 0.1;
+      const headW = tw * 0.085;
+      const bx = cx - ux * tail;
+      const by = cy - uy * tail;
+      const tx = cx + ux * tip;
+      const ty = cy + uy * tip;
+      g.lineStyle(shaft, ink, 0.9);
       g.beginPath();
       g.moveTo(bx, by);
-      g.lineTo(tx - ux * headL, ty - uy * headL);
+      g.lineTo(tx - ux * headL * 0.7, ty - uy * headL * 0.7);
       g.strokePath();
-      // 화살촉
       const px = -uy;
       const py = ux;
-      g.fillStyle(ink, 0.92);
+      g.fillStyle(ink, 0.9);
       g.beginPath();
       g.moveTo(tx, ty);
       g.lineTo(tx - ux * headL + px * headW, ty - uy * headL + py * headW);
       g.lineTo(tx - ux * headL - px * headW, ty - uy * headL - py * headW);
       g.closePath();
       g.fillPath();
-      // 꼬리 표시
-      g.fillStyle(ink, 0.55);
-      g.fillCircle(bx + ux * tail, by + uy * tail, tw * 0.032);
+      g.fillStyle(ink, 0.5);
+      g.fillCircle(bx, by, Math.max(1.5, tw * 0.024));
+    },
+
+    /** 화살표가 가리키는 쪽 윗면 모서리를 밝게 그어 탈출 방향을 강조한다. */
+    drawExitEdge: function (g, N, E, S, Wp, dir, tw, alpha) {
+      let a = N; let b = E;
+      if (dir === 1) { a = S; b = Wp; }
+      else if (dir === 2) { a = E; b = S; }
+      else if (dir === 3) { a = Wp; b = N; }
+      g.lineStyle(Math.max(2.4, tw * 0.045), 0xFFFFFF, 0.75 * alpha);
+      g.beginPath();
+      g.moveTo(a[0], a[1]);
+      g.lineTo(b[0], b[1]);
+      g.strokePath();
     },
 
     drawCube: function (g, x, y, z, dir, colorIdx, tough, hits, alpha, offset) {
@@ -481,6 +492,9 @@
         g.closePath();
         g.fillPath();
       }
+
+      // 탈출 방향 모서리 강조
+      this.drawExitEdge(g, N, E, S, Wp, dir, tw, alpha);
 
       // 테두리
       g.lineStyle(Math.max(1.6, tw * 0.022), edgeCol, 0.55 * alpha);
