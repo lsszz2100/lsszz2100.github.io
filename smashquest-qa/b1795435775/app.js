@@ -223,6 +223,13 @@
     const chName = pick({ en: C.CHAPTERS[chIdx].en, ko: C.CHAPTERS[chIdx].ko });
     $('#homeChapter').textContent = t('map.chapterN', { n: chIdx + 1 }) + ' · ' + chName;
     $('#homeStars').textContent = '★ ' + C.totalStars(profile) + ' / ' + (C.STAGE_COUNT * 3);
+    const chapterStart = chIdx * C.STAGES_PER_CHAPTER;
+    let chapterDone = 0;
+    for (let i = chapterStart; i < chapterStart + C.STAGES_PER_CHAPTER; i += 1) {
+      if (profile.stars[i]) chapterDone += 1;
+    }
+    const bar = $('#heroBar');
+    if (bar) bar.style.width = Math.round((chapterDone / C.STAGES_PER_CHAPTER) * 100) + '%';
     $('#homeProgress').textContent = t('home.progress', { done: profile.cleared, total: C.STAGE_COUNT });
     refreshCoins();
     I.apply(document.getElementById('home'));
