@@ -787,7 +787,7 @@
     let html = '<div class="modal">';
     html += '<h2>' + t('result.win') + '</h2>';
     html += '<div class="stars">' + starsHtml(applied ? applied.stars : 0) + '</div>';
-    html += '<div class="reward-coins">+ ' + applied.coins + ' ●</div>';
+    html += '<div class="reward-coins">+ ' + applied.coins + ' <i class="coin-ico">●</i></div>';
     html += '<p>' + t('result.summary', { moves: result.moves, painted: result.painted }) + '</p>';
     if (applied.newBest) html += '<div><span class="badge-new">' + t('result.newBest') + '</span></div>';
     if (!result.boosters) html += '<div><span class="badge-new">' + t('result.perfect') + '</span></div>';
