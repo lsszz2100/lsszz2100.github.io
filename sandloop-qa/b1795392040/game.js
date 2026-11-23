@@ -369,6 +369,15 @@
           g.strokePath();
         }
 
+        // 지금 모래를 받을 수 있는 통 표시
+        const activeColor = (root.SandApp && root.SandApp.selectedColor) ? root.SandApp.selectedColor() : e.front();
+        if (activeColor >= 0 && unlocked && !done && e.nextColor(i) === activeColor) {
+          g.lineStyle(4, col(this.jarColor(activeColor)), 0.55);
+          g.strokeRoundedRect(x - 3, y - 3, w + 6, h + 6, radius + 3);
+          g.fillStyle(col(this.jarColor(activeColor)), 0.07);
+          g.fillRoundedRect(x, y, w, h, radius);
+        }
+
         // 힌트 표시
         if (this.hintJar === i && this.hintUntil > t) {
           const pulse = 0.55 + 0.45 * Math.sin(t * 8);

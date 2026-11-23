@@ -164,12 +164,14 @@
     const rand = mulberry32(seed >>> 0);
 
     const jarCount = clamp(Math.round(lerp(ch.jars[0], ch.jars[1], t)), 2, 6);
-    const colorCount = clamp(
+    const colorCount = chIdx === 0 ? 3 : clamp(
       Math.round(lerp(ch.colors[0], ch.colors[1], t)) + (isBoss ? 1 : 0) + (isChallenge ? 1 : 0),
       2, 6
     );
     const minLen = Math.round(lerp(ch.layers[0], ch.layers[1], t));
     const maxLen = clamp(Math.round(lerp(ch.layers[0], ch.layers[1], t)) + 1, 2, 7);
+    // 첫 챕터는 '한 통 = 한 색'으로 만들어 색만 맞추면 풀리게 한다(튜토리얼 구간).
+    const mono = chIdx === 0;
 
     // 잠금: 챌린지/보스는 마지막 통이 잠긴다(통 at개를 완성하면 열린다).
     const lockJar = (isBoss || isChallenge) ? jarCount - 1 : -1;
@@ -181,6 +183,13 @@
     for (let j = 0; j < jarCount; j += 1) {
       let len = minLen + Math.floor(rand() * (maxLen - minLen + 1));
       if (isBoss && j === jarCount - 1) len = clamp(len + 1, 2, 7);
+      if (mono) {
+        const color = j % colorCount;
+        const pat = [];
+        for (let k = 0; k < len; k += 1) pat.push(color);
+        jars.push(pat);
+        continue;
+      }
       const pat = [];
       let guard = 0;
       while (pat.length < len && guard < 200) {
@@ -198,6 +207,7 @@
 
     // 2) 팔레트의 모든 색이 최소 한 번은 등장하게 맞춘다.
     const used = {};
+    if (mono) { for (let c = 0; c < colorCount; c += 1) used[c] = true; }
     jars.forEach(function (pat) { pat.forEach(function (c) { used[c] = true; }); });
     for (let c = 0; c < colorCount; c += 1) {
       if (used[c]) continue;
@@ -253,7 +263,7 @@
 
     const layers = jars.map(function (p) { return p.length; });
     const sandCount = total;
-    const parTime = Math.round(9 + total * 1.55);
+    const parTime = Math.round(11 + total * 1.6);
 
     return {
       index: index,

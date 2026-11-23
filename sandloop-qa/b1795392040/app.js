@@ -1317,6 +1317,11 @@
 
   window.SandApp = {
     sfx: sfx,
+    selectedColor: function () {
+      if (!engine) return -1;
+      if (selectedHold >= 0 && selectedHold < engine.holds.length) return engine.holds[selectedHold];
+      return engine.front();
+    },
     startStage: startStage,
     getProfile: function () { return profile; },
     getEngine: function () { return engine; }
