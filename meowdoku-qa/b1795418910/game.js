@@ -286,6 +286,13 @@
     if (!w || !h) return;
     const dpr = state.forceDpr || Math.min(2, Math.max(1, root.devicePixelRatio || 1));
     state.game.scale.resize(Math.round(w * dpr), Math.round(h * dpr));
+    // keep the canvas at its CSS size even though the backing store is dpr times larger
+    const canvas = state.game.canvas;
+    if (canvas) {
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      canvas.style.display = 'block';
+    }
     if (state.scene) { state.scene.dpr = dpr; state.scene.layout(); }
   }
 
