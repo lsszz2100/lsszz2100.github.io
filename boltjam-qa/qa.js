@@ -68,6 +68,7 @@
     setTimeout(function () {
       var lvl = num('level', 0);
       if (lvl) app.startLevel(lvl);
+      if (q.get('daily')) app.startDaily();
 
       var moves = num('moves', 0);
       var finish = q.get('finish');
