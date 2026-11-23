@@ -1371,8 +1371,20 @@
       profile.unlocked = unlocked;
       profile.coins = Math.max(profile.coins, 1240);
       profile.stars = stars || profile.stars;
-      profile.badges = ['first', 'lvl10', 'lvl25', 'perfect10'];
-      profile.daily = { date: todayKey(), stars: 3, streak: 4, claimed: true };
+      profile.badges = ['first', 'lvl10', 'lvl25', 'perfect10', 'daily3'];
+      var now = new Date();
+      var hist = [];
+      for (var i = 6; i >= 0; i--) {
+        var d = new Date(now.getTime());
+        d.setDate(d.getDate() - i);
+        if (i === 2) continue;
+        hist.push(C.dailyKey(d));
+      }
+      profile.dailyHistory = hist;
+      profile.daily = { date: C.dailyKey(now), stars: 3, streak: 5, claimed: true };
+      profile.dailyBest = 5;
+      profile.bestCombo = 7;
+      profile.bestTaps = { '52': 48, '41': 39, '64': 71 };
       saveProfile();
       renderHome();
     },
