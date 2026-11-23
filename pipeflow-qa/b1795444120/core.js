@@ -701,20 +701,43 @@
     return { ok: true, bi: h.bi };
   };
 
-  /** 힌트: 지금 물이 지나는 길에서 잘못 놓인 조각 하나를 정답 회전으로 맞춘다. */
+  /**
+   * 힌트: 지금 물길을 막고 있는 조각 하나를 골라 정답 회전으로 맞춘다.
+   *   1) 누수가 나는 곳의 맞은편 조각(그 조각을 돌리면 물이 이어진다)
+   *   2) 물이 지나는 길에서 잘못 놓인 조각
+   *   3) 그 밖에서 잘못 놓인 조각
+   */
   Engine.prototype.hint = function () {
     const stage = this.stage;
+    const w = stage.w;
+    const h = stage.h;
+    const f = this.flow;
+    for (let i = 0; i < f.leaks.length; i += 1) {
+      const lk = f.leaks[i];
+      const nb = nbIndex(lk.bi, lk.d, w, h);
+      if (nb < 0) continue;
+      const nc = stage.cells[nb];
+      if (!nc) continue;
+      if (nc.role === 'out') {
+        if (nc.color !== stage.cells[lk.bi].color) continue;
+        if (this.rot[nb] !== nc.correct) return { bi: nb, block: nc };
+        continue;
+      }
+      if (nc.color !== stage.cells[lk.bi].color) continue;
+      if (nc.kind === 'x') continue;
+      if (this.rot[nb] !== nc.correct) return { bi: nb, block: nc };
+    }
     const order = [];
     const seen = new Uint8Array(stage.cells.length);
     const queue = stage.sources.slice();
-    seen[queue[0]] = 1;
+    for (let i = 0; i < queue.length; i += 1) seen[queue[i]] = 1;
     for (let qi = 0; qi < queue.length; qi += 1) {
       const bi = queue[qi];
       order.push(bi);
       const m = this.maskAt(bi);
       for (let d = 0; d < 4; d += 1) {
         if (!(m & (1 << d))) continue;
-        const nb = nbIndex(bi, d, stage.w, stage.h);
+        const nb = nbIndex(bi, d, w, h);
         if (nb < 0 || seen[nb] || !stage.cells[nb]) continue;
         if (stage.cells[nb].role === 'out') continue;
         seen[nb] = 1;
@@ -725,9 +748,8 @@
       const bi = order[i];
       const c = stage.cells[bi];
       if (!c || c.kind === 'x') continue;
-      if (this.flow.water[bi] && this.rot[bi] !== c.correct) return { bi: bi, block: c };
+      if (this.rot[bi] !== c.correct) return { bi: bi, block: c };
     }
-    // 물길 밖: 출구에 닿지 않은 색의 조각 중 잘못된 것
     for (let i = 0; i < stage.cells.length; i += 1) {
       const c = stage.cells[i];
       if (!c || c.kind === 'x') continue;
