@@ -18,6 +18,11 @@
     );
   }
 
+  function dirVec(name) {
+    const d = root.GeckoCore && root.GeckoCore.DIRS ? root.GeckoCore.DIRS[name] : null;
+    return d ? { x: d.dx, y: d.dy } : { x: 0, y: 1 };
+  }
+
   function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -231,14 +236,14 @@
         let h;
         let dir;
         if (gate.side === 'top' || gate.side === 'bottom') {
-          w = geo.cell * 0.8;
-          h = 22;
+          w = geo.cell * 0.72;
+          h = 24;
           cx = geo.x + (gate.pos + 0.5) * geo.cell;
           cy = gate.side === 'top' ? geo.y - 24 : geo.y + geo.h + 24;
           dir = gate.side === 'top' ? { x: 0, y: -1 } : { x: 0, y: 1 };
         } else {
-          w = 22;
-          h = geo.cell * 0.8;
+          w = 24;
+          h = geo.cell * 0.72;
           cx = gate.side === 'left' ? geo.x - 24 : geo.x + geo.w + 24;
           cy = geo.y + (gate.pos + 0.5) * geo.cell;
           dir = gate.side === 'left' ? { x: -1, y: 0 } : { x: 1, y: 0 };
@@ -253,14 +258,15 @@
         g.lineStyle(4, shade(color, -0.25), locked ? 0.5 : 0.9);
         g.strokeRoundedRect(cx - w / 2, cy - h / 2, w, h, Math.min(w, h) / 2);
         // opening arrow
-        const ax = cx + dir.x * 4;
-        const ay = cy + dir.y * 4;
-        const s = Math.min(w, h) * 0.34;
-        g.fillStyle(0xffffff, locked ? 0.55 : 0.95);
+        const ax = cx + dir.x * 3;
+        const ay = cy + dir.y * 3;
+        g.fillStyle(0xffffff, locked ? 0.6 : 0.96);
         if (dir.x === 0) {
-          g.fillTriangle(ax - s, ay, ax + s, ay, ax, ay + dir.y * s * 1.2);
+          const b = w * 0.34;
+          g.fillTriangle(ax - b, ay - dir.y * h * 0.06, ax + b, ay - dir.y * h * 0.06, ax, ay + dir.y * h * 0.42);
         } else {
-          g.fillTriangle(ax, ay - s, ax, ay + s, ax + dir.x * s * 1.2, ay);
+          const b = h * 0.30;
+          g.fillTriangle(ax - dir.x * w * 0.06, ay - b, ax - dir.x * w * 0.06, ay + b, ax + dir.x * w * 0.42, ay);
         }
 
         if (locked) {
@@ -293,7 +299,7 @@
         g.fillRoundedRect(p.x - cs * 0.36, p.y - cs * 0.36, cs * 0.72, cs * 0.72, cs * 0.22);
         g.lineStyle(3, col('#A9D8C2'), 0.9);
         g.strokeRoundedRect(p.x - cs * 0.36, p.y - cs * 0.36, cs * 0.72, cs * 0.72, cs * 0.22);
-        const d = root.GeckoCore.DIRS[a.dir];
+        const d = dirVec(a.dir);
         const r = cs * 0.20;
         g.fillStyle(col('#2F7A5E'), 0.95);
         if (d.x === 0) {
@@ -511,7 +517,7 @@
           const end = this.hint.end === 'tail' ? pts[pts.length - 1] : pts[0];
           const nx = (this.hint.end === 'tail' ? pts[pts.length - 2] : pts[1]) || end;
           const p = { x: this.g.x + (end.x + 0.5) * cs, y: this.g.y + (end.y + 0.5) * cs };
-          const d = root.GeckoCore.DIRS[this.hint.dir];
+          const d = dirVec(this.hint.dir);
           const pulse = 0.55 + 0.45 * Math.sin(t * 7);
           g.fillStyle(col('#FFB300'), 0.2 + pulse * 0.2);
           g.fillCircle(p.x, p.y, cs * 0.46);
