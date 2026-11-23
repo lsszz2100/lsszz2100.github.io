@@ -243,6 +243,7 @@ html, body {
 .hb-gate.ga { right: 8px; top: 64px; width: 10px; height: 46px; }
 .hb-gate.gb { left: 108px; top: 8px; width: 46px; height: 10px; }
 .hero-chapter { font-size: 12px; color: var(--ink-soft); font-weight: 700; margin-top: 8px; }
+.hero-sub { font-style: normal; font-size: 10px; letter-spacing: .4px; color: #9DB5AA; font-weight: 700; margin-top: 4px; }
 .play-orb {
   position: relative; width: 96px; height: 96px; border-radius: 50%; border: none; cursor: pointer;
   background: linear-gradient(180deg, #5FD8A9, #2FA97B);

@@ -32,6 +32,7 @@
       'home.level': 'Stage {n}',
       'home.progress': '{done}/{total} cleared',
       'home.giftReady': 'Daily gift ready!',
+      'home.sub': '{n} stages · {c} chapters',
 
       'tutorial.title': 'How to play',
       't1.title': 'Each gecko is a chain',
@@ -186,6 +187,7 @@
       'home.level': '스테이지 {n}',
       'home.progress': '{done}/{total} 클리어',
       'home.giftReady': '일일 선물을 받을 수 있어요!',
+      'home.sub': '스테이지 {n}개 · 챕터 {c}개',
 
       'tutorial.title': '플레이 방법',
       't1.title': '도마뱀은 몸통 사슬이에요',
