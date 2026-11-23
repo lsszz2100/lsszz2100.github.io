@@ -57,6 +57,8 @@
       const w = fw || (this.game && this.game.canvas ? this.game.canvas.width : this.scale.width);
       const h = fh || (this.game && this.game.canvas ? this.game.canvas.height : this.scale.height);
       this.w = w; this.h = h;
+      this.dpr = Math.min(2, Math.max(1, root.devicePixelRatio || 1));
+      if (state.forceDpr) this.dpr = state.forceDpr;
       if (!state.stage) { this.ox = 0; this.oy = 0; this.cell = 40; return; }
       const n = state.stage.n;
       const margin = Math.max(24, Matte(w, h) * 0.075);   // room for the trail arrows
@@ -478,6 +480,13 @@
 
   function busy() { return !!(state.scene && state.scene.anim); }
 
+  /** Where the board sits inside its canvas (device pixels). */
+  function box() {
+    const sc = state.scene;
+    if (!sc || !state.stage) return null;
+    return { ox: sc.ox, oy: sc.oy, cell: sc.cell, n: state.stage.n, dpr: sc.dpr || 1, w: sc.w, h: sc.h };
+  }
+
   root.ColonyGame = {
     start: start,
     stop: stop,
@@ -488,6 +497,7 @@
     setHandlers: setHandlers,
     setOption: setOption,
     busy: busy,
+    box: box,
     get game() { return state.game; }
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

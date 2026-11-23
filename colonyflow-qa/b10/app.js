@@ -224,27 +224,27 @@
     const c = colorOf(colorIndex);
     const st = style || profile.antStyle || 'worker';
     const wings = st === 'winged'
-      ? '<ellipse cx="20" cy="12" rx="11" ry="5" fill="#fff" opacity="0.55" transform="rotate(-20 20 12)"/>' +
-        '<ellipse cx="20" cy="24" rx="11" ry="5" fill="#fff" opacity="0.55" transform="rotate(20 20 12)"/>'
+      ? '<ellipse cx="21" cy="10" rx="12" ry="4.6" fill="#fff" opacity="0.5" transform="rotate(-16 21 10)"/>' +
+        '<ellipse cx="21" cy="22" rx="12" ry="4.6" fill="#fff" opacity="0.5" transform="rotate(16 21 22)"/>'
       : '';
     const crown = st === 'queen'
-      ? '<circle cx="9" cy="9" r="2.4" fill="#FFD75E"/><circle cx="14" cy="7" r="2.4" fill="#FFD75E"/><circle cx="19" cy="9" r="2.4" fill="#FFD75E"/>'
+      ? '<circle cx="9" cy="8" r="2.2" fill="#FFD75E"/><circle cx="14" cy="6" r="2.2" fill="#FFD75E"/><circle cx="19" cy="8" r="2.2" fill="#FFD75E"/>'
       : '';
     const mark = st === 'soldier'
-      ? '<circle cx="22" cy="16" r="3.4" fill="' + c.edge + '" opacity="0.55"/>'
+      ? '<circle cx="22" cy="16" r="3.2" fill="' + c.edge + '" opacity="0.5"/>'
       : '';
-    return '<svg viewBox="0 0 44 30" aria-hidden="true">' +
-      '<g stroke="' + c.edge + '" stroke-width="1.7" stroke-linecap="round">' +
-      '<path d="M14 13 L9 9 M14 17 L9 21 M21 12 L19 6 M21 18 L19 24 M27 12 L32 7 M27 18 L32 23"/>' +
+    return '<svg viewBox="0 0 48 32" aria-hidden="true">' +
+      '<g stroke="' + c.edge + '" stroke-width="1.5" stroke-linecap="round" fill="none">' +
+      '<path d="M19 19 L15 28 M22.5 20 L22.5 29 M26 19 L29.5 28"/>' +
+      '<path d="M35 12 L42 7 M35.5 13 L43 15"/>' +
       '</g>' + wings +
-      '<ellipse cx="12" cy="15" rx="7.6" ry="6.2" fill="' + c.base + '"/>' +
-      '<circle cx="21" cy="15" r="4.6" fill="' + c.base + '"/>' +
-      '<circle cx="30" cy="15" r="5.6" fill="' + c.base + '"/>' +
-      '<circle cx="13" cy="13" r="2" fill="#fff" opacity="0.4"/>' +
-      '<circle cx="31.5" cy="12.6" r="1.5" fill="#fff" opacity="0.45"/>' +
-      '<circle cx="33" cy="13" r="1.1" fill="#3A2F2A"/>' +
-      '<circle cx="28.6" cy="13.4" r="1.1" fill="#3A2F2A"/>' +
-      '<path d="M34 12 L40 8 M34 13 L41 13" stroke="' + c.edge + '" stroke-width="1.5" fill="none" stroke-linecap="round"/>' +
+      '<ellipse cx="11" cy="16" rx="8" ry="7" fill="' + c.base + '"/>' +
+      '<circle cx="22" cy="16" r="4.6" fill="' + c.base + '"/>' +
+      '<circle cx="31" cy="16" r="5.8" fill="' + c.base + '"/>' +
+      '<ellipse cx="9" cy="13" rx="2.6" ry="1.9" fill="#fff" opacity="0.38"/>' +
+      '<circle cx="33.4" cy="14" r="1.2" fill="#3A2F2A"/>' +
+      '<circle cx="29" cy="14.4" r="1.2" fill="#3A2F2A"/>' +
+      '<path d="M31 18.6 q1.6 2 0 3" stroke="' + c.edge + '" stroke-width="1.2" fill="none" stroke-linecap="round"/>' +
       crown + mark +
       '</svg>';
   }
@@ -619,6 +619,7 @@
       window.ColonyGame.setHandlers({ onLane: onLane });
       window.ColonyGame.setOption('showLanes', profile.showLanes !== false);
       window.ColonyGame.resize();
+      placeCaption();
       updateHud();
       renderHand();
     });
@@ -631,6 +632,18 @@
     const el = $('#boardCaption');
     if (el) el.textContent = t('map.chapterN', { n: stage.chapter + 1 }) + ' · ' +
       pick(chapter) + ' · ' + stage.n + '×' + stage.n;
+    placeCaption();
+  }
+
+  /** Puts the chapter caption just under the board instead of at the bottom of the canvas. */
+  function placeCaption() {
+    const el = $('#boardCaption');
+    if (!el || !window.ColonyGame) return;
+    const b = window.ColonyGame.box();
+    if (!b) return;
+    const dpr = b.dpr || 1;
+    el.style.bottom = 'auto';
+    el.style.top = Math.round((b.oy + b.cell * b.n) / dpr + 12) + 'px';
   }
 
   function pickDefaultAnt() {
@@ -1236,7 +1249,7 @@
     });
 
     window.addEventListener('resize', function () {
-      if (window.ColonyGame && window.ColonyGame.game) window.ColonyGame.resize();
+      if (window.ColonyGame && window.ColonyGame.game) { window.ColonyGame.resize(); placeCaption(); }
     });
   }
 
@@ -1315,6 +1328,7 @@
     window.ColonyGame.setHandlers({ onLane: onLane });
     window.ColonyGame.setOption('showLanes', true);
     window.ColonyGame.resize();
+    placeCaption();
     updateHud();
     sel = -1;
     renderHand();
@@ -1344,6 +1358,7 @@
     window.ColonyGame.setOption('forceDpr', 2);
     window.ColonyGame.setHandlers({ onLane: onLane });
     window.ColonyGame.resize();
+    placeCaption();
     updateHud();
     renderHand();
     const result = { win: true, seconds: stage.timeLimit * 0.55, clean: true };
