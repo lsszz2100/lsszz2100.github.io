@@ -256,8 +256,8 @@ class Game {
     this.animProps = [];
     this.clock = new THREE.Clock();
     this.camYaw = 0;
-    this.camPitch = 0.33;
-    this.camDist = 9.2;
+    this.camPitch = 0.42;
+    this.camDist = 10.4;
     this.camPos = new THREE.Vector3(0, 6, -12);
     this.camTarget = new THREE.Vector3(0, 1.5, 2);
     this.camOrbit = 0;
@@ -300,6 +300,7 @@ class Game {
         errors: window.__HOPPER_ERRORS,
       }),
       teleport: (x, y, z) => { this.player.pos.set(x, y, z); this.player.vel.set(0, 0, 0); },
+      hold: (action, on) => { if (on) this.keys.add(action); else this.keys.delete(action); },
       setHearts: (n) => { this.hearts = n; this.updateHearts(); },
       hurt: () => this.hurtPlayer(null),
       win: () => this.clearStage(),
@@ -834,8 +835,8 @@ class Game {
     }
     if (!opts.preview) {
       this.camYaw = 0;
-      this.camPitch = 0.33;
-      this.camDist = 9.2;
+      this.camPitch = 0.42;
+      this.camDist = 10.4;
       this.camera.position.set(st.spawn.x, st.spawn.y + 5, st.spawn.z - 10);
       this.camTarget.set(st.spawn.x, st.spawn.y + 1.2, st.spawn.z + 1);
     }
@@ -938,12 +939,12 @@ class Game {
 
     if (theme === 'meadow' || theme === 'sky') {
       // 멀리 보이는 언덕 / 떠 있는 섬
-      const hillMat = toon(theme === 'meadow' ? 0x7cc06a : 0x9ad7a8, { fog: true });
+      const hillMat = toon(theme === 'meadow' ? 0x8fd6a0 : 0xa9dcc0, { fog: true });
       for (let i = 0; i < 9; i++) {
         const r = 16 + rng() * 22;
         const h = 14 + rng() * 24;
         const hill = new THREE.Mesh(new THREE.ConeGeometry(r, h, 6, 1), hillMat);
-        hill.position.set((rng() - 0.5) * 220, -34 - rng() * 6, 20 + rng() * 170);
+        hill.position.set((rng() - 0.5) * 260, -40 - rng() * 8, 70 + rng() * 160);
         hill.rotation.y = rng() * TAU;
         g.add(hill);
       }
@@ -1029,7 +1030,7 @@ class Game {
   buildPlatform(p, rng) {
     const kind = p.kind || 'grass';
     const palettes = {
-      grass: { top: 0x74d94b, side: 0xb5793f, bottom: 0x8a5a2b },
+      grass: { top: 0x5ecb35, side: 0xb5793f, bottom: 0x8a5a2b },
       cloud: { top: 0xf8fdff, side: 0xbfe0f5, bottom: 0x9cc8e8 },
       stone: { top: 0x9b93aa, side: 0x5f596e, bottom: 0x494353 },
     };
@@ -1048,7 +1049,7 @@ class Game {
     this.world.add(mesh);
 
     // 윗면 잔디/눈 덮개
-    const capColor = kind === 'cloud' ? 0xffffff : (kind === 'stone' ? 0xa8a0b6 : 0x8be85b);
+    const capColor = kind === 'cloud' ? 0xffffff : (kind === 'stone' ? 0xa8a0b6 : 0x76e848);
     const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), toon(capColor));
     cap.position.y = p.h / 2 + 0.07;
     cap.receiveShadow = true;
@@ -1056,10 +1057,10 @@ class Game {
 
     // 떠 있는 섬 아래쪽 뾰족한 바위
     if (kind !== 'stone') {
-      const underColor = kind === 'cloud' ? 0xcfe6f7 : 0x9a6335;
-      const under = new THREE.Mesh(new THREE.ConeGeometry(Math.min(p.w, p.d) * 0.52, Math.min(p.w, p.d) * 0.95, 7), toon(underColor));
+      const underColor = kind === 'cloud' ? 0xd8ecfa : 0xa9744a;
+      const under = new THREE.Mesh(new THREE.ConeGeometry(Math.min(p.w, p.d) * 0.42, Math.min(p.w, p.d) * 0.5, 8), toon(underColor));
       under.rotation.x = Math.PI;
-      under.position.y = -p.h / 2 - Math.min(p.w, p.d) * 0.42;
+      under.position.y = -p.h / 2 - Math.min(p.w, p.d) * 0.22;
       under.castShadow = true;
       mesh.add(under);
     }
@@ -1487,7 +1488,7 @@ class Game {
     this.updateTouchVisibility();
     this.updateHearts();
     this.updateHUD(true);
-    this.camYaw = 0; this.camPitch = 0.33; this.camDist = 9.2;
+    this.camYaw = 0; this.camPitch = 0.42; this.camDist = 10.4;
     this.camera.position.set(this.stage.spawn.x, this.stage.spawn.y + 5.2, this.stage.spawn.z - 10);
     this.audio.resume();
     this.audio.setMusicVolume(0.16);
