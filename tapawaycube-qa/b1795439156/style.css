@@ -228,15 +228,15 @@ button:disabled { opacity: .55; }
 .chapter-head { display: flex; align-items: baseline; justify-content: space-between; margin: 4px 2px 10px; }
 .chapter-head b { font-size: 15px; }
 .chapter-head span { font-size: 12.5px; color: var(--gold); font-weight: 700; }
-.stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
+.stage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .stage-btn { position: relative; aspect-ratio: 1; border-radius: 16px; background: #fff; box-shadow: var(--shadow-sm);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  font-weight: 800; font-size: 16px; color: var(--ink); }
+  font-weight: 800; font-size: 19px; color: var(--ink); }
 .stage-btn.cleared { background: linear-gradient(160deg, #F1EEFF, #E4DFFF); }
 .stage-btn.now { box-shadow: 0 0 0 3px var(--violet), var(--shadow); }
 .stage-btn.boss { background: linear-gradient(160deg, #FFF1DD, #FFE3BF); }
 .stage-btn.locked { background: #F2F4FB; color: #B9BFD6; box-shadow: none; }
-.stage-btn .st-stars { display: flex; gap: 1px; font-size: 8.5px; color: #D6D9E8; }
+.stage-btn .st-stars { display: flex; gap: 2px; font-size: 10px; color: #D6D9E8; }
 .stage-btn .st-stars i.on { color: var(--gold); }
 .stage-btn .st-lock { width: 16px; height: 16px; display: block; }
 .stage-btn .st-lock svg { width: 16px; height: 16px; }
