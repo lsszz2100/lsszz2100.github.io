@@ -503,7 +503,7 @@
         type: Phaser.CANVAS,
         parent: parentId,
         backgroundColor: '#FFF7EE',
-        scale: { mode: Phaser.Scale.RESIZE, width: w, height: h },
+        scale: { mode: Phaser.Scale.NONE, width: w, height: h },
         render: { antialias: true, roundPixels: false },
         banner: false,
         scene: [BoardScene]
