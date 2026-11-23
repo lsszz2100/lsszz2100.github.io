@@ -486,6 +486,8 @@
   }
 
   function setLang(l) {
+    const el = $('#toast');
+    if (el) el.classList.remove('show');
     profile.lang = l === 'ko' ? 'ko' : 'en';
     I.setLang(profile.lang);
     save();

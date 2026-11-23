@@ -439,8 +439,12 @@
       const sel = this.selected;
       const hint = this.hint;
 
-      // 스풀 레일
+      // 스풀 레일 (보드 위 실 선반)
       const n = stage.strands.length;
+      railG.fillStyle(0xFFFFFF, 0.72);
+      railG.fillRoundedRect(84, 170, W - 168, 74, 30);
+      railG.lineStyle(2, 0xFFFFFF, 0.95);
+      railG.strokeRoundedRect(84, 170, W - 168, 74, 30);
       for (let i = 0; i < n; i += 1) {
         const pos = this.spoolPos(i);
         this.drawSpool(railG, pos.x, pos.y, stage.strands[i].color, !!e.wound[i], e.perStrand[i] === 0 && !e.wound[i], n > 7 ? 1.15 : 1.45);

@@ -234,7 +234,7 @@ em { font-style: normal; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-weight: 900; font-size: 14px; color: var(--ink); }
 .stage-btn.locked { color: #C6B9A9; background: #FBF6EE; box-shadow: none; }
 .stage-btn.cleared { background: linear-gradient(180deg, #FFFFFF, #F1FCF8); }
-.stage-btn .st-stars { display: flex; gap: 2px; font-size: 8px; color: var(--sun); line-height: 1; }
+.stage-btn .st-stars { display: flex; gap: 2px; font-size: 9px; color: #F0A22B; line-height: 1; }
 .stage-btn .st-stars i { opacity: .22; }
 .stage-btn .st-stars i.on { opacity: 1; }
 .stage-btn.now { box-shadow: 0 0 0 2px var(--teal), var(--shadow-sm); }
@@ -291,12 +291,12 @@ em { font-style: normal; }
 
 /* ---------------------------------------------------------------- shop */
 .pack-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.pack { background: #fff; border-radius: 20px; padding: 14px; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 12px; }
-.pack .pk-ico { width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; color: #fff; font-weight: 900; }
-.pack .pk-body { flex: 1; min-width: 0; }
-.pack .pk-body b { display: block; font-size: 13.5px; }
+.pack { background: #fff; border-radius: 20px; padding: 12px; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 8px; min-width: 0; }
+.pack .pk-ico { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; color: #fff; font-weight: 900; flex: 0 0 auto; }
+.pack .pk-body { flex: 1 1 0; min-width: 0; overflow: hidden; }
+.pack .pk-body b { display: block; font-size: 12.5px; white-space: nowrap; }
 .pack .pk-body span { font-size: 12px; color: var(--soft); font-weight: 800; }
-.pack .pk-buy { background: #E6FBF5; color: var(--teal); font-weight: 900; font-size: 12.5px; padding: 8px 12px; border-radius: 999px; }
+.pack .pk-buy { background: #E6FBF5; color: var(--teal); font-weight: 900; font-size: 11.5px; padding: 7px 10px; border-radius: 999px; flex: 0 0 auto; }
 
 .skin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .skin-card { background: #fff; border-radius: 20px; padding: 12px 8px 10px; box-shadow: var(--shadow-sm); text-align: center; }
