@@ -417,3 +417,6 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
 html.cap body { background: #FFF7F2; }
 html.cap #app { position: absolute; left: 0; top: 0; }
 html.cap #toast { display: none; }
+
+/* 쇼핑 화면은 한 화면에 담기게 안내문을 숨긴다 */
+#shop > .hint { display: none; }
