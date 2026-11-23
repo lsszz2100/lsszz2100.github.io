@@ -236,7 +236,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
 .chapter-head { display: flex; align-items: baseline; justify-content: space-between; margin: 4px 2px 10px; }
 .chapter-head b { font-size: 14px; font-weight: 900; }
 .chapter-head span { font-size: 12px; font-weight: 900; color: var(--amber); }
-.stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; }
+.stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; flex: 1; align-content: space-evenly; }
 .stage-btn {
   position: relative; aspect-ratio: 1; border-radius: 16px; background: #fff; box-shadow: var(--shadow-s);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
@@ -251,7 +251,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
 .stage-btn .st-stars i { font-style: normal; font-size: 8px; color: #E7DCE4; }
 .stage-btn .st-stars i.on { color: var(--amber); }
 .stage-btn .st-lock svg { width: 15px; height: 15px; }
-.map-foot { display: flex; align-items: center; gap: 10px; margin-top: auto; padding: 14px 0 8px; }
+.map-foot { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 0 0 8px; }
 .map-stat { display: flex; flex-direction: column; align-items: center; min-width: 54px; padding: 6px 8px; border-radius: 14px; background: #fff; box-shadow: var(--shadow-s); }
 .map-stat b { font-size: 15px; font-weight: 900; }
 .map-stat span { font-size: 10px; font-weight: 800; color: var(--ink-soft); }
