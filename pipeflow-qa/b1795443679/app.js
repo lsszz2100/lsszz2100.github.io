@@ -556,7 +556,7 @@
       updateHud();
       updateBoosterButtons();
       PipeGame.relayout();
-      setTimeout(function () { PipeGame.flow(); }, 30);
+      setTimeout(function () { PipeGame.fit(); PipeGame.flow(); }, 60);
     });
     setBoosterMode('');
   }

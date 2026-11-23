@@ -29,6 +29,15 @@
 
   function rgb(hex) { return shade(hex, 0); }
 
+  function mix(a, b, t) {
+    const ca = hexToRgb(a);
+    const cb = hexToRgb(b);
+    const r = Math.round(ca.r + (cb.r - ca.r) * t);
+    const g = Math.round(ca.g + (cb.g - ca.g) * t);
+    const bl = Math.round(ca.b + (cb.b - ca.b) * t);
+    return (r << 16) | (g << 8) | bl;
+  }
+
   function withAlpha(hex, a) {
     const c = hexToRgb(hex);
     return Phaser.Display.Color.GetColor(c.r, c.g, c.b); // alpha is passed separately
@@ -165,8 +174,15 @@
       const g = this.bg;
       g.clear();
       const sky = this.theme.sky || ['#FFF7EE', '#FFE8CF'];
-      g.fillGradientStyle(rgb(sky[0]), rgb(sky[0]), rgb(sky[1]), rgb(sky[1]), 1);
-      g.fillRect(0, 0, this.scale.width, this.scale.height);
+      const W = this.scale.width;
+      const H = this.scale.height;
+      if (!W || !H) return;
+      const steps = 24;
+      const band = Math.ceil(H / steps) + 1;
+      for (let i = 0; i < steps; i += 1) {
+        g.fillStyle(mix(sky[0], sky[1], i / (steps - 1)), 1);
+        g.fillRect(0, Math.floor((H / steps) * i), W, band);
+      }
     },
 
     draw: function () {
