@@ -552,6 +552,8 @@
       window.TapGame.hint(null);
       updateHud();
       updateBoosterButtons();
+      // HUD 높이가 바뀐 뒤 판 영역을 다시 잰다(보드를 HUD 바로 아래에 붙인다).
+      window.TapGame.relayout();
     });
     setBoosterMode('');
   }

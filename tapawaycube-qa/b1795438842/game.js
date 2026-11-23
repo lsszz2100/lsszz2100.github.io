@@ -156,7 +156,7 @@
       const area = this.area || { top: BOARD.top, bottom: BOARD.bottom, left: BOARD.left, right: BOARD.right };
       const availW = area.right - area.left;
       const availH = area.bottom - area.top;
-      let tw = Math.min(availW / (bw + 0.7), availH / (bh + 0.4));
+      let tw = Math.min(availW / (bw + 0.45), availH / (bh + 0.3));
       tw = Math.max(24, Math.min(210, tw));
       const sh = tw * SH_RATIO;
       const ox = area.left + (availW - bw * tw) / 2 - minX * tw;
@@ -742,6 +742,8 @@
     nudge: function (bi) { const s = this.sceneOf(); if (s) s.nudge(bi); },
 
     redraw: function () { const s = this.sceneOf(); if (s && s.draw) s.draw(); },
+
+    relayout: function () { const s = this.sceneOf(); if (s && s.layout) s.layout(); },
     shake: function (a) { const s = this.sceneOf(); if (s) s.shakeBy(a); },
 
     fit: function () {
