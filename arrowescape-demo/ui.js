@@ -652,6 +652,9 @@
   }
 
   function banner(text, cls) {
+    // Only one banner at a time: a new combo replaces the previous one.
+    var old = fxRoot.querySelectorAll('.banner');
+    for (var i = 0; i < old.length; i++) if (old[i].parentNode) old[i].parentNode.removeChild(old[i]);
     var el = document.createElement('div');
     el.className = 'banner ' + (cls || '');
     el.textContent = text;
