@@ -197,9 +197,9 @@ em { font-style: normal; }
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #C4557C 42%, #C4557C 73%, #FFFDF8 74%); }
 .hero-deco i:nth-child(4) { left: 9%; top: 60%; transform: rotate(-18deg) scale(.9);
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #7BA843 42%, #7BA843 73%, #FFFDF8 74%); }
-.hero-deco i:nth-child(5) { left: 26%; bottom: 10%; transform: rotate(9deg) scale(.76);
+.hero-deco i:nth-child(5) { left: 4%; bottom: 5%; transform: rotate(9deg) scale(.7);
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #5B7FD4 42%, #5B7FD4 73%, #FFFDF8 74%); }
-.hero-deco i:nth-child(6) { right: 24%; bottom: 14%; transform: rotate(-7deg) scale(.68);
+.hero-deco i:nth-child(6) { right: 6%; bottom: 30%; transform: rotate(-7deg) scale(.64);
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #EFA93B 42%, #EFA93B 73%, #FFFDF8 74%); }
 .hero-chapter { margin-top: 4px; font-size: 12.5px; font-weight: 800; color: var(--caramel-d); background: #fff; padding: 7px 14px; border-radius: 999px; box-shadow: var(--shadow-sm); }
 .hero-stars { font-size: 12.5px; font-weight: 800; color: var(--soft); }
