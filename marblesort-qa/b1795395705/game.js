@@ -355,11 +355,12 @@
       });
 
       var badge = this.add.container(0, 0).setVisible(false);
+      var badgeR = Math.max(9, Math.round(w * 0.17));
       var badgeBg = this.add.graphics();
       badgeBg.fillStyle(0x43C08F, 1);
-      badgeBg.fillCircle(w * 0.34, -h * 0.46, 9);
-      var check = this.add.text(w * 0.34, -h * 0.465, '✓', {
-        fontFamily: 'sans-serif', fontSize: '11px', color: '#ffffff', fontStyle: 'bold'
+      badgeBg.fillCircle(w * 0.32, -h * 0.44, badgeR);
+      var check = this.add.text(w * 0.32, -h * 0.443, '✓', {
+        fontFamily: 'sans-serif', fontSize: Math.round(badgeR * 1.3) + 'px', color: '#ffffff', fontStyle: 'bold'
       }).setOrigin(0.5);
       badge.add([badgeBg, check]);
 

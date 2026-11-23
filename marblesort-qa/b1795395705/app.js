@@ -186,6 +186,7 @@
 
   var toastTimer = null;
   function toast(msg, kind) {
+    if (SHOT) return;                    // store screenshots stay clean
     var el = $('toast');
     if (!el) return;
     el.textContent = msg;
