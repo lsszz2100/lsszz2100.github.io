@@ -123,14 +123,15 @@ html, body {
 .ta-cell.c0 { background: #FFB79F; }
 .ta-cell.c1 { background: #9BD3FA; }
 .ta-cell.c2 { background: #9BE7B6; }
-.ta-ant { position: absolute; right: 26px; bottom: 26px; width: 54px; height: 34px; }
-.ta-ant b { position: absolute; inset: 0; border-radius: 50% 45% 45% 50%; background: #FF7A56; box-shadow: 26px 4px 0 -6px #FF7A56, -18px 2px 0 -4px #FF7A56; }
+.art-grid { gap: 18px; }
+.ta-ant { width: 62px; height: 44px; display: block; }
+.ta-ant .tid { width: 100%; height: 100%; }
+.tid { display: block; }
 .art-touch { gap: 10px; }
 .tt-hand { display: flex; flex-direction: column; gap: 7px; }
-.tt-chip { width: 40px; height: 40px; border-radius: 50%; background: #FFB79F; box-shadow: 0 4px 0 #E8643F; }
-.tt-chip.c1 { background: #9BD3FA; box-shadow: 0 4px 0 #2E8ED4; }
-.tt-chip.c2 { background: #9BE7B6; box-shadow: 0 4px 0 #33A966; }
-.tt-chip.on { transform: scale(1.14); }
+.tt-chip { width: 54px; height: 40px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 14px; box-shadow: 0 3px 0 #F2DCC4; padding: 3px 6px; }
+.tt-chip .tid { width: 100%; height: 100%; }
+.tt-chip.on { box-shadow: 0 0 0 3px var(--accent), 0 3px 0 #C97C1E; transform: scale(1.06); }
 .tt-arrow { font-size: 22px; color: var(--accent); }
 .tt-lane { display: flex; align-items: center; gap: 8px; }
 .tt-chev { font-size: 30px; color: var(--blue); font-weight: 900; line-height: 1; }
@@ -142,10 +143,8 @@ html, body {
 .ts-row { display: grid; grid-template-columns: repeat(3, 46px); grid-auto-rows: 46px; gap: 5px; background: #fff; padding: 6px; border-radius: 14px; box-shadow: var(--shadow); }
 .ts-row i { border-radius: 11px; background: #9BE7B6; }
 .ts-row i.c3.stop { background: #CBB6FA; box-shadow: inset 0 0 0 3px #7A5ACF; }
-.ts-ant { width: 62px; height: 34px; position: relative; }
-.ts-ant::before, .ts-ant::after { content: ""; position: absolute; border-radius: 50%; background: #4FC47C; }
-.ts-ant::before { left: 0; top: 6px; width: 30px; height: 26px; }
-.ts-ant::after { left: 24px; top: 2px; width: 34px; height: 30px; }
+.ts-ant { width: 74px; height: 50px; }
+.ts-ant .tid { width: 100%; height: 100%; }
 .ts-x { color: #7A5ACF; font-size: 20px; font-weight: 900; }
 .art-boost { gap: 14px; }
 .chip {

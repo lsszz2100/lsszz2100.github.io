@@ -6,6 +6,7 @@
   const I = window.I18N;
   const SAVE_KEY = 'colonyflow.save.v1';
   const CAPTURE = /[?&]capture=1/.test(location.search);
+  const FIT = /[?&]fit=1/.test(location.search);   // QA only: pin the app to a 432x768 phone frame
   const VERSION = '1.0.0';
   const WEB_TERMS = 'https://lsszz2100.github.io/colonyflow-privacy/';
 
@@ -1393,8 +1394,20 @@
     }, 30);
   }
 
+  function applyFitLayout() {
+    document.documentElement.classList.add('cap');
+    const app = document.getElementById('app');
+    app.style.width = '432px';
+    app.style.height = '768px';
+    app.style.position = 'absolute';
+    app.style.left = '0';
+    app.style.top = '0';
+    app.style.boxShadow = '0 0 0 1px #E8D8C2';
+  }
+
   function boot() {
     if (CAPTURE) { captureBoot(); return; }
+    if (FIT) applyFitLayout();
     I.setLang(lang());
     document.getElementById('verText').textContent = VERSION;
     I.apply();
