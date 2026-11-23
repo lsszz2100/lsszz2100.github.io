@@ -366,7 +366,7 @@
     packRow.innerHTML = '';
     const packs = [
       { kind: 'hint', label: t('shop.hintPack'), price: 100, color: 'linear-gradient(180deg,#C9B6F5,#8A6BBE)', ico: '?' },
-      { kind: 'recruit', label: t('shop.recruitPack'), price: 140, color: 'linear-gradient(180deg,#FFC06B,#F09B32)', ico: '🐜' }
+      { kind: 'recruit', label: t('shop.recruitPack'), price: 140, color: 'linear-gradient(180deg,#FFC06B,#F09B32)', ico: '<svg viewBox="0 0 48 32" width="26" height="18" aria-hidden="true"><g stroke="#8A4A16" stroke-width="1.7" stroke-linecap="round" fill="none"><path d="M19 19 L15 28 M22.5 20 L22.5 29 M26 19 L29.5 28"/><path d="M35 12 L42 7 M35.5 13 L43 15"/></g><ellipse cx="11" cy="16" rx="8" ry="7" fill="#FFF3E0"/><circle cx="22" cy="16" r="4.6" fill="#FFF3E0"/><circle cx="31" cy="16" r="5.8" fill="#FFF3E0"/><circle cx="33.4" cy="14" r="1.2" fill="#8A4A16"/><circle cx="29" cy="14.4" r="1.2" fill="#8A4A16"/></svg>' }
     ];
     packs.forEach(function (p) {
       const el = document.createElement('div');
