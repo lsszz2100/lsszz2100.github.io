@@ -163,9 +163,12 @@
       g.fillCircle(W * 0.12, geo.h * 0.06, 240);
       g.fillStyle(0xffffff, 0.3);
       g.fillCircle(W * 0.94, geo.h * 0.4, 210);
-      g.fillStyle(col(this.theme.board), 0.6);
+      // a floating board panel with a soft shadow, so the hanging garden reads
+      g.fillStyle(0x2F5A45, 0.07);
+      g.fillRoundedRect(22, geo.top - 18, W - 44, geo.potTop - geo.top + 46, 46);
+      g.fillStyle(col('#FFFFFF'), 0.94);
       g.fillRoundedRect(10, geo.top - 30, W - 20, geo.potTop - geo.top + 24, 44);
-      g.lineStyle(5, col(this.skin.rim), 0.9);
+      g.lineStyle(5, col(this.skin.rim), 1);
       g.strokeRoundedRect(10, geo.top - 30, W - 20, geo.potTop - geo.top + 24, 44);
       // the shelf the pots stand on
       g.fillStyle(0xffffff, 0.45);
