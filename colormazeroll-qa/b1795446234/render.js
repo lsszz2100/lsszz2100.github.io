@@ -86,6 +86,9 @@
       if (!host) return;
       const cv = document.createElement('canvas');
       cv.style.cssText = 'display:block;width:100%;height:100%;touch-action:none';
+      cv.setAttribute('role', 'application');
+      cv.setAttribute('aria-label', 'Maze board — swipe or use the arrow buttons to roll');
+      cv.setAttribute('tabindex', '0');
       host.appendChild(cv);
       this.canvas = cv;
       this.ctx = cv.getContext('2d');
@@ -476,22 +479,29 @@
       if (this.hint && now < this.hint.until) {
         const p = this.cellOf(e.pos);
         const d = this.hint.d;
-        const pulse = 0.55 + 0.45 * Math.sin(now / 190);
-        const len = ts * (0.9 + 0.12 * pulse);
+        const pulse = 0.6 + 0.4 * Math.sin(now / 190);
+        const len = ts * (1.02 + 0.1 * pulse);
         const ang = [0, Math.PI / 2, Math.PI, -Math.PI / 2][d];
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(ang);
-        ctx.globalAlpha = 0.75 * pulse;
-        ctx.fillStyle = '#FFB23E';
+        // 공 주변 고리
         ctx.beginPath();
-        ctx.moveTo(len, 0);
-        ctx.lineTo(len - ts * 0.42, -ts * 0.26);
-        ctx.lineTo(len - ts * 0.42, ts * 0.26);
-        ctx.closePath();
+        ctx.arc(0, 0, ballR * 1.45, 0, Math.PI * 2);
+        ctx.lineWidth = Math.max(2, ts * 0.055);
+        ctx.strokeStyle = 'rgba(227,162,28,' + (0.35 + 0.4 * pulse) + ')';
+        ctx.stroke();
+        // 줄기
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = '#F2A21C';
+        roundRect(ctx, ballR * 1.25, -ts * 0.11, len - ballR * 1.3, ts * 0.22, ts * 0.11);
         ctx.fill();
-        ctx.globalAlpha = 0.35 * pulse;
-        roundRect(ctx, ts * 0.16, -ts * 0.09, len - ts * 0.5, ts * 0.18, ts * 0.09);
+        // 화살촉
+        ctx.beginPath();
+        ctx.moveTo(len + ts * 0.3, 0);
+        ctx.lineTo(len - ts * 0.16, -ts * 0.3);
+        ctx.lineTo(len - ts * 0.16, ts * 0.3);
+        ctx.closePath();
         ctx.fill();
         ctx.restore();
         ctx.globalAlpha = 1;
