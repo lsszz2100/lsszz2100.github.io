@@ -469,6 +469,9 @@
     undoBtn.disabled = game.undos <= 0 || game.history.length === 0;
     $('trayNote').textContent = t('trayNote');
     I.apply();
+    // after I.apply(), which would otherwise restore the data-i18n label to "Stage"
+    $('gameMode').textContent = game.daily ? t('daily') : t('stage');
+    $('gameLevel').textContent = game.daily ? '★' : String(game.id);
   }
 
   // A completed box leaves a ghost of itself over the freshly dealt box, so the

@@ -506,6 +506,9 @@ html, body {
 /* ------------------------------------------------------------- quests / achievements / shop */
 
 .list { padding: 0 40px; display: flex; flex-direction: column; gap: 18px; flex: 1; overflow-y: auto; }
+/* the daily strip sits right under the three quests, and the streak card keeps the foot */
+#quests .list { flex: none; overflow: visible; }
+#quests .streak-card { margin-top: auto; }
 .quest {
   background: #fff; border: 3px solid var(--line); border-radius: 30px; padding: 24px 26px;
   box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 20px;
