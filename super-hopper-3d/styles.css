@@ -70,7 +70,7 @@ html, body {
   box-shadow: 0 3px 0 rgba(36,48,79,.16); text-shadow: none;
 }
 .stage-name {
-  display: inline-block; margin-top: 5px; padding: 4px 14px; border-radius: 999px;
+  display: block; width: fit-content; margin: 6px auto 0; padding: 4px 14px; border-radius: 999px;
   font-size: 14px; color: var(--ink); background: rgba(255,255,255,.94);
   box-shadow: 0 2px 0 rgba(36,48,79,.14); text-shadow: none; letter-spacing: -.2px;
 }

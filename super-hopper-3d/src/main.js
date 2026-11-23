@@ -138,11 +138,11 @@ function initSharedTextures() {
     ctx.fillStyle = '#5cc42f';
     ctx.fillRect(0, 0, w, h);
     const rnd = mulberry32(2025);
-    for (let i = 0; i < 420; i++) {
-      const x = rnd() * w, y = rnd() * h, r = 3 + rnd() * 16;
-      const shades = ['#54b92a', '#68d63d', '#4eae27', '#71de47', '#5cc42f'];
+    for (let i = 0; i < 900; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 2 + rnd() * 8;
+      const shades = ['#54b92a', '#66d23b', '#51b328', '#6bd841', '#5cc42f'];
       ctx.fillStyle = shades[Math.floor(rnd() * shades.length)];
-      ctx.globalAlpha = 0.45 + rnd() * 0.4;
+      ctx.globalAlpha = 0.16 + rnd() * 0.22;
       ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.7, rnd() * TAU, 0, TAU); ctx.fill();
     }
     ctx.globalAlpha = 0.5;
@@ -1197,7 +1197,7 @@ class Game {
     if (kind === 'grass') {
       const topTex = SHARED.grass.clone();
       topTex.needsUpdate = true;
-      topTex.repeat.set(Math.max(1, Math.round(p.w / 5)), Math.max(1, Math.round(p.d / 5)));
+      topTex.repeat.set(Math.max(1, Math.round(p.w / 3)), Math.max(1, Math.round(p.d / 3)));
       topMat = toon(0xffffff, { map: topTex, polygonOffset: true, polygonOffsetFactor: -1 });
       sideMat = toon(pal.side);
       bottomMat = toon(pal.bottom);
@@ -1234,7 +1234,7 @@ class Game {
       } else {
         const capTex = SHARED.grass.clone();
         capTex.needsUpdate = true;
-        capTex.repeat.set(Math.max(1, Math.round(p.w / 5)), Math.max(1, Math.round(p.d / 5)));
+        capTex.repeat.set(Math.max(1, Math.round(p.w / 3)), Math.max(1, Math.round(p.d / 3)));
         capMat = new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: SHARED.gradient, map: capTex });
       }
       const cap = new THREE.Mesh(new THREE.BoxGeometry(p.w + 0.12, 0.16, p.d + 0.12), capMat);
