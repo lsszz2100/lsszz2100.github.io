@@ -1,5 +1,6 @@
 /* QA ONLY: ?stage=<n> unlocks every stage and jumps straight to that stage. */
 (function () {
+  if (/[?&]capture=1/.test(location.search)) return;
   var m = /(\?|&)stage=(\d+)/.exec(location.search);
   if (!m) return;
   var n = parseInt(m[2], 10);
