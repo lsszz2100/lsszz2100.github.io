@@ -1237,7 +1237,7 @@
   function runScene(name) {
     if (name === 'home') { goHome(); return; }
     if (name === 'levels') {
-      state.selectedChapter = 2;
+      state.selectedChapter = C.chapterOf(Math.min(C.TOTAL_LEVELS, profile.unlocked));
       showScreen('levels');
       return;
     }
