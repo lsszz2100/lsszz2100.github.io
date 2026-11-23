@@ -10,5 +10,9 @@
 </head>
 <body>
 <iframe id="phone" src="./index.html?mobileqa=1" allow="autoplay"></iframe>
+<script>
+  const f = document.getElementById('phone');
+  f.src = './index.html?qa=' + Date.now();
+</script>
 </body>
 </html>

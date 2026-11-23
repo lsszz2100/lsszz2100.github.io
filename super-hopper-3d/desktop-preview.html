@@ -10,5 +10,9 @@
 </head>
 <body>
 <iframe id="desk" src="./index.html?qa=desktop" allow="autoplay"></iframe>
+<script>
+  const f = document.getElementById('desk');
+  f.src = './index.html?qa=' + Date.now();
+</script>
 </body>
 </html>
