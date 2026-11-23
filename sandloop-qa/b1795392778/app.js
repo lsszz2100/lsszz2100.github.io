@@ -757,7 +757,7 @@
     const result = {
       win: true,
       seconds: elapsedMs / 1000,
-      jars: sessionJars,
+      jars: engine.jarsDone,
       maxCombo: engine.maxCombo
     };
     const applied = C.applyStageResult(profile, stageIndex, result, C.todayKey());
@@ -775,7 +775,7 @@
     const result = {
       win: false,
       seconds: elapsedMs / 1000,
-      jars: sessionJars,
+      jars: engine.jarsDone,
       maxCombo: engine.maxCombo,
       left: engine.remaining()
     };
@@ -800,7 +800,7 @@
       html += '<div class="stars">' + starsHtml(stars) + '</div>';
       html += '<div class="reward-coins">+ ' + applied.coins + ' ●</div>';
       html += '<p>' + t('result.summary', {
-        jars: sessionJars,
+        jars: engine.jarsDone,
         time: fmtTime(result.seconds),
         par: stage.parTime
       }) + '</p>';
@@ -1245,9 +1245,8 @@
       if (engine.status !== 'playing') break;
       const out = engine.pour(stage.solution[k]);
       if (!out.ok) break;
-      const evs = engine.events;
-      if (evs.length && evs[evs.length - 1].type === 'jar') sessionJars += 1;
     }
+    sessionJars = engine.jarsDone;
     elapsedMs = (stage.parTime * 0.82) * 1000;
     timerOn = false;
     captureBegin();
