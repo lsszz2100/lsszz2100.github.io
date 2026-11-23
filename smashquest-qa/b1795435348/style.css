@@ -168,16 +168,16 @@ button:disabled { opacity: .55; }
 .hero-deco i:nth-child(7) { width: 14px; height: 14px; right: 70px; bottom: 20px; background: #CFBDF7; }
 .hero-deco i:nth-child(8) { width: 16px; height: 16px; left: 66px; bottom: 22px; background: #F7E39A; }
 .hero-chapter { position: relative; font-size: 12.5px; font-weight: 700; color: var(--soft); letter-spacing: .02em; }
-.play-orb { position: relative; display: block; width: 152px; height: 152px; margin: 8px auto 6px; border-radius: 50%;
+.play-orb { position: relative; display: block; width: 168px; height: 168px; margin: 10px auto 8px; border-radius: 50%;
   background: linear-gradient(160deg, #8C82FF, var(--violet-d)); color: #fff;
   box-shadow: 0 16px 34px rgba(75, 67, 214, .34), inset 0 -8px 18px rgba(0,0,0,.12); }
 .play-orb:active { transform: scale(.97); }
 .orb-ring { position: absolute; inset: -10px; border-radius: 50%; border: 3px dashed rgba(108,99,255,.28); animation: spin 14s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.orb-gem { position: absolute; left: 50%; top: 34px; transform: translateX(-50%); width: 44px; height: 44px; border-radius: 12px;
+.orb-gem { position: absolute; left: 50%; top: 38px; transform: translateX(-50%); width: 44px; height: 44px; border-radius: 12px;
   background: linear-gradient(160deg, #FFFFFF, #CFE8FF); box-shadow: inset 0 0 0 3px rgba(255,255,255,.7), 0 6px 14px rgba(0,0,0,.14); }
 .orb-gem::after { content: ''; position: absolute; left: 9px; right: 9px; top: 8px; height: 11px; border-radius: 6px; background: rgba(255,255,255,.85); }
-.orb-label { position: absolute; left: 0; right: 0; bottom: 34px; font-size: 18px; font-weight: 900; letter-spacing: .01em; }
+.orb-label { position: absolute; left: 0; right: 0; bottom: 38px; font-size: 19px; font-weight: 900; letter-spacing: .01em; }
 .hero-meta { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 13px; color: var(--soft); }
 .hero-meta strong { color: var(--ink); font-size: 15px; }
 .hero-stars { margin-top: 4px; font-size: 13px; font-weight: 700; color: var(--gold); }
@@ -185,7 +185,7 @@ button:disabled { opacity: .55; }
   background: #FFF6E2; color: #9B6B12; font-weight: 700; font-size: 13px; border-radius: 999px; padding: 9px 16px; }
 .home-gift.show { display: inline-flex; }
 .gift-ico { color: #E3A21C; }
-.home-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: auto; padding-bottom: 6px; }
+.home-nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 4px; padding-bottom: 6px; }
 .nav-card { background: #fff; border-radius: 18px; box-shadow: var(--shadow-sm); padding: 11px 4px 9px;
   display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
 .nav-card:active { transform: scale(.97); }
