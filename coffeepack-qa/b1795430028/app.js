@@ -623,7 +623,7 @@
     $('#hudStage').textContent = t('hud.stage', { n: stageIndex + 1 });
     $('#hudCups').textContent = String(snap.cupsLeft);
     $('#hudFree').textContent = String(snap.free);
-    $('#hudBoxes').textContent = String(engine.boxCount);
+    $('#hudBoxes').textContent = '/' + String(engine.boxCount);
     const bossBadge = $('#bossBadge');
     if (bossBadge) bossBadge.style.display = stage.isBoss ? '' : 'none';
   }

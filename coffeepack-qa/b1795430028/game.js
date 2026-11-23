@@ -6,8 +6,8 @@
   const W = (CORE && CORE.WORLD.w) || 1000;
   const H = (CORE && CORE.WORLD.h) || 1520;
 
-  const BOX_AREA = { top: 272, bottom: 1166, left: 34, right: 966 };
-  const TRAY = { top: 1246, bottom: 1436, left: 28, right: 972 };
+  const BOX_AREA = { top: 262, bottom: 1150, left: 34, right: 966 };
+  const TRAY = { top: 1250, bottom: 1414, left: 28, right: 972 };
   const SLOT_COLS = 3;
   const SLOT_ROWS = 2;
 
@@ -27,16 +27,18 @@
 
   function boxRects(count) {
     const rows = Math.max(1, Math.ceil(count / 2));
-    const areaH = BOX_AREA.bottom - BOX_AREA.top;
-    const rowH = areaH / rows;
     const bw = 452;
-    const bh = Math.min(286, rowH - 28);
+    const bh = 272;
+    const rowH = 296;
+    const areaH = BOX_AREA.bottom - BOX_AREA.top;
+    const top = BOX_AREA.top + Math.max(0, (areaH - rows * rowH) / 2);
     const out = [];
     for (let i = 0; i < count; i += 1) {
       const r = Math.floor(i / 2);
       const c = i % 2;
-      const cx = 261 + c * 478;
-      const cy = BOX_AREA.top + rowH * (r + 0.5);
+      const single = count % 2 === 1 && i === count - 1;
+      const cx = single ? 500 : 261 + c * 478;
+      const cy = top + rowH * (r + 0.5);
       out.push({ i: i, cx: cx, cy: cy, x: cx - bw / 2, y: cy - bh / 2, w: bw, h: bh });
     }
     return out;
@@ -136,9 +138,9 @@
 
     traySlots: function (n) {
       const out = [];
-      const step = n <= 1 ? 0 : Math.min(140, 860 / (n - 1));
+      const step = n <= 1 ? 0 : Math.min(134, 880 / (n - 1));
       const startX = W / 2 - (step * (n - 1)) / 2;
-      const cy = (TRAY.top + TRAY.bottom) / 2 + 4;
+      const cy = (TRAY.top + TRAY.bottom) / 2 + 2;
       for (let i = 0; i < n; i += 1) out.push({ x: startX + step * i, y: cy });
       return out;
     },
@@ -178,17 +180,26 @@
       g.fillStyle(0xffffff, 0.28);
       g.fillCircle(W * 0.86, H * 0.08, 110);
 
-      // 카운터(매장 작업대)
-      g.fillStyle(col(this.boxSkin.shelf), 0.16);
-      g.fillRoundedRect(18, 250, W - 36, 936, 54);
-      g.lineStyle(4, 0xffffff, 0.6);
-      g.strokeRoundedRect(18, 250, W - 36, 936, 54);
+      // 카운터(매장 작업대) — 박스들이 놓인 범위에 맞춘다
+      let top = BOX_AREA.top;
+      let bottom = BOX_AREA.bottom;
+      if (this.rects && this.rects.length) {
+        top = this.rects[0].y - 30;
+        bottom = this.rects[0].y + 30;
+        for (let i = 0; i < this.rects.length; i += 1) {
+          bottom = Math.max(bottom, this.rects[i].y + this.rects[i].h + 34);
+        }
+      }
+      g.fillStyle(col(this.boxSkin.shelf), 0.15);
+      g.fillRoundedRect(20, top, W - 40, bottom - top, 50);
+      g.lineStyle(4, 0xffffff, 0.62);
+      g.strokeRoundedRect(20, top, W - 40, bottom - top, 50);
 
       // 트레이 받침
       g.fillStyle(col(this.boxSkin.shelf), 0.18);
-      g.fillRoundedRect(TRAY.left - 4, TRAY.top - 6, TRAY.right - TRAY.left + 8, TRAY.bottom - TRAY.top + 12, 46);
+      g.fillRoundedRect(TRAY.left - 4, TRAY.top - 8, TRAY.right - TRAY.left + 8, TRAY.bottom - TRAY.top + 16, 44);
       g.lineStyle(4, 0xffffff, 0.55);
-      g.strokeRoundedRect(TRAY.left - 4, TRAY.top - 6, TRAY.right - TRAY.left + 8, TRAY.bottom - TRAY.top + 12, 46);
+      g.strokeRoundedRect(TRAY.left - 4, TRAY.top - 8, TRAY.right - TRAY.left + 8, TRAY.bottom - TRAY.top + 16, 44);
     },
 
     // ------------------------------------------------------------ hit tests
@@ -197,7 +208,7 @@
       if (!this.engine) return -1;
       const slots = this.traySlots(this.engine.tray.length);
       for (let i = slots.length - 1; i >= 0; i -= 1) {
-        if (Math.abs(wx - slots[i].x) <= 62 && Math.abs(wy - slots[i].y) <= 76) return i;
+        if (Math.abs(wx - slots[i].x) <= 72 && Math.abs(wy - slots[i].y) <= 86) return i;
       }
       return -1;
     },
@@ -440,7 +451,8 @@
 
       // 담긴 컵
       if (box && box.cups > 0) {
-        const size = Math.min(84, Math.min(this.slotPos(rect, 0).cw, this.slotPos(rect, 0).ch) * 0.5);
+        const sp0 = this.slotPos(rect, 0);
+        const size = Math.min(124, Math.min(sp0.cw, sp0.ch) * 0.94);
         for (let i = 0; i < box.cups; i += 1) {
           const p = this.slotPos(rect, i);
           this.drawCup(g, p.x, p.y, size, this.colors[box.color], { alpha: 1 });
@@ -495,7 +507,7 @@
       const slots = this.traySlots(e.tray.length);
       for (let i = 0; i < slots.length; i += 1) {
         const color = e.tray[i];
-        this.drawCup(cupsG, slots[i].x, slots[i].y, 92, this.colors[color], {
+        this.drawCup(cupsG, slots[i].x, slots[i].y, 118, this.colors[color], {
           selected: sel === i,
           legal: sel === i,
           hint: !!hint && hint.cup === i
@@ -508,7 +520,7 @@
 
       // 드래그 중인 컵
       if (sel != null && this.dragPoint) {
-        this.drawCup(fxG, this.dragPoint.x, this.dragPoint.y, 100, this.colors[e.tray[sel]], { ghost: true, alpha: 0.96 });
+        this.drawCup(fxG, this.dragPoint.x, this.dragPoint.y, 128, this.colors[e.tray[sel]], { ghost: true, alpha: 0.96 });
       }
 
       // 박스로 날아가는 컵
@@ -518,7 +530,7 @@
         const ease = 1 - Math.pow(1 - k, 2.4);
         const x = f.fx + (f.tx - f.fx) * ease;
         const y = f.fy + (f.ty - f.fy) * ease - Math.sin(k * Math.PI) * 40;
-        this.drawCup(fxG, x, y, 92 - 8 * ease, f.color, { alpha: 0.95 });
+        this.drawCup(fxG, x, y, 118 - 18 * ease, f.color, { alpha: 0.95 });
       }
 
       // 포장 연출
