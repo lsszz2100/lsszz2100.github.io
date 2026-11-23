@@ -895,7 +895,7 @@
     });
     var card = el('div', 'modal-card');
     if (spec.closable) {
-      var x = el('button', 'modal-close-x', '✕');
+      var x = el('button', 'modal-close-x', '×');
       x.addEventListener('click', closeModal);
       card.appendChild(x);
     }
@@ -939,7 +939,7 @@
     if (!isBest && prevBest > 0) {
       var gap = Math.abs(ms - prevBest);
       delta = '<div class="result-delta">' + t('bestWas', { t: St.formatTime(prevBest) }) +
-        (ms > prevBest ? '  +' : '  −') + St.formatTime(gap) + '</div>';
+        (ms > prevBest ? '  +' : '  -') + St.formatTime(gap) + '</div>';
     }
     var body = '<div class="result-time"><strong>' + St.formatTime(ms) + '</strong></div>' +
       (isBest ? '<div class="result-best">' + t('newBest') + '</div>' : '') +
