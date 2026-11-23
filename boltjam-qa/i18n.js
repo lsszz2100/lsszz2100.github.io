@@ -50,7 +50,7 @@
       quest_coins: 'Earn {n} coins', quest_combo: 'Reach a x{n} combo', quest_nohint: 'Clear {n} stage with no hint',
       rewardCoins: '+{n} coins', dailyDone: 'Done today', dailyPlay: 'Play today',
       dailyStreakMeta: 'Day {n} streak', dailyStreakNotice: 'Daily streak: {n}',
-      dailyBestLine: 'Best streak: {n} days', dailyBestStreak: 'Best {n} days',
+      dailyBestLine: 'Best streak: {n}', dailyBestStreak: 'Best: {n}',
       dailyStripTitle: 'Last 7 days', firstClearNotice: 'First clear today +{n}',
       chapterNotice: 'Chapter complete +{n}', flawlessTag: 'Flawless',
       bestScore: 'Best {n}', lockedWord: 'Locked',
