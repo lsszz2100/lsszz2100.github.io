@@ -183,7 +183,7 @@ em { font-style: normal; }
 .coin-chip.small { padding: 7px 11px; font-size: 13px; }
 .coin-ico { color: var(--caramel); font-size: 13px; line-height: 1; }
 
-.home-hero { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+.home-hero { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
 .hero-deco { position: absolute; inset: 0; pointer-events: none; }
 .hero-deco i { position: absolute; display: block; width: 34px; height: 44px; border-radius: 6px 6px 12px 12px;
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #D08A34 42%, #D08A34 73%, #FFFDF8 74%);
@@ -201,10 +201,10 @@ em { font-style: normal; }
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #5B7FD4 42%, #5B7FD4 73%, #FFFDF8 74%); }
 .hero-deco i:nth-child(6) { right: 24%; bottom: 14%; transform: rotate(-7deg) scale(.68);
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 41%, #EFA93B 42%, #EFA93B 73%, #FFFDF8 74%); }
-.hero-chapter { font-size: 12.5px; font-weight: 800; color: var(--caramel-d); background: #fff; padding: 7px 14px; border-radius: 999px; box-shadow: var(--shadow-sm); }
+.hero-chapter { margin-top: 4px; font-size: 12.5px; font-weight: 800; color: var(--caramel-d); background: #fff; padding: 7px 14px; border-radius: 999px; box-shadow: var(--shadow-sm); }
 .hero-stars { font-size: 12.5px; font-weight: 800; color: var(--soft); }
 .play-orb {
-  position: relative; width: 168px; height: 168px; border-radius: 50%;
+  position: relative; width: 202px; height: 202px; border-radius: 50%;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   background: radial-gradient(circle at 36% 30%, #F6C078 0%, #D08A34 55%, #A2641F 100%);
   box-shadow: 0 22px 40px rgba(162, 100, 31, .32), 0 0 0 12px rgba(208, 138, 52, .12), 0 0 0 24px rgba(208, 138, 52, .06);
@@ -213,7 +213,7 @@ em { font-style: normal; }
 .play-orb:active { transform: scale(.96); }
 .orb-ring { position: absolute; inset: 26px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.45); animation: spin 18s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.orb-cup { position: relative; width: 44px; height: 56px; border-radius: 7px 7px 14px 14px;
+.orb-cup { position: relative; width: 52px; height: 66px; border-radius: 7px 7px 14px 14px;
   background: linear-gradient(180deg, #FFFDF8 0%, #FFFDF8 36%, #8A5A2A 37%, #8A5A2A 74%, #FFFDF8 75%);
   box-shadow: 0 8px 16px rgba(80, 50, 20, .22); margin-bottom: 2px; }
 .orb-cup::before { content: ''; position: absolute; left: -4px; right: -4px; top: -7px; height: 11px;
