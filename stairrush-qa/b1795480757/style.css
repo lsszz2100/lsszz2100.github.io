@@ -695,7 +695,7 @@ ol, ul { padding-left: 20px; }
 
 /* ---------------------------------------------------------------- quests */
 
-.list { padding: 0 14px; display: flex; flex-direction: column; gap: 9px; flex: 1; overflow-y: auto; }
+.list { padding: 0 14px; display: flex; flex-direction: column; gap: 9px; flex: 0 1 auto; overflow-y: auto; }
 .q-item {
   display: flex;
   align-items: center;

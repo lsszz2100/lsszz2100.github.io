@@ -1080,8 +1080,8 @@
     var h = [];
     h.push('<svg viewBox="0 0 300 158" aria-hidden="true">');
     /* 게이지 */
-    h.push('<rect x="20" y="10" width="260" height="10" rx="5" fill="#E6F2FA"/>');
-    h.push('<rect x="20" y="10" width="' + fillW + '" height="10" rx="5" fill="' + fillColor + '"/>');
+    h.push('<rect x="20" y="0" width="260" height="8" rx="4" fill="#E6F2FA"/>');
+    h.push('<rect x="20" y="0" width="' + fillW + '" height="8" rx="4" fill="' + fillColor + '"/>');
     if (step === 1) h.push('<circle cx="272" cy="48" r="13" fill="#FFE3D8"/><text x="272" y="55" font-size="19" font-weight="900" text-anchor="middle" fill="#F0784C">!</text>');
     /* 계단 */
     h.push('<g fill="#CFE8F6"><rect x="24" y="112" width="62" height="7" rx="3.5"/><rect x="74" y="92" width="62" height="7" rx="3.5"/><rect x="124" y="72" width="62" height="7" rx="3.5"/><rect x="174" y="52" width="62" height="7" rx="3.5"/></g>');
