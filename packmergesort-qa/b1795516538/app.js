@@ -176,12 +176,14 @@
     else if (packs && packs >= 2) sub = t('combo.packs', { n: packs });
     else sub = t('combo.streak', { n: n });
     el.innerHTML =
+      '<div class="cb-inner">' +
       '<div class="cb-top">' + t(isFever ? 'fever.title' : 'combo.title') + '</div>' +
       '<div class="cb-main">x' + n + '</div>' +
-      '<div class="cb-sub">' + sub + '</div>';
+      '<div class="cb-sub">' + sub + '</div></div>';
     void el.offsetWidth;
     el.classList.add('show');
     clearTimeout(comboHideTimer);
+    if (CAPTURE) return; // 스토어 캡처 모드에서는 배너를 그대로 둔다
     comboHideTimer = setTimeout(function () {
       el.classList.remove('show');
       el.classList.add('out');
@@ -518,7 +520,7 @@
       card.className = 'challenge-card' + (done ? ' done' : '');
       card.innerHTML =
         '<span class="ch-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.6l2.3 6.4 6.4 2.3-6.4 2.3L12 20l-2.3-6.4L3.3 11.3l6.4-2.3z"/></svg></span>' +
-        '<div class="ch-body"><b>' + t('quests.challengeTitle') + '</b><span>' +
+        '<div class="ch-body"><b>' + t('quests.challengeName') + '</b><span>' +
         t('quests.challengeBody', { n: chal.stage + 1, r: chal.reward }) + '</span></div>' +
         '<button class="ch-go">' + (done ? t('quests.challengeDone') : t('quests.challengeGo')) + '</button>';
       const go = card.querySelector('.ch-go');
@@ -1269,8 +1271,10 @@
 
   function captureBoot() {
     profile = demoProfile();
-    I.setLang('en');
-    document.documentElement.lang = 'en';
+    const clang = qp('lang', 'en') === 'ko' ? 'ko' : 'en';
+    profile.lang = clang;
+    I.setLang(clang);
+    document.documentElement.lang = clang;
     I.apply();
     wireScene();
     bind();

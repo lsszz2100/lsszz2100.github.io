@@ -456,7 +456,9 @@ html.cap #app { border-radius: 0; box-shadow: none; }
 .combo-banner { position: absolute; left: 50%; top: 34%; z-index: 6; transform: translate(-50%, -50%) scale(.4);
   display: none; pointer-events: none; text-align: center; }
 .combo-banner.show { display: block; animation: comboIn .52s cubic-bezier(.18,1.4,.4,1) forwards; }
-.combo-banner .cb-top { font-size: 15px; font-weight: 900; letter-spacing: .12em; opacity: .95; }
+.combo-banner .cb-inner { background: rgba(255,255,255,.92); border-radius: 28px; padding: 14px 30px 12px;
+  box-shadow: 0 16px 34px rgba(50, 70, 120, .20), 0 0 0 5px rgba(255,255,255,.55); }
+.combo-banner .cb-top { font-size: 16px; font-weight: 900; letter-spacing: .14em; opacity: .95; }
 .combo-banner .cb-main { font-size: 48px; font-weight: 900; line-height: 1.02; letter-spacing: -0.03em;
   text-shadow: 0 4px 0 rgba(255,255,255,.9), 0 12px 22px rgba(60, 70, 130, .28); }
 .combo-banner .cb-sub { font-size: 13px; font-weight: 800; margin-top: 2px; opacity: .9; }
