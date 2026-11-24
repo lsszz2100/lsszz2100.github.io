@@ -706,9 +706,26 @@ ol, ul { padding-left: 20px; }
   box-shadow: var(--shadow);
 }
 .q-ico {
+  position: relative;
   width: 34px; height: 34px; border-radius: 11px; flex: 0 0 auto;
   background: linear-gradient(180deg, #CFF3E6, #7FD1B9);
 }
+.q-ico::after {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+}
+.q-floors::after { content: '↑'; }
+.q-combo::after { content: '★'; }
+.q-coins::after { content: '●'; }
+.q-runs::after { content: '▶'; }
+.q-stages::after { content: '▦'; }
+.q-stars::after { content: '★'; }
 .q-body { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 .q-body strong { font-size: 12.5px; font-weight: 800; }
 .q-body span { font-size: 9.5px; color: var(--ink-3); font-weight: 700; }

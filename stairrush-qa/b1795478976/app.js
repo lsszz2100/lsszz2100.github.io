@@ -827,7 +827,7 @@
       var ready = q.progress >= q.target;
       if (ready && !q.claimed) done++;
       var item = h('div', 'q-item');
-      item.appendChild(h('div', 'q-ico'));
+      item.appendChild(h('div', 'q-ico q-' + q.kind));
       var body = h('div', 'q-body');
       body.appendChild(h('strong', null, t('quest_' + q.kind, { n: q.target })));
       var bar = h('div', 'q-bar');
