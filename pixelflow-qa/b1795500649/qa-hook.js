@@ -1,5 +1,9 @@
 /* QA 전용 후크 — 임시 GitHub Pages QA 빌드에서만 쓰고 앱(AAB)에는 넣지 않는다. */
 (function () {
+  // 첫 실행 상태로 QA 하려면 ?reset=1 (앱 번들에는 없는 QA 전용 동작)
+  try {
+    if (/[?&]reset=1/.test(location.search)) localStorage.removeItem('pixelflow.save.v1');
+  } catch (e) { /* 무시 */ }
   var errs = [];
   window.addEventListener('error', function (ev) {
     errs.push('error: ' + (ev.message || (ev.error && ev.error.message) || 'unknown'));
