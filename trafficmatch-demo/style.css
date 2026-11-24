@@ -760,7 +760,8 @@ html, body {
 .tut-art .t-face { position: absolute; font-size: 15px; font-weight: 900; color: #8398b0; }
 
 /* ---------------------------------------------------- store capture mode */
-html.cap, html.cap body { overflow: hidden; background: #ffffff; }
+html.cap, html.cap body { overflow: hidden; background: #ffffff; scrollbar-width: none; }
+html.cap::-webkit-scrollbar, html.cap body::-webkit-scrollbar { display: none; width: 0; height: 0; }
 html.cap #app {
   position: static;
   display: block;
