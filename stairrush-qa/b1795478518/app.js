@@ -1034,7 +1034,7 @@
     } catch (e) { need = false; }
     /* 동의가 필요한 지역이 아니어도 행은 보이게 둔다(안내 모달로 대신한다). */
     $('rowAdPrivacy').hidden = false;
-    $('versionText').textContent = t('verWord') + ' · v' + VERSION;
+    $('versionText').textContent = 'v' + VERSION + ' · ' + t('appName');
     $('statFloors').textContent = save.totalFloors;
     $('statStages').textContent = clearedStages();
     $('statRuns').textContent = save.runs;
