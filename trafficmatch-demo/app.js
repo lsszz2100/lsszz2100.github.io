@@ -13,7 +13,7 @@
 
   var save = null;
   var state = null;          // 진행 중인 스테이지 상태 (TM state)
-  var playing = null;        // { id, daily:boolean }
+  var playing = null;        // { id, daily:boolean, rush:boolean }
   var screenName = 'splash';
   var undosLeft = 3;
   var coinDoubled = false;
@@ -29,6 +29,18 @@
     var m = new RegExp('[?&]' + name + '=([^&]*)').exec(location.search);
     return m ? decodeURIComponent(m[1]) : (def == null ? '' : def);
   }
+
+  // 화면에서 발생한 오류를 모아 둔다. 게임은 계속 돌아가고, 문제는 여기 남는다.
+  root.__qaErrors = root.__qaErrors || [];
+  function recordError(msg) {
+    if (root.__qaErrors.length < 50) root.__qaErrors.push(String(msg));
+  }
+  root.addEventListener('error', function (e) {
+    recordError((e.message || 'error') + ' @' + (e.filename || '') + ':' + (e.lineno || 0));
+  });
+  root.addEventListener('unhandledrejection', function (e) {
+    recordError('rejection: ' + String(e.reason));
+  });
 
   // ---------------------------------------------------------------- storage
 
