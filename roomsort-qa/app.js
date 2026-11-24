@@ -648,9 +648,11 @@
     Game.win();
     var stars = RS.starsFor(state);
     var comboCoins = levelComboCoins;
+    // 화면에는 이번 판의 총 획득(기본 + 연쇄 보너스)을 보여 준다. 연쇄 보너스는
+    // 정리되는 순간 이미 코인에 적립됐으므로, 여기서는 기본 코인만 더한다.
     var coins = RS.coinsFor(state) + comboCoins;
 
-    save.coins += coins;
+    save.coins += RS.coinsFor(state);
     save.stats.levels++;
     save.stats.stars += stars;
     if (stars === 3) save.stats.perfect++;
