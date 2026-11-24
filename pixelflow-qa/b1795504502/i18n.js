@@ -52,8 +52,8 @@
       questsNote: 'Three tasks a day. New ones arrive tomorrow.',
       questsDone: 'Done', rewardCoins: '+{n}', claim: 'Claim', claimed: 'Claimed', inProgress: 'Go',
       questDoneToast: 'Quest complete · +{n} coins', questClaimToast: '+{n} coins',
-      quest_stages: 'Clear {n} stages', quest_pops: 'Pop {n} pixels', quest_combo: 'Reach a {n} combo',
-      quest_perfect: 'Clear {n} stages without wasting a blaster', quest_stars: 'Earn {n} stars', quest_coins: 'Collect {n} coins',
+      quest_stages: 'Clear {n} stage(s)', quest_pops: 'Pop {n} pixels', quest_combo: 'Reach a {n} combo',
+      quest_perfect: 'Clear {n} stage(s) with no wasted blaster', quest_stars: 'Earn {n} stars', quest_coins: 'Collect {n} coins',
       streak: 'Day streak', streakNote: 'Play at least one stage a day to keep it going.',
       questFoot: 'Quests reset at midnight · progress saved on this device',
       awardsTitle: 'Awards', awardsNote: 'Milestones you have reached on this device.',
@@ -115,7 +115,7 @@
       stageClear: 'Stage clear', starsWord: 'stars', par: 'Par {n}s',
       resumeHint: 'Tap the queue to send a blaster', loading: 'Loading',
       beltBusy: 'The belt is busy — one moment.',
-      leftBlocks: 'blocks left',
+      leftBlocks: 'blocks left', blocksWord: 'Blocks',
       firstRunHint: 'Tap a blaster to load the belt'
     },
     ko: {
@@ -228,7 +228,7 @@
       stageClear: '스테이지 클리어', starsWord: '별', par: '기준 {n}초',
       resumeHint: '대기열을 탭해 블래스터를 올리세요', loading: '불러오는 중',
       beltBusy: '벨트가 바쁩니다 — 잠시만요.',
-      leftBlocks: '칸 남음',
+      leftBlocks: '칸 남음', blocksWord: '블록',
       firstRunHint: '블래스터를 탭해 벨트에 올리세요'
     }
   };

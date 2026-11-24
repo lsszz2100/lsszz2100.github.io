@@ -347,6 +347,9 @@
       var dt = Math.min(0.05, (delta || 16) / 1000);
       this.t += dt;
       if (!this.run) return;
+      /* 벨트 위 흐르는 점선 — 낮은 빈도로 다시 그려 애니메이션처럼 보이게 한다. */
+      this.beltTick = (this.beltTick || 0) + dt;
+      if (this.beltTick > 0.11) { this.beltTick = 0; this.drawBelt(); }
       if (this.onFrame) this.onFrame(dt);
       var decayed = false;
       for (var key in this.cellViews) {

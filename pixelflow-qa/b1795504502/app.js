@@ -28,6 +28,7 @@
   var jamTimer = null;
   var targetMode = null;
   var comboTierSeen = 0;
+  var winCoinsTotal = 0;
   var feverOn = false;
   var bannerTimer = null;
 
@@ -833,6 +834,7 @@
       save.stats.dailyClears = (save.stats.dailyClears || 0) + 1;
     }
     coins += dailyBonus;
+    winCoinsTotal = coins;
     if (!awarded) { save.coins += coins; save.stats.coinsEarned += coins; awarded = true; }
     if (run.wasted === 0) save.stats.perfect++;
     if (run.elapsed <= 15) save.stats.fastClears = (save.stats.fastClears || 0) + 1;
@@ -1002,6 +1004,8 @@
     root.onRewardedEarned = function (k) {
       root.onRewardedEarned = null;
       root.onRewardedFailed = null;
+      /* 광고를 보는 동안 멈춘 판을 되살린다(끝난 판은 그대로 둔다). */
+      if (run && run.status === 'running') paused = false;
       if (k === kind) cb();
     };
     root.onRewardedFailed = function () {
@@ -1369,11 +1373,11 @@
       if (coinDoubled || !run) return;
       showRewarded('coins', function () {
         coinDoubled = true;
-        var add = run.coins;
+        var add = winCoinsTotal || run.coins;
         save.coins += add;
         save.stats.coinsEarned += add;
         persist();
-        $('winCoins').textContent = '+' + (add * 2);
+        $('winCoins').textContent = '+' + (winCoinsTotal + add);
         $('winDouble').hidden = true;
         toast(t('coinsDoubled'));
         renderHome();
@@ -1624,6 +1628,26 @@
     setTimeout(function () {
       simulateProgress(parseFloat(qp('fill', '0.55')) || 0.55);
       paused = true;
+      /* 스토어 스크린샷용 연출 상태(콤보 배너·피버) — 실기기에서는 이 분기를 타지 않는다. */
+      if (qp('fx', '') === 'combo') {
+        run.combo = 32;
+        run.bestCombo = 32;
+        run.score = 1240;
+        comboTierSeen = 4;
+        setFever(true);
+        showComboBanner(32);
+        /* 캡처에서는 배너가 사라지지 않게 고정한다. */
+        if (bannerTimer) clearTimeout(bannerTimer);
+        var bb = $('comboBanner');
+        if (bb) {
+          bb.classList.add('show');
+          bb.style.animation = 'none';
+          bb.style.opacity = '1';
+          bb.style.transform = 'translateX(-50%)';
+        }
+      }
+      var hintEl = $('tapHint');
+      if (hintEl) hintEl.hidden = true;
       Game.setRun(run);
       Game.resize();
       renderHud();
