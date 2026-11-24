@@ -771,3 +771,7 @@ html.cap #stage { margin: 0; }
   box-shadow: 0 8px 18px rgba(196, 119, 63, .24);
 }
 .checkin-btn:disabled { background: #f4ece0; color: var(--ink-3); box-shadow: none; }
+
+/* 퀘스트 화면: 내용이 위에 몰려 아래가 비지 않도록 고르게 나눈다. */
+#quests { justify-content: space-between; }
+#quests .quest-foot { margin-top: 0; }
