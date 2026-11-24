@@ -334,6 +334,8 @@
     checkAchievements(false);
     beep(740, 0.09, 'sine', 0.05);
     vibrate(22);
+    bumpCoins();
+    burstCoins($('btnBonusClaim'), 12);
     toast(t('bonusClaimed', { n: coins }), 1800);
   }
 
@@ -535,12 +537,13 @@
       beep(660, 0.05, 'sine', 0.03);
     }
     if (lastDepart) {
-      Game.popBay(lastDepart.bay, lastDepart.color);
+      Game.popBay(lastDepart.bay, lastDepart.color, lastDepart.gain);
       beep(200 + lastDepart.combo * 70, 0.10, 'square', 0.05);
-      vibrate(24);
+      vibrate(24 + Math.min(20, lastDepart.combo * 4));
       if (lastDepart.combo > 1) {
         var cb = $('comboBanner');
         $('comboValue').textContent = 'x' + lastDepart.combo;
+        cb.className = 'combo-banner c' + Math.min(5, lastDepart.combo);
         cb.hidden = false;
         cb.style.animation = 'none';
         void cb.offsetWidth;
@@ -633,6 +636,7 @@
     $('resNext').textContent = playing.daily ? t('quitToHome') : t('nextStage');
     openModal('modalResult');
     $('gameCoins').textContent = save.coins;
+    bumpCoins();
 
     // 전면 광고: 클리어 후에만, 2스테이지 간격 + 네이티브 90초 쿨다운
     var cleared = save.stats.clears || 0;
@@ -668,10 +672,53 @@
       ff.style.animation = 'none';
       void ff.offsetWidth;
       ff.style.animation = '';
-      setTimeout(function () { ff.hidden = true; }, 900);
+      setTimeout(function () { ff.hidden = true; }, 950);
     }
+    var app = $('app');
+    if (app) {
+      app.classList.remove('fever');
+      void app.offsetWidth;
+      app.classList.add('fever');
+      setTimeout(function () { app.classList.remove('fever'); }, 520);
+    }
+    if (Game.fever) Game.fever();
     vibrate(60);
     beep(900, 0.16, 'sawtooth', 0.04);
+  }
+
+  /** 코인 표시를 짧게 튕겨 값이 바뀐 것을 눈으로 알린다 */
+  function bumpCoins() {
+    var pills = document.querySelectorAll('.coin-pill');
+    for (var i = 0; i < pills.length; i++) {
+      pills[i].classList.remove('bump');
+      void pills[i].offsetWidth;
+      pills[i].classList.add('bump');
+    }
+  }
+
+  /** 보상 위치에서 금빛 코인 조각이 퍼지는 연출 */
+  function burstCoins(el, n) {
+    if (!el || !el.getBoundingClientRect) return;
+    var stage = $('stage');
+    if (!stage) return;
+    var r = el.getBoundingClientRect();
+    var sr = stage.getBoundingClientRect();
+    var scale = sr.width / 430 || 1;
+    var cx = (r.left + r.width / 2 - sr.left) / scale;
+    var cy = (r.top + r.height / 2 - sr.top) / scale;
+    for (var i = 0; i < (n || 10); i++) {
+      var c = document.createElement('i');
+      c.className = 'coin-burst';
+      var ang = (-Math.PI / 2) + (Math.random() - 0.5) * 2.2;
+      var dist = 40 + Math.random() * 70;
+      c.style.left = cx + 'px';
+      c.style.top = cy + 'px';
+      c.style.setProperty('--dx', Math.round(Math.cos(ang) * dist) + 'px');
+      c.style.setProperty('--dy', Math.round(Math.sin(ang) * dist) + 'px');
+      c.style.animationDelay = (Math.random() * 90) + 'ms';
+      stage.appendChild(c);
+      setTimeout((function (node) { return function () { if (node.parentNode) node.parentNode.removeChild(node); }; })(c), 900);
+    }
   }
 
   // ---------------------------------------------------------------- 봇/도구
@@ -770,6 +817,8 @@
           save.coins += q.reward;
           persist();
           toast(t('questClaim', { n: q.reward }));
+          bumpCoins();
+          burstCoins(btn, 8);
           renderQuests();
           renderHome();
         });
@@ -1012,6 +1061,8 @@
         $('resCoins').textContent = '+' + (add * 2);
         $('resDouble').hidden = true;
         $('gameCoins').textContent = save.coins;
+        bumpCoins();
+        burstCoins($('resDouble'), 10);
         renderHome();
         toast(t('coinsDoubled'));
       });
@@ -1031,6 +1082,7 @@
       persist();
       TM.addSlot(state);
       $('gameCoins').textContent = save.coins;
+      bumpCoins();
       closeModal('modalStuck');
       Game.render(state);
       toast(t('bayAdded'));
@@ -1081,6 +1133,17 @@
 
     root.addEventListener('resize', fitStage);
     root.addEventListener('orientationchange', function () { setTimeout(fitStage, 120); });
+
+    // 버튼을 누를 때마다 짧게 눌리는 느낌을 준다
+    document.addEventListener('pointerdown', function (e) {
+      var el = e.target && e.target.closest
+        ? e.target.closest('button, .play-card, .rush-card, .tile, .skin-btn, .q-btn')
+        : null;
+      if (!el) return;
+      el.classList.remove('btn-press');
+      void el.offsetWidth;
+      el.classList.add('btn-press');
+    }, { passive: true });
   }
 
   function moveToBack() {

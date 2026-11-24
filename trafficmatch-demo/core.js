@@ -24,7 +24,7 @@
     { id: 'green', hex: '#2FAE60', dark: '#1C8A47', light: '#D2F3DF', sym: '▲', en: 'Green', ko: '초록' },
     { id: 'yellow', hex: '#F0A800', dark: '#B87C00', light: '#FFEFC4', sym: '★', en: 'Yellow', ko: '노랑' },
     { id: 'purple', hex: '#8A5CD6', dark: '#6840B0', light: '#E6D9FF', sym: '◆', en: 'Purple', ko: '보라' },
-    { id: 'pink', hex: '#E45C9E', dark: '#B83A77', light: '#FFDBEB', sym: '✚', en: 'Pink', ko: '분홍' }
+    { id: 'pink', hex: '#E45C9E', dark: '#B83A77', light: '#FFDBEB', sym: '♥', en: 'Pink', ko: '분홍' }
   ];
 
   var KINDS = [

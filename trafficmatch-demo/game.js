@@ -12,7 +12,7 @@
   var TM = root.TM;
   var COLORS = TM.COLORS;
   var KINDS = TM.KINDS;
-  var FONT = 'NotoKR, system-ui, sans-serif';
+  var FONT = 'Fredoka, Pretendard, system-ui, sans-serif';
 
   function hex(c) { return parseInt(String(c).replace('#', ''), 16); }
   function T(key, vars) { return root.I ? root.I.t(key, vars) : key; }
@@ -436,6 +436,27 @@
       c.add(g);
       c.setDepth(10);
       this.layerFx.add(c);
+
+      // 잔상 트레일: 차가 지나간 자리에 옅은 복사본이 남아 사라진다
+      for (var ti = 1; ti <= 3; ti++) {
+        var tg = this.add.graphics();
+        drawVehicle(tg, v.k, v.color, v.d, from.w, from.h);
+        var tc = this.add.container(from.x, from.y);
+        tc.add(tg);
+        tc.setDepth(9);
+        this.layerFx.add(tc);
+        this.tweens.add({
+          targets: tc,
+          x: from.cx + (bay.cx - from.cx) * (ti / 4) - from.w / 2,
+          y: from.cy + (bay.cy - from.cy) * (ti / 4) - from.h / 2,
+          scale: 1 - ti * 0.07,
+          alpha: { from: 0.34, to: 0 },
+          duration: 260 + ti * 70,
+          ease: 'Cubic.easeOut',
+          onComplete: (function (cc) { return function () { cc.destroy(); }; })(tc)
+        });
+      }
+
       var scaleTo = Math.max(0.35, Math.min(0.95, (bay.w * 0.85) / from.w));
       this.tweens.add({
         targets: c,
@@ -452,9 +473,24 @@
       });
     }
 
-    popBay(bayIndex, colorIdx) {
+    popBay(bayIndex, colorIdx, gain) {
       var b = this.bayRect(bayIndex);
       var col = COLORS[colorIdx] || COLORS[0];
+      // 점수 팝업: 배에서 튀어오르는 +점수
+      if (gain) {
+        var ft = this.add.text(b.cx, b.cy - b.h * 0.1, '+' + gain, {
+          fontFamily: FONT, fontSize: Math.round(15 * this.m.k) + 'px', color: '#163356',
+          stroke: '#ffffff', strokeThickness: Math.round(3 * this.m.k)
+        });
+        ft.setOrigin(0.5, 0.5);
+        ft.setDepth(12);
+        this.layerFx.add(ft);
+        this.tweens.add({
+          targets: ft, y: ft.y - b.h * 0.55, alpha: { from: 1, to: 0 },
+          scale: { from: 0.6, to: 1.15 }, duration: 620, ease: 'Cubic.easeOut',
+          onComplete: function () { ft.destroy(); }
+        });
+      }
       for (var i = 0; i < 10; i++) {
         var g = this.add.graphics();
         g.fillStyle(hex(col.hex), 0.9);
@@ -517,7 +553,40 @@
       if (c) this.tweens.add({ targets: c, scale: { from: 1, to: 1.07 }, duration: 240, yoyo: true, repeat: 3 });
     }
 
+    feverBurst() {
+      var m = this.m;
+      this.cameras.main.shake(340, 0.009);
+      var g = this.add.graphics();
+      g.fillStyle(0xffb703, 0.18);
+      g.fillRect(0, 0, m.w, m.h);
+      this.layerFx.add(g);
+      this.tweens.add({
+        targets: g, alpha: 0, duration: 460, ease: 'Quad.easeOut',
+        onComplete: function () { g.destroy(); }
+      });
+      // 금빛 파편이 화면 가운데에서 퍼진다
+      for (var i = 0; i < 20; i++) {
+        var s = this.add.graphics();
+        s.fillStyle(i % 3 === 0 ? 0xffffff : 0xffb703, 0.95);
+        s.fillCircle(0, 0, 2 + Math.random() * 4);
+        s.setPosition(m.w / 2, m.h * 0.52);
+        this.layerFx.add(s);
+        var ang = Math.random() * Math.PI * 2;
+        var dist = 60 + Math.random() * Math.min(m.w, m.h) * 0.45;
+        this.tweens.add({
+          targets: s,
+          x: m.w / 2 + Math.cos(ang) * dist,
+          y: m.h * 0.52 + Math.sin(ang) * dist,
+          alpha: 0,
+          duration: 380 + Math.random() * 260,
+          ease: 'Cubic.easeOut',
+          onComplete: (function (gg) { return function () { gg.destroy(); }; })(s)
+        });
+      }
+    }
+
     winRain() {
+      this.cameras.main.flash(200, 255, 255, 255);
       var m = this.m;
       for (var i = 0; i < 24; i++) {
         var g = this.add.graphics();
@@ -582,11 +651,12 @@
       sc.render(state);
     },
     ghost: function (v, bay, cb) { var s = api.sceneRef(); if (s && s.ready) s.ghostToBay(v, bay, cb); },
-    popBay: function (b, c) { var s = api.sceneRef(); if (s && s.ready) s.popBay(b, c); },
+    popBay: function (b, c, gain) { var s = api.sceneRef(); if (s && s.ready) s.popBay(b, c, gain); },
     pulseBay: function (b) { var s = api.sceneRef(); if (s && s.ready) s.pulseBay(b); },
     shake: function (id) { var s = api.sceneRef(); if (s && s.ready) s.shakeVehicle(id); },
     hint: function (id) { var s = api.sceneRef(); if (s && s.ready) s.hintPulse(id); },
     win: function () { var s = api.sceneRef(); if (s && s.ready) s.winRain(); },
+    fever: function () { var s = api.sceneRef(); if (s && s.ready) s.feverBurst(); },
     resize: function () {
       if (!api.game || !api.game.scale) return;
       var el = document.getElementById('boardHost');
