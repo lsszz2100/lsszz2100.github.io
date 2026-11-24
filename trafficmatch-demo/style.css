@@ -782,6 +782,8 @@ html.cap #stage {
   box-shadow: none;
 }
 html.cap #toast { display: none !important; }
+/* 촬영 모드에서는 backdrop-filter 를 썩지 않는다(확대 변환과 겹치면 배경이 겹쳐 그려진다) */
+html.cap .modal-wrap { backdrop-filter: none; -webkit-backdrop-filter: none; }
 
 /* ---------------------------------------------------------- home road strip */
 .home-strip {
