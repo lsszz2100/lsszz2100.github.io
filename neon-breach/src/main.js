@@ -3,7 +3,7 @@
 
 import * as THREE from '../vendor/three.module.js';
 import {
-  Store, clamp, lerp, damp, rand, randInt, pick, chance, shuffle, angleDelta, TAU, DEG,
+  Store, clamp, lerp, damp, rand, randInt, pick, chance, shuffle, angleDelta, TAU, DEG, applyLook, LOOK, PITCH_LIMIT,
 } from './core.js';
 import { I18n } from './i18n.js';
 import { AudioEngine } from './audio.js';
@@ -299,10 +299,13 @@ class Game {
     let look = this.input.consumeLook();
     // a pointer-lock acquisition can deliver one huge delta: swallow it
     if (performance.now() < (this._lookBlockUntil || 0)) look = { x: 0, y: 0 };
-    const base = this.isMobile ? 0.0042 : 0.0022;
-    p.yaw -= look.x * base * sens;
-    p.pitch -= look.y * base * sens;
-    p.pitch = clamp(p.pitch, -1.35, 1.35);
+    // rad per raw input pixel. A phone in landscape is ~840 CSS px wide, so a
+    // comfortable one-swipe turn (≈500 px) has to clear 360°; a pointer-locked
+    // mouse keeps its small per-pixel rate.
+    const base = this.isMobile ? LOOK.mobileRadPerPx : LOOK.desktopRadPerPx;
+    // arrow keys turn the view as well, so a mouse-less / lock-less session can
+    // still spin freely (applyLook: the turn rate is per second, not per frame)
+    applyLook(p, look, { base, sens, turn: this.input.turnAxis(), dt });
 
     // recoil settles
 

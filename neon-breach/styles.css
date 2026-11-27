@@ -84,7 +84,7 @@ kbd {
 
 /* ============================================================ HUD */
 #hud {
-  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
   padding: calc(10px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right))
            calc(10px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left));
   font-family: var(--ui);
@@ -662,7 +662,7 @@ input[type=range]::-webkit-slider-thumb {
 /* ======================================================= TOUCH */
 #touch { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 .stick-zone {
-  position: absolute; left: 0; bottom: 0; width: 46%; height: 66%;
+  position: absolute; left: 0; bottom: 0; width: 46%; height: 66%; z-index: 2;
   pointer-events: auto; touch-action: none;
 }
 .stick {
@@ -677,8 +677,10 @@ input[type=range]::-webkit-slider-thumb {
   border: 1px solid rgba(180,255,245,.6); box-shadow: 0 0 22px rgba(55,242,212,.45);
 }
 .stick.active { opacity: 1; }
-.look-zone { position: absolute; right: 0; top: 0; width: 62%; height: 62%; pointer-events: auto; touch-action: none; }
-.touch-btns { position: absolute; inset: 0; pointer-events: none; }
+/* aim layer: every pixel not taken by the stick or a button turns the view, and
+   the finger keeps steering after it slides off the edge of the screen */
+.look-zone { position: absolute; inset: 0; z-index: 1; pointer-events: auto; touch-action: none; }
+.touch-btns { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
 .tbtn {
   position: absolute; right: 18px; pointer-events: auto; border-radius: 50%;
   border: 1px solid rgba(96,224,255,.3); background: rgba(8,20,32,.52); color: var(--text);
@@ -724,7 +726,6 @@ body.touch .pause-btn { top: calc(12px + env(safe-area-inset-top)); right: calc(
 body.lefty .stick { left: auto; right: calc(26px + env(safe-area-inset-right)); }
 body.lefty .touch-btns { right: auto; left: calc(16px + env(safe-area-inset-left)); justify-items: start; }
 body.lefty .stick-zone { left: auto; right: 0; }
-body.lefty .look-zone { right: auto; left: 0; }
 body.lefty .tbtn { grid-column: 1; }
 
 #rotate-hint {

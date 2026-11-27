@@ -1,7 +1,11 @@
 /* Neon Breach — input: pointer-lock mouse + keyboard on desktop,
    left stick + drag look + action buttons on touch, optional gyro. */
 
-import { clamp, DEG } from './core.js';
+import { clamp, DEG, LOOK } from './core.js';
+
+// A mouse drag is bounded by the window, so it gets extra gain; pointer-locked
+// mice deliver small relative deltas and keep the raw rate.
+const DRAG_GAIN = LOOK.dragGain;
 
 export class Input {
   constructor(dom, settings) {
@@ -22,6 +26,8 @@ export class Input {
     this._lookPointer = null;
     this._stickCenter = { x: 0, y: 0 };
     this._lastLook = { x: 0, y: 0 };
+    this._dragLook = false;
+    this._dragLast = { x: 0, y: 0 };
     this._bind();
   }
 
@@ -31,7 +37,8 @@ export class Input {
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
       const k = e.key.toLowerCase();
-      if (['w', 'a', 's', 'd', ' ', 'shift', 'r', 'q', 'e', 'escape', '1', '2', '3', '4', 'p', 'm'].includes(k)) e.preventDefault();
+      if (['w', 'a', 's', 'd', ' ', 'shift', 'r', 'q', 'e', 'escape', '1', '2', '3', '4', 'p', 'm',
+        'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
       this.keys.add(k);
       if (!this.enabled) return;
       if (k === ' ') this.pressed.add('jump');
@@ -49,33 +56,63 @@ export class Input {
     window.addEventListener('blur', () => { this.keys.clear(); this.fire = false; this.ads = false; });
 
     // ---- mouse
+    // Pointer lock is the good path on desktop, but it is refused in plenty of
+    // places (embedded webviews, iframes, some browsers). Holding the left button
+    // and dragging must turn the view there too, so the drag starts regardless
+    // and stops as soon as the lock actually takes over.
     d.addEventListener('mousedown', (e) => {
       if (!this.enabled) return;
-      if (!this.locked && !this.touchMode && e.button === 0) {
-        this.requestLock();
-        return;
+      if (this.touchMode) return;
+      if (e.button === 0) {
+        if (!this.locked) {
+          this._beginDragLook(e.clientX, e.clientY);
+          this.requestLock();
+        }
+        this.fire = true;
+        this.pressed.add('fireTap');
       }
-      if (e.button === 0) { this.fire = true; this.pressed.add('fireTap'); }
       if (e.button === 2) this.ads = true;
       if (e.button === 1) this.pressed.add('dash');
     });
     window.addEventListener('mouseup', (e) => {
-      if (e.button === 0) this.fire = false;
+      if (e.button === 0) { this.fire = false; this._dragLook = false; }
       if (e.button === 2) this.ads = false;
     });
     d.addEventListener('contextmenu', (e) => e.preventDefault());
     document.addEventListener('mousemove', (e) => {
-      if (!this.locked || !this.enabled) return;
-      // the mouse can jump when the lock is first acquired: ignore that spike
-      if (performance.now() < (this._ignoreLookUntil || 0)) return;
-      this.lookX += e.movementX || 0;
-      this.lookY += e.movementY || 0;
+      if (!this.enabled) return;
+      if (this.locked) {
+        // the mouse can jump when the lock is first acquired: ignore that spike
+        if (performance.now() < (this._ignoreLookUntil || 0)) return;
+        this.lookX += e.movementX || 0;
+        this.lookY += e.movementY || 0;
+        return;
+      }
+      if (!this._dragLook) return;
+      if (performance.now() < (this._ignoreLookUntil || 0)) {
+        this._dragLast.x = e.clientX;
+        this._dragLast.y = e.clientY;
+        return;
+      }
+      this.lookX += (e.clientX - this._dragLast.x) * DRAG_GAIN;
+      this.lookY += (e.clientY - this._dragLast.y) * DRAG_GAIN;
+      this._dragLast.x = e.clientX;
+      this._dragLast.y = e.clientY;
     });
     document.addEventListener('pointerlockchange', () => {
       this.locked = document.pointerLockElement === d;
-      if (this.locked) { this._ignoreLookUntil = performance.now() + 220; this.lookX = 0; this.lookY = 0; }
+      if (this.locked) {
+        this._dragLook = false;
+        this._ignoreLookUntil = performance.now() + 220;
+        this.lookX = 0;
+        this.lookY = 0;
+      }
       if (!this.locked) { this.fire = false; this.ads = false; }
       if (this.onLockChange) this.onLockChange(this.locked);
+    });
+    document.addEventListener('pointerlockerror', () => {
+      // lock refused: the drag fallback is already running, keep it
+      this.locked = false;
     });
 
     // ---- touch joystick
@@ -111,6 +148,9 @@ export class Input {
     }
 
     // ---- touch look
+    // The layer covers the whole screen (under the stick and the buttons) and the
+    // finger keeps steering after it leaves the element, so a swipe never dies
+    // half way and a full turn is always reachable.
     const look = document.getElementById('look-zone');
     if (look) {
       look.addEventListener('pointerdown', (e) => {
@@ -120,6 +160,7 @@ export class Input {
         this._lookPointer = e.pointerId;
         this._lastLook.x = e.clientX;
         this._lastLook.y = e.clientY;
+        try { look.setPointerCapture(e.pointerId); } catch (_) { /* older webview */ }
       });
       look.addEventListener('pointermove', (e) => {
         if (e.pointerId !== this._lookPointer) return;
@@ -127,13 +168,17 @@ export class Input {
         const dy = e.clientY - this._lastLook.y;
         this._lastLook.x = e.clientX;
         this._lastLook.y = e.clientY;
-        this.lookX += dx * 1.15;
-        this.lookY += dy * 1.15;
+        this.lookX += dx;
+        this.lookY += dy;
       });
-      const end = (e) => { if (e.pointerId === this._lookPointer) this._lookPointer = null; };
+      const end = (e) => {
+        if (e.pointerId !== this._lookPointer) return;
+        this._lookPointer = null;
+        try { look.releasePointerCapture(e.pointerId); } catch (_) { /* not captured */ }
+      };
       look.addEventListener('pointerup', end);
       look.addEventListener('pointercancel', end);
-      look.addEventListener('pointerleave', end);
+      look.addEventListener('lostpointercapture', end);
     }
 
     // ---- touch buttons
@@ -182,6 +227,14 @@ export class Input {
     });
   }
 
+  _beginDragLook(x, y) {
+    this._dragLook = true;
+    this._dragLast.x = x;
+    this._dragLast.y = y;
+    // a fresh drag must not inherit the pointer-lock spike guard
+    if (!this.locked) this._ignoreLookUntil = 0;
+  }
+
   _updateStick(e) {
     const max = 46;
     let dx = e.clientX - this._stickCenter.x;
@@ -220,6 +273,9 @@ export class Input {
       this.fire = false;
       this.ads = false;
       this.pressed.clear();
+      this._dragLook = false;
+      this._lookPointer = null;
+      this._stickPointer = null;
       const knob = document.getElementById('stick-knob');
       if (knob) knob.style.transform = '';
       this.releaseLock();
@@ -232,8 +288,8 @@ export class Input {
     let y = 0;
     if (this.keys.has('w') || this.keys.has('arrowup')) y += 1;
     if (this.keys.has('s') || this.keys.has('arrowdown')) y -= 1;
-    if (this.keys.has('d') || this.keys.has('arrowright')) x += 1;
-    if (this.keys.has('a') || this.keys.has('arrowleft')) x -= 1;
+    if (this.keys.has('d')) x += 1;
+    if (this.keys.has('a')) x -= 1;
     if (this._stickPointer !== null) {
       x += this.move.x;
       y -= this.move.y;
@@ -241,6 +297,14 @@ export class Input {
     const len = Math.hypot(x, y);
     if (len > 1) { x /= len; y /= len; }
     return { x, y };
+  }
+
+  /** Keyboard turning: +1 = left (yaw grows), -1 = right */
+  turnAxis() {
+    let t = 0;
+    if (this.keys.has('arrowleft')) t += 1;
+    if (this.keys.has('arrowright')) t -= 1;
+    return t;
   }
 
   takePressed(name) {

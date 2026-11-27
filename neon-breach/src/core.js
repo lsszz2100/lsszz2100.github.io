@@ -13,7 +13,35 @@ export const sign = (v) => (v < 0 ? -1 : 1);
 export const damp = (a, b, lambda, dt) => lerp(a, b, 1 - Math.exp(-lambda * dt));
 
 export const rand = (a = 0, b = 1) => a + Math.random() * (b - a);
-export const randInt = (a, b) => Math.floor(rand(a, b + 1));
+
+/** How far the view may tilt up/down before it stops. */
+export const PITCH_LIMIT = 1.35;
+
+/** Look tuning in one place so the game, the drag fallback and the tests agree. */
+export const LOOK = {
+  mobileRadPerPx: 0.0135,   // phone swipe: ~500 px per 360°
+  desktopRadPerPx: 0.0022,  // pointer-locked mouse
+  dragGain: 3.0,            // mouse drag without pointer lock (bounded by the window)
+  keyTurnRate: 2.7,         // radians per second on ← / →
+};
+
+/**
+ * One frame of look input.
+ * yaw is deliberately unbounded: the view spins past 360° in either direction
+ * without a seam, while pitch stays inside the tilt limit.
+ *   look  - raw input pixels ({x, y}) from mouse / drag / finger
+ *   base  - radians per pixel for this device
+ *   sens  - player look-sensitivity multiplier
+ *   turn  - -1 / 0 / +1 keyboard turning (+1 = left)
+ *   rate  - keyboard turn speed in radians per second
+ */
+export function applyLook(p, look, { base, sens = 1, turn = 0, rate = LOOK.keyTurnRate, dt = 0 } = {}) {
+  p.yaw -= (look.x || 0) * base * sens;
+  p.pitch -= (look.y || 0) * base * sens;
+  if (turn) p.yaw += turn * rate * sens * dt;
+  p.pitch = clamp(p.pitch, -PITCH_LIMIT, PITCH_LIMIT);
+  return p;
+}export const randInt = (a, b) => Math.floor(rand(a, b + 1));
 export const pick = (arr) => arr[(Math.random() * arr.length) | 0];
 export const chance = (p) => Math.random() < p;
 
