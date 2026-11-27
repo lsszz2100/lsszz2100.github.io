@@ -194,7 +194,7 @@ kbd {
   display: flex; align-items: flex-end; justify-content: space-between; pointer-events: none;
 }
 .dash-box {
-  margin-bottom: 24px;
+  margin-bottom: 34px;
   padding: 6px 10px; border-radius: 8px; display: flex; align-items: center; gap: 8px;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 calc(100% - 8px)); opacity: .95;
 }
@@ -223,7 +223,7 @@ kbd {
 
 .weapon-slots {
   position: absolute; left: calc(18px + env(safe-area-inset-left));
-  bottom: calc(50px + env(safe-area-inset-bottom));
+  bottom: calc(52px + env(safe-area-inset-bottom));
   display: flex; flex-direction: row; gap: 6px; pointer-events: none; opacity: .9;
 }
 body.touch .weapon-slots { display: none; }
@@ -364,10 +364,10 @@ body.touch .weapon-slots { display: none; }
 /* menu */
 #screen-menu {
   background:
-    radial-gradient(ellipse at 22% 40%, rgba(53,214,255,.10), transparent 55%),
-    radial-gradient(ellipse at 86% 82%, rgba(255,45,117,.12), transparent 52%),
-    linear-gradient(120deg, rgba(3,8,14,.94) 0%, rgba(3,10,18,.72) 48%, rgba(4,9,16,.9) 100%);
-  backdrop-filter: blur(2px);
+    radial-gradient(ellipse at 78% 48%, rgba(255,45,117,.10), transparent 46%),
+    radial-gradient(ellipse at 70% 12%, rgba(53,214,255,.12), transparent 50%),
+    linear-gradient(100deg, rgba(3,7,12,.985) 0%, rgba(3,8,14,.965) 42%, rgba(4,10,17,.80) 66%, rgba(4,10,17,.72) 100%);
+  backdrop-filter: blur(1.5px);
 }
 .menu-bg-grid {
   position: absolute; inset: 0; pointer-events: none; opacity: .5;
@@ -380,8 +380,8 @@ body.touch .weapon-slots { display: none; }
   transform-origin: 50% 100%;
 }
 .menu-wrap {
-  position: relative; width: min(1120px, 96vw); display: grid;
-  grid-template-columns: 1.35fr .85fr; gap: clamp(14px, 3vw, 48px); align-items: end;
+  position: relative; width: min(1180px, 95vw); display: grid;
+  grid-template-columns: 1.18fr .82fr; gap: clamp(16px, 3.4vw, 60px); align-items: center;
 }
 .brand-kicker {
   font-family: var(--num); font-size: 10px; letter-spacing: .34em; color: var(--cyan);
@@ -389,9 +389,9 @@ body.touch .weapon-slots { display: none; }
 }
 .brand-title {
   margin: 0; font-family: var(--display); font-weight: 900; line-height: .84;
-  font-size: clamp(46px, 9.2vw, 116px); letter-spacing: -.02em;
+  font-size: clamp(40px, 7.1vw, 92px); letter-spacing: -.01em;
 }
-.brand-title span { display: block; color: #fff; text-shadow: 0 0 40px rgba(53,214,255,.35); }
+.brand-title span { display: block; color: #fff; text-shadow: 0 0 34px rgba(53,214,255,.30), 0 4px 26px rgba(0,0,0,.7); }
 .brand-title em {
   display: block; font-style: normal; color: transparent;
   background: linear-gradient(94deg, var(--teal) 8%, #7ef7ff 42%, var(--magenta) 96%);
@@ -404,15 +404,17 @@ body.touch .weapon-slots { display: none; }
   color: var(--dim); margin-top: 10px;
 }
 .menu-blurb {
-  max-width: 46ch; font-family: var(--kr); font-size: 12.5px; line-height: 1.75; color: var(--dim);
-  margin: 18px 0 0;
+  max-width: 44ch; font-family: var(--kr); font-size: 12.5px; line-height: 1.8; color: #93aec2;
+  margin: 16px 0 0; text-shadow: 0 1px 10px rgba(0,0,0,.8);
 }
-.menu-stats { display: flex; gap: clamp(10px, 2.4vw, 30px); margin-top: 22px; flex-wrap: wrap; }
+.menu-stats { display: flex; gap: clamp(12px, 2.8vw, 34px); margin-top: 20px; flex-wrap: wrap; }
+.stat b { text-shadow: 0 2px 14px rgba(0,0,0,.75); }
 .stat b { display: block; font-family: var(--num); font-size: clamp(16px, 2.2vw, 24px); color: var(--text); }
 .stat span { font-family: var(--num); font-size: 8.5px; letter-spacing: .22em; color: var(--dim2); }
 
 .menu-right { display: flex; flex-direction: column; gap: 10px; padding-bottom: 4px; }
-.menu-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.menu-links { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.menu-links .btn { padding: 10px 8px; font-size: 10.5px; letter-spacing: .12em; backdrop-filter: blur(8px); }
 .mode-row { display: flex; gap: 6px; margin-top: 4px; }
 .mode-chip {
   font-family: var(--num); font-size: 8.5px; letter-spacing: .18em; padding: 4px 9px;
@@ -439,16 +441,16 @@ body.touch .weapon-slots { display: none; }
 .btn:active { transform: scale(.975); }
 .btn.ghost:hover { border-color: var(--line-strong); background: rgba(20,44,66,.85); }
 .btn.primary {
-  background: linear-gradient(96deg, #12d8ba, #2aa8ff);
+  background: linear-gradient(96deg, #17e0c0, #2fa4ff);
   color: #03121a; border-color: transparent;
-  box-shadow: 0 10px 32px rgba(26,200,220,.24), inset 0 1px 0 rgba(255,255,255,.4);
+  box-shadow: 0 12px 34px rgba(26,200,220,.28), inset 0 1px 0 rgba(255,255,255,.45);
 }
+.btn.primary.big { border-radius: 10px; }
 .btn.primary.big { padding: 22px 20px; font-size: 17px; letter-spacing: .24em; flex-direction: column; gap: 4px; }
 .btn.primary .btn-glow {
-  position: absolute; inset: -60% -10%; background: linear-gradient(100deg, transparent 35%, rgba(255,255,255,.6) 50%, transparent 65%);
-  transform: translateX(-60%); animation: shine 3.6s infinite;
+  position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255,255,255,.35), transparent 60%);
+  opacity: .55; pointer-events: none;
 }
-@keyframes shine { 0%, 55% { transform: translateX(-70%); } 85%, 100% { transform: translateX(70%); } }
 .btn-tag { font-size: 8.5px; letter-spacing: .3em; opacity: .7; font-weight: 400; }
 .btn.danger { color: #ffb3c7; border-color: rgba(255,45,117,.4); }
 .btn.ad { color: #ffe1ac; border-color: rgba(255,192,77,.4); background: rgba(46,30,10,.55); }
@@ -601,7 +603,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 .card.r2 .glyph { color: var(--cyan); border-color: rgba(53,214,255,.4); }
 .card.r3 .glyph { color: var(--amber); border-color: rgba(255,192,77,.45); background: rgba(255,192,77,.06); }
-.card h3 { margin: 0 0 5px; font-family: var(--num); font-size: 12px; letter-spacing: .12em; }
+.card h3 { margin: 0 0 6px; font-family: var(--num); font-size: 14px; letter-spacing: .13em; color: #fff; text-shadow: 0 0 14px rgba(53,214,255,.25); }
 .card p { margin: 0; font-family: var(--kr); font-size: 10.5px; line-height: 1.6; color: var(--dim); }
 .card .key {
   position: absolute; right: 10px; bottom: 9px; font-family: var(--num); font-size: 8px; color: var(--dim2);

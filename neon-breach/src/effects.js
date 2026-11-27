@@ -216,11 +216,11 @@ export class Effects {
     f.sprite.position.set(x, y, z);
     f.sprite.material.color.set(color);
     f.sprite.material.opacity = 0.95;
-    f.sprite.scale.setScalar(size || 0.5);
+    f.sprite.scale.setScalar(size || 0.3);
     f.sprite.visible = true;
     f.life = 0;
     f.max = 0.14;
-    f.size = size || 0.5;
+    f.size = size || 0.3;
   }
 
   tracer(ax, ay, az, bx, by, bz, color) {

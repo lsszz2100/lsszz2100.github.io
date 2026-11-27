@@ -23,11 +23,11 @@ const UPGRADES = [
   { id: 'mag', rarity: 1, glyph: '+M', title: { en: 'DEEP MAG', ko: '확장 탄창' }, desc: { en: '+25% magazine size', ko: '탄창 용량 +25%' } },
   { id: 'hp', rarity: 1, glyph: '+H', title: { en: 'PLATING', ko: '장갑 보강' }, desc: { en: '+25 max health and heal 25', ko: '최대 체력 +25, 즉시 25 회복' } },
   { id: 'shield', rarity: 2, glyph: '+S', title: { en: 'BARRIER CELL', ko: '배리어 셀' }, desc: { en: '+25 shield, fully recharged', ko: '보호막 +25, 즉시 충전' } },
-  { id: 'dash', rarity: 3, glyph: '⇢', title: { en: 'PHASE DRIVE', ko: '위상 드라이브' }, desc: { en: '+1 dash charge, faster recharge', ko: '대시 충전 +1, 재충전 단축' } },
+  { id: 'dash', rarity: 3, glyph: '>>', title: { en: 'PHASE DRIVE', ko: '위상 드라이브' }, desc: { en: '+1 dash charge, faster recharge', ko: '대시 충전 +1, 재충전 단축' } },
   { id: 'crit', rarity: 3, glyph: '★', title: { en: 'WEAK POINT AI', ko: '약점 분석' }, desc: { en: '+35% headshot damage', ko: '헤드샷 피해 +35%' } },
   { id: 'leech', rarity: 3, glyph: '♥', title: { en: 'SIPHON', ko: '생체 흡수' }, desc: { en: 'Kills restore 5 health', ko: '처치 시 체력 5 회복' } },
   { id: 'reload', rarity: 1, glyph: '↻', title: { en: 'QUICK HANDS', ko: '신속 장전' }, desc: { en: '-18% reload time', ko: '재장전 시간 -18%' } },
-  { id: 'speed', rarity: 1, glyph: '»', title: { en: 'SERVO BOOST', ko: '서보 부스트' }, desc: { en: '+8% move speed', ko: '이동 속도 +8%' } },
+  { id: 'speed', rarity: 1, glyph: '>>>', title: { en: 'SERVO BOOST', ko: '서보 부스트' }, desc: { en: '+8% move speed', ko: '이동 속도 +8%' } },
 ];
 
 const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
@@ -62,6 +62,7 @@ class Game {
     const canvas = $('gl');
     this.renderer = new THREE.WebGLRenderer({
       canvas, antialias: !this._isMobile(), alpha: false, powerPreference: 'high-performance', stencil: false,
+      preserveDrawingBuffer: new URLSearchParams(location.search).get('capture') === '1',
     });
     this.renderer.setClearColor(0x050a12, 1);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -153,7 +154,6 @@ class Game {
     this.fx = new Effects(this.scene, this.store.settings.quality);
     this.enemies = new EnemySystem(this.scene, this.arena, this.fx);
     this.weapons = new WeaponRig(this.renderer, this.isMobile);
-    this.weapons.scene.environment = this.arena.env;
     this.ui.loadProgress(0.75);
     this._hookEnemies();
     await new Promise((r) => setTimeout(r, 20));
@@ -183,8 +183,8 @@ class Game {
   }
 
   _menuCamera() {
-    this.camera.position.set(Math.cos(0.7) * 21, 7.2, Math.sin(0.7) * 21);
-    this.camera.lookAt(0, 3.2, 0);
+    this.camera.position.set(17.5, 11.5, 23.5);
+    this.camera.lookAt(1.5, 5.0, 0);
   }
 
   /* ------------------------------------------------------------ enemies hooks */
@@ -223,7 +223,8 @@ class Game {
 
   _loop() {
     requestAnimationFrame(() => this._loop());
-    const dtRaw = Math.min(this.clock.getDelta(), 0.05);
+    let dtRaw = Math.min(this.clock.getDelta(), 0.05);
+    if (this._frozen) dtRaw = 0;
     this.time += dtRaw;
     this._perf(dtRaw);
 
@@ -254,10 +255,11 @@ class Game {
   }
 
   _updateMenu(dt) {
-    const a = this.time * 0.07;
-    this.camera.position.set(Math.cos(a) * 21.5, 7.4 + Math.sin(this.time * 0.3) * 0.4, Math.sin(a) * 21.5);
-    this.camera.lookAt(0, 3.0, 0);
-    this.camera.fov = lerp(this.camera.fov, 62, dt * 2);
+    const a = 0.72 + Math.sin(this.time * 0.08) * 0.055;
+    const r = 29.5;
+    this.camera.position.set(Math.cos(a) * r, 11.2 + Math.sin(this.time * 0.24) * 0.5, Math.sin(a) * r);
+    this.camera.lookAt(1.0, 5.4, 0);
+    this.camera.fov = lerp(this.camera.fov, 58, dt * 2);
     this.camera.updateProjectionMatrix();
   }
 
@@ -539,7 +541,7 @@ class Game {
     this._shake(this.weapons.def.recoil * 0.075);
     this.player.pitch += this.weapons.def.recoil * 0.0042;
     this.player.recoilKick += this.weapons.def.recoil * 0.0042;
-    this.fx.flash(mz.pos.x, mz.pos.y, mz.pos.z, this.weapons.def.muzzle, 0.45);
+    this.fx.flash(mz.pos.x, mz.pos.y, mz.pos.z, this.weapons.def.muzzle, 0.16);
     this.fx.burst(mz.pos.x, mz.pos.y, mz.pos.z, 0xffd9a0, 5, 3.2, 0.18, 4, 0.05);
     this.stats.triggerPulls++;
 
@@ -946,6 +948,9 @@ class Game {
     this.mode = 'upgrade';
     this.input.setEnabled(false);
     this.input.releaseLock();
+    this.ui.showHud(false);
+    this.ui.showTouch(false);
+    this._adsBanner(true);
     this.ui.showUpgrade(cards, this.wave, (i) => this._applyUpgrade(picks[i]));
   }
 
@@ -980,6 +985,7 @@ class Game {
     this.mode = 'playing';
     this.input.setEnabled(true);
     if (!this.isMobile) this.input.requestLock();
+    this._adsBanner(false);
     this.ui.setVitals(p.hp, p.hpMax, p.shield, p.shieldMax);
   }
 
@@ -1154,7 +1160,7 @@ class Game {
     this.ui.setDoubleUsed(false);
     this._adsBanner(true);
     this._menuCamera();
-    this.camera.fov = 62;
+    this.camera.fov = 58;
     this.camera.updateProjectionMatrix();
     this.audio.setIntensity(0.15);
   }
@@ -1538,6 +1544,36 @@ function boot() {
     setPos: (x, z) => { game.player.pos.set(x, 0, z); },
     fire: () => { game._triggerHeld = true; game._tryFire(); },
     grant: (id) => { const u = UPGRADES.find((x) => x.id === id); if (u) game._applyUpgrade(u); },
+    freeze: (on) => { game._frozen = !!on; },
+    renderNow: () => {
+      const g = game;
+      g.renderer.render(g.scene, g.camera);
+      g.renderer.autoClear = false;
+      g.renderer.clearDepth();
+      g.renderer.render(g.weapons.scene, g.weapons.camera);
+      g.renderer.autoClear = true;
+    },
+    poseCombat: (targetIndex) => {
+      const g = game;
+      const e = g.enemies.list.filter((x) => x.alive)[targetIndex || 0];
+      const mz = g.weapons.muzzleWorld(g.camera);
+      g.weapons.state.flashT = 0.055;
+      g.weapons.state.kick = 0.9;
+      g.weapons.state.bloom = 1.2;
+      const p = e ? e.group.position : new THREE.Vector3(0, 1, 0);
+      const aim = new THREE.Vector3(p.x, p.y + (e ? e.def.headY * 0.9 : 1.4), p.z);
+      g.fx.tracer(mz.pos.x, mz.pos.y, mz.pos.z, aim.x, aim.y, aim.z, g.weapons.def.tracer);
+      g.fx.flash(mz.pos.x, mz.pos.y, mz.pos.z, g.weapons.def.muzzle, 0.16);
+      g.fx.impact(aim.x, aim.y, aim.z, 0, 0.2, 0.4, 0xffd479, 12);
+      g.fx.damageNumber(aim.x, aim.y + 0.35, aim.z, 42, true);
+      g.ui.hitmarker('head');
+      g.player.shake = 0.5;
+    },
+    showUpgrade: (wave) => { game.wave = wave || game.wave; game.mode = 'upgrade'; game._showUpgrades(); },
+    showResults: (data) => { game.mode = 'results'; game._showResults(Object.assign({
+      score: 18450, wave: 9, kills: 74, bestCombo: 38, accuracy: 0.62, headshots: 21, time: 402, newBest: true }, data || {})); },
+    showArsenal: () => { game._renderArsenal(); game.ui.show('screen-arsenal'); },
+    setFever: (on) => { game.feverT = on ? 8 : 0; game.ui.setFever(!!on); },
     freezeWaves: (on) => {
       game._wavesFrozen = !!on;
       if (on) { game.waveQueue.length = 0; game.waveState = 'idle'; }

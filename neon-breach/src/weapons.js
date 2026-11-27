@@ -35,8 +35,8 @@ export const WEAPONS = {
   },
 };
 
-const GUN_MAT = () => new THREE.MeshStandardMaterial({ color: 0x46535f, metalness: 0.55, roughness: 0.4, envMapIntensity: 1.0 });
-const POLY_MAT = () => new THREE.MeshStandardMaterial({ color: 0x242f39, metalness: 0.22, roughness: 0.64 });
+const GUN_MAT = () => new THREE.MeshStandardMaterial({ color: 0x1c242c, metalness: 0.3, roughness: 0.68, envMapIntensity: 0.35 });
+const POLY_MAT = () => new THREE.MeshStandardMaterial({ color: 0x171e25, metalness: 0.18, roughness: 0.72 });
 const GLOW_MAT = (c) => new THREE.MeshStandardMaterial({ color: 0x0a1a1f, emissive: c, emissiveIntensity: 0.5, metalness: 0.3, roughness: 0.3 });
 
 /* ------------------------------------------------------------- models */
@@ -231,14 +231,14 @@ export class WeaponRig {
     this.camera = new THREE.PerspectiveCamera(52, 1, 0.01, 6);
     this.scene.add(this.camera);
 
-    const hemi = new THREE.HemisphereLight(0xa8d8ff, 0x101820, 0.95);
+    const hemi = new THREE.HemisphereLight(0x9cc4e0, 0x0c1116, 0.42);
     this.scene.add(hemi);
-    const key = new THREE.DirectionalLight(0xe6f4ff, 1.35);
+    const key = new THREE.DirectionalLight(0xe6f4ff, 0.6);
     key.position.set(-0.9, 1.1, 0.9);
     this.scene.add(key);
-    const rim = new THREE.DirectionalLight(0x35d6ff, 1.5);
+    const rim = new THREE.DirectionalLight(0x35d6ff, 0.5);
     rim.position.set(1.2, -0.3, 0.6);
-    const fill = new THREE.DirectionalLight(0xffd9a0, 0.55);
+    const fill = new THREE.DirectionalLight(0xffd9a0, 0.28);
     fill.position.set(-1.4, -0.6, 0.4);
     this.scene.add(fill);
     rim.position.set(1, 0.4, -1);
@@ -278,9 +278,9 @@ export class WeaponRig {
     this.camera.add(this.flash);
 
     // gloved hands / forearms, shared by every weapon
-    const glove = new THREE.MeshStandardMaterial({ color: 0x2b3946, metalness: 0.3, roughness: 0.72 });
-    const sleeve = new THREE.MeshStandardMaterial({ color: 0x1a2530, metalness: 0.35, roughness: 0.7 });
-    const cuffMat = new THREE.MeshStandardMaterial({ color: 0x0a1a22, emissive: 0x35d6ff, emissiveIntensity: 0.7, metalness: 0.4, roughness: 0.5 });
+    const glove = new THREE.MeshStandardMaterial({ color: 0x18202a, metalness: 0.25, roughness: 0.75 });
+    const sleeve = new THREE.MeshStandardMaterial({ color: 0x121a22, metalness: 0.3, roughness: 0.75 });
+    const cuffMat = new THREE.MeshStandardMaterial({ color: 0x0a1a22, emissive: 0x35d6ff, emissiveIntensity: 0.22, metalness: 0.4, roughness: 0.55 });
     this.hands = new THREE.Group();
     const mkHand = (x, y, z, rot) => {
       const h = new THREE.Group();
@@ -302,7 +302,7 @@ export class WeaponRig {
       h.rotation.set(rot[0], rot[1], rot[2]);
       return h;
     };
-    this.hands.add(mkHand(0.0, -0.14, 0.16, [0.1, 0, 0]));
+    this.hands.add(mkHand(0.0, -0.14, 0.2, [0.1, 0, 0]));
     this.hands.add(mkHand(-0.01, -0.09, -0.34, [-0.1, 0, 0.1]));
     this.slot.add(this.hands);
 
@@ -315,11 +315,11 @@ export class WeaponRig {
       shots: 0, hits: 0, headshots: 0,
     };
     this.resetAmmo();
-    this.basePos = new THREE.Vector3(0.205, -0.15, -0.52);
+    this.basePos = new THREE.Vector3(0.26, -0.15, -0.86);
     this.slot.position.copy(this.basePos);
-    this.scaleBase = this.mobile ? 0.66 : 0.78;
-    this.slot.scale.set(this.scaleBase, this.scaleBase, this.scaleBase * 1.69);
-    this.slot.rotation.y = 0.27;
+    this.scaleBase = this.mobile ? 0.5 : 0.6;
+    this.slot.scale.set(this.scaleBase, this.scaleBase, this.scaleBase * 1.55);
+    this.slot.rotation.y = 0.3;
   }
 
   resetAmmo() {
@@ -482,7 +482,7 @@ export class WeaponRig {
     const reloadK = st.reloading ? Math.sin(clamp(st.reloadT / this.reloadTime, 0, 1) * Math.PI) : 0;
     const swapK = st.swapT > 0 ? Math.sin((st.swapT / 0.28) * Math.PI) : 0;
 
-    const adsPos = new THREE.Vector3(0.005, -0.075, -0.54);
+    const adsPos = new THREE.Vector3(0.005, -0.055, -0.88);
     const hipPos = this.basePos;
     const pos = new THREE.Vector3().lerpVectors(hipPos, adsPos, st.ads);
     pos.x += st.swayX + bobX;
@@ -491,15 +491,15 @@ export class WeaponRig {
     this.slot.position.lerp(pos, Math.min(1, dt * 22));
     this.slot.rotation.z = lerp(0, 0.04, st.ads) + st.swayX * 1.6;
     this.slot.rotation.x = st.recoilRot * 0.9 - reloadK * 0.5 - swapK * 0.6 + st.swayY * 1.2;
-    this.slot.rotation.y = st.swayX * 2.4;
+    this.slot.rotation.y = (this.baseYaw === undefined ? 0.44 : this.baseYaw) + st.swayX * 2.4;
 
     // muzzle flash
     this.flash.visible = st.flashT > 0 && !!model.userData.muzzleLocal;
     if (st.flashT > 0 && model.userData.muzzleLocal) {
       const mp = model.userData.muzzleLocal;
       this.flash.position.set(mp.x, mp.y, mp.z);
-      this.flash.material.opacity = (st.flashT / 0.055) * 0.95;
-      const s = 0.26 + (st.flashT / 0.055) * 0.2 + Math.random() * 0.06;
+      this.flash.material.opacity = (st.flashT / 0.055) * 0.8;
+      const s = 0.028 + (st.flashT / 0.055) * 0.016 + Math.random() * 0.006;
       this.flash.scale.set(s, s, 1);
       this.flash.material.color.set(def.muzzle);
       this.flashLight.intensity = (st.flashT / 0.055) * 2.6;

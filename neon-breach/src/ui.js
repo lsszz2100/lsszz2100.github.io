@@ -250,7 +250,7 @@ export class UI {
   /* ------------------------------------------------------------ results */
   showResults(data) {
     $('res-kicker').textContent = this.t('results.kicker');
-    $('res-title').textContent = data.newBest ? this.t('results.record') : this.t('results.overrun');
+    $('res-title').textContent = this.t('results.overrun');
     $('res-record').classList.toggle('hidden', !data.newBest);
     $('res-score').textContent = Math.round(data.score).toLocaleString('en-US');
     $('res-wave').textContent = data.wave;

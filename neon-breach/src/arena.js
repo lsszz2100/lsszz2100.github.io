@@ -658,9 +658,9 @@ export function buildArena(renderer, scene, quality) {
     rings.push(r);
   }
   const coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({
-    map: glowTeal, color: 0xffffff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.9,
+    map: glowTeal, color: 0xbafff2, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.9,
   }));
-  coreGlow.scale.set(9, 9, 1);
+  coreGlow.scale.set(4.4, 4.4, 1);
   coreGlow.position.y = 4.2;
   reactor.add(coreGlow);
   group.add(reactor);
@@ -926,7 +926,7 @@ export function buildArena(renderer, scene, quality) {
     state.pulse = pulse;
     coreMat.emissiveIntensity = 0.42 + pulse * 0.25 + fever * 0.4;
     reactorLight.intensity = 20 + pulse * 8 + fever * 14;
-    coreGlow.material.opacity = 0.42 + pulse * 0.14;
+    coreGlow.material.opacity = 0.15 + pulse * 0.06;
     rings.forEach((r, i) => {
       r.rotation.z += dt * (0.35 + i * 0.18) * (fever ? 2.2 : 1);
       r.rotation.x = Math.PI / 2 + Math.sin(time * 0.6 + i) * 0.22;
