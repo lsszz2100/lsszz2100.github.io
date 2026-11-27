@@ -715,7 +715,7 @@ body.touch .dash-box { display: none; }
 body.touch .ammo-box { text-align: center; }
 body.touch .ammo b { font-size: 30px; }
 body.touch .reload-bar { margin: 0 auto; }
-body.touch .pause-btn { top: calc(14px + env(safe-area-inset-top)); right: calc(86px + env(safe-area-inset-right)); }
+body.touch .pause-btn { top: calc(12px + env(safe-area-inset-top)); right: calc(150px + env(safe-area-inset-right)); }
 .tbtn-auto {
   position: absolute; left: 50%; bottom: calc(10px + env(safe-area-inset-bottom)); transform: translateX(-50%);
   font-family: var(--num); font-size: 8px; letter-spacing: .2em; color: var(--teal);

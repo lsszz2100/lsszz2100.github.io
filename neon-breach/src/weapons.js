@@ -315,7 +315,7 @@ export class WeaponRig {
       shots: 0, hits: 0, headshots: 0,
     };
     this.resetAmmo();
-    this.basePos = new THREE.Vector3(0.26, -0.15, -0.86);
+    this.basePos = new THREE.Vector3(0.235, -0.13, -0.84);
     this.slot.position.copy(this.basePos);
     this.scaleBase = this.mobile ? 0.5 : 0.6;
     this.slot.scale.set(this.scaleBase, this.scaleBase, this.scaleBase * 1.55);
