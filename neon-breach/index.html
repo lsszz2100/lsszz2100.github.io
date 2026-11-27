@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#050a12" />
+<title>Neon Breach — Arena Protocol</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+  <canvas id="gl"></canvas>
+  <div id="fx-layer"></div>
+
+  <!-- ============================================================= HUD -->
+  <div id="hud" class="hidden" aria-hidden="true">
+    <div class="hud-top">
+      <div class="vitals glass">
+        <div class="vital-row">
+          <span class="vital-ico hp"></span>
+          <div class="vital-bar hp"><i id="hp-fill"></i><b id="hp-num">100</b></div>
+        </div>
+        <div class="vital-row">
+          <span class="vital-ico sh"></span>
+          <div class="vital-bar sh"><i id="sh-fill"></i><b id="sh-num">50</b></div>
+        </div>
+      </div>
+
+      <div class="wave-block">
+        <div class="wave-label"><span data-i18n="hud.wave">WAVE</span> <b id="wave-num">1</b></div>
+        <div class="wave-sub" id="wave-sub">STALKERS INBOUND</div>
+        <div class="boss-wrap hidden" id="boss-wrap">
+          <div class="boss-name" id="boss-name">WARDEN</div>
+          <div class="boss-bar"><i id="boss-fill"></i></div>
+        </div>
+      </div>
+
+      <div class="score-block">
+        <div class="score" id="score">0</div>
+        <div class="combo" id="combo">
+          <span class="combo-x" id="combo-x">x1.0</span>
+          <span class="combo-n" id="combo-n">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="killfeed" id="killfeed"></div>
+
+    <div class="hud-bottom">
+      <div class="dash-box glass" id="dash-box">
+        <span class="dash-label" data-i18n="hud.dash">DASH</span>
+        <div class="dash-pips"><i></i><i></i></div>
+      </div>
+      <div class="ammo-box">
+        <div class="weapon-name" id="weapon-name">VX-9 PULSE</div>
+        <div class="ammo"><b id="ammo-mag">30</b><span id="ammo-res">/ 240</span></div>
+        <div class="reload-bar"><i id="reload-fill"></i></div>
+      </div>
+    </div>
+
+    <div class="weapon-slots" id="weapon-slots"></div>
+
+    <div class="crosshair" id="crosshair">
+      <span class="ch t"></span><span class="ch b"></span><span class="ch l"></span><span class="ch r"></span>
+      <span class="ch-dot"></span>
+      <span class="hitmarker" id="hitmarker"></span>
+    </div>
+
+    <div class="fever" id="fever">
+      <div class="fever-band"></div>
+      <div class="fever-text" data-i18n="hud.fever">FEVER</div>
+    </div>
+
+    <div class="dmg-vignette" id="dmg-vignette"></div>
+    <div class="dmg-arrows" id="dmg-arrows"></div>
+    <div class="toast-stack" id="toast-stack"></div>
+
+    <div class="perf hidden" id="perf">0 fps</div>
+    <button class="icon-btn pause-btn" id="pause-btn" aria-label="Pause">
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <!-- ========================================================== SCREENS -->
+  <div id="screens">
+
+    <!-- MENU -->
+    <section class="screen show" id="screen-menu">
+      <div class="menu-bg-grid"></div>
+      <div class="menu-wrap">
+        <div class="menu-left">
+          <div class="brand">
+            <div class="brand-kicker" data-i18n="menu.kicker">VANTA ORBITAL FOUNDRY // SECTOR 09</div>
+            <h1 class="brand-title"><span>NEON</span><em>BREACH</em></h1>
+            <div class="brand-sub" data-i18n="menu.subtitle">ARENA PROTOCOL</div>
+          </div>
+          <p class="menu-blurb" data-i18n="menu.blurb">The foundry went dark six hours ago. Every security unit inside is still awake. Breach the reactor ring, hold the arena, and take back the sector one wave at a time.</p>
+
+          <div class="menu-stats">
+            <div class="stat"><b id="stat-best">0</b><span data-i18n="menu.best">BEST SCORE</span></div>
+            <div class="stat"><b id="stat-wave">0</b><span data-i18n="menu.bestWave">BEST WAVE</span></div>
+            <div class="stat"><b id="stat-kills">0</b><span data-i18n="menu.kills">TOTAL KILLS</span></div>
+            <div class="stat"><b id="stat-runs">0</b><span data-i18n="menu.runs">BREACHES</span></div>
+          </div>
+        </div>
+
+        <div class="menu-right">
+          <button class="btn primary big" id="btn-play">
+            <span class="btn-glow"></span>
+            <span class="btn-label" data-i18n="menu.deploy">DEPLOY</span>
+            <span class="btn-tag" data-i18n="menu.deployTag">WAVE 1</span>
+          </button>
+          <div class="menu-links">
+            <button class="btn ghost" id="btn-arsenal"><i class="ico ico-gun"></i><span data-i18n="menu.arsenal">ARSENAL</span></button>
+            <button class="btn ghost" id="btn-brief"><i class="ico ico-map"></i><span data-i18n="menu.briefing">BRIEFING</span></button>
+            <button class="btn ghost" id="btn-settings"><i class="ico ico-gear"></i><span data-i18n="menu.settings">SETTINGS</span></button>
+          </div>
+          <div class="mode-row">
+            <span class="mode-chip active" data-i18n="menu.modeEndless">ENDLESS</span>
+            <span class="mode-chip" data-i18n="menu.modeSoon">HARDCORE · SOON</span>
+          </div>
+          <div class="menu-foot">
+            <button class="lang-toggle" id="lang-menu"><b>EN</b><span>/</span><b>KR</b></button>
+            <span class="ver">v1.0.0 · Three.js</span>
+          </div>
+        </div>
+      </div>
+      <div class="scan"></div>
+    </section>
+
+    <!-- BRIEFING / HELP -->
+    <section class="screen" id="screen-brief">
+      <div class="panel wide">
+        <header class="panel-head">
+          <h2 data-i18n="brief.title">FIELD BRIEFING</h2>
+          <button class="icon-btn close" data-close="screen-brief" aria-label="Close">×</button>
+        </header>
+        <div class="brief-grid">
+          <div class="brief-col">
+            <h3 data-i18n="brief.controls">CONTROLS</h3>
+            <ul class="keylist" id="keylist-desktop">
+              <li><kbd>W A S D</kbd><span data-i18n="brief.move">Move</span></li>
+              <li><kbd>MOUSE</kbd><span data-i18n="brief.look">Aim</span></li>
+              <li><kbd>LMB</kbd><span data-i18n="brief.fire">Fire</span></li>
+              <li><kbd>RMB</kbd><span data-i18n="brief.ads">Focus (ADS)</span></li>
+              <li><kbd>R</kbd><span data-i18n="brief.reload">Reload</span></li>
+              <li><kbd>SHIFT</kbd><span data-i18n="brief.dash">Dash</span></li>
+              <li><kbd>SPACE</kbd><span data-i18n="brief.jump">Jump</span></li>
+              <li><kbd>1 - 4</kbd><span data-i18n="brief.swap">Switch weapon</span></li>
+              <li><kbd>ESC</kbd><span data-i18n="brief.pause">Pause</span></li>
+            </ul>
+            <ul class="keylist hidden" id="keylist-touch">
+              <li><kbd data-i18n="brief.tStick">LEFT PAD</kbd><span data-i18n="brief.move">Move</span></li>
+              <li><kbd data-i18n="brief.tLook">SWIPE</kbd><span data-i18n="brief.look">Aim</span></li>
+              <li><kbd data-i18n="brief.tFire">FIRE</kbd><span data-i18n="brief.fire">Fire</span></li>
+            </ul>
+          </div>
+          <div class="brief-col">
+            <h3 data-i18n="brief.hostiles">HOSTILES</h3>
+            <ul class="enemylist">
+              <li><b>STALKER</b><span data-i18n="brief.eStalker">Close-range rusher. Glows red before it lunges.</span></li>
+              <li><b>SENTRY</b><span data-i18n="brief.eSentry">Hovering drone. Strafes and fires slow plasma.</span></li>
+              <li><b>WEAVER</b><span data-i18n="brief.eWeaver">Blink runner. Fragile, but closes distance fast.</span></li>
+              <li><b>BRUTE</b><span data-i18n="brief.eBrute">Armored slab. Aim for the head; body shots bounce.</span></li>
+              <li><b>WARDEN</b><span data-i18n="brief.eBoss">Sector boss every 5 waves. Break the core.</span></li>
+            </ul>
+          </div>
+          <div class="brief-col">
+            <h3 data-i18n="brief.rules">RULES OF ENGAGEMENT</h3>
+            <p data-i18n="brief.rule1">Chain kills to build the combo meter. At 25 the arena enters FEVER: hostiles slow down and your damage climbs.</p>
+            <p data-i18n="brief.rule2">Every cleared wave grants one upgrade. Headshots deal double damage and feed the combo faster.</p>
+            <p data-i18n="brief.rule3">Boss waves every fifth. Clear ten waves to stabilise the sector and push deeper.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARSENAL -->
+    <section class="screen" id="screen-arsenal">
+      <div class="panel wide">
+        <header class="panel-head">
+          <h2 data-i18n="arsenal.title">ARSENAL</h2>
+          <button class="icon-btn close" data-close="screen-arsenal" aria-label="Close">×</button>
+        </header>
+        <div class="guns" id="gun-cards"></div>
+        <div class="arsenal-foot" data-i18n="arsenal.foot">Field modifications are temporary. Damage, fire rate and handling upgrades are offered between waves.</div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="screen" id="screen-settings">
+      <div class="panel">
+        <header class="panel-head">
+          <h2 data-i18n="settings.title">SETTINGS</h2>
+          <button class="icon-btn close" data-close="screen-settings" aria-label="Close">×</button>
+        </header>
+        <div class="settings-body">
+          <div class="set-row">
+            <span data-i18n="settings.language">Language</span>
+            <div class="seg" id="seg-lang"><button data-lang="en">EN</button><button data-lang="ko">한국어</button></div>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.sensitivity">Look sensitivity</span>
+            <input type="range" id="set-sens" min="20" max="200" step="5" value="100" />
+            <b class="set-val" id="val-sens">1.00</b>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.quality">Graphics quality</span>
+            <div class="seg" id="seg-quality"><button data-q="low" data-i18n="settings.low">LOW</button><button data-q="high" data-i18n="settings.high">HIGH</button></div>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.autofire">Auto-fire on target</span>
+            <label class="switch"><input type="checkbox" id="set-autofire" /><i></i></label>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.gyro">Gyro aim (mobile)</span>
+            <label class="switch"><input type="checkbox" id="set-gyro" /><i></i></label>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.lefty">Left-handed layout</span>
+            <label class="switch"><input type="checkbox" id="set-lefty" /><i></i></label>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.sfx">Sound effects</span>
+            <label class="switch"><input type="checkbox" id="set-sfx" checked /><i></i></label>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.music">Music</span>
+            <label class="switch"><input type="checkbox" id="set-music" checked /><i></i></label>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.haptics">Haptics</span>
+            <label class="switch"><input type="checkbox" id="set-haptics" checked /><i></i></label>
+          </div>
+          <div class="set-row">
+            <span data-i18n="settings.perf">Show performance</span>
+            <label class="switch"><input type="checkbox" id="set-perf" /><i></i></label>
+          </div>
+          <button class="set-row link-row" id="btn-privacy">
+            <span data-i18n="settings.privacy">Ad privacy options</span><i class="chev"></i>
+          </button>
+          <button class="set-row link-row" id="btn-policy">
+            <span data-i18n="settings.policy">Privacy policy</span><i class="chev"></i>
+          </button>
+        </div>
+        <footer class="panel-foot">
+          <button class="btn ghost" id="btn-reset-save" data-i18n="settings.reset">RESET PROGRESS</button>
+        </footer>
+      </div>
+    </section>
+
+    <!-- UPGRADE -->
+    <section class="screen dim" id="screen-upgrade">
+      <div class="upgrade-wrap">
+        <div class="upgrade-head">
+          <span class="kicker" data-i18n="upgrade.kicker">WAVE CLEARED</span>
+          <h2 data-i18n="upgrade.title">SELECT A FIELD MODIFICATION</h2>
+          <p id="upgrade-wave">WAVE 3 CLEARED</p>
+        </div>
+        <div class="cards" id="upgrade-cards"></div>
+        <div class="upgrade-foot"><span data-i18n="upgrade.foot">Choose one. It applies for the rest of this breach.</span></div>
+      </div>
+    </section>
+
+    <!-- PAUSE -->
+    <section class="screen dim" id="screen-pause">
+      <div class="panel narrow">
+        <header class="panel-head"><h2 data-i18n="pause.title">PAUSED</h2></header>
+        <div class="pause-body">
+          <button class="btn primary" id="btn-resume" data-i18n="pause.resume">RESUME</button>
+          <button class="btn ghost" id="btn-restart" data-i18n="pause.restart">RESTART BREACH</button>
+          <button class="btn ghost" id="btn-pause-settings" data-i18n="menu.settings">SETTINGS</button>
+          <button class="btn ghost ad" id="btn-pause-rare"><i class="ico ico-ad"></i><span data-i18n="pause.rare">UNLOCK ARCLIGHT (AD)</span></button>
+          <button class="btn ghost danger" id="btn-quit" data-i18n="pause.quit">EXIT TO BASE</button>
+        </div>
+        <div class="pause-tip" data-i18n="pause.tip">TIP: dash cancels reload and dodges plasma orbs.</div>
+      </div>
+    </section>
+
+    <!-- REVIVE -->
+    <section class="screen dim" id="screen-revive">
+      <div class="panel narrow revive-panel">
+        <div class="revive-head">
+          <span class="kicker" data-i18n="revive.kicker">SYSTEMS OFFLINE</span>
+          <h2 data-i18n="revive.title">REVIVE?</h2>
+          <p id="revive-wave">WAVE 1</p>
+        </div>
+        <div class="revive-body">
+          <p data-i18n="revive.desc">Watch a short ad to redeploy with 60% health. Nearby hostiles are cleared. Once per breach.</p>
+          <button class="btn primary ad" id="btn-revive"><i class="ico ico-ad"></i><span data-i18n="revive.yes">REVIVE (AD)</span></button>
+          <button class="btn ghost" id="btn-revive-no" data-i18n="revive.no">END BREACH</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="screen dim" id="screen-results">
+      <div class="panel wide results">
+        <div class="res-head">
+          <span class="kicker" id="res-kicker">BREACH ENDED</span>
+          <h2 id="res-title">SECTOR OVERRUN</h2>
+          <div class="res-record hidden" id="res-record" data-i18n="results.record">NEW RECORD</div>
+        </div>
+        <div class="res-score">
+          <span data-i18n="results.score">SCORE</span>
+          <b id="res-score">0</b>
+        </div>
+        <div class="res-grid">
+          <div class="res-cell"><b id="res-wave">0</b><span data-i18n="results.wave">WAVES</span></div>
+          <div class="res-cell"><b id="res-kills">0</b><span data-i18n="results.kills">KILLS</span></div>
+          <div class="res-cell"><b id="res-best-combo">0</b><span data-i18n="results.combo">BEST COMBO</span></div>
+          <div class="res-cell"><b id="res-acc">0%</b><span data-i18n="results.acc">ACCURACY</span></div>
+          <div class="res-cell"><b id="res-heads">0</b><span data-i18n="results.heads">HEADSHOTS</span></div>
+          <div class="res-cell"><b id="res-time">0:00</b><span data-i18n="results.time">TIME</span></div>
+        </div>
+        <div class="res-actions">
+          <button class="btn primary" id="btn-again" data-i18n="results.again">REDEPLOY</button>
+          <button class="btn ghost ad" id="btn-double"><i class="ico ico-ad"></i><span data-i18n="results.double">DOUBLE SCORE (AD)</span></button>
+          <button class="btn ghost" id="btn-home" data-i18n="results.home">BASE</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOADING -->
+    <section class="screen show" id="screen-loading">
+      <div class="load-wrap">
+        <div class="load-logo"><span>NEON</span><em>BREACH</em></div>
+        <div class="load-bar"><i id="load-fill"></i></div>
+        <div class="load-txt" data-i18n="load.spooling">SPOOLING ARENA</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================================ TOUCH -->
+  <div id="touch" class="hidden">
+    <div class="stick-zone" id="stick-zone">
+      <div class="stick" id="stick"><i id="stick-knob"></i></div>
+    </div>
+    <div class="look-zone" id="look-zone"></div>
+    <div class="touch-btns" id="touch-btns">
+      <button class="tbtn fire" id="btn-fire"><i></i></button>
+      <button class="tbtn small" id="btn-reload" data-i18n="hud.reload">R</button>
+      <button class="tbtn small" id="btn-dash" data-i18n="hud.dash">DASH</button>
+      <button class="tbtn small" id="btn-jump" data-i18n="hud.jump">JUMP</button>
+      <button class="tbtn small" id="btn-swap" data-i18n="hud.swap">SWAP</button>
+      <button class="tbtn small" id="btn-ads" data-i18n="hud.ads">ZOOM</button>
+    </div>
+    <div class="tbtn-auto hidden" id="autofire-chip" data-i18n="hud.autofire">AUTO</div>
+  </div>
+
+  <div id="rotate-hint" class="hidden">
+    <div class="rot-ico"></div>
+    <p data-i18n="hud.rotate">ROTATE YOUR DEVICE</p>
+  </div>
+</div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

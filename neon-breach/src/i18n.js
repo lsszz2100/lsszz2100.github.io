@@ -1,0 +1,353 @@
+/* Neon Breach — bilingual strings (EN default / KR in-app switch). */
+
+export const STRINGS = {
+  en: {
+    'menu.kicker': 'VANTA ORBITAL FOUNDRY // SECTOR 09',
+    'menu.subtitle': 'ARENA PROTOCOL',
+    'menu.blurb': 'The foundry went dark six hours ago. Every security unit inside is still awake. Breach the reactor ring, hold the arena, and take back the sector one wave at a time.',
+    'menu.best': 'BEST SCORE',
+    'menu.bestWave': 'BEST WAVE',
+    'menu.kills': 'TOTAL KILLS',
+    'menu.runs': 'BREACHES',
+    'menu.deploy': 'DEPLOY',
+    'menu.deployTag': 'WAVE 1',
+    'menu.arsenal': 'ARSENAL',
+    'menu.briefing': 'BRIEFING',
+    'menu.settings': 'SETTINGS',
+    'menu.modeEndless': 'ENDLESS',
+    'menu.modeSoon': 'HARDCORE · SOON',
+
+    'brief.title': 'FIELD BRIEFING',
+    'brief.controls': 'CONTROLS',
+    'brief.move': 'Move',
+    'brief.look': 'Aim',
+    'brief.fire': 'Fire',
+    'brief.ads': 'Focus (ADS)',
+    'brief.reload': 'Reload',
+    'brief.dash': 'Dash',
+    'brief.jump': 'Jump',
+    'brief.swap': 'Switch weapon',
+    'brief.pause': 'Pause',
+    'brief.tStick': 'LEFT PAD',
+    'brief.tLook': 'SWIPE',
+    'brief.tFire': 'FIRE',
+    'brief.hostiles': 'HOSTILES',
+    'brief.eStalker': 'Close-range rusher. Glows red before it lunges.',
+    'brief.eSentry': 'Hovering drone. Strafes and fires slow plasma.',
+    'brief.eWeaver': 'Blink runner. Fragile, but closes distance fast.',
+    'brief.eBrute': 'Armored slab. Aim for the head; body shots bounce.',
+    'brief.eBoss': 'Sector boss every 5 waves. Break the core.',
+    'brief.rules': 'RULES OF ENGAGEMENT',
+    'brief.rule1': 'Chain kills to build the combo meter. At 25 the arena enters FEVER: hostiles slow down and your damage climbs.',
+    'brief.rule2': 'Every cleared wave grants one upgrade. Headshots deal double damage and feed the combo faster.',
+    'brief.rule3': 'Boss waves every fifth. Clear ten waves to stabilise the sector and push deeper.',
+
+    'arsenal.title': 'ARSENAL',
+    'arsenal.foot': 'Field modifications are temporary. Damage, fire rate and handling upgrades are offered between waves.',
+    'arsenal.unlock': 'AD UNLOCK',
+    'arsenal.carry': 'CARRIED',
+    'arsenal.typePulse': 'ASSAULT RIFLE',
+    'arsenal.typeScatter': 'COMBAT SHOTGUN',
+    'arsenal.typeLance': 'RAIL LANCE',
+    'arsenal.typeArc': 'ARC SMG · RARE',
+    'arsenal.pulse': 'VX-9 PULSE',
+    'arsenal.scatter': 'SG-8 SCATTER',
+    'arsenal.lance': 'LR-7 LANCE',
+    'arsenal.arc': 'ARCLIGHT',
+    'arsenal.dPulse': 'Balanced automatic rifle. Reliable at mid range, forgiving on touch.',
+    'arsenal.dScatter': 'Eight-pellet burst. Deletes anything inside four metres.',
+    'arsenal.dLance': 'Piercing rail shot. Punishes lined-up drones and armored heads.',
+    'arsenal.dArc': 'Chained arc SMG. Fast, hungry, and unlocked with a rewarded ad.',
+    'arsenal.dmg': 'DMG',
+    'arsenal.rof': 'RATE',
+    'arsenal.acc': 'ACC',
+    'arsenal.mag': 'MAG',
+
+    'settings.title': 'SETTINGS',
+    'settings.language': 'Language',
+    'settings.sensitivity': 'Look sensitivity',
+    'settings.quality': 'Graphics quality',
+    'settings.low': 'LOW',
+    'settings.high': 'HIGH',
+    'settings.autofire': 'Auto-fire on target',
+    'settings.gyro': 'Gyro aim (mobile)',
+    'settings.lefty': 'Left-handed layout',
+    'settings.sfx': 'Sound effects',
+    'settings.music': 'Music',
+    'settings.haptics': 'Haptics',
+    'settings.perf': 'Show performance',
+    'settings.privacy': 'Ad privacy options',
+    'settings.policy': 'Privacy policy',
+    'settings.reset': 'RESET PROGRESS',
+    'settings.resetAsk': 'Erase best score, wave and settings?',
+    'settings.resetDone': 'Progress reset.',
+    'settings.gyroAsk': 'Move your device to aim. Requires a motion sensor.',
+
+    'upgrade.kicker': 'WAVE CLEARED',
+    'upgrade.title': 'SELECT A FIELD MODIFICATION',
+    'upgrade.foot': 'Choose one. It applies for the rest of this breach.',
+    'upgrade.wave': 'WAVE {n} CLEARED',
+
+    'pause.title': 'PAUSED',
+    'pause.resume': 'RESUME',
+    'pause.restart': 'RESTART BREACH',
+    'pause.rare': 'UNLOCK ARCLIGHT (AD)',
+    'pause.quit': 'EXIT TO BASE',
+    'pause.tip': 'TIP: dash cancels reload and dodges plasma orbs.',
+
+    'results.record': 'NEW RECORD',
+    'results.score': 'SCORE',
+    'results.wave': 'WAVES',
+    'results.kills': 'KILLS',
+    'results.combo': 'BEST COMBO',
+    'results.acc': 'ACCURACY',
+    'results.heads': 'HEADSHOTS',
+    'results.time': 'TIME',
+    'results.again': 'REDEPLOY',
+    'results.double': 'DOUBLE SCORE (AD)',
+    'results.home': 'BASE',
+    'results.overrun': 'SECTOR OVERRUN',
+    'results.recall': 'BREACH ENDED',
+    'results.doubled': 'SCORE DOUBLED',
+    'results.kicker': 'DEBRIEF',
+
+    'revive.kicker': 'SYSTEMS OFFLINE',
+    'revive.title': 'REVIVE?',
+    'revive.desc': 'Watch a short ad to redeploy with 60% health. Nearby hostiles are cleared. Once per breach.',
+    'revive.yes': 'REVIVE (AD)',
+    'revive.no': 'END BREACH',
+
+    'hud.wave': 'WAVE',
+    'hud.dash': 'DASH',
+    'hud.reload': 'R',
+    'hud.jump': 'JUMP',
+    'hud.swap': 'SWAP',
+    'hud.ads': 'ZOOM',
+    'hud.autofire': 'AUTO',
+    'hud.fever': 'FEVER',
+    'hud.rotate': 'ROTATE YOUR DEVICE',
+    'hud.reloading': 'RELOADING',
+    'hud.locked': 'NO AMMO',
+
+    'load.spooling': 'SPOOLING ARENA',
+    'load.ready': 'READY',
+
+    'msg.waveStart': 'WAVE {n} — HOSTILES INBOUND',
+    'msg.waveClear': 'WAVE {n} CLEARED',
+    'msg.fever': 'FEVER — TIME DILATION',
+    'msg.boss': 'WARDEN DEPLOYED',
+    'msg.bossDown': 'WARDEN DESTROYED',
+    'msg.adOnly': 'Rewarded ads are available in the Android app.',
+    'msg.adFail': 'No ad available right now. Try again later.',
+    'msg.adReward': 'Reward granted.',
+    'msg.reviveReady': 'REVIVE AVAILABLE BY AD',
+    'msg.lowHp': 'ARMOR CRITICAL',
+    'msg.rareOn': 'ARCLIGHT ONLINE',
+    'msg.newWave': 'SECTOR PRESSURE RISING',
+    'msg.gyroOff': 'Gyro aim unavailable on this device.',
+
+    'enemy.stalker': 'STALKER',
+    'enemy.sentry': 'SENTRY',
+    'enemy.weaver': 'WEAVER',
+    'enemy.brute': 'BRUTE',
+    'enemy.warden': 'WARDEN',
+    'feed.headshot': 'HEADSHOT',
+    'feed.kill': 'DOWN',
+    'feed.boss': 'ELIMINATED',
+  },
+
+  ko: {
+    'menu.kicker': '반타 궤도 주조소 // 09 구역',
+    'menu.subtitle': '아레나 프로토콜',
+    'menu.blurb': '여섯 시간 전 주조소가 꺼졌습니다. 안에 남은 보안 유닛은 모두 살아 있습니다. 원자로 링을 뚫고 아레나를 지켜 구역을 되찾으세요.',
+    'menu.best': '최고 점수',
+    'menu.bestWave': '최고 웨이브',
+    'menu.kills': '누적 처치',
+    'menu.runs': '침투 횟수',
+    'menu.deploy': '투입',
+    'menu.deployTag': '웨이브 1',
+    'menu.arsenal': '무기고',
+    'menu.briefing': '작전 브리핑',
+    'menu.settings': '설정',
+    'menu.modeEndless': '무한 모드',
+    'menu.modeSoon': '하드코어 · 준비 중',
+
+    'brief.title': '작전 브리핑',
+    'brief.controls': '조작',
+    'brief.move': '이동',
+    'brief.look': '조준',
+    'brief.fire': '사격',
+    'brief.ads': '집중 조준',
+    'brief.reload': '재장전',
+    'brief.dash': '대시',
+    'brief.jump': '점프',
+    'brief.swap': '무기 교체',
+    'brief.pause': '일시정지',
+    'brief.tStick': '좌측 패드',
+    'brief.tLook': '화면 드래그',
+    'brief.tFire': '사격',
+    'brief.hostiles': '적 유닛',
+    'brief.eStalker': '근접 돌격형. 덮치기 전에 붉게 빛납니다.',
+    'brief.eSentry': '부유 드론. 좌우로 움직이며 느린 플라즈마를 쏩니다.',
+    'brief.eWeaver': '순간이동 추격형. 약하지만 거리를 빠르게 좁힙니다.',
+    'brief.eBrute': '중장갑 병기. 머리를 노리세요. 몸통은 튕겨냅니다.',
+    'brief.eBoss': '5웨이브마다 등장하는 구역 보스. 코어를 파괴하세요.',
+    'brief.rules': '교전 수칙',
+    'brief.rule1': '연속 처치로 콤보를 쌓으세요. 25에서 아레나가 FEVER 상태가 되어 적이 느려지고 피해량이 올라갑니다.',
+    'brief.rule2': '웨이브를 끝낼 때마다 강화를 하나 고릅니다. 헤드샷은 피해가 두 배이며 콤보가 더 빨리 쌓입니다.',
+    'brief.rule3': '5웨이브마다 보스가 나옵니다. 10웨이브를 넘기면 구역이 안정되고 더 깊이 진입합니다.',
+
+    'arsenal.title': '무기고',
+    'arsenal.foot': '현장 개조는 이번 침투에서만 유지됩니다. 피해·연사·손맛 강화는 웨이브 사이에 제안됩니다.',
+    'arsenal.unlock': '광고 해금',
+    'arsenal.carry': '휴대 중',
+    'arsenal.typePulse': '돌격소총',
+    'arsenal.typeScatter': '전투 산탄총',
+    'arsenal.typeLance': '레일 랜스',
+    'arsenal.typeArc': '아크 SMG · 레어',
+    'arsenal.pulse': 'VX-9 펄스',
+    'arsenal.scatter': 'SG-8 스캐터',
+    'arsenal.lance': 'LR-7 랜스',
+    'arsenal.arc': '아크라이트',
+    'arsenal.dPulse': '균형 잡힌 자동 소총. 중거리에서 안정적이고 터치 조작에 관대합니다.',
+    'arsenal.dScatter': '8발 산탄. 4미터 안의 적은 남기지 않습니다.',
+    'arsenal.dLance': '관통 레일탄. 일렬로 선 드론과 장갑 머리에 치명적입니다.',
+    'arsenal.dArc': '연쇄 전격 SMG. 빠르고 공격적이며 리워드 광고로 해금합니다.',
+    'arsenal.dmg': '피해',
+    'arsenal.rof': '연사',
+    'arsenal.acc': '정확',
+    'arsenal.mag': '탄창',
+
+    'settings.title': '설정',
+    'settings.language': '언어',
+    'settings.sensitivity': '조준 감도',
+    'settings.quality': '그래픽 품질',
+    'settings.low': '낮음',
+    'settings.high': '높음',
+    'settings.autofire': '대상 자동 사격',
+    'settings.gyro': '자이로 조준 (모바일)',
+    'settings.lefty': '왼손 조작 배치',
+    'settings.sfx': '효과음',
+    'settings.music': '음악',
+    'settings.haptics': '진동',
+    'settings.perf': '성능 표시',
+    'settings.privacy': '광고 개인정보 설정',
+    'settings.policy': '개인정보처리방침',
+    'settings.reset': '진행 기록 초기화',
+    'settings.resetAsk': '최고 점수와 웨이브, 설정을 모두 지울까요?',
+    'settings.resetDone': '기록을 초기화했습니다.',
+    'settings.gyroAsk': '기기를 기울여 조준합니다. 동작 센서가 필요합니다.',
+
+    'upgrade.kicker': '웨이브 클리어',
+    'upgrade.title': '현장 개조 선택',
+    'upgrade.foot': '하나를 고르세요. 이번 침투가 끝날 때까지 적용됩니다.',
+    'upgrade.wave': '웨이브 {n} 클리어',
+
+    'pause.title': '일시정지',
+    'pause.resume': '계속하기',
+    'pause.restart': '침투 재시작',
+    'pause.rare': '아크라이트 해금 (광고)',
+    'pause.quit': '기지로 복귀',
+    'pause.tip': 'TIP: 대시는 재장전을 끊고 플라즈마 탄을 피할 수 있습니다.',
+
+    'results.record': '신기록',
+    'results.score': '점수',
+    'results.wave': '웨이브',
+    'results.kills': '처치',
+    'results.combo': '최고 콤보',
+    'results.acc': '명중률',
+    'results.heads': '헤드샷',
+    'results.time': '시간',
+    'results.again': '다시 투입',
+    'results.double': '점수 2배 (광고)',
+    'results.home': '기지',
+    'results.overrun': '구역 상실',
+    'results.recall': '침투 종료',
+    'results.doubled': '점수 2배 적용',
+    'results.kicker': '전투 기록',
+
+    'revive.kicker': '시스템 다운',
+    'revive.title': '부활하시겠습니까?',
+    'revive.desc': '짧은 광고를 보고 체력 60%로 복귀합니다. 주변 적이 정리됩니다. 침투당 1회.',
+    'revive.yes': '부활 (광고)',
+    'revive.no': '침투 종료',
+
+    'hud.wave': '웨이브',
+    'hud.dash': '대시',
+    'hud.reload': '재장전',
+    'hud.jump': '점프',
+    'hud.swap': '교체',
+    'hud.ads': '줌',
+    'hud.autofire': '자동',
+    'hud.fever': '피버',
+    'hud.rotate': '기기를 가로로 돌려주세요',
+    'hud.reloading': '재장전',
+    'hud.locked': '탄 없음',
+
+    'load.spooling': '아레나 준비 중',
+    'load.ready': '준비 완료',
+
+    'msg.waveStart': '웨이브 {n} — 적 진입',
+    'msg.waveClear': '웨이브 {n} 클리어',
+    'msg.fever': 'FEVER — 시간 지연',
+    'msg.boss': '워든 투입',
+    'msg.bossDown': '워든 파괴',
+    'msg.adOnly': '리워드 광고는 안드로이드 앱에서 사용할 수 있습니다.',
+    'msg.adFail': '지금은 광고가 없습니다. 잠시 후 다시 시도하세요.',
+    'msg.adReward': '보상을 받았습니다.',
+    'msg.reviveReady': '광고로 부활 가능',
+    'msg.lowHp': '방어구 위험',
+    'msg.rareOn': '아크라이트 가동',
+    'msg.newWave': '구역 압력 상승',
+    'msg.gyroOff': '이 기기에서는 자이로 조준을 쓸 수 없습니다.',
+
+    'enemy.stalker': '스토커',
+    'enemy.sentry': '센트리',
+    'enemy.weaver': '위버',
+    'enemy.brute': '브루트',
+    'enemy.warden': '워든',
+    'feed.headshot': '헤드샷',
+    'feed.kill': '격파',
+    'feed.boss': '제거',
+  },
+};
+
+const LANG_KEY = 'nb.lang';
+
+export class I18n {
+  constructor() {
+    let saved = null;
+    try { saved = localStorage.getItem(LANG_KEY); } catch (e) { /* storage may be blocked */ }
+    this.lang = saved === 'ko' || saved === 'en' ? saved : (navigator.language || 'en').toLowerCase().startsWith('ko') ? 'ko' : 'en';
+  }
+
+  set(lang) {
+    if (lang !== 'en' && lang !== 'ko') return;
+    this.lang = lang;
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* ignore */ }
+    this.apply();
+  }
+
+  t(key, vars) {
+    const table = STRINGS[this.lang] || STRINGS.en;
+    let s = table[key];
+    if (s === undefined) s = STRINGS.en[key];
+    if (s === undefined) return key;
+    if (vars) {
+      for (const k in vars) s = s.split('{' + k + '}').join(String(vars[k]));
+    }
+    return s;
+  }
+
+  apply(root) {
+    const scope = root || document;
+    scope.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      const text = this.t(key);
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return;
+      el.textContent = text;
+    });
+    document.documentElement.lang = this.lang;
+    document.body.classList.toggle('kr', this.lang === 'ko');
+  }
+}
