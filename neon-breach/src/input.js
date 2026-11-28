@@ -160,6 +160,9 @@ export class Input {
         this._lookPointer = e.pointerId;
         this._lastLook.x = e.clientX;
         this._lastLook.y = e.clientY;
+        // a mouse on a touch layout (narrow touch laptop, odd webview) aims here
+        // too, so it must still be able to shoot
+        if (e.pointerType === 'mouse' && e.button === 0) { this.fire = true; this.pressed.add('fireTap'); }
         try { look.setPointerCapture(e.pointerId); } catch (_) { /* older webview */ }
       });
       look.addEventListener('pointermove', (e) => {
@@ -174,6 +177,7 @@ export class Input {
       const end = (e) => {
         if (e.pointerId !== this._lookPointer) return;
         this._lookPointer = null;
+        if (e.pointerType === 'mouse') this.fire = false;
         try { look.releasePointerCapture(e.pointerId); } catch (_) { /* not captured */ }
       };
       look.addEventListener('pointerup', end);
